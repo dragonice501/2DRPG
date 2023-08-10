@@ -1,0 +1,832 @@
+#pragma once
+
+#include "../Engine/Engine.h"
+#include "../Components/Components.h"
+
+#include "../ECS/ECS.h"
+
+#include "../EventBus/EventBus.h"
+#include "../Events/CollisionEvent.h"
+#include "../Events/KeyPressedEvent.h"
+
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <glm/glm.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_sdl.h>
+#include <imgui/imgui_impl_sdl.h>
+
+#include <tuple>
+#include <algorithm>
+
+class AnimationSystem : public System
+{
+public:
+	AnimationSystem()
+	{
+		RequireComponent<SpriteComponent>();
+		RequireComponent<AnimationComponent>();
+	}
+
+	void Update(float deltaTime)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& animation = entity.GetComponent<AnimationComponent>();
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+
+			animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameRateSpeed / 1000) % animation.numFrames;
+			sprite.srcRect.x = animation.currentFrame * sprite.width;
+		}
+	}
+};
+
+class CameraMovementSystem : public System
+{
+public:
+	CameraMovementSystem()
+	{
+		RequireComponent<CameraFollowComponent>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void Update(SDL_Rect& camera)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto transform = entity.GetComponent<TransformComponent>();
+
+			if (transform.position.x + (camera.w / 2) < Engine::mapWidth)
+			{
+				camera.x = transform.position.x - (Engine::mWindowWidth / 2);
+			}
+			if (transform.position.y + (camera.h / 2) < Engine::mapHeight)
+			{
+				camera.y = transform.position.y - (Engine::mWindowWidth / 2);
+			}
+
+			camera.x = camera.x < 0 ? 0 : camera.x;
+			camera.y = camera.y < 0 ? 0 : camera.y;
+			camera.x = camera.x > camera.w ? camera.w : camera.x;
+			camera.y = camera.y > camera.h ? camera.h : camera.y;
+		}
+	}
+};
+
+class CollisionSystem : public System
+{
+public:
+	CollisionSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<BoxColliderComponent>();
+	}
+
+	void Update(std::unique_ptr<EventBus>& eventBus)
+	{
+		auto entities = GetSystemEntities();
+
+		for (auto i = entities.begin(); i != entities.end(); i++)
+		{
+			Entity a = *i;
+			auto aTransform = a.GetComponent<TransformComponent>();
+			auto aCollider = a.GetComponent<BoxColliderComponent>();
+
+			for (auto j = i; j != entities.end(); j++)
+			{
+				Entity b = *j;
+				if (a == b) continue;
+
+				auto bTransform = b.GetComponent<TransformComponent>();
+				auto bCollider = b.GetComponent<BoxColliderComponent>();
+
+				if (CheckAABBCollision(
+					aTransform.position.x + aCollider.offset.x, aTransform.position.y + aCollider.offset.y, aCollider.width, aCollider.height,
+					bTransform.position.x + bCollider.offset.x, bTransform.position.y + bCollider.offset.y, bCollider.width, bCollider.height))
+				{
+					eventBus->EmitEvent<CollisionEvent>(a, b);
+				}
+			}
+		}
+	}
+
+	bool CheckAABBCollision(double aX, double aY, double aW, double aH, double bX, double bY, double bW, double bH)
+	{
+		return
+			aX < bX + bW &&
+			aX + aW > bX &&
+			aY < bY + bH &&
+			aY + aH > bY;
+	}
+};
+
+class DamageSystem : public System
+{
+public:
+	DamageSystem()
+	{
+		RequireComponent<BoxColliderComponent>();
+	}
+
+	void SuscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<CollisionEvent>(this, &DamageSystem::OnCollision);
+	}
+
+	void OnCollision(CollisionEvent& event)
+	{
+		Entity a = event.a;
+		Entity b = event.b;
+
+		/*Logger::Log(
+			"the damage system received an event collision between entities " +
+			std::to_string(a.GetID()) + " and " + std::to_string(b.GetID()));*/
+
+		if (a.BelongsToGroup("projectiles") && b.HasTag("player"))
+		{
+			OnProjectileHitPlayer(a, b);
+		}
+
+		if (b.BelongsToGroup("projectiles") && a.HasTag("player"))
+		{
+			OnProjectileHitPlayer(b, a);
+		}
+
+		if (a.BelongsToGroup("projectiles") && b.BelongsToGroup("enemies"))
+		{
+			OnProjectileHitEnemy(a, b);
+		}
+
+		if (b.BelongsToGroup("projectiles") && a.BelongsToGroup("enemies"))
+		{
+			OnProjectileHitEnemy(b, a);
+		}
+	}
+
+	void Update()
+	{
+
+	}
+
+	void OnProjectileHitPlayer(Entity projectile, Entity player)
+	{
+		auto projectileComponent = projectile.GetComponent<ProjectileComponent>();
+
+		if (!projectileComponent.isFriendly)
+		{
+			auto& health = player.GetComponent<HealthComponent>();
+
+			health.healthPercentage -= projectileComponent.hitPercentDamage;
+
+			if (health.healthPercentage <= 0)
+			{
+				player.Kill();
+			}
+
+			projectile.Kill();
+		}
+	}
+
+	void OnProjectileHitEnemy(Entity projectile, Entity enemy)
+	{
+		auto projectileComponent = projectile.GetComponent<ProjectileComponent>();
+
+		if (projectileComponent.isFriendly)
+		{
+			auto& health = enemy.GetComponent<HealthComponent>();
+
+			health.healthPercentage -= projectileComponent.hitPercentDamage;
+
+			if (health.healthPercentage <= 0)
+			{
+				enemy.Kill();
+			}
+
+			projectile.Kill();
+		}
+	}
+};
+
+class KeyboardControlSystem : public System
+{
+public:
+	KeyboardControlSystem()
+	{
+		RequireComponent<KeyboardControlComponent>();
+		RequireComponent<RigidbodyComponent>();
+		RequireComponent<SpriteComponent>();
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<KeyPressedEvent>(this, &KeyboardControlSystem::OnKeyPressed);
+	}
+
+	void OnKeyPressed(KeyPressedEvent& event)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			const auto keyboardControl = entity.GetComponent<KeyboardControlComponent>();
+			auto& rigidBody = entity.GetComponent<RigidbodyComponent>();
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+
+			switch (event.symbol)
+			{
+			case SDLK_UP:
+				rigidBody.velocity = keyboardControl.upVelocity;
+				sprite.srcRect.y = sprite.height * 0;
+				break;
+			case SDLK_RIGHT:
+				rigidBody.velocity = keyboardControl.rightVelocity;
+				sprite.srcRect.y = sprite.height * 1;
+				break;
+			case SDLK_DOWN:
+				rigidBody.velocity = keyboardControl.downVelocity;
+				sprite.srcRect.y = sprite.height * 2;
+				break;
+			case SDLK_LEFT:
+				rigidBody.velocity = keyboardControl.leftVelocity;
+				sprite.srcRect.y = sprite.height * 3;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+};
+
+class MovementSystem : public System
+{
+public:
+	MovementSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<RigidbodyComponent>();
+		RequireComponent<SpriteComponent>();
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<CollisionEvent>(this, &MovementSystem::OnCollision);
+	}
+
+	void OnCollision(CollisionEvent& event)
+	{
+		Entity a = event.a;
+		Entity b = event.b;
+
+		if (a.BelongsToGroup("enemies") && b.BelongsToGroup("obstacles"))
+		{
+			OnEnemyHitsObstacles(a, b);
+		}
+
+		if (a.BelongsToGroup("obstacles") && b.BelongsToGroup("enemies"))
+		{
+			OnEnemyHitsObstacles(b, a);
+		}
+	}
+
+	void OnEnemyHitsObstacles(Entity enemy, Entity obstacle)
+	{
+		if (enemy.HasComponent<RigidbodyComponent>() && enemy.HasComponent<SpriteComponent>())
+		{
+			auto& rigidbody = enemy.GetComponent<RigidbodyComponent>();
+			auto& sprite = enemy.GetComponent<SpriteComponent>();
+
+			if (rigidbody.velocity.x != 0)
+			{
+				rigidbody.velocity.x *= -1;
+
+				if (sprite.flip == SDL_FLIP_NONE) sprite.flip = SDL_FLIP_HORIZONTAL;
+				else sprite.flip = SDL_FLIP_NONE;
+			}
+
+			if (rigidbody.velocity.y != 0)
+			{
+				rigidbody.velocity.y *= -1;
+
+				if (sprite.flip == SDL_FLIP_NONE) sprite.flip = SDL_FLIP_VERTICAL;
+				else sprite.flip = SDL_FLIP_NONE;
+			}
+		}
+	}
+
+	void Update(double deltaTime)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>();
+			const auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+
+			transform.position.x += rigidbody.velocity.x * deltaTime;
+			transform.position.y += rigidbody.velocity.y * deltaTime;
+
+			if (
+				(transform.position.x < 0 ||
+					transform.position.x > Engine::mapWidth ||
+					transform.position.y < 0 ||
+					transform.position.y > Engine::mapHeight) &&
+				!entity.HasTag("player"))
+			{
+				entity.Kill();
+			}
+
+			if (entity.HasTag("player"))
+			{
+				int paddingLeft = 10;
+				int paddingTop = 10;
+				int paddingRight = 50;
+				int paddingBottom = 50;
+
+				transform.position.x = transform.position.x < paddingLeft ? paddingLeft : transform.position.x;
+				transform.position.x = transform.position.x > Engine::mapWidth - paddingRight ? Engine::mapWidth - paddingRight : transform.position.x;
+				transform.position.y = transform.position.y < paddingLeft ? paddingTop : transform.position.y;
+				transform.position.y = transform.position.y > Engine::mapHeight + paddingBottom ? Engine::mapHeight - paddingBottom : transform.position.y;
+			}
+
+			if (
+				(transform.position.x < 0 ||
+					transform.position.x > Engine::mapWidth ||
+					transform.position.y < 0 ||
+					transform.position.y > Engine::mapHeight) &&
+				entity.HasTag("player"))
+			{
+				entity.Kill();
+			}
+		}
+	}
+};
+
+class ProjectileEmitSystem : public System
+{
+public:
+	ProjectileEmitSystem()
+	{
+		RequireComponent<ProjectileEmitterComponent>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void SubcribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<KeyPressedEvent>(this, &ProjectileEmitSystem::OnKeyPressed);
+	}
+
+	void Update(std::unique_ptr<Registry>& registry)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+			const auto transform = entity.GetComponent<TransformComponent>();
+
+			if (projectileEmitter.repeatFrequency == 0) continue;
+
+			if (SDL_GetTicks() - projectileEmitter.lastEmissionTime > projectileEmitter.repeatFrequency)
+			{
+				glm::vec2 projectilePosition = transform.position;
+				if (entity.HasComponent<SpriteComponent>())
+				{
+					const auto sprite = entity.GetComponent<SpriteComponent>();
+					projectilePosition.x += (transform.scale.x * sprite.width / 2);
+					projectilePosition.y += (transform.scale.y * sprite.height / 2);
+				}
+
+				Entity projectile = registry->CreateEntity();
+				projectile.Group("projectiles");
+				projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
+				projectile.AddComponent<RigidbodyComponent>(projectileEmitter.projectileVelocity);
+				projectile.AddComponent<SpriteComponent>("bullet-image", 4, 4, 4);
+				projectile.AddComponent<BoxColliderComponent>(4, 4);
+				projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly, projectileEmitter.hitPercentDamage, projectileEmitter.projectileDuration);
+
+				projectileEmitter.lastEmissionTime = SDL_GetTicks();
+			}
+		}
+	}
+
+	void OnKeyPressed(KeyPressedEvent& event)
+	{
+		if (event.symbol == SDLK_SPACE)
+		{
+			for (auto entity : GetSystemEntities())
+			{
+				if (entity.HasComponent<CameraFollowComponent>())
+				{
+					const auto projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+					const auto transform = entity.GetComponent<TransformComponent>();
+					const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
+
+					glm::vec2 projectilePosition = transform.position;
+					if (entity.HasComponent<SpriteComponent>())
+					{
+						auto sprite = entity.GetComponent<SpriteComponent>();
+						projectilePosition.x += transform.scale.x * sprite.width / 2;
+						projectilePosition.y += transform.scale.y * sprite.height / 2;
+					}
+
+					glm::vec2 projectileVelocity = projectileEmitter.projectileVelocity;
+					int directionX = 0;
+					int directionY = 0;
+					if (rigidbody.velocity.x > 0) directionX = 1;
+					if (rigidbody.velocity.x < 0) directionX = -1;
+					if (rigidbody.velocity.y > 0) directionY = 1;
+					if (rigidbody.velocity.y < 0) directionY = -1;
+					projectileVelocity.x = projectileEmitter.projectileVelocity.x * directionX;
+					projectileVelocity.y = projectileEmitter.projectileVelocity.y * directionY;
+
+					Entity projectile = entity.mRegistry->CreateEntity();
+					projectile.Group("projectiles");
+					projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
+					projectile.AddComponent<RigidbodyComponent>(projectileVelocity);
+					projectile.AddComponent<SpriteComponent>("bullet-image", 4, 4, 4);
+					projectile.AddComponent<BoxColliderComponent>(4, 4);
+					projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly, projectileEmitter.hitPercentDamage, projectileEmitter.projectileDuration);
+				}
+			}
+		}
+	}
+};
+
+class ProjectileSystem : public System
+{
+public:
+	ProjectileSystem()
+	{
+		RequireComponent<ProjectileComponent>();
+	}
+
+	void Update()
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto projectile = entity.GetComponent<ProjectileComponent>();
+
+			if (SDL_GetTicks() - projectile.startTime > projectile.duration)
+			{
+				entity.Kill();
+			}
+		}
+	}
+};
+
+class RenderCollisionSystem : public System
+{
+public:
+	RenderCollisionSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<BoxColliderComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, SDL_Rect& camera)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			const auto transform = entity.GetComponent<TransformComponent>();
+			const auto collider = entity.GetComponent<BoxColliderComponent>();
+
+			SDL_Rect colliderRect =
+			{
+				static_cast<int>(transform.position.x + collider.offset.x - camera.x),
+				static_cast<int>(transform.position.y + collider.offset.y - camera.y),
+				static_cast<int>(collider.width * transform.scale.x),
+				static_cast<int>(collider.height * transform.scale.y)
+			};
+
+			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+			SDL_RenderDrawRect(renderer, &colliderRect);
+		}
+	}
+};
+
+class RenderGUISytem : public System
+{
+public:
+	RenderGUISytem() = default;
+
+	void Update(const std::unique_ptr<Registry>& registry, SDL_Rect& camera)
+	{
+		ImGui::NewFrame();
+
+		if (ImGui::Begin("Spawn Enemies"))
+		{
+			static int enemyPosX = 0;
+			static int enemyPosY = 0;
+			static int scaleX = 1;
+			static int scaleY = 1;
+			static int velX = 0;
+			static int velY = 0;
+			static int health = 100;
+			static float rotation = 0.0;
+			static float projAngle = 0.0;
+			static float projSpeed = 0.0;
+			static int projRepeat = 10;
+			static int projDuration = 10;
+			const char* sprites[] = { "tank-image", "truck-image" };
+			static int selectedSpriteIndex = 0;
+
+			if (ImGui::CollapsingHeader("Sprite", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::Combo("texture id", &selectedSpriteIndex, sprites, IM_ARRAYSIZE(sprites));
+			}
+			ImGui::Spacing();
+
+			if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::InputInt("position x", &enemyPosX);
+				ImGui::InputInt("position y", &enemyPosY);
+				ImGui::SliderInt("scale x", &scaleX, 1, 10);
+				ImGui::SliderInt("scale y", &scaleY, 1, 10);
+				ImGui::SliderAngle("rotation (deg)", &rotation, 0, 360);
+			}
+
+			if (ImGui::CollapsingHeader("Rigid Body", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::InputInt("velocity x", &velX);
+				ImGui::InputInt("velocity y", &velY);
+			}
+			ImGui::Spacing();
+
+			if (ImGui::CollapsingHeader("Projectile emitter", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::SliderAngle("angle (deg)", &projAngle, 0, 360);
+				ImGui::SliderFloat("spedd (px/sec)", &projSpeed, 10, 500);
+				ImGui::InputInt("repeat (sec)", &projRepeat);
+				ImGui::InputInt("durection (sec)", &projDuration);
+			}
+			ImGui::Spacing();
+
+			if (ImGui::CollapsingHeader("Health", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::InputInt("%", &health, 0, 100);
+			}
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			if (ImGui::Button("Create new enemy"))
+			{
+				Entity enemy = registry->CreateEntity();
+				enemy.Group("enemies");
+				enemy.AddComponent<TransformComponent>(glm::vec2(enemyPosX, enemyPosY), glm::vec2(scaleX, scaleY), 0.0);
+				enemy.AddComponent<RigidbodyComponent>(glm::vec2(velX, velY));
+				enemy.AddComponent<SpriteComponent>(sprites[selectedSpriteIndex], 32, 32, 1);
+				enemy.AddComponent<BoxColliderComponent>(25, 20, glm::vec2(5, 5));
+				double projVelX = cos(projAngle) * projSpeed;
+				double projVelY = sin(projAngle) * projSpeed;
+				enemy.AddComponent<ProjectileEmitterComponent>(glm::vec2(projVelX, projVelY), projRepeat * 1000, projDuration * 1000, 10, false);
+				enemy.AddComponent<HealthComponent>(health);
+
+				enemyPosX = enemyPosY = rotation = projAngle = 0;
+				scaleX = scaleY = 1;
+				projRepeat = projDuration = 10;
+				projSpeed = 100;
+				health = 100;
+			}
+		}
+		ImGui::End();
+
+		ImGuiWindowFlags windowsFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav;
+		ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Always, ImVec2(0, 0));
+		ImGui::SetNextWindowBgAlpha(0.9f);
+		if (ImGui::Begin("Map Coordinates", NULL, windowsFlags))
+		{
+			ImGui::Text(
+				"Map coordinates (x=%.1f, y=%.1f)",
+				ImGui::GetIO().MousePos.x + camera.x,
+				ImGui::GetIO().MousePos.y + camera.y
+			);
+		}
+		ImGui::End();
+
+		ImGui::Render();
+		ImGuiSDL::Render(ImGui::GetDrawData());
+	}
+};
+
+class RenderHealthBarSystem : public System
+{
+public:
+	RenderHealthBarSystem()
+	{
+		RequireComponent<HealthComponent>();
+		RequireComponent<SpriteComponent>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect camera)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			const auto transform = entity.GetComponent<TransformComponent>();
+			const auto sprite = entity.GetComponent<SpriteComponent>();
+			const auto health = entity.GetComponent<HealthComponent>();
+
+			SDL_Color healthBarColor = { 255, 255, 255 };
+
+			if (health.healthPercentage >= 0 && health.healthPercentage < 40) healthBarColor = { 255, 0, 0 };
+			if (health.healthPercentage >= 40 && health.healthPercentage < 80) healthBarColor = { 255, 255, 0 };
+			if (health.healthPercentage >= 80 && health.healthPercentage <= 100) healthBarColor = { 0, 255, 0 };
+
+			int healthBarWidth = 15;
+			int healthBarHeight = 3;
+			double healthBarPosX = (transform.position.x + (sprite.width * transform.scale.x)) - camera.x;
+			double healthBarPosY = (transform.position.y) - camera.y;
+
+			SDL_Rect healthBarRectangle =
+			{
+				healthBarPosX,
+				healthBarPosY,
+				healthBarWidth * (health.healthPercentage / 100.0),
+				healthBarHeight
+			};
+
+			SDL_SetRenderDrawColor(renderer, healthBarColor.r, healthBarColor.g, healthBarColor.b, 255);
+			SDL_RenderFillRect(renderer, &healthBarRectangle);
+
+			std::string healthText = std::to_string(health.healthPercentage);
+			SDL_Surface* surface = TTF_RenderText_Blended(assetStore->GetFont("charriot-font"), healthText.c_str(), healthBarColor);
+			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_FreeSurface(surface);
+
+			int labelWidth = 0;
+			int labelHeight = 0;
+			SDL_QueryTexture(texture, NULL, NULL, &labelWidth, &labelHeight);
+			SDL_Rect healthBarTextRectangle =
+			{
+				healthBarPosX,
+				healthBarPosY + 5,
+				labelWidth,
+				labelHeight
+			};
+
+			SDL_RenderCopy(renderer, texture, NULL, &healthBarTextRectangle);
+			SDL_DestroyTexture(texture);
+		}
+	}
+};
+
+class RenderSystem : public System
+{
+public:
+	RenderSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<SpriteComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect& camera)
+	{
+		struct RenderableEntity
+		{
+			TransformComponent transformComponent;
+			SpriteComponent spriteComponent;
+		};
+		std::vector<RenderableEntity> renderableEntities;
+
+		for (auto entity : GetSystemEntities())
+		{
+			RenderableEntity renderableEntity;
+			renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+			renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
+
+			if (!(renderableEntity.transformComponent.position.x + (renderableEntity.transformComponent.scale.x * renderableEntity.spriteComponent.width) < camera.x ||
+				renderableEntity.transformComponent.position.x > camera.x + camera.w ||
+				renderableEntity.transformComponent.position.y + (renderableEntity.transformComponent.scale.y * renderableEntity.spriteComponent.height) < camera.y ||
+				renderableEntity.transformComponent.position.y > camera.y + camera.h
+				) && !renderableEntity.spriteComponent.isFixed)
+			{
+				renderableEntities.emplace_back(renderableEntity);
+			}
+		}
+
+		std::sort(renderableEntities.begin(), renderableEntities.end(), [](const RenderableEntity& a, const RenderableEntity& b)
+			{
+				return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
+			});
+
+		for (auto entity : renderableEntities)
+		{
+			const auto transform = entity.transformComponent;
+			const auto sprite = entity.spriteComponent;
+
+			SDL_Rect srcRect = sprite.srcRect;
+			SDL_Rect destRect = {
+				transform.position.x - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y - (sprite.isFixed ? 0 : camera.y),
+				sprite.width * transform.scale.x,
+				sprite.height * transform.scale.y };
+			SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+
+			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
+		}
+	}
+};
+
+class RenderTextSystem : public System {
+public:
+	RenderTextSystem()
+	{
+		RequireComponent<TextLabelComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			const auto textlabel = entity.GetComponent<TextLabelComponent>();
+
+			SDL_Surface* surface = TTF_RenderText_Blended(assetStore->GetFont(textlabel.assetId), textlabel.text.c_str(), textlabel.color);
+			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_FreeSurface(surface);
+
+			int labelWidth = 0;
+			int labelHeight = 0;
+			SDL_QueryTexture(texture, NULL, NULL, &labelWidth, &labelHeight);
+			SDL_Rect healthBarTextRectangle =
+			{
+				textlabel.position.x - (textlabel.isFixed ? 0 : camera.x),
+				textlabel.position.y - (textlabel.isFixed ? 0 : camera.y),
+				labelWidth,
+				labelHeight
+			};
+
+			SDL_RenderCopy(renderer, texture, NULL, &healthBarTextRectangle);
+			SDL_DestroyTexture(texture);
+		}
+	}
+};
+
+std::tuple<double, double> GetEntityPosition(Entity entity) {
+	if (entity.HasComponent<TransformComponent>()) {
+		const auto transform = entity.GetComponent<TransformComponent>();
+		return std::make_tuple(transform.position.x, transform.position.y);
+	}
+	else {
+		Logger::Err("Trying to get the position of an entity that has no transform component");
+		return std::make_tuple(0.0, 0.0);
+	}
+}
+
+std::tuple<double, double> GetEntityVelocity(Entity entity) {
+	if (entity.HasComponent<RigidbodyComponent>()) {
+		const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
+		return std::make_tuple(rigidbody.velocity.x, rigidbody.velocity.y);
+	}
+	else {
+		Logger::Err("Trying to get the velocity of an entity that has no rigidbody component");
+		return std::make_tuple(0.0, 0.0);
+	}
+}
+
+void SetEntityPosition(Entity entity, double x, double y) {
+	if (entity.HasComponent<TransformComponent>()) {
+		auto& transform = entity.GetComponent<TransformComponent>();
+		transform.position.x = x;
+		transform.position.y = y;
+	}
+	else {
+		Logger::Err("Trying to set the position of an entity that has no transform component");
+	}
+}
+
+void SetEntityVelocity(Entity entity, double x, double y) {
+	if (entity.HasComponent<RigidbodyComponent>()) {
+		auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+		rigidbody.velocity.x = x;
+		rigidbody.velocity.y = y;
+	}
+	else {
+		Logger::Err("Trying to set the velocity of an entity that has no rigidbody component");
+	}
+}
+
+void SetEntityRotation(Entity entity, double angle) {
+	if (entity.HasComponent<TransformComponent>()) {
+		auto& transform = entity.GetComponent<TransformComponent>();
+		transform.rotation = angle;
+	}
+	else {
+		Logger::Err("Trying to set the rotation of an entity that has no transform component");
+	}
+}
+
+void SetEntityAnimationFrame(Entity entity, int frame) {
+	if (entity.HasComponent<AnimationComponent>()) {
+		auto& animation = entity.GetComponent<AnimationComponent>();
+		animation.currentFrame = frame;
+	}
+	else {
+		Logger::Err("Trying to set the animation frame of an entity that has no animation component");
+	}
+}
+
+void SetProjectileVelocity(Entity entity, double x, double y) {
+	if (entity.HasComponent<ProjectileEmitterComponent>()) {
+		auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+		projectileEmitter.projectileVelocity.x = x;
+		projectileEmitter.projectileVelocity.y = y;
+	}
+	else {
+		Logger::Err("Trying to set the projectile velocity of an entity that has no projectile emitter component");
+	}
+}
