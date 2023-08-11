@@ -3,8 +3,8 @@
 #include "../Logger/Logger.h"
 
 #include "../Engine/Engine.h"
-#include "../ECS/Components.h"
 
+#include "../ECS/Components.h"
 #include "../ECS/ECS.h"
 
 #include "../EventBus/EventBus.h"
@@ -235,7 +235,7 @@ public:
 			{
 				case SDLK_ESCAPE:
 				{
-					Engine::SetIsRunning(false);
+					
 				}
 				case SDLK_UP:
 				{
@@ -624,7 +624,7 @@ public:
 		RequireComponent<TransformComponent>();
 	}
 
-	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect camera)
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
 	{
 		for (auto entity : GetSystemEntities())
 		{
@@ -685,7 +685,7 @@ public:
 		RequireComponent<SpriteComponent>();
 	}
 
-	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect& camera)
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
 	{
 		struct RenderableEntity
 		{
@@ -766,78 +766,3 @@ public:
 		}
 	}
 };
-
-//std::tuple<double, double> GetEntityPosition(Entity entity) {
-//	if (entity.HasComponent<TransformComponent>()) {
-//		const auto transform = entity.GetComponent<TransformComponent>();
-//		return std::make_tuple(transform.position.x, transform.position.y);
-//	}
-//	else {
-//		Logger::Err("Trying to get the position of an entity that has no transform component");
-//		return std::make_tuple(0.0, 0.0);
-//	}
-//}
-//
-//std::tuple<double, double> GetEntityVelocity(Entity entity) {
-//	if (entity.HasComponent<RigidbodyComponent>()) {
-//		const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
-//		return std::make_tuple(rigidbody.velocity.x, rigidbody.velocity.y);
-//	}
-//	else {
-//		Logger::Err("Trying to get the velocity of an entity that has no rigidbody component");
-//		return std::make_tuple(0.0, 0.0);
-//	}
-//}
-//
-//void SetEntityPosition(Entity entity, double x, double y) {
-//	if (entity.HasComponent<TransformComponent>()) {
-//		auto& transform = entity.GetComponent<TransformComponent>();
-//		transform.position.x = x;
-//		transform.position.y = y;
-//	}
-//	else {
-//		Logger::Err("Trying to set the position of an entity that has no transform component");
-//	}
-//}
-//
-//void SetEntityVelocity(Entity entity, double x, double y) {
-//	if (entity.HasComponent<RigidbodyComponent>()) {
-//		auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
-//		rigidbody.velocity.x = x;
-//		rigidbody.velocity.y = y;
-//	}
-//	else {
-//		Logger::Err("Trying to set the velocity of an entity that has no rigidbody component");
-//	}
-//}
-//
-//void SetEntityRotation(Entity entity, double angle) {
-//	if (entity.HasComponent<TransformComponent>()) {
-//		auto& transform = entity.GetComponent<TransformComponent>();
-//		transform.rotation = angle;
-//	}
-//	else {
-//		Logger::Err("Trying to set the rotation of an entity that has no transform component");
-//	}
-//}
-//
-//void SetEntityAnimationFrame(Entity entity, int frame) {
-//	if (entity.HasComponent<AnimationComponent>()) {
-//		auto& animation = entity.GetComponent<AnimationComponent>();
-//		animation.currentFrame = frame;
-//	}
-//	else {
-//		Logger::Err("Trying to set the animation frame of an entity that has no animation component");
-//	}
-//}
-//
-//void SetProjectileVelocity(Entity entity, double x, double y) {
-//	if (entity.HasComponent<ProjectileEmitterComponent>()) {
-//		auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
-//		projectileEmitter.projectileVelocity.x = x;
-//		projectileEmitter.projectileVelocity.y = y;
-//	}
-//	else {
-//		Logger::Err("Trying to set the projectile velocity of an entity that has no projectile emitter component");
-//	}
-//}

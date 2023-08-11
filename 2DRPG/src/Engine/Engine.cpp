@@ -8,6 +8,7 @@
 
 #include "../Scene/Scene.h"
 #include "../Scene/ScenePikuma.h"
+#include "../Scene/SceneTest.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -36,17 +37,6 @@ Engine::Engine()
     mEventBus = std::make_unique<EventBus>();
 }
 
-Engine& Engine::Instance()
-{
-    static Engine* instance = new Engine();
-    return *instance;
-}
-
-const SDL_Rect& Engine::Camera()
-{
-    return camera;
-}
-
 void Engine::SetIsRunning(const bool running)
 {
     isRunning = running;
@@ -67,8 +57,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    //mWindowWidth = 800;
-    //mWindowHeight = 800;
+    mWindowWidth = 800;
+    mWindowHeight = 800;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)
@@ -100,7 +90,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<ScenePikuma>();
+    std::unique_ptr<Scene> scene = std::make_unique<SceneTest>();
     scene->Setup(mRegistry, mAssetStore, mRenderer);
 
     while (isRunning)

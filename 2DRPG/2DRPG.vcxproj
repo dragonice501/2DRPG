@@ -139,6 +139,9 @@
     <ClCompile Include="libs\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="libs\imgui\imgui_sdl.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Scene\SceneTest.cpp" />
+    <ClCompile Include="src\Graphics\Font.cpp" />
+    <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Scene\ScenePikuma.cpp" />
     <ClCompile Include="src\AssetStore\AssetStore.cpp" />
     <ClCompile Include="src\ECS\ECS.cpp" />
@@ -247,7 +250,11 @@
     <ClInclude Include="libs\SDL2\include\SDL_version.h" />
     <ClInclude Include="libs\SDL2\include\SDL_video.h" />
     <ClInclude Include="libs\SDL2\include\SDL_vulkan.h" />
+    <ClInclude Include="src\Scene\SceneTest.h" />
     <ClInclude Include="src\EventBus\Events.h" />
+    <ClInclude Include="src\Graphics\Font.h" />
+    <ClInclude Include="src\Graphics\Graphics.h" />
+    <ClInclude Include="src\Graphics\GraphicsConstants.h" />
     <ClInclude Include="src\Scene\ScenePikuma.h" />
     <ClInclude Include="src\AssetStore\AssetStore.h" />
     <ClInclude Include="src\ECS\Components.h" />

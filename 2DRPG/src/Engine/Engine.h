@@ -12,8 +12,12 @@ const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 class Engine
 {
 public:
-	static Engine& Instance();
-	static const SDL_Rect& Camera();
+	static Engine& Instance()
+	{
+		static Engine* instance = new Engine();
+		return *instance;
+	}
+	static SDL_Rect& Camera() { return camera; }
 	static void SetIsRunning(const bool running);
 
 	bool Init();
@@ -24,12 +28,13 @@ public:
 	static int mWindowHeight;
 	static int mapWidth;
 	static int mapHeight;
-	static SDL_Rect camera;
-	static bool isRunning;
 
 private:
 	Engine();
 	~Engine() {}
+	
+	static SDL_Rect camera;
+	static bool isRunning;
 
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;

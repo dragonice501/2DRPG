@@ -165,7 +165,7 @@ void ScenePikuma::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Ev
     registry->GetSystem<AnimationSystem>().Update(dt);
     registry->GetSystem<CollisionSystem>().Update(eventBus);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
-    registry->GetSystem<CameraMovementSystem>().Update(Engine::camera);
+    registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera());
     registry->GetSystem<ProjectileSystem>().Update();
 }
 
@@ -175,7 +175,7 @@ void ScenePikuma::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<As
     SDL_RenderClear(renderer);
 
     // Invoke all the systems that need to render 
-    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, Engine::camera);
-    registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, Engine::camera);
-    registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, Engine::camera);
+    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, Engine::Camera());
+    registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, Engine::Camera());
+    registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, Engine::Camera());
 }
