@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../Logger/Logger.h"
-
 #include <vector>
 #include <bitset>
 #include <unordered_map>
@@ -274,7 +272,7 @@ inline void Registry::RemoveComponent(Entity entity)
 
 	entityComponentSignatures[entityId].set(componentId, false);
 
-	Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id " + std::to_string(entityId));
+	//Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id " + std::to_string(entityId));
 }
 
 template<typename TComponent>

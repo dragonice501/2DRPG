@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Utils/Vec2.h"
+
 #include <SDL.h>
 #include <glm/vec2.hpp>
 
@@ -23,7 +25,7 @@ struct AnimationComponent
 
 struct BoxColliderComponent
 {
-	BoxColliderComponent(int width = 0, int height = 0, glm::vec2 offset = glm::vec2(0))
+	BoxColliderComponent(int width = 0, int height = 0, Vec2 offset = Vec2(0))
 	{
 		this->width = width;
 		this->height = height;
@@ -32,7 +34,7 @@ struct BoxColliderComponent
 
 	int width;
 	int height;
-	glm::vec2 offset;
+	Vec2 offset;
 };
 
 struct CameraFollowComponent
@@ -53,10 +55,10 @@ struct HealthComponent
 struct KeyboardControlComponent
 {
 	KeyboardControlComponent(
-		glm::vec2 upVelocity = glm::vec2(0),
-		glm::vec2 rightVelocity = glm::vec2(0),
-		glm::vec2 downVelocity = glm::vec2(0),
-		glm::vec2 leftVelocity = glm::vec2(0))
+		Vec2 upVelocity = Vec2(0),
+		Vec2 rightVelocity = Vec2(0),
+		Vec2 downVelocity = Vec2(0),
+		Vec2 leftVelocity = Vec2(0))
 	{
 		this->upVelocity = upVelocity;
 		this->rightVelocity = rightVelocity;
@@ -64,10 +66,10 @@ struct KeyboardControlComponent
 		this->leftVelocity = leftVelocity;
 	}
 
-	glm::vec2 upVelocity;
-	glm::vec2 rightVelocity;
-	glm::vec2 downVelocity;
-	glm::vec2 leftVelocity;
+	Vec2 upVelocity;
+	Vec2 rightVelocity;
+	Vec2 downVelocity;
+	Vec2 leftVelocity;
 };
 
 struct ProjectileComponent
@@ -90,7 +92,7 @@ struct ProjectileComponent
 struct ProjectileEmitterComponent
 {
 	ProjectileEmitterComponent(
-		glm::vec2 projectileVelocity = glm::vec2(0),
+		Vec2 projectileVelocity = Vec2(0),
 		int repeatFrequency = 0,
 		int projectileDuration = 10000,
 		int hitPercentageDamage = 10,
@@ -103,7 +105,7 @@ struct ProjectileEmitterComponent
 		this->isFriendly = isFriendly;
 	}
 
-	glm::vec2 projectileVelocity;
+	Vec2 projectileVelocity;
 	int repeatFrequency;
 	int projectileDuration;
 	int hitPercentDamage;
@@ -113,12 +115,12 @@ struct ProjectileEmitterComponent
 
 struct RigidbodyComponent
 {
-	RigidbodyComponent(glm::vec2 velocity = glm::vec2(0.0, 0.0))
+	RigidbodyComponent(Vec2 velocity = Vec2(0.0, 0.0))
 	{
 		this->velocity = velocity;
 	}
 
-	glm::vec2 velocity;
+	Vec2 velocity;
 };
 
 struct SpriteComponent
@@ -145,22 +147,22 @@ struct SpriteComponent
 
 struct TransformComponent
 {
-	TransformComponent(glm::vec2 position = glm::vec2(0, 0), glm::vec2 scale = glm::vec2(1, 1), double rotation = 0)
+	TransformComponent(Vec2 position = Vec2(0, 0), Vec2 scale = Vec2(1, 1), double rotation = 0)
 	{
 		this->position = position;
 		this->scale = scale;
 		this->rotation = rotation;
 	}
 
-	glm::vec2 position;
-	glm::vec2 scale;
+	Vec2 position;
+	Vec2 scale;
 	double rotation;
 };
 
 struct TextLabelComponent
 {
 	TextLabelComponent(
-		glm::vec2 textPosition = glm::vec2(0),
+		Vec2 textPosition = Vec2(0),
 		std::string text = "",
 		std::string assetId = "",
 		const SDL_Color& color = { 0, 0, 0 },
@@ -173,7 +175,7 @@ struct TextLabelComponent
 		this->isFixed = isFixed;
 	}
 
-	glm::vec2 position;
+	Vec2 position;
 	std::string text;
 	std::string assetId;
 	SDL_Color color;

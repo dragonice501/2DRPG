@@ -2,11 +2,12 @@
 
 int main(int argc, char* argv[])
 {
-	Engine engine;
 
-	engine.Init();
-	engine.Run();
-	engine.Destroy();
+	if (Engine::Instance().Init())
+	{
+		Engine::Instance().Run();
+	}
+	Engine::Instance().Destroy();
 
     return 0;
 }
