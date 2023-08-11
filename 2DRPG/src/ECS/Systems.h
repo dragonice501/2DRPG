@@ -1,17 +1,18 @@
 #pragma once
 
+#include "../Logger/Logger.h"
+
 #include "../Engine/Engine.h"
-#include "../Components/Components.h"
+#include "../ECS/Components.h"
 
 #include "../ECS/ECS.h"
 
 #include "../EventBus/EventBus.h"
-#include "../Events/CollisionEvent.h"
-#include "../Events/KeyPressedEvent.h"
+#include "../EventBus/Events.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <glm/glm.hpp>
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_sdl.h>
 #include <imgui/imgui_impl_sdl.h>
@@ -232,24 +233,34 @@ public:
 
 			switch (event.symbol)
 			{
-			case SDLK_UP:
-				rigidBody.velocity = keyboardControl.upVelocity;
-				sprite.srcRect.y = sprite.height * 0;
-				break;
-			case SDLK_RIGHT:
-				rigidBody.velocity = keyboardControl.rightVelocity;
-				sprite.srcRect.y = sprite.height * 1;
-				break;
-			case SDLK_DOWN:
-				rigidBody.velocity = keyboardControl.downVelocity;
-				sprite.srcRect.y = sprite.height * 2;
-				break;
-			case SDLK_LEFT:
-				rigidBody.velocity = keyboardControl.leftVelocity;
-				sprite.srcRect.y = sprite.height * 3;
-				break;
-			default:
-				break;
+				case SDLK_ESCAPE:
+				{
+					Engine::SetIsRunning(false);
+				}
+				case SDLK_UP:
+				{
+					rigidBody.velocity = keyboardControl.upVelocity;
+					sprite.srcRect.y = sprite.height * 0;
+					break;
+				}
+				case SDLK_RIGHT:
+				{
+					rigidBody.velocity = keyboardControl.rightVelocity;
+					sprite.srcRect.y = sprite.height * 1;
+					break;
+				}
+				case SDLK_DOWN:
+				{
+					rigidBody.velocity = keyboardControl.downVelocity;
+					sprite.srcRect.y = sprite.height * 2;
+					break;
+				}
+				case SDLK_LEFT:
+				{
+					rigidBody.velocity = keyboardControl.leftVelocity;
+					sprite.srcRect.y = sprite.height * 3;
+					break;
+				}
 			}
 		}
 	}
@@ -382,7 +393,7 @@ public:
 
 			if (SDL_GetTicks() - projectileEmitter.lastEmissionTime > projectileEmitter.repeatFrequency)
 			{
-				glm::vec2 projectilePosition = transform.position;
+				Vec2 projectilePosition = transform.position;
 				if (entity.HasComponent<SpriteComponent>())
 				{
 					const auto sprite = entity.GetComponent<SpriteComponent>();
@@ -392,7 +403,7 @@ public:
 
 				Entity projectile = registry->CreateEntity();
 				projectile.Group("projectiles");
-				projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
+				projectile.AddComponent<TransformComponent>(projectilePosition, Vec2(1.0, 1.0), 0.0);
 				projectile.AddComponent<RigidbodyComponent>(projectileEmitter.projectileVelocity);
 				projectile.AddComponent<SpriteComponent>("bullet-image", 4, 4, 4);
 				projectile.AddComponent<BoxColliderComponent>(4, 4);
@@ -415,7 +426,7 @@ public:
 					const auto transform = entity.GetComponent<TransformComponent>();
 					const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
 
-					glm::vec2 projectilePosition = transform.position;
+					Vec2 projectilePosition = transform.position;
 					if (entity.HasComponent<SpriteComponent>())
 					{
 						auto sprite = entity.GetComponent<SpriteComponent>();
@@ -423,7 +434,7 @@ public:
 						projectilePosition.y += transform.scale.y * sprite.height / 2;
 					}
 
-					glm::vec2 projectileVelocity = projectileEmitter.projectileVelocity;
+					Vec2 projectileVelocity = projectileEmitter.projectileVelocity;
 					int directionX = 0;
 					int directionY = 0;
 					if (rigidbody.velocity.x > 0) directionX = 1;
@@ -435,7 +446,7 @@ public:
 
 					Entity projectile = entity.mRegistry->CreateEntity();
 					projectile.Group("projectiles");
-					projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
+					projectile.AddComponent<TransformComponent>(projectilePosition, Vec2(1.0, 1.0), 0.0);
 					projectile.AddComponent<RigidbodyComponent>(projectileVelocity);
 					projectile.AddComponent<SpriteComponent>("bullet-image", 4, 4, 4);
 					projectile.AddComponent<BoxColliderComponent>(4, 4);
@@ -567,13 +578,13 @@ public:
 			{
 				Entity enemy = registry->CreateEntity();
 				enemy.Group("enemies");
-				enemy.AddComponent<TransformComponent>(glm::vec2(enemyPosX, enemyPosY), glm::vec2(scaleX, scaleY), 0.0);
-				enemy.AddComponent<RigidbodyComponent>(glm::vec2(velX, velY));
+				enemy.AddComponent<TransformComponent>(Vec2(enemyPosX, enemyPosY), Vec2(scaleX, scaleY), 0.0);
+				enemy.AddComponent<RigidbodyComponent>(Vec2(velX, velY));
 				enemy.AddComponent<SpriteComponent>(sprites[selectedSpriteIndex], 32, 32, 1);
-				enemy.AddComponent<BoxColliderComponent>(25, 20, glm::vec2(5, 5));
+				enemy.AddComponent<BoxColliderComponent>(25, 20, Vec2(5, 5));
 				double projVelX = cos(projAngle) * projSpeed;
 				double projVelY = sin(projAngle) * projSpeed;
-				enemy.AddComponent<ProjectileEmitterComponent>(glm::vec2(projVelX, projVelY), projRepeat * 1000, projDuration * 1000, 10, false);
+				enemy.AddComponent<ProjectileEmitterComponent>(Vec2(projVelX, projVelY), projRepeat * 1000, projDuration * 1000, 10, false);
 				enemy.AddComponent<HealthComponent>(health);
 
 				enemyPosX = enemyPosY = rotation = projAngle = 0;
@@ -756,77 +767,77 @@ public:
 	}
 };
 
-std::tuple<double, double> GetEntityPosition(Entity entity) {
-	if (entity.HasComponent<TransformComponent>()) {
-		const auto transform = entity.GetComponent<TransformComponent>();
-		return std::make_tuple(transform.position.x, transform.position.y);
-	}
-	else {
-		Logger::Err("Trying to get the position of an entity that has no transform component");
-		return std::make_tuple(0.0, 0.0);
-	}
-}
-
-std::tuple<double, double> GetEntityVelocity(Entity entity) {
-	if (entity.HasComponent<RigidbodyComponent>()) {
-		const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
-		return std::make_tuple(rigidbody.velocity.x, rigidbody.velocity.y);
-	}
-	else {
-		Logger::Err("Trying to get the velocity of an entity that has no rigidbody component");
-		return std::make_tuple(0.0, 0.0);
-	}
-}
-
-void SetEntityPosition(Entity entity, double x, double y) {
-	if (entity.HasComponent<TransformComponent>()) {
-		auto& transform = entity.GetComponent<TransformComponent>();
-		transform.position.x = x;
-		transform.position.y = y;
-	}
-	else {
-		Logger::Err("Trying to set the position of an entity that has no transform component");
-	}
-}
-
-void SetEntityVelocity(Entity entity, double x, double y) {
-	if (entity.HasComponent<RigidbodyComponent>()) {
-		auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
-		rigidbody.velocity.x = x;
-		rigidbody.velocity.y = y;
-	}
-	else {
-		Logger::Err("Trying to set the velocity of an entity that has no rigidbody component");
-	}
-}
-
-void SetEntityRotation(Entity entity, double angle) {
-	if (entity.HasComponent<TransformComponent>()) {
-		auto& transform = entity.GetComponent<TransformComponent>();
-		transform.rotation = angle;
-	}
-	else {
-		Logger::Err("Trying to set the rotation of an entity that has no transform component");
-	}
-}
-
-void SetEntityAnimationFrame(Entity entity, int frame) {
-	if (entity.HasComponent<AnimationComponent>()) {
-		auto& animation = entity.GetComponent<AnimationComponent>();
-		animation.currentFrame = frame;
-	}
-	else {
-		Logger::Err("Trying to set the animation frame of an entity that has no animation component");
-	}
-}
-
-void SetProjectileVelocity(Entity entity, double x, double y) {
-	if (entity.HasComponent<ProjectileEmitterComponent>()) {
-		auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
-		projectileEmitter.projectileVelocity.x = x;
-		projectileEmitter.projectileVelocity.y = y;
-	}
-	else {
-		Logger::Err("Trying to set the projectile velocity of an entity that has no projectile emitter component");
-	}
-}
+//std::tuple<double, double> GetEntityPosition(Entity entity) {
+//	if (entity.HasComponent<TransformComponent>()) {
+//		const auto transform = entity.GetComponent<TransformComponent>();
+//		return std::make_tuple(transform.position.x, transform.position.y);
+//	}
+//	else {
+//		Logger::Err("Trying to get the position of an entity that has no transform component");
+//		return std::make_tuple(0.0, 0.0);
+//	}
+//}
+//
+//std::tuple<double, double> GetEntityVelocity(Entity entity) {
+//	if (entity.HasComponent<RigidbodyComponent>()) {
+//		const auto rigidbody = entity.GetComponent<RigidbodyComponent>();
+//		return std::make_tuple(rigidbody.velocity.x, rigidbody.velocity.y);
+//	}
+//	else {
+//		Logger::Err("Trying to get the velocity of an entity that has no rigidbody component");
+//		return std::make_tuple(0.0, 0.0);
+//	}
+//}
+//
+//void SetEntityPosition(Entity entity, double x, double y) {
+//	if (entity.HasComponent<TransformComponent>()) {
+//		auto& transform = entity.GetComponent<TransformComponent>();
+//		transform.position.x = x;
+//		transform.position.y = y;
+//	}
+//	else {
+//		Logger::Err("Trying to set the position of an entity that has no transform component");
+//	}
+//}
+//
+//void SetEntityVelocity(Entity entity, double x, double y) {
+//	if (entity.HasComponent<RigidbodyComponent>()) {
+//		auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+//		rigidbody.velocity.x = x;
+//		rigidbody.velocity.y = y;
+//	}
+//	else {
+//		Logger::Err("Trying to set the velocity of an entity that has no rigidbody component");
+//	}
+//}
+//
+//void SetEntityRotation(Entity entity, double angle) {
+//	if (entity.HasComponent<TransformComponent>()) {
+//		auto& transform = entity.GetComponent<TransformComponent>();
+//		transform.rotation = angle;
+//	}
+//	else {
+//		Logger::Err("Trying to set the rotation of an entity that has no transform component");
+//	}
+//}
+//
+//void SetEntityAnimationFrame(Entity entity, int frame) {
+//	if (entity.HasComponent<AnimationComponent>()) {
+//		auto& animation = entity.GetComponent<AnimationComponent>();
+//		animation.currentFrame = frame;
+//	}
+//	else {
+//		Logger::Err("Trying to set the animation frame of an entity that has no animation component");
+//	}
+//}
+//
+//void SetProjectileVelocity(Entity entity, double x, double y) {
+//	if (entity.HasComponent<ProjectileEmitterComponent>()) {
+//		auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+//		projectileEmitter.projectileVelocity.x = x;
+//		projectileEmitter.projectileVelocity.y = y;
+//	}
+//	else {
+//		Logger::Err("Trying to set the projectile velocity of an entity that has no projectile emitter component");
+//	}
+//}
