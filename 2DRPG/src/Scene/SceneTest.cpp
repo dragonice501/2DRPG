@@ -1,5 +1,7 @@
 #include "SceneTest.h"
 
+#include <iostream>
+
 SceneTest::SceneTest()
 {
 }
@@ -22,8 +24,56 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     int mapNumCols = 25;
     int mapNumRows = 20;
 
+    int tileType;
+    int i = 0;
+    int mapWidth = 0;
+    int mapHeight = 0;
+    float mapXOffset = 0;
+    float mapYOffset = 0;
+
+    std::ifstream file("./assets/MapSaveFile.txt");
+    std::string type;
+    while (file >> type)
+    {
+        if (type == ":width")
+        {
+            file >> mapWidth;
+            std::cout << mapWidth << std::endl;
+        }
+        else if (type == ":height")
+        {
+            file >> mapHeight;
+            std::cout << mapHeight << std::endl;
+        }
+        else if (type == ":xOffset")
+        {
+            file >> mapXOffset;
+            std::cout << mapXOffset << std::endl;
+        }
+        else if (type == ":yOffset")
+        {
+            file >> mapYOffset;
+            std::cout << mapYOffset << std::endl;
+        }
+        else if (type == ":tile")
+        {
+            file >> tileType;
+            //std::cout << i << ' ' << tileType << std::endl;
+
+            int x = (tileType % 28);
+            int y = (tileType / 28);
+            //std::cout << x << ' ' << y << std::endl;
+
+            Entity tile = registry->CreateEntity();
+            tile.Tag("Tile");
+            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * 16, (i / mapHeight) * 16), Vec2(1.0, 1.0), 0.0);
+            tile.AddComponent<SpriteComponent>("TileMap", 16, 16, 0, false, x * 16, y * 16);
+            i++;
+        }
+    }
+
     /*std::fstream mapFile;
-    mapFile.open("./assets/tilemaps/jungle.map");
+    mapFile.open("./assets/MapSaveFile.txt");
     for (int y = 0; y < mapNumRows; y++)
     {
         for (int x = 0; x < mapNumCols; x++)
@@ -45,11 +95,10 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     Engine::mapWidth = mapNumCols * tileSize * tileScale;
     Engine::mapHeight = mapNumRows * tileSize * tileScale;*/
 
-    // Create an entity
-    Entity tileMap = registry->CreateEntity();
-    tileMap.Tag("Sprite");
-    tileMap.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(1.0, 1.0), 0.0);
-    tileMap.AddComponent<SpriteComponent>("TileMap", 1024, 1024);
+    //Entity tileMap = registry->CreateEntity();
+    //tileMap.Tag("Sprite");
+    //tileMap.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(1.0, 1.0), 0.0);
+    //tileMap.AddComponent<SpriteComponent>("TileMap", 1024, 1024);
 }
 
 void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
