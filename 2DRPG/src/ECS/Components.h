@@ -56,9 +56,9 @@ struct KeyboardControlComponent
 {
 	KeyboardControlComponent(
 		Vec2 upVelocity = Vec2(0),
-		Vec2 rightVelocity = Vec2(0),
 		Vec2 downVelocity = Vec2(0),
-		Vec2 leftVelocity = Vec2(0))
+		Vec2 leftVelocity = Vec2(0),
+		Vec2 rightVelocity = Vec2(0))
 	{
 		this->upVelocity = upVelocity;
 		this->rightVelocity = rightVelocity;
@@ -143,6 +143,14 @@ struct SpriteComponent
 	SDL_RendererFlip flip;
 	bool isFixed;
 	SDL_Rect srcRect;
+};
+
+struct TileComponent
+{
+	TileComponent()
+	{
+
+	}
 };
 
 struct TransformComponent

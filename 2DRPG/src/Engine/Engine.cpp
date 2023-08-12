@@ -57,8 +57,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    //mWindowWidth = 800;
-    //mWindowHeight = 800;
+    mWindowWidth = 1280;
+    mWindowHeight = 720;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)
@@ -95,6 +95,7 @@ void Engine::Run()
 
     while (isRunning)
     {
+        std::cout << SDL_GetTicks() - millisecondsPreviousFrame << std::endl;
         int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
         if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME)
         {

@@ -71,7 +71,7 @@ public:
 	System() = default;
 	~System() = default;
 
-	inline std::vector<Entity> GetSystemEntities() const { return mEntities; }
+	inline std::vector<Entity>& GetSystemEntities() { return mEntities; }
 
 	void AddEntityToSystem(Entity entity);
 	void RemoveEntityFromSystem(Entity entity);

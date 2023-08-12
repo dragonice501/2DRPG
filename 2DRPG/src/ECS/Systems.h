@@ -17,7 +17,7 @@
 #include <imgui/imgui_sdl.h>
 #include <imgui/imgui_impl_sdl.h>
 
-#include <tuple>
+#include <iostream>
 #include <algorithm>
 
 class AnimationSystem : public System
@@ -240,12 +240,6 @@ public:
 				case SDLK_UP:
 				{
 					rigidBody.velocity = keyboardControl.upVelocity;
-					sprite.srcRect.y = sprite.height * 0;
-					break;
-				}
-				case SDLK_RIGHT:
-				{
-					rigidBody.velocity = keyboardControl.rightVelocity;
 					sprite.srcRect.y = sprite.height * 1;
 					break;
 				}
@@ -259,6 +253,12 @@ public:
 				{
 					rigidBody.velocity = keyboardControl.leftVelocity;
 					sprite.srcRect.y = sprite.height * 3;
+					break;
+				}
+				case SDLK_RIGHT:
+				{
+					rigidBody.velocity = keyboardControl.rightVelocity;
+					sprite.srcRect.y = sprite.height * 4;
 					break;
 				}
 			}
@@ -342,7 +342,7 @@ public:
 				entity.Kill();
 			}
 
-			if (entity.HasTag("player"))
+			/*if (entity.HasTag("player"))
 			{
 				int paddingLeft = 10;
 				int paddingTop = 10;
@@ -353,9 +353,9 @@ public:
 				transform.position.x = transform.position.x > Engine::mapWidth - paddingRight ? Engine::mapWidth - paddingRight : transform.position.x;
 				transform.position.y = transform.position.y < paddingLeft ? paddingTop : transform.position.y;
 				transform.position.y = transform.position.y > Engine::mapHeight + paddingBottom ? Engine::mapHeight - paddingBottom : transform.position.y;
-			}
+			}*/
 
-			if (
+			/*if (
 				(transform.position.x < 0 ||
 					transform.position.x > Engine::mapWidth ||
 					transform.position.y < 0 ||
@@ -363,7 +363,7 @@ public:
 				entity.HasTag("player"))
 			{
 				entity.Kill();
-			}
+			}*/
 		}
 	}
 };
@@ -475,6 +475,36 @@ public:
 			{
 				entity.Kill();
 			}
+		}
+	}
+};
+
+class RenderCharacterSystem : public System
+{
+public:
+	RenderCharacterSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<SpriteComponent>();
+		RequireComponent<AnimationComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
+	{
+		for (const auto& entity : GetSystemEntities())
+		{
+			const auto transform = entity.GetComponent<TransformComponent>();
+			const auto sprite = entity.GetComponent<SpriteComponent>();
+
+			SDL_Rect srcRect = sprite.srcRect;
+			SDL_Rect destRect = {
+				transform.position.x - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y - (sprite.isFixed ? 0 : camera.y),
+				sprite.width * transform.scale.x,
+				sprite.height * transform.scale.y };
+			SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+
+			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 		}
 	}
 };
@@ -694,7 +724,7 @@ public:
 		};
 		std::vector<RenderableEntity> renderableEntities;
 
-		for (auto entity : GetSystemEntities())
+		for (auto& entity : GetSystemEntities())
 		{
 			RenderableEntity renderableEntity;
 			renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
@@ -715,10 +745,10 @@ public:
 				return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
 			});
 
-		for (auto entity : renderableEntities)
+		for (const auto& entity : GetSystemEntities())
 		{
-			const auto transform = entity.transformComponent;
-			const auto sprite = entity.spriteComponent;
+			const auto transform = entity.GetComponent<TransformComponent>();
+			const auto sprite = entity.GetComponent<SpriteComponent>();
 
 			SDL_Rect srcRect = sprite.srcRect;
 			SDL_Rect destRect = {
@@ -763,6 +793,42 @@ public:
 
 			SDL_RenderCopy(renderer, texture, NULL, &healthBarTextRectangle);
 			SDL_DestroyTexture(texture);
+		}
+	}
+};
+
+class RenderTileSystem : public System
+{
+public:
+	RenderTileSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<SpriteComponent>();
+		RequireComponent<TileComponent>();
+	}
+
+	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
+	{
+		int x = camera.x - (camera.x % 16);
+		int y = camera.y - (camera.y % 16);
+
+		for (int i = y; i < camera.h / 16; i++)
+		{
+			for (int j = x; j < camera.w / 16; j++)
+			{
+				const auto transform = GetSystemEntities()[j + i * 256].GetComponent<TransformComponent>();
+				const auto sprite = GetSystemEntities()[j + i * 256].GetComponent<SpriteComponent>();
+
+				SDL_Rect srcRect = sprite.srcRect;
+				SDL_Rect destRect = {
+					transform.position.x - (sprite.isFixed ? 0 : camera.x),
+					transform.position.y - (sprite.isFixed ? 0 : camera.y),
+					sprite.width * transform.scale.x,
+					sprite.height * transform.scale.y };
+				SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+
+				SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
+			}
 		}
 	}
 };
