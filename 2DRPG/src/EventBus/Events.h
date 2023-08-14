@@ -24,3 +24,14 @@ public:
 
 	SDL_Keycode symbol;
 };
+
+class KeyReleasedEvent : public Event
+{
+public:
+	KeyReleasedEvent(SDL_Keycode symbol)
+	{
+		this->symbol = symbol;
+	}
+
+	SDL_Keycode symbol;
+};

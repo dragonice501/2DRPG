@@ -74,6 +74,234 @@ public:
 	}
 };
 
+class CharacterAnimationSystem : public System
+{
+public:
+	CharacterAnimationSystem()
+	{
+		RequireComponent<SpriteComponent>();
+		RequireComponent<AnimationComponent>();
+		RequireComponent<RigidbodyComponent>();
+	}
+
+	void Update(float deltaTime)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& animation = entity.GetComponent<AnimationComponent>();
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+
+			if (rigidbody.velocity.y < 0)
+			{
+				sprite.srcRect.y = sprite.height * 1;
+			}
+			else if (rigidbody.velocity.y > 0)
+			{
+				sprite.srcRect.y = sprite.height * 2;
+			}
+			else if (rigidbody.velocity.x < 0)
+			{
+				sprite.srcRect.y = sprite.height * 3;
+			}
+			else if (rigidbody.velocity.x > 0)
+			{
+				sprite.srcRect.y = sprite.height * 4;
+			}
+			else if (rigidbody.velocity == Vec2(0.0f))
+			{
+				sprite.srcRect.y = 0;
+			}
+
+			animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameRateSpeed / 1000) % animation.numFrames;
+			sprite.srcRect.x = animation.currentFrame * sprite.width;
+		}
+	}
+};
+
+class CharacterInputSystem : public System
+{
+public:
+	CharacterInputSystem()
+	{
+		RequireComponent<CharacterInputComponent>();
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<KeyPressedEvent>(this, &CharacterInputSystem::OnKeyPressed);
+		eventBus->SubscribeToEvent<KeyReleasedEvent>(this, &CharacterInputSystem::OnKeyReleased);
+	}
+
+	void OnKeyPressed(KeyPressedEvent& event)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& characterInput = entity.GetComponent<CharacterInputComponent>();
+
+			switch (event.symbol)
+			{
+				case SDLK_ESCAPE:
+				{
+
+				}
+				case SDLK_w:
+				{
+					characterInput.upButtonPresed = true;
+					break;
+				}
+				case SDLK_s:
+				{
+					characterInput.downButtonPresed = true;
+					break;
+				}
+				case SDLK_a:
+				{
+					characterInput.leftButtonPresed = true;
+					break;
+				}
+				case SDLK_d:
+				{
+					characterInput.rightButtonPresed = true;
+					break;
+				}
+			}
+		}
+	}
+
+	void OnKeyReleased(KeyReleasedEvent& event)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& characterInput = entity.GetComponent<CharacterInputComponent>();
+
+			switch (event.symbol)
+			{
+				case SDLK_ESCAPE:
+				{
+
+				}
+				case SDLK_w:
+				{
+					characterInput.upButtonPresed = false;
+					break;
+				}
+				case SDLK_s:
+				{
+					characterInput.downButtonPresed = false;
+					break;
+				}
+				case SDLK_a:
+				{
+					characterInput.leftButtonPresed = false;
+					break;
+				}
+				case SDLK_d:
+				{
+					characterInput.rightButtonPresed = false;
+					break;
+				}
+			}
+		}
+	}
+};
+
+class CharacterMovementSystem : public System
+{
+public:
+	CharacterMovementSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<RigidbodyComponent>();
+		RequireComponent<CharacterMovementComponent>();
+		RequireComponent<SpriteComponent>();
+		RequireComponent<CharacterInputComponent>();
+	}
+
+	void Update(double dt)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+			auto& movement = entity.GetComponent<CharacterMovementComponent>();
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+			auto& input = entity.GetComponent<CharacterInputComponent>();
+
+			if (movement.movementState == CharacterMovementComponent::EMovementState::Moving)
+			{
+				if(movement.destination == Vec2(0.0f))
+				{
+					SetVelocity(rigidbody, movement, input, transform);
+				}
+
+				if (transform.position != movement.destination)
+				{
+					movement.rate += 2 * dt;
+					transform.position = Vec2::Lerp(movement.start, movement.destination, movement.rate);
+					if (transform.position == movement.destination)
+					{
+						movement.rate = 0.0f;
+						movement.start = transform.position;
+						movement.destination = Vec2(0.0f);
+						rigidbody.velocity = Vec2(0.0f);
+						sprite.srcRect.y = 0;
+
+						if (MovementPressed(input))
+						{
+							SetVelocity(rigidbody, movement, input, transform);
+						}
+						else
+						{
+							movement.movementState = CharacterMovementComponent::EMovementState::Idle;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (MovementPressed(input))
+				{
+					movement.movementState = CharacterMovementComponent::EMovementState::Moving;
+				}
+			}
+		}
+	}
+
+	bool MovementPressed(const CharacterInputComponent& i)
+	{
+		return i.upButtonPresed || i.downButtonPresed || i.leftButtonPresed || i.rightButtonPresed;
+	}
+	void SetVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
+	{
+		if (i.upButtonPresed)
+		{
+			r.velocity = m.upVelocity * 32.0f;
+			m.start = t.position;
+		}
+		else if (i.downButtonPresed)
+		{
+			r.velocity = m.downVelocity * 32.0f;
+			m.destination = t.position + r.velocity;
+			m.start = t.position;
+			m.destination = t.position + r.velocity;
+		}
+		else if (i.leftButtonPresed)
+		{
+			r.velocity = m.leftVelocity * 32.0f;
+			m.start = t.position;
+			m.destination = t.position + r.velocity;
+		}
+		else if (i.rightButtonPresed)
+		{
+			r.velocity = m.rightVelocity * 32.0f;
+			m.start = t.position;
+			m.destination = t.position + r.velocity;
+		}
+		m.destination = t.position + r.velocity;
+	}
+};
+
 class CollisionSystem : public System
 {
 public:
@@ -213,9 +441,11 @@ class KeyboardControlSystem : public System
 public:
 	KeyboardControlSystem()
 	{
+		RequireComponent<CharacterMovementComponent>();
 		RequireComponent<KeyboardControlComponent>();
 		RequireComponent<RigidbodyComponent>();
 		RequireComponent<SpriteComponent>();
+		RequireComponent<TransformComponent>();
 	}
 
 	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
@@ -227,9 +457,11 @@ public:
 	{
 		for (auto entity : GetSystemEntities())
 		{
-			const auto keyboardControl = entity.GetComponent<KeyboardControlComponent>();
+			auto& keyboardControl = entity.GetComponent<KeyboardControlComponent>();
+			auto& characterMovement = entity.GetComponent<CharacterMovementComponent>();
 			auto& rigidBody = entity.GetComponent<RigidbodyComponent>();
 			auto& sprite = entity.GetComponent<SpriteComponent>();
+			auto& transform = entity.GetComponent<TransformComponent>();
 
 			switch (event.symbol)
 			{
@@ -240,24 +472,44 @@ public:
 				case SDLK_UP:
 				{
 					rigidBody.velocity = keyboardControl.upVelocity;
+
+					characterMovement.destination = transform.position + rigidBody.velocity;
+					characterMovement.start = transform.position;
+					characterMovement.movementState = CharacterMovementComponent::EMovementState::Moving;
+
 					sprite.srcRect.y = sprite.height * 1;
 					break;
 				}
 				case SDLK_DOWN:
 				{
 					rigidBody.velocity = keyboardControl.downVelocity;
+
+					characterMovement.destination = transform.position + rigidBody.velocity;
+					characterMovement.start = transform.position;
+					characterMovement.movementState = CharacterMovementComponent::EMovementState::Moving;
+
 					sprite.srcRect.y = sprite.height * 2;
 					break;
 				}
 				case SDLK_LEFT:
 				{
 					rigidBody.velocity = keyboardControl.leftVelocity;
+
+					characterMovement.destination = transform.position + rigidBody.velocity;
+					characterMovement.start = transform.position;
+					characterMovement.movementState = CharacterMovementComponent::EMovementState::Moving;
+
 					sprite.srcRect.y = sprite.height * 3;
 					break;
 				}
 				case SDLK_RIGHT:
 				{
 					rigidBody.velocity = keyboardControl.rightVelocity;
+
+					characterMovement.destination = transform.position + rigidBody.velocity;
+					characterMovement.start = transform.position;
+					characterMovement.movementState = CharacterMovementComponent::EMovementState::Moving;
+
 					sprite.srcRect.y = sprite.height * 4;
 					break;
 				}
@@ -342,7 +594,7 @@ public:
 				entity.Kill();
 			}
 
-			/*if (entity.HasTag("player"))
+			if (entity.HasTag("player"))
 			{
 				int paddingLeft = 10;
 				int paddingTop = 10;
@@ -353,9 +605,9 @@ public:
 				transform.position.x = transform.position.x > Engine::mapWidth - paddingRight ? Engine::mapWidth - paddingRight : transform.position.x;
 				transform.position.y = transform.position.y < paddingLeft ? paddingTop : transform.position.y;
 				transform.position.y = transform.position.y > Engine::mapHeight + paddingBottom ? Engine::mapHeight - paddingBottom : transform.position.y;
-			}*/
+			}
 
-			/*if (
+			if (
 				(transform.position.x < 0 ||
 					transform.position.x > Engine::mapWidth ||
 					transform.position.y < 0 ||
@@ -363,7 +615,7 @@ public:
 				entity.HasTag("player"))
 			{
 				entity.Kill();
-			}*/
+			}
 		}
 	}
 };
@@ -745,10 +997,10 @@ public:
 				return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
 			});
 
-		for (const auto& entity : GetSystemEntities())
+		for (const auto& entity : renderableEntities)
 		{
-			const auto transform = entity.GetComponent<TransformComponent>();
-			const auto sprite = entity.GetComponent<SpriteComponent>();
+			const auto transform = entity.transformComponent;
+			const auto sprite = entity.spriteComponent;
 
 			SDL_Rect srcRect = sprite.srcRect;
 			SDL_Rect destRect = {
@@ -812,7 +1064,7 @@ public:
 		int x = camera.x - (camera.x % 16);
 		int y = camera.y - (camera.y % 16);
 
-		for (int i = y; i < camera.h / 16; i++)
+		/*for (int i = y; i < camera.h / 16; i++)
 		{
 			for (int j = x; j < camera.w / 16; j++)
 			{
@@ -829,6 +1081,22 @@ public:
 
 				SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 			}
+		}*/
+
+		for (const auto& entity : GetSystemEntities())
+		{
+			const auto transform = entity.GetComponent<TransformComponent>();
+			const auto sprite = entity.GetComponent<SpriteComponent>();
+
+			SDL_Rect srcRect = sprite.srcRect;
+			SDL_Rect destRect = {
+				transform.position.x - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y - (sprite.isFixed ? 0 : camera.y),
+				sprite.width * transform.scale.x,
+				sprite.height * transform.scale.y };
+			SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+
+			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 		}
 	}
 };

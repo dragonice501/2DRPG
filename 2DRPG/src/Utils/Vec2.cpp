@@ -88,6 +88,39 @@ float Vec2::Cross(const Vec2& v) const
 	return (x * v.y) - (y * v.x);
 }
 
+float Clamp(float val, float min, float max)
+{
+	if (val > max) return max;
+	else if (val < min) return min;
+	else return val;
+}
+
+Vec2 Vec2::Lerp(const Vec2& start, const Vec2& end, float rate)
+{
+	float x = start.x + (end.x - start.x) * rate;
+	float y = start.y + (end.y - start.y) * rate;
+
+	if (start.x < end.x)
+	{
+		x = Clamp(x, start.x, end.x);
+	}
+	else if (start.x > end.x)
+	{
+		x = Clamp(x, end.x, start.x);
+	}
+
+	if (start.y < end.y)
+	{
+		y = Clamp(y, start.y, end.y);
+	}
+	else if (start.y > end.y)
+	{
+		y = Clamp(y, end.y, start.y);
+	}
+
+	return Vec2(x, y);
+}
+
 Vec2& Vec2::operator = (const Vec2& v)
 {
 	x = v.x;

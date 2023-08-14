@@ -15,13 +15,18 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     // Add the sytems that need to be processed in our game
     registry->AddSystem<RenderTileSystem>();
     registry->AddSystem<RenderCharacterSystem>();
-    registry->AddSystem<AnimationSystem>();
-    registry->AddSystem<KeyboardControlSystem>();
-    registry->AddSystem<MovementSystem>();
+    registry->AddSystem<CharacterAnimationSystem>();
+    registry->AddSystem<CharacterInputSystem>();
+    registry->AddSystem<CharacterMovementSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "TileMap", "./assets/Chapter_0_m.png");
+    assetStore->AddTexture(renderer, "BarbarianSheet", "./assets/Barbarian.png");
+    assetStore->AddTexture(renderer, "BowFighterSheet", "./assets/Bow_Fighter.png");
+    assetStore->AddTexture(renderer, "DancerSheet", "./assets/Dancer.png");
+    assetStore->AddTexture(renderer, "MageSheet", "./assets/Mage.png");
     assetStore->AddTexture(renderer, "SigurdSheet", "./assets/Sigurd.png");
+    assetStore->AddTexture(renderer, "SwordArmourSheet", "./assets/Sword_Armour.png");
 
     int tileType;
     int i = 0;
@@ -54,12 +59,12 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         {
             file >> tileType;
 
-            int x = (tileType % 28);
-            int y = (tileType / 28);
+            int x = (tileType % 32);
+            int y = (tileType / 32);
 
             Entity tile = registry->CreateEntity();
             tile.Tag("Tile");
-            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * 16, (i / mapHeight) * 16), Vec2(1.0, 1.0), 0.0);
+            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * 32, (i / mapWidth) * 32), Vec2(2.0, 2.0), 0.0);
             tile.AddComponent<SpriteComponent>("TileMap", 16, 16, 0, false, x * 16, y * 16);
             tile.AddComponent<TileComponent>();
             i++;
@@ -68,11 +73,12 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(2.0, 2.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0);
-    sigurd.AddComponent<AnimationComponent>(4, 4, true);
-    sigurd.AddComponent<KeyboardControlComponent>(Vec2(0.0f, -16.0f), Vec2(0.0f, 16.0f), Vec2(-16.0f, 0.0f), Vec2(16.0f, 0.0f));
+    sigurd.AddComponent<AnimationComponent>(4, 8, true);
+    sigurd.AddComponent<CharacterInputComponent>();
     sigurd.AddComponent<RigidbodyComponent>();
+    sigurd.AddComponent<CharacterMovementComponent>();
 }
 
 void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
@@ -90,6 +96,11 @@ void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
             }
+            case SDL_KEYUP:
+            {
+                eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
+                break;
+            }
         }
     }
 }
@@ -98,12 +109,13 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
 {
     // Reset all event handlers for the current frame
     eventBus->Reset();
-    registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<CharacterInputSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
-    registry->GetSystem<MovementSystem>().Update(dt);
-    registry->GetSystem<AnimationSystem>().Update(dt);
+    registry->GetSystem<CharacterMovementSystem>().Update(dt);
+
+    registry->GetSystem<CharacterAnimationSystem>().Update(dt);
 }
 
 void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

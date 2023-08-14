@@ -95,7 +95,7 @@ void Engine::Run()
 
     while (isRunning)
     {
-        std::cout << SDL_GetTicks() - millisecondsPreviousFrame << std::endl;
+        //std::cout << SDL_GetTicks() - millisecondsPreviousFrame << std::endl;
         int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
         if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME)
         {

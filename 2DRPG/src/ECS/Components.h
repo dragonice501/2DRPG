@@ -42,6 +42,47 @@ struct CameraFollowComponent
 	CameraFollowComponent() = default;
 };
 
+struct CharacterInputComponent
+{
+	CharacterInputComponent() :
+		upButtonPresed(false),
+		downButtonPresed(false),
+		leftButtonPresed(false),
+		rightButtonPresed(false)
+	{
+
+	}
+
+	bool upButtonPresed;
+	bool downButtonPresed;
+	bool leftButtonPresed;
+	bool rightButtonPresed;
+};
+
+struct CharacterMovementComponent
+{
+	CharacterMovementComponent() :
+		movementState(EMovementState::Idle), start(Vec2(0.0f)), destination(Vec2(0.0f)), rate(0.0f),
+		upVelocity(0.0f, -1.0f), downVelocity(0.0f, 1.0f), leftVelocity(-1.0f, 0.0f), rightVelocity(1.0f, 0.0f)
+	{
+	}
+
+	enum EMovementState
+	{
+		Idle, Moving
+	};
+
+	EMovementState movementState;
+	Vec2 start;
+	Vec2 destination;
+	float rate;
+
+	Vec2 upVelocity;
+	Vec2 rightVelocity;
+	Vec2 downVelocity;
+	Vec2 leftVelocity;
+};
+
 struct HealthComponent
 {
 	HealthComponent(int healthPercentage = 0)
