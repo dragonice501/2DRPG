@@ -39,12 +39,13 @@ struct BoxColliderComponent
 
 struct CameraFollowComponent
 {
-	CameraFollowComponent() : shouldFollow(false)
+	CameraFollowComponent() : inHorizontalMiddle(false), inVerticalMiddle(false)
 	{
 
 	}
 
-	bool shouldFollow;
+	bool inHorizontalMiddle;
+	bool inVerticalMiddle;
 };
 
 struct CharacterInputComponent

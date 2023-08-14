@@ -31,8 +31,6 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     int tileType;
     int i = 0;
-    int mapWidth = 0;
-    int mapHeight = 0;
     float mapXOffset = 0;
     float mapYOffset = 0;
 
@@ -119,10 +117,10 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
-    registry->GetSystem<CharacterMovementSystem>().Update(dt);
+    registry->GetSystem<CharacterMovementSystem>().Update(dt, mapWidth, mapHeight);
+    registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
-    registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera());
 }
 
 void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

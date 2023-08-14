@@ -27,4 +27,8 @@ public:
 	virtual void Input(std::unique_ptr<EventBus>& eventBus) = 0;
 	virtual void Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt) = 0;
 	virtual void Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer) = 0;
+
+protected:
+	int mapWidth = 0;
+	int mapHeight = 0;
 };

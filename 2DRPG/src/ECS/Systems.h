@@ -11,6 +11,7 @@
 #include "../EventBus/Events.h"
 
 #include "../Utils/Constants.h"
+#include "../Utils/Utils.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -21,6 +22,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
 class AnimationSystem : public System
 {
@@ -53,25 +55,24 @@ public:
 		RequireComponent<TransformComponent>();
 	}
 
-	void Update(SDL_Rect& camera)
+	void Update(SDL_Rect& camera, const int mapWidth, const int mapHeight)
 	{
-		for (auto entity : GetSystemEntities())
+		for (auto& entity : GetSystemEntities())
 		{
-			auto transform = entity.GetComponent<TransformComponent>();
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& cameraFollow = entity.GetComponent<CameraFollowComponent>();
 
-			if (transform.position.x + (camera.w / 2) < Engine::mapWidth)
+			if (transform.position.x * TILE_SPRITE_SCALE + (camera.w / 2) < mapWidth * TILE_SIZE * TILE_SPRITE_SCALE)
 			{
-				camera.x = transform.position.x - (Engine::mWindowWidth / 2);
+				camera.x = transform.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
 			}
-			if (transform.position.y + (camera.h / 2) < Engine::mapHeight)
+			if (transform.position.y * TILE_SPRITE_SCALE + (camera.h / 2) < mapHeight * TILE_SIZE * TILE_SPRITE_SCALE)
 			{
-				camera.y = transform.position.y - (Engine::mWindowWidth / 2);
+				camera.y = transform.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
 			}
 
-			camera.x = camera.x < 0 ? 0 : camera.x;
-			camera.y = camera.y < 0 ? 0 : camera.y;
-			camera.x = camera.x > camera.w ? camera.w : camera.x;
-			camera.y = camera.y > camera.h ? camera.h : camera.y;
+			camera.x = Clampf(camera.x, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE);
+			camera.y = Clampf(camera.y, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE);
 		}
 	}
 };
@@ -218,9 +219,10 @@ public:
 		RequireComponent<CharacterMovementComponent>();
 		RequireComponent<SpriteComponent>();
 		RequireComponent<CharacterInputComponent>();
+		RequireComponent<CameraFollowComponent>();
 	}
 
-	void Update(double dt)
+	void Update(double dt, const int mapWidth, const int mapHeight)
 	{
 		for (auto entity : GetSystemEntities())
 		{
@@ -249,7 +251,7 @@ public:
 						rigidbody.velocity = Vec2(0.0f);
 						sprite.srcRect.y = 0;
 
-						if (MovementPressed(input))
+						if (MovementPressed(input) && MovementInsideMap(GetDesiredVelocity(movement, input), transform, mapWidth, mapHeight))
 						{
 							SetVelocity(rigidbody, movement, input, transform);
 						}
@@ -262,9 +264,13 @@ public:
 			}
 			else
 			{
-				if (MovementPressed(input) && MovementInsideScreen(GetDesiredVelocity(rigidbody, movement, input, transform), transform))
+				if (MovementPressed(input))
 				{
-					movement.movementState = CharacterMovementComponent::EMovementState::Moving;
+					Vec2 desiredVelocity = GetDesiredVelocity(movement, input);
+					if (MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
+					{
+						movement.movementState = CharacterMovementComponent::EMovementState::Moving;
+					}
 				}
 			}
 		}
@@ -275,32 +281,37 @@ public:
 		return i.upButtonPresed || i.downButtonPresed || i.leftButtonPresed || i.rightButtonPresed;
 	}
 
-	bool MovementInsideScreen(const Vec2& v, const TransformComponent& t)
+	bool MovementInsideMap(const Vec2& v, const TransformComponent& t, const int width, const int height)
 	{
 		return !(
 			t.position.x + v.x < 0 ||
-			(t.position.x) + v.x  > Engine::mWindowWidth ||
-			t.position.y + v.y < 0 ||
-			(t.position.x * 2) + v.y > Engine::mWindowHeight);
+			t.position.x + TILE_SIZE  + v.x > width * TILE_SIZE ||
+			t.position.y + TILE_SIZE + v.y < 0 ||
+			t.position.y + TILE_SIZE * 2  + v.y  > height * TILE_SIZE);
 	}
 
-	Vec2 GetDesiredVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
+	Vec2 GetDesiredVelocity(CharacterMovementComponent& m, CharacterInputComponent& i)
 	{
+		Vec2 desiredPosition;
 		if (i.upButtonPresed)
 		{
-			return m.upVelocity;
+			desiredPosition = Vec2(static_cast<int>(m.upVelocity.x * TILE_SIZE), static_cast<int>(m.upVelocity.y * TILE_SIZE));
+			return desiredPosition;
 		}
 		else if (i.downButtonPresed)
 		{
-			return m.downVelocity;
+			desiredPosition = Vec2(static_cast<int>(m.downVelocity.x * TILE_SIZE), static_cast<int>(m.downVelocity.y * TILE_SIZE));
+			return m.downVelocity * TILE_SPRITE_SCALE;
 		}
 		else if (i.leftButtonPresed)
 		{
-			return m.leftVelocity;
+			desiredPosition = Vec2(static_cast<int>(m.leftVelocity.x * TILE_SIZE), static_cast<int>(m.leftVelocity.y * TILE_SIZE));
+			return m.leftVelocity * TILE_SPRITE_SCALE;
 		}
 		else if (i.rightButtonPresed)
 		{
-			return m.rightVelocity;
+			desiredPosition = Vec2(static_cast<int>(m.rightVelocity.x * TILE_SIZE), static_cast<int>(m.rightVelocity.y * TILE_SIZE));
+			return m.rightVelocity * TILE_SPRITE_SCALE;
 		}
 	}
 
