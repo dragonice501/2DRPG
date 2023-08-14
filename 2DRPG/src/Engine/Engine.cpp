@@ -57,8 +57,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    mWindowWidth = 1280;
-    mWindowHeight = 720;
+    //mWindowWidth = 1280;
+    //mWindowHeight = 720;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)

@@ -39,7 +39,12 @@ struct BoxColliderComponent
 
 struct CameraFollowComponent
 {
-	CameraFollowComponent() = default;
+	CameraFollowComponent() : shouldFollow(false)
+	{
+
+	}
+
+	bool shouldFollow;
 };
 
 struct CharacterInputComponent

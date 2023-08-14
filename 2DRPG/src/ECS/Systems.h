@@ -10,6 +10,8 @@
 #include "../EventBus/EventBus.h"
 #include "../EventBus/Events.h"
 
+#include "../Utils/Constants.h"
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -260,7 +262,7 @@ public:
 			}
 			else
 			{
-				if (MovementPressed(input))
+				if (MovementPressed(input) && MovementInsideScreen(GetDesiredVelocity(rigidbody, movement, input, transform), transform))
 				{
 					movement.movementState = CharacterMovementComponent::EMovementState::Moving;
 				}
@@ -272,29 +274,59 @@ public:
 	{
 		return i.upButtonPresed || i.downButtonPresed || i.leftButtonPresed || i.rightButtonPresed;
 	}
+
+	bool MovementInsideScreen(const Vec2& v, const TransformComponent& t)
+	{
+		return !(
+			t.position.x + v.x < 0 ||
+			(t.position.x) + v.x  > Engine::mWindowWidth ||
+			t.position.y + v.y < 0 ||
+			(t.position.x * 2) + v.y > Engine::mWindowHeight);
+	}
+
+	Vec2 GetDesiredVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
+	{
+		if (i.upButtonPresed)
+		{
+			return m.upVelocity;
+		}
+		else if (i.downButtonPresed)
+		{
+			return m.downVelocity;
+		}
+		else if (i.leftButtonPresed)
+		{
+			return m.leftVelocity;
+		}
+		else if (i.rightButtonPresed)
+		{
+			return m.rightVelocity;
+		}
+	}
+
 	void SetVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
 	{
 		if (i.upButtonPresed)
 		{
-			r.velocity = m.upVelocity * 32.0f;
+			r.velocity = m.upVelocity * TILE_SIZE;
 			m.start = t.position;
 		}
 		else if (i.downButtonPresed)
 		{
-			r.velocity = m.downVelocity * 32.0f;
+			r.velocity = m.downVelocity * TILE_SIZE;
 			m.destination = t.position + r.velocity;
 			m.start = t.position;
 			m.destination = t.position + r.velocity;
 		}
 		else if (i.leftButtonPresed)
 		{
-			r.velocity = m.leftVelocity * 32.0f;
+			r.velocity = m.leftVelocity * TILE_SIZE;
 			m.start = t.position;
 			m.destination = t.position + r.velocity;
 		}
 		else if (i.rightButtonPresed)
 		{
-			r.velocity = m.rightVelocity * 32.0f;
+			r.velocity = m.rightVelocity * TILE_SIZE;
 			m.start = t.position;
 			m.destination = t.position + r.velocity;
 		}
@@ -750,11 +782,10 @@ public:
 
 			SDL_Rect srcRect = sprite.srcRect;
 			SDL_Rect destRect = {
-				transform.position.x - (sprite.isFixed ? 0 : camera.x),
-				transform.position.y - (sprite.isFixed ? 0 : camera.y),
-				sprite.width * transform.scale.x,
-				sprite.height * transform.scale.y };
-			SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+				transform.position.x * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.y),
+				sprite.width * transform.scale.x * TILE_SPRITE_SCALE,
+				sprite.height * transform.scale.y * TILE_SPRITE_SCALE };
 
 			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 		}
@@ -1061,27 +1092,8 @@ public:
 
 	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
 	{
-		int x = camera.x - (camera.x % 16);
-		int y = camera.y - (camera.y % 16);
-
-		/*for (int i = y; i < camera.h / 16; i++)
-		{
-			for (int j = x; j < camera.w / 16; j++)
-			{
-				const auto transform = GetSystemEntities()[j + i * 256].GetComponent<TransformComponent>();
-				const auto sprite = GetSystemEntities()[j + i * 256].GetComponent<SpriteComponent>();
-
-				SDL_Rect srcRect = sprite.srcRect;
-				SDL_Rect destRect = {
-					transform.position.x - (sprite.isFixed ? 0 : camera.x),
-					transform.position.y - (sprite.isFixed ? 0 : camera.y),
-					sprite.width * transform.scale.x,
-					sprite.height * transform.scale.y };
-				SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
-
-				SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
-			}
-		}*/
+		int x = camera.x - (camera.x % TILE_SIZE);
+		int y = camera.y - (camera.y % TILE_SIZE);
 
 		for (const auto& entity : GetSystemEntities())
 		{
@@ -1089,12 +1101,13 @@ public:
 			const auto sprite = entity.GetComponent<SpriteComponent>();
 
 			SDL_Rect srcRect = sprite.srcRect;
-			SDL_Rect destRect = {
-				transform.position.x - (sprite.isFixed ? 0 : camera.x),
-				transform.position.y - (sprite.isFixed ? 0 : camera.y),
-				sprite.width * transform.scale.x,
-				sprite.height * transform.scale.y };
-			SDL_Point center = { transform.position.x + sprite.width / 2.0, transform.position.y + sprite.height / 2.0 };
+			SDL_Rect destRect =
+			{
+				transform.position.x * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.y),
+				sprite.width * transform.scale.x * TILE_SPRITE_SCALE,
+				sprite.height * transform.scale.y * TILE_SPRITE_SCALE
+			};
 
 			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 		}

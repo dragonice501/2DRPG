@@ -11,6 +11,8 @@
 #include "../EventBus/EventBus.h"
 #include "../EventBus/Events.h"
 
+#include "../Utils/Constants.h"
+
 #include <SDL.h>
 #include <memory>
 #include <fstream>

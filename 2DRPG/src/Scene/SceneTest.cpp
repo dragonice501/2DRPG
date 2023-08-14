@@ -18,6 +18,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     registry->AddSystem<CharacterAnimationSystem>();
     registry->AddSystem<CharacterInputSystem>();
     registry->AddSystem<CharacterMovementSystem>();
+    registry->AddSystem<CameraMovementSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "TileMap", "./assets/Chapter_0_m.png");
@@ -42,10 +43,14 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         if (type == ":width")
         {
             file >> mapWidth;
+
+            Engine::mapWidth = mapWidth;
         }
         else if (type == ":height")
         {
             file >> mapHeight;
+
+            Engine::mapHeight = mapHeight;
         }
         else if (type == ":xOffset")
         {
@@ -59,13 +64,13 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         {
             file >> tileType;
 
-            int x = (tileType % 32);
-            int y = (tileType / 32);
+            int x = (tileType % SPRITE_SHEET_SIZE);
+            int y = (tileType / SPRITE_SHEET_SIZE);
 
             Entity tile = registry->CreateEntity();
             tile.Tag("Tile");
-            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * 32, (i / mapWidth) * 32), Vec2(2.0, 2.0), 0.0);
-            tile.AddComponent<SpriteComponent>("TileMap", 16, 16, 0, false, x * 16, y * 16);
+            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE), Vec2(1.0, 1.0), 0.0);
+            tile.AddComponent<SpriteComponent>("TileMap", TILE_SIZE, TILE_SIZE, 0, false, x * TILE_SIZE, y * TILE_SIZE);
             tile.AddComponent<TileComponent>();
             i++;
         }
@@ -73,12 +78,13 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(2.0, 2.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(1.0, 1.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0);
     sigurd.AddComponent<AnimationComponent>(4, 8, true);
     sigurd.AddComponent<CharacterInputComponent>();
     sigurd.AddComponent<RigidbodyComponent>();
     sigurd.AddComponent<CharacterMovementComponent>();
+    sigurd.AddComponent<CameraFollowComponent>();
 }
 
 void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
@@ -116,6 +122,7 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
     registry->GetSystem<CharacterMovementSystem>().Update(dt);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
+    registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera());
 }
 
 void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

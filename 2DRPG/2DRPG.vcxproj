@@ -265,6 +265,7 @@
     <ClInclude Include="src\Logger\Logger.h" />
     <ClInclude Include="src\ECS\Systems.h" />
     <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Utils\Constants.h" />
     <ClInclude Include="src\Utils\Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
