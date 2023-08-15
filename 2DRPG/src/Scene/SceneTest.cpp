@@ -2,8 +2,14 @@
 
 #include <iostream>
 
-SceneTest::SceneTest()
+SceneTest::SceneTest() : SceneTest(0, 0)
 {
+}
+
+SceneTest::SceneTest(const int x, const int y)
+{
+    startX = x * TILE_SIZE;
+    startY = y * TILE_SIZE;
 }
 
 SceneTest::~SceneTest()
@@ -28,6 +34,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     assetStore->AddTexture(renderer, "MageSheet", "./assets/Mage.png");
     assetStore->AddTexture(renderer, "SigurdSheet", "./assets/Sigurd.png");
     assetStore->AddTexture(renderer, "SwordArmourSheet", "./assets/Sword_Armour.png");
+    assetStore->AddTexture(renderer, "FighterSheet", "./assets/Fighter.png");
 
     int tileType;
     int i = 0;
@@ -58,6 +65,16 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         {
             file >> mapYOffset;
         }
+        else if (type == ":startPositionX")
+        {
+            file >> startX;
+            startX *= TILE_SIZE;
+        }
+        else if (type == ":startPositionY")
+        {
+            file >> startY;
+            startY *= TILE_SIZE;
+        }
         else if (type == ":tile")
         {
             file >> tileType;
@@ -76,7 +93,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(0, 0), Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(Vec2(startX, startY - TILE_SIZE), Vec2(1.0, 1.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0);
     sigurd.AddComponent<AnimationComponent>(4, 8, true);
     sigurd.AddComponent<CharacterInputComponent>();

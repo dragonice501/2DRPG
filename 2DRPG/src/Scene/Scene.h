@@ -31,4 +31,6 @@ public:
 protected:
 	int mapWidth = 0;
 	int mapHeight = 0;
+	int startX = 0;
+	int startY = 0;
 };

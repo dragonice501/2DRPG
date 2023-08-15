@@ -6,6 +6,7 @@ class SceneTest : public Scene
 {
 public:
 	SceneTest();
+	SceneTest(const int x, const int y);
 	~SceneTest();
 
 	void Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);

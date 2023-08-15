@@ -56,8 +56,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
-    mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
+    //mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
+    //mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)
@@ -89,12 +89,11 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<SceneTest>();
+    std::unique_ptr<Scene> scene = std::make_unique<SceneTest>(30, 17);
     scene->Setup(mRegistry, mAssetStore, mRenderer);
 
     while (isRunning)
     {
-        //std::cout << SDL_GetTicks() - millisecondsPreviousFrame << std::endl;
         int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
         if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME)
         {
@@ -104,7 +103,7 @@ void Engine::Run()
         // The difference in ticks since the last frame, converted to seconds
         double deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0;
         if (deltaTime > MILLISECONDS_PER_FRAME) deltaTime = MILLISECONDS_PER_FRAME;
-        std::cout << deltaTime << std::endl;
+        //std::cout << deltaTime << std::endl;
 
         // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
