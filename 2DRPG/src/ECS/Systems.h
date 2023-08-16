@@ -62,17 +62,20 @@ public:
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& cameraFollow = entity.GetComponent<CameraFollowComponent>();
 
-			if (transform.position.x * TILE_SPRITE_SCALE + (camera.w / 2) < mapWidth * TILE_SIZE * TILE_SPRITE_SCALE)
+			/*if (transform.position.x * TILE_SPRITE_SCALE + (camera.w / 2) < mapWidth * TILE_SIZE * TILE_SPRITE_SCALE)
 			{
-				camera.x = transform.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
+				
 			}
 			if (transform.position.y * TILE_SPRITE_SCALE + (camera.h / 2) < mapHeight * TILE_SIZE * TILE_SPRITE_SCALE)
 			{
-				camera.y = transform.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
-			}
+				
+			}*/
 
-			camera.x = Clampf(camera.x, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE);
-			camera.y = Clampf(camera.y, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE);
+			camera.x = transform.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
+			camera.y = transform.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
+
+			camera.x = Clampf(camera.x, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE - camera.w);
+			camera.y = Clampf(camera.y, 0, mapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);
 		}
 	}
 };
@@ -222,7 +225,7 @@ public:
 		RequireComponent<CameraFollowComponent>();
 	}
 
-	void Update(double dt, const int mapWidth, const int mapHeight)
+	void Update(double dt, const int mapWidth, const int mapHeight, const std::vector<Entity>& tiles)
 	{
 		for (auto entity : GetSystemEntities())
 		{
@@ -253,7 +256,11 @@ public:
 
 						if (MovementPressed(input) && MovementInsideMap(GetDesiredVelocity(movement, input), transform, mapWidth, mapHeight))
 						{
-							SetVelocity(rigidbody, movement, input, transform);
+							Vec2 desiredVelocity = GetDesiredVelocity(movement, input);
+							if (CanMove(mapWidth, transform, desiredVelocity, input, tiles) && MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
+							{
+								SetVelocity(rigidbody, movement, input, transform);
+							}
 						}
 						else
 						{
@@ -267,7 +274,7 @@ public:
 				if (MovementPressed(input))
 				{
 					Vec2 desiredVelocity = GetDesiredVelocity(movement, input);
-					if (MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
+					if (CanMove(mapWidth, transform, desiredVelocity, input, tiles) && MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
 					{
 						movement.movementState = CharacterMovementComponent::EMovementState::Moving;
 					}
@@ -285,34 +292,42 @@ public:
 	{
 		return !(
 			t.position.x + v.x < 0 ||
-			t.position.x + TILE_SIZE  + v.x > width * TILE_SIZE ||
-			t.position.y + TILE_SIZE + v.y < 0 ||
-			t.position.y + TILE_SIZE * 2  + v.y  > height * TILE_SIZE);
+			t.position.x + TILE_SIZE + v.x > width * TILE_SIZE ||
+			t.position.y + v.y < 0 ||
+			t.position.y + TILE_SIZE + v.y  > height * TILE_SIZE);
+	}
+
+	bool CanMove(int width, const TransformComponent& t, const Vec2& velocity, const CharacterInputComponent& i, const std::vector<Entity>& tl)
+	{
+		int x = (t.position.x + velocity.x) / TILE_SIZE;
+		int y = (t.position.y + velocity.y) / TILE_SIZE;
+
+		GetTerrainType(tl[x + y * width].GetComponent<TileComponent>().terrain);
+
+		return true;
 	}
 
 	Vec2 GetDesiredVelocity(CharacterMovementComponent& m, CharacterInputComponent& i)
 	{
-		Vec2 desiredPosition;
+		Vec2 desiredVelocity;
 		if (i.upButtonPresed)
 		{
-			desiredPosition = Vec2(static_cast<int>(m.upVelocity.x * TILE_SIZE), static_cast<int>(m.upVelocity.y * TILE_SIZE));
-			return desiredPosition;
+			desiredVelocity = Vec2(static_cast<int>(m.upVelocity.x * TILE_SIZE), static_cast<int>(m.upVelocity.y * TILE_SIZE));
 		}
 		else if (i.downButtonPresed)
 		{
-			desiredPosition = Vec2(static_cast<int>(m.downVelocity.x * TILE_SIZE), static_cast<int>(m.downVelocity.y * TILE_SIZE));
-			return m.downVelocity * TILE_SPRITE_SCALE;
+			desiredVelocity = Vec2(static_cast<int>(m.downVelocity.x * TILE_SIZE), static_cast<int>(m.downVelocity.y * TILE_SIZE));
 		}
 		else if (i.leftButtonPresed)
 		{
-			desiredPosition = Vec2(static_cast<int>(m.leftVelocity.x * TILE_SIZE), static_cast<int>(m.leftVelocity.y * TILE_SIZE));
-			return m.leftVelocity * TILE_SPRITE_SCALE;
+			desiredVelocity = Vec2(static_cast<int>(m.leftVelocity.x * TILE_SIZE), static_cast<int>(m.leftVelocity.y * TILE_SIZE));
 		}
 		else if (i.rightButtonPresed)
 		{
-			desiredPosition = Vec2(static_cast<int>(m.rightVelocity.x * TILE_SIZE), static_cast<int>(m.rightVelocity.y * TILE_SIZE));
-			return m.rightVelocity * TILE_SPRITE_SCALE;
+			desiredVelocity = Vec2(static_cast<int>(m.rightVelocity.x * TILE_SIZE), static_cast<int>(m.rightVelocity.y * TILE_SIZE));
 		}
+
+		return desiredVelocity;
 	}
 
 	void SetVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
@@ -793,8 +808,8 @@ public:
 
 			SDL_Rect srcRect = sprite.srcRect;
 			SDL_Rect destRect = {
-				transform.position.x * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.x),
-				transform.position.y * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.y),
+				transform.position.x * TILE_SPRITE_SCALE + sprite.xOffset * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.x),
+				transform.position.y * TILE_SPRITE_SCALE + sprite.yOffset * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.y),
 				sprite.width * transform.scale.x * TILE_SPRITE_SCALE,
 				sprite.height * transform.scale.y * TILE_SPRITE_SCALE };
 

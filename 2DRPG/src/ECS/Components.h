@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../Utils/Vec2.h"
+#include "../Utils/Utils.h"
 
 #include <SDL.h>
 #include <glm/vec2.hpp>
+#include <iostream>
 
 struct AnimationComponent
 {
@@ -172,11 +174,16 @@ struct RigidbodyComponent
 
 struct SpriteComponent
 {
-	SpriteComponent(std::string assetId = "", int width = 0, int height = 0, int zIndex = 0, bool isFixed = false, int srcRectX = 0, int srcRectY = 0)
+	SpriteComponent(
+		std::string assetId = "",
+		int width = 0, int height = 0, int xOffset = 0, int yOffset = 0,
+		int zIndex = 0, bool isFixed = false, int srcRectX = 0, int srcRectY = 0)
 	{
 		this->assetId = assetId;
 		this->width = width;
 		this->height = height;
+		this->xOffset = xOffset;
+		this->yOffset = yOffset;
 		this->zIndex = zIndex;
 		this->flip = SDL_FLIP_NONE;
 		this->srcRect = { srcRectX, srcRectY, width, height };
@@ -186,6 +193,8 @@ struct SpriteComponent
 	std::string assetId;
 	int width;
 	int height;
+	int xOffset;
+	int yOffset;
 	int zIndex;
 	SDL_RendererFlip flip;
 	bool isFixed;
@@ -194,10 +203,14 @@ struct SpriteComponent
 
 struct TileComponent
 {
-	TileComponent()
+	TileComponent(int tileIndex = 0)
 	{
-
+		this->terrain = tileIndex;
+		this->terrainType = GetTerrainType(tileIndex);
 	}
+
+	int terrain;
+	ETerrainType terrainType;
 };
 
 struct TransformComponent

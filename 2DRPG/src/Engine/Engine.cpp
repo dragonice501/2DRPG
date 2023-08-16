@@ -56,8 +56,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    //mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
-    //mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
+    mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
+    mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)
@@ -70,10 +70,6 @@ bool Engine::Init()
     {
         return false;
     }
-
-    // Initialize the ImGui context
-    ImGui::CreateContext();
-    ImGuiSDL::Initialize(mRenderer, mWindowWidth, mWindowHeight);
 
     // Initialize the camera view with the entire screen area
     camera.x = 0;
@@ -118,9 +114,6 @@ void Engine::Run()
 
 void Engine::Destroy()
 {
-    ImGuiSDL::Deinitialize();
-    ImGui::DestroyContext();
-
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();

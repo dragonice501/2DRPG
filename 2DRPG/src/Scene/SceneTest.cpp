@@ -85,8 +85,8 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
             Entity tile = registry->CreateEntity();
             tile.Tag("Tile");
             tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE), Vec2(1.0, 1.0), 0.0);
-            tile.AddComponent<SpriteComponent>("TileMap", TILE_SIZE, TILE_SIZE, 0, false, x * TILE_SIZE, y * TILE_SIZE);
-            tile.AddComponent<TileComponent>();
+            tile.AddComponent<SpriteComponent>("TileMap", TILE_SIZE, TILE_SIZE, 0, 0, 0, false, x * TILE_SIZE, y * TILE_SIZE);
+            tile.AddComponent<TileComponent>(x + y * SPRITE_SHEET_SIZE);
             i++;
         }
     }
@@ -94,7 +94,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
     sigurd.AddComponent<TransformComponent>(Vec2(startX, startY - TILE_SIZE), Vec2(1.0, 1.0), 0.0);
-    sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0);
+    sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0, -TILE_SIZE, 1);
     sigurd.AddComponent<AnimationComponent>(4, 8, true);
     sigurd.AddComponent<CharacterInputComponent>();
     sigurd.AddComponent<RigidbodyComponent>();
@@ -134,7 +134,7 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
-    registry->GetSystem<CharacterMovementSystem>().Update(dt, mapWidth, mapHeight);
+    registry->GetSystem<CharacterMovementSystem>().Update(dt, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
     registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
