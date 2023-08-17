@@ -302,7 +302,7 @@ public:
 		int x = (t.position.x + velocity.x) / TILE_SIZE;
 		int y = (t.position.y + velocity.y) / TILE_SIZE;
 
-		GetTerrainType(tl[x + y * width].GetComponent<TileComponent>().terrain);
+		PrintTerrainType(tl[x + y * width].GetComponent<TileComponent>().terrainType);
 
 		return true;
 	}
