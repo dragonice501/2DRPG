@@ -7,6 +7,7 @@
 #include "../Utils/Vec2.h"
 
 #include "../Scene/Scene.h"
+#include "../Managers/SceneManager.h"
 #include "../Scene/SceneTest.h"
 
 #include <SDL.h>
@@ -85,8 +86,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<SceneTest>(30, 17);
-    scene->Setup(mRegistry, mAssetStore, mRenderer);
+    SceneManager::Intance().LoadScene(OVERWORLD, mRegistry, mAssetStore, mRenderer);
 
     while (isRunning)
     {
@@ -99,14 +99,13 @@ void Engine::Run()
         // The difference in ticks since the last frame, converted to seconds
         double deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0;
         if (deltaTime > MILLISECONDS_PER_FRAME) deltaTime = MILLISECONDS_PER_FRAME;
-        //std::cout << deltaTime << std::endl;
 
         // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        scene->Input(mEventBus);
-        scene->Update(mRegistry, mEventBus, deltaTime);
-        scene->Render(mRegistry, mAssetStore, mRenderer);
+        SceneManager::Intance().CurrentSceneInput(mEventBus);
+        SceneManager::Intance().CurrentSceneUpdate(mRegistry, mEventBus, deltaTime);
+        SceneManager::Intance().CurrentSceneDraw(mRegistry, mAssetStore, mRenderer);
 
         SDL_RenderPresent(mRenderer);
     }

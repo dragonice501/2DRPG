@@ -1,5 +1,11 @@
 #pragma once
 
+enum SceneNames
+{
+	OVERWORLD,
+	TOWN
+};
+
 enum ETerrainType
 {
 	BRAGI_TOWER,

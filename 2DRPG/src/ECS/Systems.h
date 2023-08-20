@@ -1179,10 +1179,6 @@ public:
 		{
 			const SceneEntranceComponent& entrance = i->GetComponent<SceneEntranceComponent>();
 
-			std::cout <<
-				event.position.x << ',' << event.position.y << "   " <<
-				entrance.position.x * TILE_SIZE << ',' << entrance.position.y * TILE_SIZE << std::endl;
-
 			if (entrance.position * TILE_SIZE == event.position)
 			{
 				std::cout << "character stepped on entrance" << std::endl;
@@ -1211,6 +1207,7 @@ public:
 	void DetectMovement(CharacterMovementEvent& event)
 	{
 		//PrintTerrainType(event.terrainType);
+		mEncounterStepRemaining--;
 
 		if (mEncounterStepRemaining <= 0)
 		{

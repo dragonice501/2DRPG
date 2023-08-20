@@ -250,6 +250,7 @@
     <ClInclude Include="libs\SDL2\include\SDL_version.h" />
     <ClInclude Include="libs\SDL2\include\SDL_video.h" />
     <ClInclude Include="libs\SDL2\include\SDL_vulkan.h" />
+    <ClInclude Include="src\Managers\SceneManager.h" />
     <ClInclude Include="src\Scene\SceneTest.h" />
     <ClInclude Include="src\EventBus\Events.h" />
     <ClInclude Include="src\Graphics\Font.h" />
