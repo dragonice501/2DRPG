@@ -76,10 +76,10 @@ static size_t mMountainIndeces[59] =
 
 };*/
 
-static size_t mPlainIndeces[40] =
+static size_t mPlainIndeces[41] =
 {
 	0,1,2,3,4,6,7,8,9,11,12,28,29,30,31,32,33,33,34,35,36,37,38,39,40,41,62,91,112,140,201,202,204,205,308,
-	309,338,366,495,496
+	309,338,366,495,496,561
 };
 
 static size_t mRiverIndeces[17] =

@@ -2,8 +2,23 @@
 
 #include "../ECS/ECS.h"
 #include "../EventBus/Event.h"
+#include "../Utils/Utils.h"
 
 #include <SDL.h>
+#include <iostream>
+
+class CharacterMovementEvent : public Event
+{
+public:
+	CharacterMovementEvent(ETerrainType terrain, Vec2 movementPosition)
+	{
+		this->terrainType = terrain;
+		this->position = movementPosition;
+	}
+
+	ETerrainType terrainType;
+	Vec2 position;
+};
 
 class CollisionEvent : public Event
 {

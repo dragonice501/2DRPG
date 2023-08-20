@@ -225,7 +225,7 @@ public:
 		RequireComponent<CameraFollowComponent>();
 	}
 
-	void Update(double dt, const int mapWidth, const int mapHeight, const std::vector<Entity>& tiles)
+	void Update(double dt, std::unique_ptr<EventBus>& eventBus, const int mapWidth, const int mapHeight, const std::vector<Entity>& tiles)
 	{
 		for (auto entity : GetSystemEntities())
 		{
@@ -237,11 +237,6 @@ public:
 
 			if (movement.movementState == CharacterMovementComponent::EMovementState::Moving)
 			{
-				if(movement.destination == Vec2(0.0f))
-				{
-					SetVelocity(rigidbody, movement, input, transform);
-				}
-
 				if (transform.position != movement.destination)
 				{
 					movement.rate += 2 * dt;
@@ -254,12 +249,21 @@ public:
 						rigidbody.velocity = Vec2(0.0f);
 						sprite.srcRect.y = 0;
 
-						if (MovementPressed(input) && MovementInsideMap(GetDesiredVelocity(movement, input), transform, mapWidth, mapHeight))
+						int index = transform.position.x / TILE_SIZE + (transform.position.y / TILE_SIZE) * mapWidth;
+						eventBus->EmitEvent<CharacterMovementEvent>(tiles[index].GetComponent<TileComponent>().terrainType, transform.position);
+
+						if (MovementPressed(input))
 						{
-							Vec2 desiredVelocity = GetDesiredVelocity(movement, input);
-							if (CanMove(mapWidth, transform, desiredVelocity, input, tiles) && MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
+							Vec2 desiredPosition = GetDesiredPosition(movement, input, transform);
+							if (
+								MovementInsideMap(desiredPosition, mapWidth, mapHeight) &&
+								CanMove(mapWidth, mapHeight, transform, desiredPosition, input, tiles, movement))
 							{
-								SetVelocity(rigidbody, movement, input, transform);
+								SetMovement(rigidbody, movement, input, transform);
+							}
+							else
+							{
+								movement.movementState = CharacterMovementComponent::EMovementState::Idle;
 							}
 						}
 						else
@@ -273,10 +277,17 @@ public:
 			{
 				if (MovementPressed(input))
 				{
-					Vec2 desiredVelocity = GetDesiredVelocity(movement, input);
-					if (CanMove(mapWidth, transform, desiredVelocity, input, tiles) && MovementInsideMap(desiredVelocity, transform, mapWidth, mapHeight))
+					Vec2 desiredPosition = GetDesiredPosition(movement, input, transform);
+					if (
+						MovementInsideMap(desiredPosition, mapWidth, mapHeight) &&
+						CanMove(mapWidth, mapHeight, transform, desiredPosition, input, tiles, movement))
 					{
 						movement.movementState = CharacterMovementComponent::EMovementState::Moving;
+						SetMovement(rigidbody, movement, input, transform);
+					}
+					else
+					{
+						movement.movementState = CharacterMovementComponent::EMovementState::Idle;
 					}
 				}
 			}
@@ -288,75 +299,82 @@ public:
 		return i.upButtonPresed || i.downButtonPresed || i.leftButtonPresed || i.rightButtonPresed;
 	}
 
-	bool MovementInsideMap(const Vec2& v, const TransformComponent& t, const int width, const int height)
+	Vec2 GetDesiredPosition(const CharacterMovementComponent& m, const CharacterInputComponent& i, const TransformComponent& t)
+	{
+		Vec2 desiredPosition;
+
+		if (i.upButtonPresed)
+		{
+			desiredPosition = Vec2(static_cast<int>(t.position.x + m.upVelocity.x * TILE_SIZE), static_cast<int>(t.position.y + m.upVelocity.y * TILE_SIZE));
+		}
+		else if (i.downButtonPresed)
+		{
+			desiredPosition = Vec2(static_cast<int>(t.position.x + m.downVelocity.x * TILE_SIZE), static_cast<int>(t.position.y + m.downVelocity.y * TILE_SIZE));
+		}
+		else if (i.leftButtonPresed)
+		{
+			desiredPosition = Vec2(static_cast<int>(t.position.x + m.leftVelocity.x * TILE_SIZE), static_cast<int>(t.position.y + m.leftVelocity.y * TILE_SIZE));
+		}
+		else if (i.rightButtonPresed)
+		{
+			desiredPosition = Vec2(static_cast<int>(t.position.x + m.rightVelocity.x * TILE_SIZE), static_cast<int>(t.position.y + m.rightVelocity.y * TILE_SIZE));
+		}
+
+		return desiredPosition;
+	}
+	
+	bool MovementInsideMap(const Vec2& position, const int width, const int height)
 	{
 		return !(
-			t.position.x + v.x < 0 ||
-			t.position.x + TILE_SIZE + v.x > width * TILE_SIZE ||
-			t.position.y + v.y < 0 ||
-			t.position.y + TILE_SIZE + v.y  > height * TILE_SIZE);
+			position.x < 0 ||
+			position.x + TILE_SIZE > width * TILE_SIZE ||
+			position.y < 0 ||
+			position.y + TILE_SIZE > height * TILE_SIZE);
 	}
 
-	bool CanMove(int width, const TransformComponent& t, const Vec2& velocity, const CharacterInputComponent& i, const std::vector<Entity>& tl)
+	bool CanMove(
+		int width, int height, const TransformComponent& t, const Vec2& position, const CharacterInputComponent& i,
+		const std::vector<Entity>& tl, const CharacterMovementComponent& m)
 	{
-		int x = (t.position.x + velocity.x) / TILE_SIZE;
-		int y = (t.position.y + velocity.y) / TILE_SIZE;
+		int x = position.x / TILE_SIZE;
+		int y = position.y / TILE_SIZE;
 
-		PrintTerrainType(tl[x + y * width].GetComponent<TileComponent>().terrainType);
+		ETerrainType terrain = tl[x + y * width].GetComponent<TileComponent>().terrainType;
+
+		if (terrain == CLIFF && !m.canWalkCliffs) return false;
+		
+		if (terrain == RIVER && !m.canWalkRivers) return false;
+
 
 		return true;
 	}
 
-	Vec2 GetDesiredVelocity(CharacterMovementComponent& m, CharacterInputComponent& i)
-	{
-		Vec2 desiredVelocity;
-		if (i.upButtonPresed)
-		{
-			desiredVelocity = Vec2(static_cast<int>(m.upVelocity.x * TILE_SIZE), static_cast<int>(m.upVelocity.y * TILE_SIZE));
-		}
-		else if (i.downButtonPresed)
-		{
-			desiredVelocity = Vec2(static_cast<int>(m.downVelocity.x * TILE_SIZE), static_cast<int>(m.downVelocity.y * TILE_SIZE));
-		}
-		else if (i.leftButtonPresed)
-		{
-			desiredVelocity = Vec2(static_cast<int>(m.leftVelocity.x * TILE_SIZE), static_cast<int>(m.leftVelocity.y * TILE_SIZE));
-		}
-		else if (i.rightButtonPresed)
-		{
-			desiredVelocity = Vec2(static_cast<int>(m.rightVelocity.x * TILE_SIZE), static_cast<int>(m.rightVelocity.y * TILE_SIZE));
-		}
-
-		return desiredVelocity;
-	}
-
-	void SetVelocity(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
+	void SetMovement(RigidbodyComponent& r, CharacterMovementComponent& m, CharacterInputComponent& i, TransformComponent& t)
 	{
 		if (i.upButtonPresed)
 		{
-			r.velocity = m.upVelocity * TILE_SIZE;
+			r.velocity = m.upVelocity;
 			m.start = t.position;
+			m.destination = t.position + m.upVelocity * TILE_SIZE;
 		}
 		else if (i.downButtonPresed)
 		{
-			r.velocity = m.downVelocity * TILE_SIZE;
-			m.destination = t.position + r.velocity;
+			r.velocity = m.downVelocity;
 			m.start = t.position;
-			m.destination = t.position + r.velocity;
+			m.destination = t.position + m.downVelocity * TILE_SIZE;
 		}
 		else if (i.leftButtonPresed)
 		{
-			r.velocity = m.leftVelocity * TILE_SIZE;
+			r.velocity = m.leftVelocity;
 			m.start = t.position;
-			m.destination = t.position + r.velocity;
+			m.destination = t.position + m.leftVelocity * TILE_SIZE;
 		}
 		else if (i.rightButtonPresed)
 		{
-			r.velocity = m.rightVelocity * TILE_SIZE;
+			r.velocity = m.rightVelocity;
 			m.start = t.position;
-			m.destination = t.position + r.velocity;
+			m.destination = t.position + m.rightVelocity * TILE_SIZE;
 		}
-		m.destination = t.position + r.velocity;
 	}
 };
 
@@ -1136,6 +1154,68 @@ public:
 			};
 
 			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
+		}
+	}
+};
+
+class WorldCollisionSystem : public System
+{
+public:
+	WorldCollisionSystem()
+	{
+		RequireComponent<SceneEntranceComponent>();
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<CharacterMovementEvent>(this, &WorldCollisionSystem::CheckCharacterOnEntrance);
+	}
+
+	void CheckCharacterOnEntrance(CharacterMovementEvent& event)
+	{
+		std::vector<Entity>& entities = GetSystemEntities();
+
+		for (auto i = entities.begin(); i != entities.end(); i++)
+		{
+			const SceneEntranceComponent& entrance = i->GetComponent<SceneEntranceComponent>();
+
+			std::cout <<
+				event.position.x << ',' << event.position.y << "   " <<
+				entrance.position.x * TILE_SIZE << ',' << entrance.position.y * TILE_SIZE << std::endl;
+
+			if (entrance.position * TILE_SIZE == event.position)
+			{
+				std::cout << "character stepped on entrance" << std::endl;
+			}
+		}
+	}
+};
+
+class WorldEncounterSystem : public System
+{
+public:
+	size_t mEncounterStepsSize = 15;
+	size_t mEncounterStepRemaining = mEncounterStepsSize;
+
+public:
+	WorldEncounterSystem()
+	{
+
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<CharacterMovementEvent>(this, &WorldEncounterSystem::DetectMovement);
+	}
+
+	void DetectMovement(CharacterMovementEvent& event)
+	{
+		//PrintTerrainType(event.terrainType);
+
+		if (mEncounterStepRemaining <= 0)
+		{
+			std::cout << "encounter" << std::endl;
+			mEncounterStepRemaining = mEncounterStepsSize;
 		}
 	}
 };

@@ -26,6 +26,9 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     registry->AddSystem<CharacterMovementSystem>();
     registry->AddSystem<CameraMovementSystem>();
 
+    registry->AddSystem<WorldCollisionSystem>();
+    registry->AddSystem<WorldEncounterSystem>();
+
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "TileMap", "./assets/Chapter_0_m.png");
     assetStore->AddTexture(renderer, "BarbarianSheet", "./assets/Barbarian.png");
@@ -45,37 +48,32 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     std::string type;
     while (file >> type)
     {
-        if (type == ":width")
+        if (type == "MapSize")
         {
-            file >> mapWidth;
+            file >> mapWidth >> mapHeight;
 
             Engine::mapWidth = mapWidth;
-        }
-        else if (type == ":height")
-        {
-            file >> mapHeight;
-
             Engine::mapHeight = mapHeight;
         }
-        else if (type == ":xOffset")
+        else if (type == "StartPosition")
         {
-            file >> mapXOffset;
-        }
-        else if (type == ":yOffset")
-        {
-            file >> mapYOffset;
-        }
-        else if (type == ":startPositionX")
-        {
-            file >> startX;
+            file >> startX >> startY;
             startX *= TILE_SIZE;
-        }
-        else if (type == ":startPositionY")
-        {
-            file >> startY;
             startY *= TILE_SIZE;
         }
-        else if (type == ":tile")
+        else if (type == "SceneEntrance")
+        {
+            int sceneName;
+            int sceneEntranceIndex;
+            int sceneEntrancePosX;
+            int sceneEntrancePosY;
+            file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY;
+
+            Entity sceneEntrance = registry->CreateEntity();
+            sceneEntrance.Tag("Entrance");
+            sceneEntrance.AddComponent<SceneEntranceComponent>(sceneName, sceneEntranceIndex, Vec2(sceneEntrancePosX, sceneEntrancePosY));
+        }
+        else if (type == "Tile")
         {
             file >> tileType;
 
@@ -93,7 +91,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(startX, startY - TILE_SIZE), Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(Vec2(startX, startY), Vec2(1.0, 1.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0, -TILE_SIZE, 1);
     sigurd.AddComponent<AnimationComponent>(4, 8, true);
     sigurd.AddComponent<CharacterInputComponent>();
@@ -130,11 +128,14 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
 {
     // Reset all event handlers for the current frame
     eventBus->Reset();
+
     registry->GetSystem<CharacterInputSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<WorldCollisionSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<WorldEncounterSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
-    registry->GetSystem<CharacterMovementSystem>().Update(dt, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
+    registry->GetSystem<CharacterMovementSystem>().Update(dt, eventBus, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
     registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);

@@ -73,6 +73,8 @@ struct CharacterMovementComponent
 		movementState(EMovementState::Idle), start(Vec2(0.0f)), destination(Vec2(0.0f)), rate(0.0f),
 		upVelocity(0.0f, -1.0f), downVelocity(0.0f, 1.0f), leftVelocity(-1.0f, 0.0f), rightVelocity(1.0f, 0.0f)
 	{
+		canWalkCliffs = false;
+		canWalkRivers = false;
 	}
 
 	enum EMovementState
@@ -89,6 +91,9 @@ struct CharacterMovementComponent
 	Vec2 rightVelocity;
 	Vec2 downVelocity;
 	Vec2 leftVelocity;
+
+	bool canWalkCliffs;
+	bool canWalkRivers;
 };
 
 struct HealthComponent
@@ -172,6 +177,23 @@ struct RigidbodyComponent
 	Vec2 velocity;
 };
 
+struct SceneEntranceComponent
+{
+public:
+	SceneEntranceComponent(int name = 0, int index = 0, Vec2 newPosition = Vec2(0.0f))
+	{
+		this->sceneName = name;
+		this->sceneEntranceIndex = index;
+		this->position = newPosition;
+
+		//std::cout << "entrance created" << std::endl;
+	}
+
+	int sceneName;
+	int sceneEntranceIndex;
+	Vec2 position;
+};
+
 struct SpriteComponent
 {
 	SpriteComponent(
@@ -205,11 +227,9 @@ struct TileComponent
 {
 	TileComponent(int tileIndex = 0)
 	{
-		this->terrain = tileIndex;
 		this->terrainType = GetTerrainType(tileIndex);
 	}
 
-	int terrain;
 	ETerrainType terrainType;
 };
 
