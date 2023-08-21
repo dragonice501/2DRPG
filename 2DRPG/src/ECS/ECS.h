@@ -306,7 +306,7 @@ template<typename TSystem>
 inline void Registry::RemoveSystem(System systemToRemove)
 {
 	auto system = systems.find(std::type_index(typeid(TSystem)));
-	systems.erase(systemToRemove);
+	systems.erase(system);
 }
 
 template<typename TSystem>

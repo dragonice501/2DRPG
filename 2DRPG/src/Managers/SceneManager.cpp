@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 
+int SceneManager::mSceneEntranceIndex = 0;
+
 SceneManager& SceneManager::Instance()
 {
 	static SceneManager* instance = new SceneManager();
@@ -11,9 +13,10 @@ bool SceneManager::SceneReadyToLoad() const
 	return mSceneToLoad != NONE;
 }
 
-void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad)
+void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex)
 {
 	mSceneToLoad = sceneToLoad;
+	mSceneEntranceIndex = entranceIndex;
 }
 
 void SceneManager::LoadScene(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

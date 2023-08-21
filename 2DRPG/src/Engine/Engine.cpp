@@ -86,7 +86,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::Instance().SetSceneToLoad(OVERWORLD);
+    SceneManager::Instance().SetSceneToLoad(OVERWORLD, 0);
 
     while (isRunning)
     {

@@ -26,8 +26,7 @@ public:
 
 			if (entrance.position * TILE_SIZE == event.position)
 			{
-				std::cout << "character stepped on entrance" << std::endl;
-				SceneManager::Instance().SetSceneToLoad(static_cast<SceneNames>(entrance.sceneName));
+				SceneManager::Instance().SetSceneToLoad(static_cast<SceneNames>(entrance.sceneName), entrance.sceneEntranceIndex);
 			}
 		}
 	}

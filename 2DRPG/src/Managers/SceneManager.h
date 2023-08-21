@@ -11,8 +11,10 @@ class SceneManager
 public:
 	static SceneManager& Instance();
 
+	static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
+
 	bool SceneReadyToLoad() const;
-	void SetSceneToLoad(const SceneNames sceneToLoad);
+	void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
 
 	void LoadScene(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);
 
@@ -27,4 +29,5 @@ private:
 
 	std::unique_ptr<Scene> currentScene = nullptr;
 	SceneNames mSceneToLoad = NONE;
+	static int mSceneEntranceIndex;
 };

@@ -27,10 +27,9 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     assetStore->AddTexture(renderer, "TileMap", "./assets/TownSpriteSheet.png");
     assetStore->AddTexture(renderer, "SigurdSheet", "./assets/Sigurd.png");
 
-    int tileType;
     int i = 0;
-    float mapXOffset = 0;
-    float mapYOffset = 0;
+    int j = 0;
+    Vec2 spawnPosition;
 
     std::ifstream file("./assets/TownSaveFile.txt");
     std::string type;
@@ -57,12 +56,20 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
             int sceneEntrancePosY;
             file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY;
 
+            if (j == SceneManager::GetSceneEntranceIndex())
+            {
+                spawnPosition = Vec2(sceneEntrancePosX, sceneEntrancePosY) * TILE_SIZE;
+            }
+
+            j++;
+
             Entity sceneEntrance = registry->CreateEntity();
             sceneEntrance.Tag("Entrance");
             sceneEntrance.AddComponent<SceneEntranceComponent>(sceneName, sceneEntranceIndex, Vec2(sceneEntrancePosX, sceneEntrancePosY));
         }
         else if (type == "Tile")
         {
+            int tileType;
             file >> tileType;
 
             int x = (tileType % SPRITE_SHEET_SIZE);
@@ -77,9 +84,14 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         }
     }
 
+    if (spawnPosition == Vec2(0.0f, 0.0f))
+    {
+        spawnPosition = Vec2(41.0f * TILE_SIZE, 18.0f * TILE_SIZE);
+    }
+
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(startX, startY), Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(spawnPosition, Vec2(1.0, 1.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0, -TILE_SIZE, 1);
     sigurd.AddComponent<AnimationComponent>(4, 8, true);
     sigurd.AddComponent<CharacterInputComponent>();
@@ -92,7 +104,7 @@ void SceneTown::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<As
 {
     registry->KillAllEntities();
 
-    /*registry->RemoveSystem<RenderTileSystem>(registry->GetSystem<RenderTileSystem>());
+    registry->RemoveSystem<RenderTileSystem>(registry->GetSystem<RenderTileSystem>());
     registry->RemoveSystem<RenderCharacterSystem>(registry->GetSystem<RenderCharacterSystem>());
     registry->RemoveSystem<CharacterAnimationSystem>(registry->GetSystem<CharacterAnimationSystem>());
     registry->RemoveSystem<CharacterInputSystem>(registry->GetSystem<CharacterInputSystem>());
@@ -100,7 +112,7 @@ void SceneTown::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<As
     registry->RemoveSystem<CameraMovementSystem>(registry->GetSystem<CameraMovementSystem>());
 
     registry->RemoveSystem<WorldCollisionSystem>(registry->GetSystem<WorldCollisionSystem>());
-    registry->RemoveSystem<WorldEncounterSystem>(registry->GetSystem<WorldEncounterSystem>());*/
+    registry->RemoveSystem<WorldEncounterSystem>(registry->GetSystem<WorldEncounterSystem>());
 
     assetStore->ClearAssets();
 }

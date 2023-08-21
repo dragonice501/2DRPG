@@ -1134,6 +1134,11 @@ public:
 		RequireComponent<TileComponent>();
 	}
 
+	~RenderTileSystem()
+	{
+		
+	}
+
 	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
 	{
 		int x = camera.x - (camera.x % TILE_SIZE);
