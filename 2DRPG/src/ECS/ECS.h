@@ -194,6 +194,7 @@ public:
 
 	Entity CreateEntity();
 	void KillEntity(Entity entity);
+	void KillAllEntities();
 
 	void AddEntityToSystems(Entity entity);
 	void RemoveEntityFromSystems(Entity entity);
@@ -302,10 +303,10 @@ inline void Registry::AddSystem(TArgs && ...args)
 }
 
 template<typename TSystem>
-inline void Registry::RemoveSystem(System system)
+inline void Registry::RemoveSystem(System systemToRemove)
 {
 	auto system = systems.find(std::type_index(typeid(TSystem)));
-	systems.erase(system);
+	systems.erase(systemToRemove);
 }
 
 template<typename TSystem>

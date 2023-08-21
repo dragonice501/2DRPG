@@ -6,8 +6,8 @@
 
 #include "../Utils/Vec2.h"
 
-#include "../Scene/Scene.h"
 #include "../Managers/SceneManager.h"
+#include "../Scene/Scene.h"
 #include "../Scene/SceneTest.h"
 
 #include <SDL.h>
@@ -86,7 +86,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::Intance().LoadScene(OVERWORLD, mRegistry, mAssetStore, mRenderer);
+    SceneManager::Instance().SetSceneToLoad(OVERWORLD);
 
     while (isRunning)
     {
@@ -103,9 +103,14 @@ void Engine::Run()
         // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        SceneManager::Intance().CurrentSceneInput(mEventBus);
-        SceneManager::Intance().CurrentSceneUpdate(mRegistry, mEventBus, deltaTime);
-        SceneManager::Intance().CurrentSceneDraw(mRegistry, mAssetStore, mRenderer);
+        if (SceneManager::Instance().SceneReadyToLoad())
+        {
+            SceneManager::Instance().LoadScene(mRegistry, mAssetStore, mRenderer);
+        }
+
+        SceneManager::Instance().CurrentSceneInput(mEventBus);
+        SceneManager::Instance().CurrentSceneUpdate(mRegistry, mEventBus, deltaTime);
+        SceneManager::Instance().CurrentSceneDraw(mRegistry, mAssetStore, mRenderer);
 
         SDL_RenderPresent(mRenderer);
     }

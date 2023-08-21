@@ -105,6 +105,17 @@ void Registry::KillEntity(Entity entity)
     mEntitiesToBeKilled.insert(entity);
 }
 
+void Registry::KillAllEntities()
+{
+    for (auto& system : systems)
+    {
+        for (auto& entity : system.second->GetSystemEntities())
+        {
+            entity.Kill();
+        }
+    }
+}
+
 void Registry::AddEntityToSystems(Entity entity)
 {
     const auto entityId = entity.GetID();

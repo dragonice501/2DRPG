@@ -23,6 +23,7 @@ public:
 	virtual ~Scene() {};
 
 	virtual void Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer) = 0;
+	virtual void Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer) = 0;
 
 	virtual void Input(std::unique_ptr<EventBus>& eventBus) = 0;
 	virtual void Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt) = 0;

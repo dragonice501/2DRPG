@@ -1,18 +1,16 @@
-#include "SceneTest.h"
+#include "SceneTown.h"
 
 #include "../ECS/WorldCollisionSystem.h"
 
-#include <iostream>
-
-SceneTest::SceneTest()
+SceneTown::SceneTown()
 {
 }
 
-SceneTest::~SceneTest()
+SceneTown::~SceneTown()
 {
 }
 
-void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     // Add the sytems that need to be processed in our game
     registry->AddSystem<RenderTileSystem>();
@@ -26,7 +24,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     registry->AddSystem<WorldEncounterSystem>();
 
     // Adding assets to the asset store
-    assetStore->AddTexture(renderer, "TileMap", "./assets/Chapter_0_m.png");
+    assetStore->AddTexture(renderer, "TileMap", "./assets/TownSpriteSheet.png");
     assetStore->AddTexture(renderer, "SigurdSheet", "./assets/Sigurd.png");
 
     int tileType;
@@ -34,7 +32,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     float mapXOffset = 0;
     float mapYOffset = 0;
 
-    std::ifstream file("./assets/MapSaveFile.txt");
+    std::ifstream file("./assets/TownSaveFile.txt");
     std::string type;
     while (file >> type)
     {
@@ -90,7 +88,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     sigurd.AddComponent<CameraFollowComponent>();
 }
 
-void SceneTest::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneTown::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     registry->KillAllEntities();
 
@@ -107,7 +105,7 @@ void SceneTest::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<As
     assetStore->ClearAssets();
 }
 
-void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
+void SceneTown::Input(std::unique_ptr<EventBus>& eventBus)
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -131,7 +129,7 @@ void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
     }
 }
 
-void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt)
+void SceneTown::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt)
 {
     // Reset all event handlers for the current frame
     eventBus->Reset();
@@ -148,7 +146,7 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
 }
 
-void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneTown::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);

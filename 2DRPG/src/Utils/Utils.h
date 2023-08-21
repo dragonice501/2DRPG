@@ -3,7 +3,8 @@
 enum SceneNames
 {
 	OVERWORLD,
-	TOWN
+	TOWN,
+	NONE
 };
 
 enum ETerrainType

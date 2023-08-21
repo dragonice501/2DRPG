@@ -139,6 +139,8 @@
     <ClCompile Include="libs\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="libs\imgui\imgui_sdl.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Scene\SceneTown.cpp" />
+    <ClCompile Include="src\Managers\SceneManager.cpp" />
     <ClCompile Include="src\Scene\SceneTest.cpp" />
     <ClCompile Include="src\Graphics\Font.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
@@ -250,6 +252,8 @@
     <ClInclude Include="libs\SDL2\include\SDL_version.h" />
     <ClInclude Include="libs\SDL2\include\SDL_video.h" />
     <ClInclude Include="libs\SDL2\include\SDL_vulkan.h" />
+    <ClInclude Include="src\Scene\SceneTown.h" />
+    <ClInclude Include="src\ECS\WorldCollisionSystem.h" />
     <ClInclude Include="src\Managers\SceneManager.h" />
     <ClInclude Include="src\Scene\SceneTest.h" />
     <ClInclude Include="src\EventBus\Events.h" />
