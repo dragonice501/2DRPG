@@ -132,6 +132,7 @@ void SceneTown::Input(std::unique_ptr<EventBus>& eventBus)
         {
             case SDL_KEYDOWN:
             {
+                std::cout << "key pressed" << std::endl;
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) Engine::SetIsRunning(false);
 
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -139,6 +140,7 @@ void SceneTown::Input(std::unique_ptr<EventBus>& eventBus)
             }
             case SDL_KEYUP:
             {
+                std::cout << "key released" << std::endl;
                 eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
                 break;
             }

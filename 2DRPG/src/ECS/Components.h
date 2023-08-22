@@ -115,7 +115,9 @@ struct CharacterInputComponent
 		upButtonPresed(false),
 		downButtonPresed(false),
 		leftButtonPresed(false),
-		rightButtonPresed(false)
+		rightButtonPresed(false),
+		interactButtonPressed(false),
+		interactButtonAlreadyPressed(false)
 	{
 
 	}
@@ -124,6 +126,8 @@ struct CharacterInputComponent
 	bool downButtonPresed;
 	bool leftButtonPresed;
 	bool rightButtonPresed;
+	bool interactButtonPressed;
+	bool interactButtonAlreadyPressed;
 };
 
 struct CharacterMovementComponent
@@ -163,6 +167,14 @@ struct HealthComponent
 	}
 
 	int healthPercentage;
+};
+
+struct InteractableComponent
+{
+	InteractableComponent()
+	{
+
+	}
 };
 
 struct KeyboardControlComponent

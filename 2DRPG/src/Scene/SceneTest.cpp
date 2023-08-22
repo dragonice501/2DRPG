@@ -19,9 +19,10 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     registry->AddSystem<RenderCharacterSystem>();
     registry->AddSystem<CharacterAnimationSystem>();
     registry->AddSystem<CharacterInputSystem>();
+    registry->AddSystem<CharacterInteractSystem>();
     registry->AddSystem<CharacterMovementSystem>();
     registry->AddSystem<CameraMovementSystem>();
-
+    registry->AddSystem<InteractSystem>();
     registry->AddSystem<WorldCollisionSystem>();
     registry->AddSystem<WorldEncounterSystem>();
 
@@ -57,6 +58,20 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
             sceneEntrance.Tag("Entrance");
             sceneEntrance.AddComponent<SceneEntranceComponent>(sceneName, sceneEntranceIndex, Vec2(sceneEntrancePosX, sceneEntrancePosY));
         }
+        else if (type == "Interactable")
+        {
+            int xPos;
+            int yPos;
+
+            file >> xPos >> yPos;
+
+            std::cout << "interactable at: " << xPos * TILE_SIZE << ',' << yPos * TILE_SIZE << std::endl;
+
+            Entity interactable = registry->CreateEntity();
+            interactable.Tag("Interactable");
+            interactable.AddComponent<TransformComponent>(Vec2(xPos * TILE_SIZE, yPos * TILE_SIZE), Vec2(1.0f, 1.0f), 0.0f);
+            interactable.AddComponent<InteractableComponent>();
+        }
         else if (type == "Tile")
         {
             int tileType;
@@ -67,7 +82,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
             Entity tile = registry->CreateEntity();
             tile.Tag("Tile");
-            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE), Vec2(1.0, 1.0), 0.0);
+            tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE), Vec2(1.0, 1.0), 0.0f);
             tile.AddComponent<SpriteComponent>("TileMap", TILE_SIZE, TILE_SIZE, 0, 0, 0, false, x * TILE_SIZE, y * TILE_SIZE);
             tile.AddComponent<TileComponent>(x + y * SPRITE_SHEET_SIZE);
             i++;
@@ -127,6 +142,7 @@ void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
         {
             case SDL_KEYDOWN:
             {
+                //std::cout << "key pressed" << std::endl;
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) Engine::SetIsRunning(false);
 
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -134,6 +150,7 @@ void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
             }
             case SDL_KEYUP:
             {
+               // std::cout << "key released" << std::endl;
                 eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
                 break;
             }
@@ -147,11 +164,13 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
     eventBus->Reset();
 
     registry->GetSystem<CharacterInputSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<InteractSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<WorldCollisionSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<WorldEncounterSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
+    registry->GetSystem<CharacterInteractSystem>().Update(eventBus);
     registry->GetSystem<CharacterMovementSystem>().Update(dt, eventBus, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
     registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 

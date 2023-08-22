@@ -7,6 +7,17 @@
 #include <SDL.h>
 #include <iostream>
 
+class CharacterInteractEvent : public Event
+{
+public:
+	CharacterInteractEvent(Vec2 interactPosition)
+	{
+		this->interactPosition = interactPosition;
+	}
+
+	Vec2 interactPosition;
+};
+
 class CharacterMovementEvent : public Event
 {
 public:

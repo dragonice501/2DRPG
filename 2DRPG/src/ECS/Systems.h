@@ -173,10 +173,6 @@ public:
 
 			switch (event.symbol)
 			{
-				case SDLK_ESCAPE:
-				{
-
-				}
 				case SDLK_w:
 				{
 					characterInput.upButtonPresed = true;
@@ -197,6 +193,19 @@ public:
 					characterInput.rightButtonPresed = true;
 					break;
 				}
+				case SDLK_e:
+				{
+					if (!characterInput.interactButtonAlreadyPressed)
+					{
+						characterInput.interactButtonPressed = true;
+					}
+					else
+					{
+						characterInput.interactButtonAlreadyPressed = true;
+						characterInput.interactButtonPressed = false;
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -209,10 +218,6 @@ public:
 
 			switch (event.symbol)
 			{
-				case SDLK_ESCAPE:
-				{
-
-				}
 				case SDLK_w:
 				{
 					characterInput.upButtonPresed = false;
@@ -233,6 +238,48 @@ public:
 					characterInput.rightButtonPresed = false;
 					break;
 				}
+				case SDLK_e:
+				{
+					characterInput.interactButtonAlreadyPressed = false;
+					characterInput.interactButtonPressed = false;
+					break;
+				}
+			}
+		}
+	}
+};
+
+class CharacterInteractSystem: public System
+{
+public:
+	CharacterInteractSystem()
+	{
+		RequireComponent<TransformComponent>();
+		RequireComponent<RigidbodyComponent>();
+		RequireComponent<CharacterInputComponent>();
+	}
+
+	void Update(std::unique_ptr<EventBus>& eventbus)
+	{
+		for (auto entity : GetSystemEntities())
+		{
+			auto& input = entity.GetComponent<CharacterInputComponent>();
+			const auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+			const auto& transform = entity.GetComponent<TransformComponent>();
+
+			if (input.interactButtonPressed && !input.interactButtonAlreadyPressed)
+			{	
+				Vec2 interactionPosition =
+				{
+					transform.position.x + rigidbody.lastVelocity.x * TILE_SIZE,
+					transform.position.y + rigidbody.lastVelocity.y * TILE_SIZE
+				};
+
+				std::cout << "Checking position: " << interactionPosition.x << ',' << interactionPosition.y << std::endl;
+
+				eventbus->EmitEvent<CharacterInteractEvent>(interactionPosition);
+
+				input.interactButtonAlreadyPressed = true;
 			}
 		}
 	}
@@ -257,7 +304,7 @@ public:
 		{
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
-			auto& movement = entity.GetComponent<CharacterMovementComponent>();
+			auto& movement = entity.GetComponent<CharacterMovementComponent>();//
 			auto& sprite = entity.GetComponent<SpriteComponent>();
 			auto& input = entity.GetComponent<CharacterInputComponent>();
 
@@ -535,6 +582,34 @@ public:
 			}
 
 			projectile.Kill();
+		}
+	}
+};
+
+class InteractSystem : public System
+{
+public:
+	InteractSystem()
+	{
+		RequireComponent<InteractableComponent>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+	{
+		eventBus->SubscribeToEvent<CharacterInteractEvent>(this, &InteractSystem::CheckInteractables);
+	}
+
+	void CheckInteractables(CharacterInteractEvent& event)
+	{
+		for (auto& entity : GetSystemEntities())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>();
+
+			if (transform.position == event.interactPosition)
+			{
+				std::cout << "interaction made" << std::endl;
+			}
 		}
 	}
 };
