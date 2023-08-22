@@ -62,15 +62,6 @@ public:
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& cameraFollow = entity.GetComponent<CameraFollowComponent>();
 
-			/*if (transform.position.x * TILE_SPRITE_SCALE + (camera.w / 2) < mapWidth * TILE_SIZE * TILE_SPRITE_SCALE)
-			{
-				
-			}
-			if (transform.position.y * TILE_SPRITE_SCALE + (camera.h / 2) < mapHeight * TILE_SIZE * TILE_SPRITE_SCALE)
-			{
-				
-			}*/
-
 			camera.x = transform.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
 			camera.y = transform.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
 
@@ -86,7 +77,8 @@ public:
 	CharacterAnimationSystem()
 	{
 		RequireComponent<SpriteComponent>();
-		RequireComponent<AnimationComponent>();
+		RequireComponent<AnimationSystemComponent>();
+		RequireComponent<AnimationStateComponent>();
 		RequireComponent<RigidbodyComponent>();
 	}
 
@@ -94,33 +86,67 @@ public:
 	{
 		for (auto entity : GetSystemEntities())
 		{
-			auto& animation = entity.GetComponent<AnimationComponent>();
+			auto& animationState = entity.GetComponent<AnimationStateComponent>();
+			auto& animationSystem = entity.GetComponent<AnimationSystemComponent>();
 			auto& sprite = entity.GetComponent<SpriteComponent>();
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
 
-			if (rigidbody.velocity.y < 0)
+			if (rigidbody.velocity != Vec2(0.0f))
 			{
-				sprite.srcRect.y = sprite.height * 1;
+				animationState.animationState = AnimationStateComponent::MOVING;
+				animationSystem.SetCurrentAnimation("Moving");
+				sprite.assetId = animationSystem.GetCurrentAnimation().assetId;
 			}
-			else if (rigidbody.velocity.y > 0)
+			else
 			{
-				sprite.srcRect.y = sprite.height * 2;
-			}
-			else if (rigidbody.velocity.x < 0)
-			{
-				sprite.srcRect.y = sprite.height * 3;
-			}
-			else if (rigidbody.velocity.x > 0)
-			{
-				sprite.srcRect.y = sprite.height * 4;
-			}
-			else if (rigidbody.velocity == Vec2(0.0f))
-			{
-				sprite.srcRect.y = 0;
+				animationState.animationState = AnimationStateComponent::IDLE;
+				animationSystem.SetCurrentAnimation("Idle");
+				sprite.assetId = animationSystem.GetCurrentAnimation().assetId;
 			}
 
-			animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameRateSpeed / 1000) % animation.numFrames;
-			sprite.srcRect.x = animation.currentFrame * sprite.width;
+			if (animationState.animationState == AnimationStateComponent::IDLE)
+			{
+				if (rigidbody.lastVelocity.y < 0)
+				{
+					sprite.srcRect.y = sprite.height * 0;
+				}
+				else if (rigidbody.lastVelocity.y > 0)
+				{
+					sprite.srcRect.y = sprite.height * 1;
+				}
+				else if (rigidbody.lastVelocity.x < 0)
+				{
+					sprite.srcRect.y = sprite.height * 2;
+				}
+				else if (rigidbody.lastVelocity.x > 0)
+				{
+					sprite.srcRect.y = sprite.height * 3;
+				}
+			}
+			else if (animationState.animationState == AnimationStateComponent::MOVING)
+			{
+				if (rigidbody.velocity.y < 0)
+				{
+					sprite.srcRect.y = sprite.height * 0;
+				}
+				else if (rigidbody.velocity.y > 0)
+				{
+					sprite.srcRect.y = sprite.height * 1;
+				}
+				else if (rigidbody.velocity.x < 0)
+				{
+					sprite.srcRect.y = sprite.height * 2;
+				}
+				else if (rigidbody.velocity.x > 0)
+				{
+					sprite.srcRect.y = sprite.height * 3;
+				}
+			}
+
+			AnimationSystemComponent::Animation& anim = animationSystem.GetCurrentAnimation();
+
+			anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
+			sprite.srcRect.x = anim.currentFrame * sprite.width;
 		}
 	}
 };
@@ -246,6 +272,7 @@ public:
 						movement.rate = 0.0f;
 						movement.start = transform.position;
 						movement.destination = Vec2(0.0f);
+						rigidbody.lastVelocity = rigidbody.velocity;
 						rigidbody.velocity = Vec2(0.0f);
 						sprite.srcRect.y = 0;
 
@@ -814,22 +841,24 @@ public:
 	{
 		RequireComponent<TransformComponent>();
 		RequireComponent<SpriteComponent>();
-		RequireComponent<AnimationComponent>();
+		RequireComponent<AnimationSystemComponent>();
 	}
 
 	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera)
 	{
 		for (const auto& entity : GetSystemEntities())
 		{
-			const auto transform = entity.GetComponent<TransformComponent>();
-			const auto sprite = entity.GetComponent<SpriteComponent>();
+			const auto& transform = entity.GetComponent<TransformComponent>();
+			const auto& sprite = entity.GetComponent<SpriteComponent>();
 
 			SDL_Rect srcRect = sprite.srcRect;
-			SDL_Rect destRect = {
+			SDL_Rect destRect =
+			{
 				transform.position.x * TILE_SPRITE_SCALE + sprite.xOffset * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.x),
 				transform.position.y * TILE_SPRITE_SCALE + sprite.yOffset * TILE_SPRITE_SCALE - (sprite.isFixed ? 0 : camera.y),
 				sprite.width * transform.scale.x * TILE_SPRITE_SCALE,
-				sprite.height * transform.scale.y * TILE_SPRITE_SCALE };
+				sprite.height * transform.scale.y * TILE_SPRITE_SCALE
+			};
 
 			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
 		}

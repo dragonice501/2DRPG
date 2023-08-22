@@ -27,10 +27,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "TileMap", "./assets/Chapter_0_m.png");
-    assetStore->AddTexture(renderer, "SigurdSheet", "./assets/Sigurd.png");
-
     int i = 0;
-    Vec2 spawnPosition;
 
     std::ifstream file("./assets/WorldSaveFile.txt");
     std::string type;
@@ -82,11 +79,21 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         spawnPosition = Vec2(41.0f * TILE_SIZE, 18.0f * TILE_SIZE);
     }
 
+    assetStore->AddTexture(renderer, "SigurdIdleSheet", "./assets/Sigurd_Idle.png");
+    assetStore->AddTexture(renderer, "SigurdMovingSheet", "./assets/Sigurd_Moving.png");
+
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
     sigurd.AddComponent<TransformComponent>(spawnPosition, Vec2(1.0, 1.0), 0.0);
-    sigurd.AddComponent<SpriteComponent>("SigurdSheet", 32, 32, 0, -TILE_SIZE, 1);
-    sigurd.AddComponent<AnimationComponent>(4, 8, true);
+    sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -TILE_SIZE, 1);
+
+    sigurd.AddComponent<AnimationStateComponent>();
+    sigurd.AddComponent<AnimationSystemComponent>();
+    AnimationSystemComponent::Animation idleAnimation(4, 4, true, "SigurdIdleSheet");
+    AnimationSystemComponent::Animation movingAnimation(4, 8, true, "SigurdMovingSheet");
+    sigurd.GetComponent<AnimationSystemComponent>().AddAnimation("Idle", idleAnimation);
+    sigurd.GetComponent<AnimationSystemComponent>().AddAnimation("Moving", movingAnimation);
+
     sigurd.AddComponent<CharacterInputComponent>();
     sigurd.AddComponent<RigidbodyComponent>();
     sigurd.AddComponent<CharacterMovementComponent>();

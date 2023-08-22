@@ -34,4 +34,7 @@ protected:
 	int mapHeight = 0;
 	int startX = 0;
 	int startY = 0;
+
+	std::string sceneFileString;
+	Vec2 spawnPosition;
 };

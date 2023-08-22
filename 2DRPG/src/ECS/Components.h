@@ -6,11 +6,13 @@
 #include <SDL.h>
 #include <glm/vec2.hpp>
 #include <iostream>
+#include <map>
 
 struct AnimationComponent
 {
-	AnimationComponent(int numFrames = 1, int frameRateSpeed = 1, bool shouldLoop = true)
+	AnimationComponent(int numFrames = 1, int frameRateSpeed = 1, bool shouldLoop = true, std::string assetId = "")
 	{
+		this->assetId = assetId;
 		this->numFrames = numFrames;
 		this->currentFrame = 1;
 		this->frameRateSpeed = frameRateSpeed;
@@ -18,11 +20,68 @@ struct AnimationComponent
 		this->startTime = SDL_GetTicks();
 	}
 
+	std::string assetId;
 	int numFrames;
 	int currentFrame;
 	int frameRateSpeed;
 	bool shouldLoop;
 	int startTime;
+};
+
+struct AnimationStateComponent
+{
+	enum AnimationState
+	{
+		IDLE,
+		MOVING
+	};
+
+	AnimationStateComponent()
+	{
+		this->animationState = IDLE;
+	}
+
+	AnimationState animationState;
+};
+
+struct AnimationSystemComponent
+{
+	struct Animation
+	{
+		Animation(int numFrames = 1, int frameRateSpeed = 1, bool shouldLoop = true, std::string assetId = "")
+		{
+			this->assetId = assetId;
+			this->numFrames = numFrames;
+			this->currentFrame = 1;
+			this->frameRateSpeed = frameRateSpeed;
+			this->shouldLoop = shouldLoop;
+			this->startTime = SDL_GetTicks();
+		}
+
+		std::string assetId;
+		int numFrames;
+		int currentFrame;
+		int frameRateSpeed;
+		bool shouldLoop;
+		int startTime;
+	};
+
+	AnimationSystemComponent()
+	{
+		currentAnimation = "Idle";
+	}
+
+	void AddAnimation(std::string name, Animation animation)
+	{
+		animationMap.emplace(name, animation);
+	}
+
+	Animation& GetAnimation(const std::string& key) { return animationMap.at(key); }
+	Animation& GetCurrentAnimation() { return animationMap.at(currentAnimation); }
+	void SetCurrentAnimation(const std::string& key) { currentAnimation = key; }
+
+	std::map<std::string, Animation> animationMap;
+	std::string currentAnimation;
 };
 
 struct BoxColliderComponent
@@ -169,12 +228,14 @@ struct ProjectileEmitterComponent
 
 struct RigidbodyComponent
 {
-	RigidbodyComponent(Vec2 velocity = Vec2(0.0, 0.0))
+	RigidbodyComponent(Vec2 velocity = Vec2(0.0, 0.0), Vec2 lastVelocity = Vec2(-1.0f, 0.0f))
 	{
 		this->velocity = velocity;
+		this->lastVelocity = lastVelocity;
 	}
 
 	Vec2 velocity;
+	Vec2 lastVelocity;
 };
 
 struct SceneEntranceComponent
