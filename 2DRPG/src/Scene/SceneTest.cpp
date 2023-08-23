@@ -1,6 +1,7 @@
 #include "SceneTest.h"
 
-#include "../ECS/WorldCollisionSystem.h"
+#include "../Systems/WorldCollisionSystem.h"
+#include "../Systems/CharacterMovementSystem.h"
 
 #include <iostream>
 
@@ -100,7 +101,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
     sigurd.AddComponent<TransformComponent>(spawnPosition, Vec2(1.0, 1.0), 0.0);
-    sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -TILE_SIZE, 1);
+    sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -22, 1);
 
     sigurd.AddComponent<AnimationStateComponent>();
     sigurd.AddComponent<AnimationSystemComponent>();
@@ -170,11 +171,14 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
+
     registry->GetSystem<CharacterInteractSystem>().Update(eventBus);
     registry->GetSystem<CharacterMovementSystem>().Update(dt, eventBus, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
     registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
+    
+    registry->GetSystem<CharacterInputSystem>().Update(dt);
 }
 
 void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

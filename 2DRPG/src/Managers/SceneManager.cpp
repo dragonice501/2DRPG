@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 
 int SceneManager::mSceneEntranceIndex = 0;
+bool SceneManager::mIsOverworld = false;
 
 SceneManager& SceneManager::Instance()
 {
@@ -31,11 +32,13 @@ void SceneManager::LoadScene(std::unique_ptr<Registry>& registry, std::unique_pt
 	{
 		case OVERWORLD:
 		{
+			mIsOverworld = true;
 			currentScene = std::make_unique<SceneTest>();
 			break;
 		}
 		case TOWN:
 		{
+			mIsOverworld = false;
 			currentScene = std::make_unique<SceneTown>();
 			break;
 		}

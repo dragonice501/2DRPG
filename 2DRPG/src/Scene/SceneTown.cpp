@@ -1,6 +1,7 @@
 #include "SceneTown.h"
 
-#include "../ECS/WorldCollisionSystem.h"
+#include "../Systems/WorldCollisionSystem.h"
+#include "../Systems/CharacterMovementSystem.h"
 
 SceneTown::SceneTown()
 {
@@ -17,9 +18,10 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     registry->AddSystem<RenderCharacterSystem>();
     registry->AddSystem<CharacterAnimationSystem>();
     registry->AddSystem<CharacterInputSystem>();
+    registry->AddSystem<CharacterInteractSystem>();
     registry->AddSystem<CharacterMovementSystem>();
     registry->AddSystem<CameraMovementSystem>();
-
+    registry->AddSystem<InteractSystem>();
     registry->AddSystem<WorldCollisionSystem>();
     registry->AddSystem<WorldEncounterSystem>();
 
@@ -39,11 +41,19 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
             Engine::mapWidth = mapWidth;
             Engine::mapHeight = mapHeight;
         }
-        else if (type == "StartPosition")
+        else if (type == "Interactable")
         {
-            file >> startX >> startY;
-            startX *= TILE_SIZE;
-            startY *= TILE_SIZE;
+            int xPos;
+            int yPos;
+
+            file >> xPos >> yPos;
+
+            std::cout << "interactable at: " << xPos * TILE_SIZE << ',' << yPos * TILE_SIZE << std::endl;
+
+            Entity interactable = registry->CreateEntity();
+            interactable.Tag("Interactable");
+            interactable.AddComponent<TransformComponent>(Vec2(xPos * TILE_SIZE, yPos * TILE_SIZE), Vec2(1.0f, 1.0f), 0.0f);
+            interactable.AddComponent<InteractableComponent>();
         }
         else if (type == "SceneEntrance")
         {
@@ -74,7 +84,7 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
             tile.Tag("Tile");
             tile.AddComponent<TransformComponent>(Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE), Vec2(1.0, 1.0), 0.0);
             tile.AddComponent<SpriteComponent>("TileMap", TILE_SIZE, TILE_SIZE, 0, 0, 0, false, x * TILE_SIZE, y * TILE_SIZE);
-            tile.AddComponent<TileComponent>(x + y * SPRITE_SHEET_SIZE);
+            tile.AddComponent<TileComponent>(x + y * SPRITE_SHEET_SIZE, true);
             i++;
         }
     }
@@ -89,8 +99,8 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(spawnPosition, Vec2(1.0, 1.0), 0.0);
-    sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -TILE_SIZE, 1);
+    sigurd.AddComponent<TransformComponent>(Vec2(17.0f, 16.0f) * TILE_SIZE, Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -22, 1);
 
     sigurd.AddComponent<AnimationStateComponent>();
     sigurd.AddComponent<AnimationSystemComponent>();
@@ -115,7 +125,6 @@ void SceneTown::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<As
     registry->RemoveSystem<CharacterInputSystem>(registry->GetSystem<CharacterInputSystem>());
     registry->RemoveSystem<CharacterMovementSystem>(registry->GetSystem<CharacterMovementSystem>());
     registry->RemoveSystem<CameraMovementSystem>(registry->GetSystem<CameraMovementSystem>());
-
     registry->RemoveSystem<WorldCollisionSystem>(registry->GetSystem<WorldCollisionSystem>());
     registry->RemoveSystem<WorldEncounterSystem>(registry->GetSystem<WorldEncounterSystem>());
 
@@ -127,12 +136,10 @@ void SceneTown::Input(std::unique_ptr<EventBus>& eventBus)
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
-        // Handle core SDL events (close window, key pressed, etc.)
         switch (sdlEvent.type)
         {
             case SDL_KEYDOWN:
             {
-                std::cout << "key pressed" << std::endl;
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) Engine::SetIsRunning(false);
 
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -140,7 +147,6 @@ void SceneTown::Input(std::unique_ptr<EventBus>& eventBus)
             }
             case SDL_KEYUP:
             {
-                std::cout << "key released" << std::endl;
                 eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
                 break;
             }
@@ -154,15 +160,20 @@ void SceneTown::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
     eventBus->Reset();
 
     registry->GetSystem<CharacterInputSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<InteractSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<WorldCollisionSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<WorldEncounterSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
+
+    registry->GetSystem<CharacterInteractSystem>().Update(eventBus);
     registry->GetSystem<CharacterMovementSystem>().Update(dt, eventBus, mapWidth, mapHeight, registry->GetSystem<RenderTileSystem>().GetSystemEntities());
     registry->GetSystem<CameraMovementSystem>().Update(Engine::Camera(), mapWidth, mapHeight);
 
     registry->GetSystem<CharacterAnimationSystem>().Update(dt);
+    
+    registry->GetSystem<CharacterInputSystem>().Update(dt);
 }
 
 void SceneTown::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)

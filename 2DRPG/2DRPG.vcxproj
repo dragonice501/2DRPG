@@ -153,6 +153,7 @@
     <ClCompile Include="src\Utils\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Systems\CharacterMovementSystem.h" />
     <ClInclude Include="libs\imgui\imconfig.h" />
     <ClInclude Include="libs\imgui\imgui.h" />
     <ClInclude Include="libs\imgui\imgui_impl_sdl.h" />
@@ -253,7 +254,7 @@
     <ClInclude Include="libs\SDL2\include\SDL_video.h" />
     <ClInclude Include="libs\SDL2\include\SDL_vulkan.h" />
     <ClInclude Include="src\Scene\SceneTown.h" />
-    <ClInclude Include="src\ECS\WorldCollisionSystem.h" />
+    <ClInclude Include="src\Systems\WorldCollisionSystem.h" />
     <ClInclude Include="src\Managers\SceneManager.h" />
     <ClInclude Include="src\Scene\SceneTest.h" />
     <ClInclude Include="src\EventBus\Events.h" />

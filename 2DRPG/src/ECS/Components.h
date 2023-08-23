@@ -116,8 +116,7 @@ struct CharacterInputComponent
 		downButtonPresed(false),
 		leftButtonPresed(false),
 		rightButtonPresed(false),
-		interactButtonPressed(false),
-		interactButtonAlreadyPressed(false)
+		interactButtonPressed(false), interactButtonHeld(false), interactButtonReleased(false)
 	{
 
 	}
@@ -126,8 +125,10 @@ struct CharacterInputComponent
 	bool downButtonPresed;
 	bool leftButtonPresed;
 	bool rightButtonPresed;
+
 	bool interactButtonPressed;
-	bool interactButtonAlreadyPressed;
+	bool interactButtonHeld;
+	bool interactButtonReleased;
 };
 
 struct CharacterMovementComponent
@@ -298,11 +299,19 @@ struct SpriteComponent
 
 struct TileComponent
 {
-	TileComponent(int tileIndex = 0)
+	TileComponent(int tileIndex = 0, bool isTownTile = false) : townTileType(UNWALKABLE), terrainType(UNDEFINED)
 	{
-		this->terrainType = GetTerrainType(tileIndex);
+		if (isTownTile)
+		{
+			this->townTileType = GetTownTileType(tileIndex);
+		}
+		else
+		{
+			this->terrainType = GetTerrainType(tileIndex);
+		}
 	}
 
+	ETownTileType townTileType;
 	ETerrainType terrainType;
 };
 

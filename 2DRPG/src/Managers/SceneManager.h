@@ -12,6 +12,7 @@ public:
 	static SceneManager& Instance();
 
 	static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
+	static bool GetIsOverworld() { return mIsOverworld; }
 
 	bool SceneReadyToLoad() const;
 	void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
@@ -30,4 +31,5 @@ private:
 	std::unique_ptr<Scene> currentScene = nullptr;
 	SceneNames mSceneToLoad = NONE;
 	static int mSceneEntranceIndex;
+	static bool mIsOverworld;
 };

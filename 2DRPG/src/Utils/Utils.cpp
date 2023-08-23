@@ -9,6 +9,19 @@ float Clampf(const float v, const float min, const float max)
 	else return v;
 }
 
+ETownTileType GetTownTileType(const int mapSpriteIndex)
+{
+	for (const int index : mWalkableIndeces)
+	{
+		if (mapSpriteIndex == index)
+		{
+			return WALKABLE;
+		}
+	}
+
+	return UNWALKABLE;
+}
+
 ETerrainType GetTerrainType(const int mapSpriteIndex)
 {
 	for (const int index : mChurchIndeces)

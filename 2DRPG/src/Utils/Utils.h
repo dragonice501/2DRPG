@@ -7,6 +7,19 @@ enum SceneNames
 	NONE
 };
 
+enum ETownTileType
+{
+	WALKABLE,
+	UNWALKABLE
+};
+
+// Town Tile Indeces
+static size_t mWalkableIndeces[43] =
+{
+	0,5,6,7,11,12,13,68,69,71,74,100,101,103,130,131,132,133,134,135,142,148,161,
+	162,163,164,165,166,167,168,174,180,197,206,238,389,391,394,421,423,424,425,428
+};
+
 enum ETerrainType
 {
 	BRAGI_TOWER,
@@ -121,6 +134,8 @@ static size_t mVillageIndeces[3] =
 };
 
 float Clampf(const float v, const float min, const float max);
+
+ETownTileType GetTownTileType(const int mapSpriteIndex);
 
 ETerrainType GetTerrainType(const int mapSpriteIndex);
 void PrintTerrainType(const ETerrainType terrain);

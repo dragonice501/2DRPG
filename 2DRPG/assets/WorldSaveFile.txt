@@ -1,5 +1,4 @@
 MapSize 60 34
-Interactable 34 14
 SceneEntrance 1 1 41 17
 SceneEntrance 1 0 36 14
 Tile 256
