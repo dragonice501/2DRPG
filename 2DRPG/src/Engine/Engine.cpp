@@ -8,7 +8,6 @@
 
 #include "../Managers/SceneManager.h"
 #include "../Scene/Scene.h"
-#include "../Scene/SceneTest.h"
 
 #include <SDL.h>
 #include <SDL_image.h>

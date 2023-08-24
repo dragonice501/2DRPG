@@ -1,19 +1,20 @@
-#include "SceneTest.h"
+#include "SceneOverworld.h"
 
 #include "../Systems/WorldCollisionSystem.h"
+#include "../Systems/WorldEncounterSystem.h"
 #include "../Systems/CharacterMovementSystem.h"
 
 #include <iostream>
 
-SceneTest::SceneTest()
+SceneOverworld::SceneOverworld()
 {
 }
 
-SceneTest::~SceneTest()
+SceneOverworld::~SceneOverworld()
 {
 }
 
-void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneOverworld::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     // Add the sytems that need to be processed in our game
     registry->AddSystem<RenderTileSystem>();
@@ -116,7 +117,7 @@ void SceneTest::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
     sigurd.AddComponent<CameraFollowComponent>();
 }
 
-void SceneTest::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneOverworld::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     registry->KillAllEntities();
 
@@ -133,7 +134,7 @@ void SceneTest::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<As
     assetStore->ClearAssets();
 }
 
-void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
+void SceneOverworld::Input(std::unique_ptr<EventBus>& eventBus)
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -159,7 +160,7 @@ void SceneTest::Input(std::unique_ptr<EventBus>& eventBus)
     }
 }
 
-void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt)
+void SceneOverworld::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt)
 {
     // Reset all event handlers for the current frame
     eventBus->Reset();
@@ -181,7 +182,7 @@ void SceneTest::Update(std::unique_ptr<Registry>& registry, std::unique_ptr<Even
     registry->GetSystem<CharacterInputSystem>().Update(dt);
 }
 
-void SceneTest::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneOverworld::Render(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);

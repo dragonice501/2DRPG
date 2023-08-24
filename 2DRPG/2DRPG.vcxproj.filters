@@ -57,7 +57,7 @@
     <ClCompile Include="src\Graphics\Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\SceneTest.cpp">
+    <ClCompile Include="src\Scene\SceneOverworld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\Utils.cpp">
@@ -410,7 +410,7 @@
     <ClInclude Include="src\Graphics\GraphicsConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\SceneTest.h">
+    <ClInclude Include="src\Scene\SceneOverworld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\Constants.h">
@@ -429,6 +429,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Systems\CharacterMovementSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Systems\WorldEncounterSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

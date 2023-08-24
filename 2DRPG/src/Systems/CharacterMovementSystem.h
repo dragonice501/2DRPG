@@ -86,6 +86,11 @@ public:
 					else
 					{
 						movement.movementState = CharacterMovementComponent::EMovementState::Idle;
+
+						if (input.upButtonPresed)rigidbody.lastVelocity = movement.upVelocity;
+						else if (input.downButtonPresed)rigidbody.lastVelocity = movement.downVelocity;
+						else if (input.leftButtonPresed)rigidbody.lastVelocity = movement.leftVelocity;
+						else if (input.rightButtonPresed)rigidbody.lastVelocity = movement.rightVelocity;
 					}
 				}
 			}
@@ -137,18 +142,18 @@ public:
 		int x = position.x / TILE_SIZE;
 		int y = position.y / TILE_SIZE;
 
-		ETownTileType townTile = tl[x + y * width].GetComponent<TileComponent>().townTileType;
-		ETerrainType terrain = tl[x + y * width].GetComponent<TileComponent>().terrainType;
-
-
 		if (SceneManager::Instance().GetIsOverworld())
 		{
-			if (terrain == CLIFF && !m.canWalkCliffs) return false;
+			ETerrainType terrain = tl[x + y * width].GetComponent<TileComponent>().terrainType;
 
-			if (terrain == RIVER && !m.canWalkRivers) return false;
+			if (terrain == CLIFF && !m.canWalkCliffs) return false;
+			else if (terrain == RIVER && !m.canWalkRivers) return false;
+			else if (terrain == MOUNTAIN && !m.canWalkMountains) return false;
 		}
 		else
 		{
+			ETownTileType townTile = tl[x + y * width].GetComponent<TileComponent>().townTileType;
+
 			if (townTile == UNWALKABLE) return false;
 		}
 

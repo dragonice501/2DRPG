@@ -141,7 +141,7 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Scene\SceneTown.cpp" />
     <ClCompile Include="src\Managers\SceneManager.cpp" />
-    <ClCompile Include="src\Scene\SceneTest.cpp" />
+    <ClCompile Include="src\Scene\SceneOverworld.cpp" />
     <ClCompile Include="src\Graphics\Font.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\AssetStore\AssetStore.cpp" />
@@ -256,7 +256,7 @@
     <ClInclude Include="src\Scene\SceneTown.h" />
     <ClInclude Include="src\Systems\WorldCollisionSystem.h" />
     <ClInclude Include="src\Managers\SceneManager.h" />
-    <ClInclude Include="src\Scene\SceneTest.h" />
+    <ClInclude Include="src\Scene\SceneOverworld.h" />
     <ClInclude Include="src\EventBus\Events.h" />
     <ClInclude Include="src\Graphics\Font.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
@@ -270,6 +270,7 @@
     <ClInclude Include="src\Logger\Logger.h" />
     <ClInclude Include="src\ECS\Systems.h" />
     <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Systems\WorldEncounterSystem.h" />
     <ClInclude Include="src\Utils\Constants.h" />
     <ClInclude Include="src\Utils\Utils.h" />
     <ClInclude Include="src\Utils\Vec2.h" />

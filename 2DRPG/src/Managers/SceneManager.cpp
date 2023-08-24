@@ -33,7 +33,7 @@ void SceneManager::LoadScene(std::unique_ptr<Registry>& registry, std::unique_pt
 		case OVERWORLD:
 		{
 			mIsOverworld = true;
-			currentScene = std::make_unique<SceneTest>();
+			currentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
 		case TOWN:

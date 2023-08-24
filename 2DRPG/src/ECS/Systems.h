@@ -297,6 +297,23 @@ public:
 	}
 };
 
+class CollisionSystem : public System
+{
+public:
+	CollisionSystem()
+	{
+		RequireComponent<BoxColliderAAComponent>();
+	}
+
+	void Update()
+	{
+		for (Entity& entity : GetSystemEntities())
+		{
+
+		}
+	}
+};
+
 class InteractSystem : public System
 {
 public:
@@ -425,36 +442,6 @@ public:
 			};
 
 			SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &destRect, transform.rotation, nullptr, sprite.flip);
-		}
-	}
-};
-
-class WorldEncounterSystem : public System
-{
-public:
-	size_t mEncounterStepsSize = 15;
-	size_t mEncounterStepRemaining = mEncounterStepsSize;
-
-public:
-	WorldEncounterSystem()
-	{
-
-	}
-
-	void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
-	{
-		eventBus->SubscribeToEvent<CharacterMovementEvent>(this, &WorldEncounterSystem::DetectMovement);
-	}
-
-	void DetectMovement(CharacterMovementEvent& event)
-	{
-		//PrintTerrainType(event.terrainType);
-		mEncounterStepRemaining--;
-
-		if (mEncounterStepRemaining <= 0)
-		{
-			std::cout << "encounter" << std::endl;
-			mEncounterStepRemaining = mEncounterStepsSize;
 		}
 	}
 };

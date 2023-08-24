@@ -1,6 +1,8 @@
 #include "ECS.h"
 #include "../Logger/Logger.h"
 
+#include <iostream>
+
 int IComponent::nextId = 0;
 
 void Entity::Kill()

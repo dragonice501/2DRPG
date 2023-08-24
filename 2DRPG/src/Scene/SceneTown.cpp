@@ -1,6 +1,7 @@
 #include "SceneTown.h"
 
 #include "../Systems/WorldCollisionSystem.h"
+#include "../Systems/WorldEncounterSystem.h"
 #include "../Systems/CharacterMovementSystem.h"
 
 SceneTown::SceneTown()
@@ -48,8 +49,6 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
             file >> xPos >> yPos;
 
-            std::cout << "interactable at: " << xPos * TILE_SIZE << ',' << yPos * TILE_SIZE << std::endl;
-
             Entity interactable = registry->CreateEntity();
             interactable.Tag("Interactable");
             interactable.AddComponent<TransformComponent>(Vec2(xPos * TILE_SIZE, yPos * TILE_SIZE), Vec2(1.0f, 1.0f), 0.0f);
@@ -89,6 +88,21 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
         }
     }
 
+    assetStore->AddTexture(renderer, "DancerIdleSheet", "./assets/Dancer_Idle.png");
+
+    Entity dancer = registry->CreateEntity();
+    dancer.Tag("npc");
+    dancer.AddComponent<TransformComponent>(Vec2(16.0f, 14.0f) * TILE_SIZE, Vec2(1.0, 1.0), 0.0);
+    dancer.AddComponent<SpriteComponent>("DancerIdleSheet", 32, 32, 0, -22, 1);
+    dancer.AddComponent<RigidbodyComponent>(Vec2(0.0f), Vec2(0.0f, 1.0f));
+    dancer.AddComponent<InteractableComponent>();
+    dancer.AddComponent<BoxColliderAAComponent>();
+
+    dancer.AddComponent<AnimationSystemComponent>();
+    dancer.AddComponent<AnimationStateComponent>();
+    AnimationSystemComponent::Animation dancerIdle(4, 4, true, "DancerIdleSheet");
+    dancer.GetComponent<AnimationSystemComponent>().AddAnimation("Idle", dancerIdle);
+
     if (spawnPosition == Vec2(0.0f, 0.0f))
     {
         spawnPosition = Vec2(41.0f * TILE_SIZE, 18.0f * TILE_SIZE);
@@ -99,7 +113,7 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 
     Entity sigurd = registry->CreateEntity();
     sigurd.Tag("player");
-    sigurd.AddComponent<TransformComponent>(Vec2(17.0f, 16.0f) * TILE_SIZE, Vec2(1.0, 1.0), 0.0);
+    sigurd.AddComponent<TransformComponent>(Vec2(16.0f, 17.0f) * TILE_SIZE, Vec2(1.0, 1.0), 0.0);
     sigurd.AddComponent<SpriteComponent>("SigurdIdleSheet", 32, 32, 0, -22, 1);
 
     sigurd.AddComponent<AnimationStateComponent>();
@@ -118,6 +132,7 @@ void SceneTown::Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<Asset
 void SceneTown::Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
 {
     registry->KillAllEntities();
+    registry->Update();
 
     registry->RemoveSystem<RenderTileSystem>(registry->GetSystem<RenderTileSystem>());
     registry->RemoveSystem<RenderCharacterSystem>(registry->GetSystem<RenderCharacterSystem>());

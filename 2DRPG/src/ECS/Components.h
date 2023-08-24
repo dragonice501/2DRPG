@@ -84,18 +84,18 @@ struct AnimationSystemComponent
 	std::string currentAnimation;
 };
 
-struct BoxColliderComponent
+struct BoxColliderAAComponent
 {
-	BoxColliderComponent(int width = 0, int height = 0, Vec2 offset = Vec2(0))
+	BoxColliderAAComponent(int width = 16, int height = 16, Vec2 position = Vec2(0.0f))
 	{
 		this->width = width;
 		this->height = height;
-		this->offset = offset;
+		this->position = position;
 	}
 
+	Vec2 position;
 	int width;
 	int height;
-	Vec2 offset;
 };
 
 struct CameraFollowComponent
@@ -139,6 +139,7 @@ struct CharacterMovementComponent
 	{
 		canWalkCliffs = false;
 		canWalkRivers = false;
+		canWalkMountains = false;
 	}
 
 	enum EMovementState
@@ -158,6 +159,7 @@ struct CharacterMovementComponent
 
 	bool canWalkCliffs;
 	bool canWalkRivers;
+	bool canWalkMountains;
 };
 
 struct HealthComponent

@@ -2,11 +2,11 @@
 
 #include "Scene.h"
 
-class SceneTest : public Scene
+class SceneOverworld : public Scene
 {
 public:
-	SceneTest();
-	~SceneTest();
+	SceneOverworld();
+	~SceneOverworld();
 
 	void Setup(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);
 	void Shutdown(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);
