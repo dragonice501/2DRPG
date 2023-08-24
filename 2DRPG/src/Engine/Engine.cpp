@@ -7,7 +7,9 @@
 #include "../Utils/Vec2.h"
 
 #include "../Managers/SceneManager.h"
-#include "../Scene/Scene.h"
+//#include "../Scene/Scene.h"
+#include "../_Scenes/SceneRef.h"
+#include "../_Scenes/SceneRefOverworld.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -56,8 +58,8 @@ bool Engine::Init()
     SDL_GetCurrentDisplayMode(0, &displayMode);
     mWindowWidth = displayMode.w;
     mWindowHeight = displayMode.h;
-    mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
-    mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
+    //mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
+    //mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
     mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
 
     if (!mWindow)
@@ -72,8 +74,8 @@ bool Engine::Init()
     }
 
     // Initialize the camera view with the entire screen area
-    camera.x = 0;
-    camera.y = 0;
+    camera.x = 0.0f;
+    camera.y = 0.0f;
     camera.w = mWindowWidth;
     camera.h = mWindowHeight;
 
@@ -85,7 +87,10 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::Instance().SetSceneToLoad(OVERWORLD, 0);
+    //SceneManager::Instance().SetSceneToLoad(OVERWORLD, 0);
+
+    std::unique_ptr<SceneRef> scene = std::make_unique<SceneRefOverworld>();
+    scene->Setup(mRenderer);
 
     while (isRunning)
     {
@@ -102,14 +107,18 @@ void Engine::Run()
         // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        if (SceneManager::Instance().SceneReadyToLoad())
+        /*f (SceneManager::Instance().SceneReadyToLoad())
         {
             SceneManager::Instance().LoadScene(mRegistry, mAssetStore, mRenderer);
         }
 
         SceneManager::Instance().CurrentSceneInput(mEventBus);
         SceneManager::Instance().CurrentSceneUpdate(mRegistry, mEventBus, deltaTime);
-        SceneManager::Instance().CurrentSceneDraw(mRegistry, mAssetStore, mRenderer);
+        SceneManager::Instance().CurrentSceneDraw(mRegistry, mAssetStore, mRenderer);*/
+
+        scene->Input();
+        scene->Update(deltaTime);
+        scene->Render(mRenderer);
 
         SDL_RenderPresent(mRenderer);
     }
