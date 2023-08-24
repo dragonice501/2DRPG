@@ -1,89 +1,55 @@
 #pragma once
 
 #include "Character.h"
+#include "ComponentsRef.h"
 #include "../Utils/Vec2.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <vector>
+#include <map>
 
 class Character
 {
-	struct Animation
+	enum EMovementState
 	{
-		Animation(int numFrames = 1, int frameRateSpeed = 1, bool shouldLoop = true)
-		{
-			this->numFrames = numFrames;
-			this->currentFrame = 1;
-			this->frameRateSpeed = frameRateSpeed;
-			this->shouldLoop = shouldLoop;
-			this->startTime = SDL_GetTicks();
-		}
-
-		int numFrames;
-		int currentFrame;
-		int frameRateSpeed;
-		bool shouldLoop;
-		int startTime;
-	};
-
-	struct Sprite
-	{
-		Sprite(int width = 0, int height = 0, int xOffset = 0, int yOffset = 0, int srcRectX = 0, int srcRectY = 0)
-		{
-			this->width = width;
-			this->height = height;
-			this->xOffset = xOffset;
-			this->yOffset = yOffset;
-			this->srcRect = { srcRectX, srcRectY, width, height };
-		}
-
-		int width;
-		int height;
-		int xOffset;
-		int yOffset;
-		SDL_Rect srcRect;
-	};
-
-	struct Input
-	{
-		Input() : upPressed(false), downPressed(false), leftPressed(false), rightPressed(false)
-		{
-
-		}
-
-		bool upPressed;
-		bool downPressed;
-		bool leftPressed;
-		bool rightPressed;
-	};
-
-	struct Rigidbody
-	{
-		Rigidbody() : velocity(Vec2(0.0f))
-		{
-
-		}
-
-		Vec2 velocity;
+		MS_IDLE,
+		MS_MOVING
 	};
 
 public:
 	Character();
 	~Character();
 
-	void Init(std::string mSpriteSheetPath, SDL_Renderer* renderer);
+	void Init(std::string spriteSheetPath, std::string animationsFilePath, SDL_Renderer* renderer);
+	void LoadAnimations(std::string animationsFilePath);
 
 	void Update(const float dt);
 	void Render(SDL_Renderer* renderer);
 
+	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt);
+	bool MovementPressed();
+	Vec2 GetDesiredPosition();
+	bool MovementInsideMap(const Vec2& position, const int width, const int height);
+	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& mTiles);
+	void SetMovement();
+
+	Vec2 position;
 	Input mInput;
+	Movement mMovement;
 	Rigidbody mRigidbody;
 
 private:
-
-	Vec2 position;
+	EMovementState mMovementState = MS_IDLE;
 	Sprite mSprite;
 	SDL_Texture* mSpriteSheet;
+	SDL_Texture* mIdleSpriteSheet;
+	SDL_Texture* mMovingSpriteSheet;
+
+	std::map<std::string, Animation> mAnimations;
+	std::string mCurrentAnimation;
+
 	Animation mIdleAnimation;
+	Animation mMovingAnimation;
 };

@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\_Scenes\Character.h" />
+    <ClInclude Include="src\_Scenes\ComponentsRef.h" />
     <ClInclude Include="src\_Scenes\SceneRefOverworld.h" />
     <ClInclude Include="src\Systems\CharacterMovementSystem.h" />
     <ClInclude Include="libs\imgui\imconfig.h" />

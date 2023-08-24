@@ -2,6 +2,7 @@
 
 #include "SceneRef.h"
 #include "Character.h"
+#include "ComponentsRef.h"
 
 #include "../Utils/Utils.h"
 
@@ -19,15 +20,9 @@ public:
 
 	void Input() override;
 	void Update(const float dt) override;
-	void Render(SDL_Renderer* renderer) override;
+	void Render(SDL_Renderer* renderer, SDL_Rect& camera) override;
 
 private:
-	struct Tile
-	{
-		size_t spriteIndex;
-		Vec2 position;
-	};
-
 	std::vector<Tile> mTiles;
 	SDL_Texture* mSpriteSheet;
 

@@ -1120,9 +1120,9 @@ Tile 98
 Tile 101
 Tile 160
 Tile 100
-Tile 99
-Tile 96
-Tile 65
+Tile 167
+Tile 101
+Tile 134
 Tile 0
 Tile 0
 Tile 0

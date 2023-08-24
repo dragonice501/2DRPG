@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 
 int SceneManager::mSceneEntranceIndex = 0;
-bool SceneManager::mIsOverworld = false;
+bool SceneManager::mIsOverworld = true;
 
 SceneManager& SceneManager::Instance()
 {

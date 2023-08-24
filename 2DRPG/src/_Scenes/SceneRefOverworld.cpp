@@ -31,8 +31,6 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
         {
             file >> mapWidth >> mapHeight;
 
-            std::cout << mapWidth << ',' << mapHeight << std::endl;
-
             Engine::mapWidth = mapWidth;
             Engine::mapHeight = mapHeight;
         }
@@ -51,7 +49,7 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
 
             Tile newTile =
             {
-                tileType,
+                static_cast<size_t>(tileType),
                 Vec2((i % mapWidth) * TILE_SIZE, (i / mapWidth) * TILE_SIZE)
             };
 
@@ -60,7 +58,7 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
         }
     }
 
-    mSigurd.Init("./assets/Sigurd_Idle.png", renderer);
+    mSigurd.Init("./assets/Sigurd.png", "SigurdAnimations", renderer);
 }
 
 void SceneRefOverworld::Shutdown()
@@ -133,11 +131,18 @@ void SceneRefOverworld::Input()
 
 void SceneRefOverworld::Update(const float dt)
 {
+    mSigurd.UpdateMovement(mapWidth, mapHeight, mTiles, dt);
     mSigurd.Update(dt);
 }
 
-void SceneRefOverworld::Render(SDL_Renderer* renderer)
+void SceneRefOverworld::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 {
+    camera.x = mSigurd.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
+    camera.y = mSigurd.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
+
+    camera.x = Clampf(camera.x, 0, mapWidth * TILE_SIZE * TILE_SPRITE_SCALE - camera.w);
+    camera.y = Clampf(camera.y, 0, mapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);
+
     for (int i = 0; i < mTiles.size(); i++)
     {
         SDL_Rect srcRect =

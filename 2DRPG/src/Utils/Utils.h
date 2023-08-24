@@ -136,6 +136,5 @@ static size_t mVillageIndeces[3] =
 float Clampf(const float v, const float min, const float max);
 
 ETownTileType GetTownTileType(const int mapSpriteIndex);
-
 ETerrainType GetTerrainType(const int mapSpriteIndex);
 void PrintTerrainType(const ETerrainType terrain);
