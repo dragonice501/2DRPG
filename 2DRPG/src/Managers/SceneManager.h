@@ -2,7 +2,7 @@
 
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneOverworld.h"
-#include "../Scenes/SceneTown.h"
+//#include "../Scenes/SceneTown.h"
 
 #include "../Utils/Utils.h"
 
@@ -16,7 +16,7 @@ public:
 	static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
 	static bool GetIsOverworld() { return mIsOverworld; }
 
-	bool CurrentScene() { return currentSceneRef != nullptr; }
+	bool CurrentScene() { return currentScene != nullptr; }
 
 	bool SceneReadyToLoad() const;
 	void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
@@ -32,7 +32,7 @@ public:
 private:
 	SceneManager() {};
 
-	std::unique_ptr<Scene> currentSceneRef = nullptr;
+	std::unique_ptr<Scene> currentScene = nullptr;
 
 	SceneNames mSceneToLoad = NONE;
 	static int mSceneEntranceIndex;

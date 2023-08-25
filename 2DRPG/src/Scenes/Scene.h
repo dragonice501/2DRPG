@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include <memory>
 #include <fstream>
+#include <string>
 
 class Scene
 {
@@ -22,11 +23,8 @@ public:
 	virtual void Render(SDL_Renderer* renderer, SDL_Rect& camera) = 0;
 
 protected:
-	int mapWidth = 0;
-	int mapHeight = 0;
-	int startX = 0;
-	int startY = 0;
-
-	std::string sceneFileString = "";
-	Vec2 spawnPosition = Vec2(0.0f);
+	int mMapWidth = 0;
+	int mMapHeight = 0;
+	int mStartX = 0;
+	int mStartY = 0;
 };

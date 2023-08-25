@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "../Objects/Actor.h"
 #include "../Objects/Character.h"
 #include "../Objects/Components.h"
 
@@ -29,6 +30,8 @@ private:
 	SDL_Texture* mSpriteSheet;
 
 	std::vector<SceneEntrance> mSceneEntrances;
+
+	std::vector<Actor> mActors;
 
 	Character mSigurd;
 };

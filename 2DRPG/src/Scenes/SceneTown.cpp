@@ -78,12 +78,22 @@ void SceneTown::Setup(SDL_Renderer* renderer)
         }
     }
 
+    if (SceneManager::Instance().GetSceneEntranceIndex() == -1)
+    {
+        spawnPosition = { 16 * TILE_SIZE, 16 * TILE_SIZE };
+    }
+
     mSigurd.Init("./assets/Sigurd.png", "SigurdAnimations", spawnPosition, renderer);
+
+    Actor dancer;
+    dancer.Init("./assets/Dancer.png", "DancerAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
+    mActors.push_back(dancer);
 }
 
 void SceneTown::Shutdown()
 {
     mTiles.clear();
+    mActors.clear();
 }
 
 void SceneTown::Input()
@@ -165,6 +175,11 @@ void SceneTown::Update(const float dt)
             }
         }
     }
+
+    for (Actor& actor : mActors)
+    {
+        actor.Update(dt);
+    }
 }
 
 void SceneTown::Render(SDL_Renderer* renderer, SDL_Rect& camera)
@@ -194,6 +209,11 @@ void SceneTown::Render(SDL_Renderer* renderer, SDL_Rect& camera)
         };
 
         SDL_RenderCopy(renderer, mSpriteSheet, &srcRect, &destRect);
+    }
+
+    for (Actor& actor : mActors)
+    {
+        actor.Render(renderer);
     }
 
     mSigurd.Render(renderer);

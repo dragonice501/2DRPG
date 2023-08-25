@@ -22,10 +22,10 @@ void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entran
 
 void SceneManager::LoadScene(SDL_Renderer* renderer)
 {
-	if (currentSceneRef)
+	if (currentScene)
 	{
-		currentSceneRef->Shutdown();
-		currentSceneRef.reset();
+		currentScene->Shutdown();
+		currentScene.reset();
 	}
 
 	switch (mSceneToLoad)
@@ -33,38 +33,38 @@ void SceneManager::LoadScene(SDL_Renderer* renderer)
 		case OVERWORLD:
 		{
 			mIsOverworld = true;
-			currentSceneRef = std::make_unique<SceneOverworld>();
+			currentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
-		case TOWN:
+		/*case TOWN:
 		{
 			mIsOverworld = false;
 			currentSceneRef = std::make_unique<SceneTown>();
 			break;
-		}
+		}*/
 	}
 
 	mSceneToLoad = NONE;
 
-	if (currentSceneRef) currentSceneRef->Setup(renderer);
+	if (currentScene) currentScene->Setup(renderer);
 }
 
 void SceneManager::CurrentSceneInput()
 {
-	currentSceneRef->Input();
+	currentScene->Input();
 }
 
 void SceneManager::CurrentSceneUpdate(const float dt)
 {
-	currentSceneRef->Update(dt);
+	currentScene->Update(dt);
 }
 
 void SceneManager::CurrentSceneRender(SDL_Renderer* renderer)
 {
-	currentSceneRef->Render(renderer, Engine::Camera());
+	currentScene->Render(renderer, Engine::Camera());
 }
 
 void SceneManager::CurrentSceneShutdown()
 {
-	currentSceneRef->Shutdown();
+	currentScene->Shutdown();
 }

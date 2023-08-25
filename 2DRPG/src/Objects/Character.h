@@ -22,8 +22,8 @@ public:
 	Character();
 	~Character();
 
-	void Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer);
-	void LoadAnimations(std::string animationsFilePath);
+	void Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer);
+	void LoadAnimations(std::string animationsFileName);
 
 	void Update(const float dt);
 	void Render(SDL_Renderer* renderer);

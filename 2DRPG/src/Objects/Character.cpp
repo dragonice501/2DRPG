@@ -12,9 +12,10 @@ Character::~Character()
 	SDL_DestroyTexture(mSpriteSheet);
 }
 
-void Character::Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer)
+void Character::Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer)
 {
-    SDL_Surface* surface = IMG_Load(spriteSheetPath.c_str());
+    std::string filePath = "./assets/" + spriteSheetName + ".png";
+    SDL_Surface* surface = IMG_Load(filePath.c_str());
     if (surface)
     {
         mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
@@ -23,16 +24,16 @@ void Character::Init(const std::string& spriteSheetPath, const std::string& anim
     position = spawnPosition;
     mSprite = { 32, 32, 0, -16, 0, 64 };
 
-    LoadAnimations(animationsFilePath);
+    LoadAnimations(animationsFileName);
     mCurrentAnimation = "IdleRight";
 }
 
-void Character::LoadAnimations(std::string animationsFilePath)
+void Character::LoadAnimations(std::string animationsFileName)
 {
     Animation newAnimation;
     std::string animationName;
 
-    std::string filePath = "./assets/" + animationsFilePath + ".txt";
+    std::string filePath = "./assets/" + animationsFileName + ".txt";
     std::ifstream file(filePath);
     std::string type;
     while (file >> type)
@@ -76,7 +77,10 @@ void Character::Render(SDL_Renderer* renderer)
         mSprite.height * TILE_SPRITE_SCALE
     };
 
-    SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect);
+    if (SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect) == 0)
+    {
+        std::cout << "rendered" << std::endl;
+    }
 }
 
 void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt)
