@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Character.h"
-#include "ComponentsRef.h"
+#include "Components.h"
 #include "../Utils/Vec2.h"
 
 #include <SDL.h>

@@ -39,14 +39,27 @@ void SceneTown::Setup(SDL_Renderer* renderer)
             int sceneEntranceIndex;
             int sceneEntrancePosX;
             int sceneEntrancePosY;
-            file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY;
+            int sceneEntranceOffsetX;
+            int sceneEntranceOffsetY;
+            file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY >> sceneEntranceOffsetX >> sceneEntranceOffsetY;
 
-            SceneEntrance newEntrance(Vec2(sceneEntrancePosX * TILE_SIZE, sceneEntrancePosY * TILE_SIZE), sceneName, sceneEntranceIndex);
+            SceneEntrance newEntrance =
+            {
+                Vec2(sceneEntrancePosX * TILE_SIZE, sceneEntrancePosY * TILE_SIZE),
+                Vec2(sceneEntranceOffsetX * TILE_SIZE, sceneEntranceOffsetY * TILE_SIZE),
+                sceneName,
+                sceneEntranceIndex
+            };
+
             mSceneEntrances.push_back(newEntrance);
 
             if (sceneEntranceIndex == SceneManager::Instance().GetSceneEntranceIndex())
             {
-                spawnPosition = { static_cast<float>(sceneEntrancePosX * TILE_SIZE), static_cast<float>(sceneEntrancePosY * TILE_SIZE) };
+                spawnPosition =
+                {
+                    static_cast<float>(sceneEntrancePosX * TILE_SIZE + sceneEntranceOffsetX * TILE_SIZE),
+                    static_cast<float>(sceneEntrancePosY * TILE_SIZE + sceneEntranceOffsetY * TILE_SIZE)
+                };
             }
         }
         else if (type == "Tile")

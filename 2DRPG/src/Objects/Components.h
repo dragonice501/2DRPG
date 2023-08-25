@@ -87,14 +87,16 @@ struct Rigidbody
 
 struct SceneEntrance
 {
-	SceneEntrance(const Vec2& position, const int sceneName, const int sceneEntranceIndex)
+	SceneEntrance(const Vec2& position, const Vec2& spawnOffset, const int sceneName, const int sceneEntranceIndex)
 	{
 		this->position = position;
+		this->spawnOffset = spawnOffset;
 		this->sceneName = sceneName;
 		this->sceneEntranceIndex = sceneEntranceIndex;
 	}
 
 	Vec2 position;
+	Vec2 spawnOffset;
 	int sceneName;
 	int sceneEntranceIndex;
 };

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Scene.h"
-#include "Character.h"
-#include "ComponentsRef.h"
-#include "Actor.h"
+#include "../Objects/Character.h"
+#include "../Objects/Components.h"
 
 #include "../Managers/SceneManager.h"
 

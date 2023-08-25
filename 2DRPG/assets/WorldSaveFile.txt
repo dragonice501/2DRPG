@@ -1,6 +1,6 @@
 MapSize 60 34
-SceneEntrance 1 0 36 14
-SceneEntrance 1 1 41 17
+SceneEntrance 1 0 36 14 -1 0
+SceneEntrance 1 1 41 17 0 1
 Tile 256
 Tile 256
 Tile 256

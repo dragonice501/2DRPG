@@ -134,7 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Scenes\SceneTown.cpp" />
-    <ClCompile Include="src\Scenes\Character.cpp" />
+    <ClCompile Include="src\Objects\Character.cpp" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
     <ClCompile Include="libs\imgui\imgui_demo.cpp" />
     <ClCompile Include="libs\imgui\imgui_draw.cpp" />
@@ -152,9 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Scenes\SceneTown.h" />
-    <ClInclude Include="src\Scenes\Actor.h" />
-    <ClInclude Include="src\Scenes\Character.h" />
-    <ClInclude Include="src\Scenes\ComponentsRef.h" />
+    <ClInclude Include="src\Objects\Character.h" />
+    <ClInclude Include="src\Objects\Components.h" />
     <ClInclude Include="src\Scenes\SceneOverworld.h" />
     <ClInclude Include="libs\imgui\imconfig.h" />
     <ClInclude Include="libs\imgui\imgui.h" />

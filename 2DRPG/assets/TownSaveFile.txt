@@ -1,7 +1,7 @@
 MapSize 34 30
 Interactable 17 14
-SceneEntrance 0 0 3 12
-SceneEntrance 0 1 24 26
+SceneEntrance 0 0 3 12 1 0
+SceneEntrance 0 1 24 26 0 -1
 Tile 0
 Tile 0
 Tile 0
