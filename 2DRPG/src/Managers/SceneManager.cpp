@@ -36,12 +36,12 @@ void SceneManager::LoadScene(SDL_Renderer* renderer)
 			currentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
-		/*case TOWN:
+		case TOWN:
 		{
 			mIsOverworld = false;
-			currentSceneRef = std::make_unique<SceneTown>();
+			currentScene = std::make_unique<SceneTown>();
 			break;
-		}*/
+		}
 	}
 
 	mSceneToLoad = NONE;

@@ -8,19 +8,20 @@ Actor::~Actor()
 {
 }
 
-void Actor::Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer)
+void Actor::Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    SDL_Surface* surface = IMG_Load(spriteSheetPath.c_str());
+    std::string filePath = "./assets/" + spriteSheetPath + ".png";
+    SDL_Surface* surface = IMG_Load(filePath.c_str());
     if (surface)
     {
         mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
     }
 
-    position = spawnPosition;
+    mPosition = spawnPosition;
     mSprite = { 32, 32, 0, -16, 0, 64 };
 
     LoadAnimations(animationsFilePath);
-    mCurrentAnimation = "IdleDown";
+    mCurrentAnimation = startinAnimation;
 }
 
 void Actor::LoadAnimations(std::string animationsFilePath)
@@ -66,8 +67,8 @@ void Actor::Render(SDL_Renderer* renderer)
 {
     SDL_Rect destRect =
     {
-        position.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - Engine::Camera().x,
-        position.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - Engine::Camera().y,
+        mPosition.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - Engine::Camera().x,
+        mPosition.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - Engine::Camera().y,
         mSprite.width * TILE_SPRITE_SCALE,
         mSprite.height * TILE_SPRITE_SCALE
     };

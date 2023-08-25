@@ -2,7 +2,7 @@
 
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneOverworld.h"
-//#include "../Scenes/SceneTown.h"
+#include "../Scenes/SceneTown.h"
 
 #include "../Utils/Utils.h"
 

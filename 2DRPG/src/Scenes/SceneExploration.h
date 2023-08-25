@@ -19,7 +19,7 @@ public:
 	virtual void Setup(SDL_Renderer* renderer);
 	virtual void Shutdown() override;
 
-	virtual void Input() override;
+	virtual void Input(Character& character) override;
 	virtual void Update(const float dt) override;
 	virtual void Render(SDL_Renderer* renderer, SDL_Rect& camera) override;
 

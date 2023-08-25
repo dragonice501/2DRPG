@@ -20,4 +20,6 @@ public:
 	void Input() override;
 	void Update(const float dt) override;
 	void Render(SDL_Renderer* renderer, SDL_Rect& camera) override;
+
+	Character mSigurd;
 };

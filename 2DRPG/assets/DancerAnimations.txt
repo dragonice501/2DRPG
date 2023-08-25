@@ -13,14 +13,14 @@ Frame 32 32 32 32
 Animation IdleLeft 4 4 1
 Frame 32 64 32 32
 Frame 32 64 32 32
-Frame 32 64 32 32
-Frame 32 64 32 32
+Frame 64 64 32 32
+Frame 64 64 32 32
 
 Animation IdleRight 4 4 1
 Frame 32 96 32 32
 Frame 32 96 32 32
-Frame 32 96 32 32
-Frame 32 96 32 32
+Frame 64 96 32 32
+Frame 64 96 32 32
 
 Animation MovingUp 4 8 1
 Frame 0 0 32 32

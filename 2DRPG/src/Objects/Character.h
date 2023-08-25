@@ -1,16 +1,8 @@
 #pragma once
 
-#include "Character.h"
-#include "Components.h"
-#include "../Utils/Vec2.h"
+#include "Actor.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <string>
-#include <vector>
-#include <map>
-
-class Character
+class Character : Actor
 {
 	enum EMovementState
 	{
@@ -22,11 +14,17 @@ public:
 	Character();
 	~Character();
 
-	void Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer);
-	void LoadAnimations(std::string animationsFileName);
+	void Init(
+		const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer,
+		std::string startinAnimation = "IdleDown") override;
+	void LoadAnimations(std::string animationsFileName) override;
 
-	void Update(const float dt);
-	void Render(SDL_Renderer* renderer);
+	void Update(const float dt) override;
+	void Render(SDL_Renderer* renderer) override;
+
+	void UpdateAnimation() override;
+
+	const Vec2& GetPosition() const override { return mPosition; }
 
 	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt);
 	bool MovementPressed();
@@ -35,18 +33,10 @@ public:
 	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& mTiles);
 	void SetMovement();
 
-	void UpdateAnimation();
-
-	Vec2 position;
 	Input mInput;
 	Movement mMovement;
 	Rigidbody mRigidbody;
 
 private:
 	EMovementState mMovementState = MS_IDLE;
-	Sprite mSprite;
-	SDL_Texture* mSpriteSheet;
-
-	std::map<std::string, Animation> mAnimations;
-	std::string mCurrentAnimation;
 };

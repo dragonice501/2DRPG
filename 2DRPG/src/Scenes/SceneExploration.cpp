@@ -79,7 +79,7 @@ void SceneExploration::Shutdown()
     SDL_DestroyTexture(mSpriteSheet);
 }
 
-void SceneExploration::Input()
+void SceneExploration::Input(Character& character)
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -89,59 +89,56 @@ void SceneExploration::Input()
             Engine::SetIsRunning(false);
             break;
         }
-        for (Character& character : mCharacters)
+        switch (sdlEvent.type)
         {
-            switch (sdlEvent.type)
+        case SDL_KEYDOWN:
+        {
+            if (sdlEvent.key.keysym.sym == SDLK_w)
             {
-                case SDL_KEYDOWN:
-                {
-                    if (sdlEvent.key.keysym.sym == SDLK_w)
-                    {
-                        character.mInput.upPressed = true;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_s)
-                    {
-                        character.mInput.downPressed = true;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_a)
-                    {
-                        character.mInput.leftPressed = true;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_d)
-                    {
-                        character.mInput.rightPressed = true;
-                        break;
-                    }
-                    break;
-                }
-                case SDL_KEYUP:
-                {
-                    if (sdlEvent.key.keysym.sym == SDLK_w)
-                    {
-                        character.mInput.upPressed = false;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_s)
-                    {
-                        character.mInput.downPressed = false;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_a)
-                    {
-                        character.mInput.leftPressed = false;
-                        break;
-                    }
-                    else if (sdlEvent.key.keysym.sym == SDLK_d)
-                    {
-                        character.mInput.rightPressed = false;
-                        break;
-                    }
-                    break;
-                }
+                character.mInput.upPressed = true;
+                break;
             }
+            else if (sdlEvent.key.keysym.sym == SDLK_s)
+            {
+                character.mInput.downPressed = true;
+                break;
+            }
+            else if (sdlEvent.key.keysym.sym == SDLK_a)
+            {
+                character.mInput.leftPressed = true;
+                break;
+            }
+            else if (sdlEvent.key.keysym.sym == SDLK_d)
+            {
+                character.mInput.rightPressed = true;
+                break;
+            }
+            break;
+        }
+        case SDL_KEYUP:
+        {
+            if (sdlEvent.key.keysym.sym == SDLK_w)
+            {
+                character.mInput.upPressed = false;
+                break;
+            }
+            else if (sdlEvent.key.keysym.sym == SDLK_s)
+            {
+                character.mInput.downPressed = false;
+                break;
+            }
+            else if (sdlEvent.key.keysym.sym == SDLK_a)
+            {
+                character.mInput.leftPressed = false;
+                break;
+            }
+            else if (sdlEvent.key.keysym.sym == SDLK_d)
+            {
+                character.mInput.rightPressed = false;
+                break;
+            }
+            break;
+        }
         }
     }
 }

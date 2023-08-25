@@ -12,75 +12,27 @@ Character::~Character()
 	SDL_DestroyTexture(mSpriteSheet);
 }
 
-void Character::Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer)
+void Character::Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    std::string filePath = "./assets/" + spriteSheetName + ".png";
-    SDL_Surface* surface = IMG_Load(filePath.c_str());
-    if (surface)
-    {
-        mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
-    }
+    Actor::Init(spriteSheetName, animationsFileName, spawnPosition, renderer);
 
-    position = spawnPosition;
-    mSprite = { 32, 32, 0, -16, 0, 64 };
-
-    LoadAnimations(animationsFileName);
-    mCurrentAnimation = "IdleRight";
+    mPosition = spawnPosition;
 }
 
 void Character::LoadAnimations(std::string animationsFileName)
 {
-    Animation newAnimation;
-    std::string animationName;
-
-    std::string filePath = "./assets/" + animationsFileName + ".txt";
-    std::ifstream file(filePath);
-    std::string type;
-    while (file >> type)
-    {
-        if (type == "Animation")
-        {
-            int animationFrames, animationFrameRate;
-            bool shouldLoop;
-
-            file >> animationName >> animationFrames >> animationFrameRate >> shouldLoop;
-
-            newAnimation = { animationFrames, animationFrameRate, shouldLoop };
-
-            mAnimations.emplace(animationName, newAnimation);
-        }
-        else if (type == "Frame")
-        {
-            int frameX, frameY, frameWidth, frameHeight;
-
-            file >> frameX >> frameY >> frameWidth >> frameHeight;
-
-            AnimationFrame newFrame = { Vec2(frameX, frameY), frameWidth, frameHeight };
-
-            mAnimations[animationName].frames.push_back(newFrame);
-        }
-    }
+    Actor::LoadAnimations(animationsFileName);
 }
 
 void Character::Update(const float dt)
 {
     UpdateAnimation();
+    Actor::UpdateAnimation();
 }
 
 void Character::Render(SDL_Renderer* renderer)
 {
-    SDL_Rect destRect =
-    {
-        position.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - Engine::Camera().x,
-        position.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - Engine::Camera().y,
-        mSprite.width * TILE_SPRITE_SCALE,
-        mSprite.height * TILE_SPRITE_SCALE
-    };
-
-    if (SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect) == 0)
-    {
-        std::cout << "rendered" << std::endl;
-    }
+    Actor::Render(renderer);
 }
 
 void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt)
@@ -89,21 +41,21 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
 
     if (mMovementState == MS_MOVING)
     {
-        if (position != mMovement.destination)
+        if (mPosition != mMovement.destination)
         {
             mMovement.rate += 2 * dt;
-            position = Vec2::Lerp(mMovement.start, mMovement.destination, mMovement.rate);
-            if (position == mMovement.destination)
+            mPosition = Vec2::Lerp(mMovement.start, mMovement.destination, mMovement.rate);
+            if (mPosition == mMovement.destination)
             {
                 mMovement.rate = 0.0f;
-                mMovement.start = position;
+                mMovement.start = mPosition;
                 mMovement.destination = Vec2(0.0f);
                 mMovement.stepTaken = true;
                 mRigidbody.lastVelocity = mRigidbody.velocity;
                 mRigidbody.velocity = Vec2(0.0f);
                 mSprite.srcRect.y = 0;
 
-                int index = position.x / TILE_SIZE + (position.y / TILE_SIZE) * mapWidth;
+                int index = mPosition.x / TILE_SIZE + (mPosition.y / TILE_SIZE) * mapWidth;
 
                 if (MovementPressed())
                 {
@@ -163,19 +115,19 @@ Vec2 Character::GetDesiredPosition()
 
     if (mInput.upPressed)
     {
-        desiredPosition = Vec2(static_cast<int>(position.x), static_cast<int>(position.y - TILE_SIZE));
+        desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y - TILE_SIZE));
     }
     else if (mInput.downPressed)
     {
-        desiredPosition = Vec2(static_cast<int>(position.x), static_cast<int>(position.y + TILE_SIZE));
+        desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y + TILE_SIZE));
     }
     else if (mInput.leftPressed)
     {
-        desiredPosition = Vec2(static_cast<int>(position.x - TILE_SIZE), static_cast<int>(position.y));
+        desiredPosition = Vec2(static_cast<int>(mPosition.x - TILE_SIZE), static_cast<int>(mPosition.y));
     }
     else if (mInput.rightPressed)
     {
-        desiredPosition = Vec2(static_cast<int>(position.x + TILE_SIZE), static_cast<int>(position.y));
+        desiredPosition = Vec2(static_cast<int>(mPosition.x + TILE_SIZE), static_cast<int>(mPosition.y));
     }
 
     return desiredPosition;
@@ -218,26 +170,26 @@ void Character::SetMovement()
     if (mInput.upPressed)
     {
         mRigidbody.velocity = Vec2(0.0f, -TILE_SIZE);
-        mMovement.start = position;
-        mMovement.destination = position + mRigidbody.velocity;
+        mMovement.start = mPosition;
+        mMovement.destination = mPosition + mRigidbody.velocity;
     }
     else if (mInput.downPressed)
     {
         mRigidbody.velocity = Vec2(0.0f, TILE_SIZE);
-        mMovement.start = position;
-        mMovement.destination = position + mRigidbody.velocity;
+        mMovement.start = mPosition;
+        mMovement.destination = mPosition + mRigidbody.velocity;
     }
     else if (mInput.leftPressed)
     {
         mRigidbody.velocity = Vec2(-TILE_SIZE, 0.0f);
-        mMovement.start = position;
-        mMovement.destination = position + mRigidbody.velocity;
+        mMovement.start = mPosition;
+        mMovement.destination = mPosition + mRigidbody.velocity;
     }
     else if (mInput.rightPressed)
     {
         mRigidbody.velocity = Vec2(TILE_SIZE, 0.0f);
-        mMovement.start = position;
-        mMovement.destination = position + mRigidbody.velocity;
+        mMovement.start = mPosition;
+        mMovement.destination = mPosition + mRigidbody.velocity;
     }
 }
 
@@ -281,12 +233,4 @@ void Character::UpdateAnimation()
             mCurrentAnimation = "IdleRight";
         }
     }
-
-    Animation& anim = mAnimations[mCurrentAnimation];
-    anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
-
-    mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
-    mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
-    mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
-    mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 }
