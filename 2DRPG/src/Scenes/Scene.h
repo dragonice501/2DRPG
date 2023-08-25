@@ -9,10 +9,10 @@
 #include <memory>
 #include <fstream>
 
-class SceneRef
+class Scene
 {
 public:
-	virtual ~SceneRef() {};
+	virtual ~Scene() {};
 
 	virtual void Setup(SDL_Renderer* renderer) = 0;
 	virtual void Shutdown() = 0;

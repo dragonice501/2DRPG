@@ -1,19 +1,22 @@
 #pragma once
 
-#include "SceneRef.h"
+#include "Scene.h"
 #include "Character.h"
 #include "ComponentsRef.h"
+#include "Actor.h"
+
+#include "../Managers/SceneManager.h"
 
 #include "../Utils/Utils.h"
 
 #include <SDL_image.h>
 #include <vector>
 
-class SceneRefOverworld : public SceneRef
+class SceneTown : public Scene
 {
 public:
-	SceneRefOverworld();
-	~SceneRefOverworld();
+	SceneTown();
+	~SceneTown();
 
 	void Setup(SDL_Renderer* renderer) override;
 	void Shutdown() override;
@@ -25,6 +28,8 @@ public:
 private:
 	std::vector<Tile> mTiles;
 	SDL_Texture* mSpriteSheet;
+
+	std::vector<SceneEntrance> mSceneEntrances;
 
 	Character mSigurd;
 };

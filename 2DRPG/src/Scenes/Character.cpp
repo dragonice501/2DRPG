@@ -9,10 +9,10 @@ Character::Character()
 
 Character::~Character()
 {
-	SDL_DestroyTexture(mIdleSpriteSheet);
+	SDL_DestroyTexture(mSpriteSheet);
 }
 
-void Character::Init(std::string spriteSheetPath, std::string animationsFilePath, SDL_Renderer* renderer)
+void Character::Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer)
 {
     SDL_Surface* surface = IMG_Load(spriteSheetPath.c_str());
     if (surface)
@@ -20,11 +20,11 @@ void Character::Init(std::string spriteSheetPath, std::string animationsFilePath
         mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
     }
 
-    position = Vec2(16.0f);
+    position = spawnPosition;
     mSprite = { 32, 32, 0, -16, 0, 64 };
 
     LoadAnimations(animationsFilePath);
-    mCurrentAnimation = "MovingUp";
+    mCurrentAnimation = "IdleRight";
 }
 
 void Character::LoadAnimations(std::string animationsFilePath)
@@ -63,56 +63,7 @@ void Character::LoadAnimations(std::string animationsFilePath)
 
 void Character::Update(const float dt)
 {
-    /*if(mMovementState == MS_MOVING)
-    {
-        mCurrentAnimation = mMovingAnimation;
-
-        if (mRigidbody.velocity.y < 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 0;
-        }
-        else if (mRigidbody.velocity.y > 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 1;
-        }
-        else if (mRigidbody.velocity.x < 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 2;
-        }
-        else if (mRigidbody.velocity.x > 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 3;
-        }
-    }
-    else if (mMovementState == MS_IDLE)
-    {
-        mCurrentAnimation = mIdleAnimation;
-
-        if (mRigidbody.lastVelocity.y < 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 0;
-        }
-        else if (mRigidbody.lastVelocity.y > 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 1;
-        }
-        else if (mRigidbody.lastVelocity.x < 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 2;
-        }
-        else if (mRigidbody.lastVelocity.x > 0)
-        {
-            mSprite.srcRect.y = mSprite.height * 3;
-        }
-    }*/
-
-    Animation& anim = mAnimations[mCurrentAnimation];
-    anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
-
-    mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
-    mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
-    mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
-    mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
+    UpdateAnimation();
 }
 
 void Character::Render(SDL_Renderer* renderer)
@@ -130,6 +81,8 @@ void Character::Render(SDL_Renderer* renderer)
 
 void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt)
 {
+    mMovement.stepTaken = false;
+
     if (mMovementState == MS_MOVING)
     {
         if (position != mMovement.destination)
@@ -141,6 +94,7 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
                 mMovement.rate = 0.0f;
                 mMovement.start = position;
                 mMovement.destination = Vec2(0.0f);
+                mMovement.stepTaken = true;
                 mRigidbody.lastVelocity = mRigidbody.velocity;
                 mRigidbody.velocity = Vec2(0.0f);
                 mSprite.srcRect.y = 0;
@@ -281,4 +235,54 @@ void Character::SetMovement()
         mMovement.start = position;
         mMovement.destination = position + mRigidbody.velocity;
     }
+}
+
+void Character::UpdateAnimation()
+{
+    if (mMovementState == MS_MOVING)
+    {
+        if (mRigidbody.velocity.y < 0)
+        {
+            mCurrentAnimation = "MovingUp";
+        }
+        else if (mRigidbody.velocity.y > 0)
+        {
+            mCurrentAnimation = "MovingDown";
+        }
+        else if (mRigidbody.velocity.x < 0)
+        {
+            mCurrentAnimation = "MovingLeft";
+        }
+        else if (mRigidbody.velocity.x > 0)
+        {
+            mCurrentAnimation = "MovingRight";
+        }
+    }
+    else if (mMovementState == MS_IDLE)
+    {
+        if (mRigidbody.lastVelocity.y < 0)
+        {
+            mCurrentAnimation = "IdleUp";
+        }
+        else if (mRigidbody.lastVelocity.y > 0)
+        {
+            mCurrentAnimation = "IdleDown";
+        }
+        else if (mRigidbody.lastVelocity.x < 0)
+        {
+            mCurrentAnimation = "IdleLeft";
+        }
+        else if (mRigidbody.lastVelocity.x > 0)
+        {
+            mCurrentAnimation = "IdleRight";
+        }
+    }
+
+    Animation& anim = mAnimations[mCurrentAnimation];
+    anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
+
+    mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
+    mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
+    mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
+    mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 }

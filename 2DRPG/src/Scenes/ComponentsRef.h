@@ -64,11 +64,13 @@ struct Movement
 		this->start = start;
 		this->destination = destination;
 		this->rate = rate;
+		stepTaken = false;
 	}
 
 	Vec2 start;
 	Vec2 destination;
 	float rate;
+	bool stepTaken;
 };
 
 struct Rigidbody
@@ -81,6 +83,20 @@ struct Rigidbody
 
 	Vec2 velocity;
 	Vec2 lastVelocity;
+};
+
+struct SceneEntrance
+{
+	SceneEntrance(const Vec2& position, const int sceneName, const int sceneEntranceIndex)
+	{
+		this->position = position;
+		this->sceneName = sceneName;
+		this->sceneEntranceIndex = sceneEntranceIndex;
+	}
+
+	Vec2 position;
+	int sceneName;
+	int sceneEntranceIndex;
 };
 
 struct Sprite

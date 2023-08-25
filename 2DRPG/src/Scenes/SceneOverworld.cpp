@@ -1,17 +1,17 @@
-#include "SceneRefOverworld.h"
+#include "SceneOverworld.h"
 
 #include <iostream>
 
-SceneRefOverworld::SceneRefOverworld()
+SceneOverworld::SceneOverworld()
 {
 }
 
-SceneRefOverworld::~SceneRefOverworld()
+SceneOverworld::~SceneOverworld()
 {
     SDL_DestroyTexture(mSpriteSheet);
 }
 
-void SceneRefOverworld::Setup(SDL_Renderer* renderer)
+void SceneOverworld::Setup(SDL_Renderer* renderer)
 {
     std::string fileName = "./assets/WorldSpriteSheet.png";
     SDL_Surface* surface = IMG_Load(fileName.c_str());
@@ -22,6 +22,7 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
     SDL_FreeSurface(surface);
 
     int i = 0;
+    Vec2 spawnPosition;
 
     std::ifstream file("./assets/WorldSaveFile.txt");
     std::string type;
@@ -41,6 +42,14 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
             int sceneEntrancePosX;
             int sceneEntrancePosY;
             file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY;
+
+            SceneEntrance newEntrance(Vec2(sceneEntrancePosX * TILE_SIZE, sceneEntrancePosY * TILE_SIZE), sceneName, sceneEntranceIndex);
+            mSceneEntrances.push_back(newEntrance);
+
+            if (sceneEntranceIndex == SceneManager::Instance().GetSceneEntranceIndex())
+            {
+                spawnPosition = { static_cast<float>(sceneEntrancePosX * TILE_SIZE), static_cast<float>(sceneEntrancePosY * TILE_SIZE) };
+            }
         }
         else if (type == "Tile")
         {
@@ -58,14 +67,20 @@ void SceneRefOverworld::Setup(SDL_Renderer* renderer)
         }
     }
 
-    mSigurd.Init("./assets/Sigurd.png", "SigurdAnimations", renderer);
+    if (SceneManager::Instance().GetSceneEntranceIndex() == -1)
+    {
+        spawnPosition = { 34 * TILE_SIZE, 14 * TILE_SIZE };
+    }
+
+    mSigurd.Init("./assets/Sigurd.png", "SigurdAnimations", spawnPosition, renderer);
 }
 
-void SceneRefOverworld::Shutdown()
+void SceneOverworld::Shutdown()
 {
+    mTiles.clear();
 }
 
-void SceneRefOverworld::Input()
+void SceneOverworld::Input()
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -129,13 +144,24 @@ void SceneRefOverworld::Input()
     }
 }
 
-void SceneRefOverworld::Update(const float dt)
+void SceneOverworld::Update(const float dt)
 {
     mSigurd.UpdateMovement(mapWidth, mapHeight, mTiles, dt);
     mSigurd.Update(dt);
+
+    if (mSigurd.mMovement.stepTaken)
+    {
+        for (const SceneEntrance& entrance : mSceneEntrances)
+        {
+            if (mSigurd.position == entrance.position)
+            {
+                SceneManager::Instance().SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
+            }
+        }
+    }
 }
 
-void SceneRefOverworld::Render(SDL_Renderer* renderer, SDL_Rect& camera)
+void SceneOverworld::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 {
     camera.x = mSigurd.position.x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
     camera.y = mSigurd.position.y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);

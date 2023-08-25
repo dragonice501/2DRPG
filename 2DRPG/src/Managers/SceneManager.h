@@ -1,8 +1,10 @@
 #pragma once
 
-#include "../Scene/Scene.h"
-#include "../Scene/SceneOverworld.h"
-#include "../Scene/SceneTown.h"
+#include "../Scenes/Scene.h"
+#include "../Scenes/SceneOverworld.h"
+#include "../Scenes/SceneTown.h"
+
+#include "../Utils/Utils.h"
 
 #include <memory>
 
@@ -14,21 +16,24 @@ public:
 	static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
 	static bool GetIsOverworld() { return mIsOverworld; }
 
+	bool CurrentScene() { return currentSceneRef != nullptr; }
+
 	bool SceneReadyToLoad() const;
 	void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
 
-	void LoadScene(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);
+	void LoadScene(SDL_Renderer* renderer);
 
-	void CurrentSceneInput(std::unique_ptr<EventBus>& eventBus);
+	void CurrentSceneInput();
+	void CurrentSceneUpdate(const float dt);
+	void CurrentSceneRender(SDL_Renderer* renderer);
 
-	void CurrentSceneUpdate(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt);
-
-	void CurrentSceneDraw(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer);
+	void CurrentSceneShutdown();
 
 private:
 	SceneManager() {};
 
-	std::unique_ptr<Scene> currentScene = nullptr;
+	std::unique_ptr<Scene> currentSceneRef = nullptr;
+
 	SceneNames mSceneToLoad = NONE;
 	static int mSceneEntranceIndex;
 	static bool mIsOverworld;

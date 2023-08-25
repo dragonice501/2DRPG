@@ -1,15 +1,10 @@
 #include "./Engine.h"
 
-#include "../ECS/ECS.h"
-#include "../ECS/Components.h"
-#include "../ECS/Systems.h"
-
 #include "../Utils/Vec2.h"
 
 #include "../Managers/SceneManager.h"
-//#include "../Scene/Scene.h"
-#include "../_Scenes/SceneRef.h"
-#include "../_Scenes/SceneRefOverworld.h"
+#include "../Scenes/Scene.h"
+#include "../Scenes/SceneOverworld.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -32,10 +27,6 @@ Engine::Engine()
 {
     isRunning = false;
     isDebug = false;
-
-    mRegistry = std::make_unique<Registry>();
-    mAssetStore = std::make_unique<AssetStore>();
-    mEventBus = std::make_unique<EventBus>();
 }
 
 void Engine::SetIsRunning(const bool running)
@@ -87,8 +78,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    std::unique_ptr<SceneRef> scene = std::make_unique<SceneRefOverworld>();
-    scene->Setup(mRenderer);
+    SceneManager::Instance().SetSceneToLoad(OVERWORLD, -1);
 
     while (isRunning)
     {
@@ -105,9 +95,18 @@ void Engine::Run()
         // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        scene->Input();
-        scene->Update(deltaTime);
-        scene->Render(mRenderer, camera);
+        if (SceneManager::Instance().SceneReadyToLoad())
+        {
+            if (SceneManager::Instance().CurrentScene())
+            {
+                SceneManager::Instance().CurrentSceneShutdown();
+            }
+            SceneManager::Instance().LoadScene(mRenderer);
+        }
+
+        SceneManager::Instance().CurrentSceneInput();
+        SceneManager::Instance().CurrentSceneUpdate(deltaTime);
+        SceneManager::Instance().CurrentSceneRender(mRenderer);
 
         SDL_RenderPresent(mRenderer);
     }

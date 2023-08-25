@@ -22,7 +22,7 @@ public:
 	Character();
 	~Character();
 
-	void Init(std::string spriteSheetPath, std::string animationsFilePath, SDL_Renderer* renderer);
+	void Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer);
 	void LoadAnimations(std::string animationsFilePath);
 
 	void Update(const float dt);
@@ -35,6 +35,8 @@ public:
 	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& mTiles);
 	void SetMovement();
 
+	void UpdateAnimation();
+
 	Vec2 position;
 	Input mInput;
 	Movement mMovement;
@@ -44,12 +46,7 @@ private:
 	EMovementState mMovementState = MS_IDLE;
 	Sprite mSprite;
 	SDL_Texture* mSpriteSheet;
-	SDL_Texture* mIdleSpriteSheet;
-	SDL_Texture* mMovingSpriteSheet;
 
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation;
-
-	Animation mIdleAnimation;
-	Animation mMovingAnimation;
 };

@@ -1,9 +1,5 @@
 #pragma once
 
-#include "../ECS/ECS.h"
-#include "../AssetStore/AssetStore.h"
-#include "../EventBus/EventBus.h"
-
 #include <SDL.h>
 
 const int FPS = 60;
@@ -38,11 +34,6 @@ private:
 
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
-
-	std::unique_ptr<Registry> mRegistry;
-	std::unique_ptr<AssetStore> mAssetStore;
-	std::unique_ptr<EventBus> mEventBus;
-
 	int millisecondsPreviousFrame;
 	bool isDebug;
 };

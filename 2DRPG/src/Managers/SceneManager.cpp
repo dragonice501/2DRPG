@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-int SceneManager::mSceneEntranceIndex = 0;
+int SceneManager::mSceneEntranceIndex = -1;
 bool SceneManager::mIsOverworld = true;
 
 SceneManager& SceneManager::Instance()
@@ -20,12 +20,12 @@ void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entran
 	mSceneEntranceIndex = entranceIndex;
 }
 
-void SceneManager::LoadScene(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneManager::LoadScene(SDL_Renderer* renderer)
 {
-	if (currentScene)
+	if (currentSceneRef)
 	{
-		currentScene->Shutdown(registry, assetStore, renderer);
-		currentScene.reset();
+		currentSceneRef->Shutdown();
+		currentSceneRef.reset();
 	}
 
 	switch (mSceneToLoad)
@@ -33,33 +33,38 @@ void SceneManager::LoadScene(std::unique_ptr<Registry>& registry, std::unique_pt
 		case OVERWORLD:
 		{
 			mIsOverworld = true;
-			currentScene = std::make_unique<SceneOverworld>();
+			currentSceneRef = std::make_unique<SceneOverworld>();
 			break;
 		}
 		case TOWN:
 		{
 			mIsOverworld = false;
-			currentScene = std::make_unique<SceneTown>();
+			currentSceneRef = std::make_unique<SceneTown>();
 			break;
 		}
 	}
 
 	mSceneToLoad = NONE;
 
-	if (currentScene) currentScene->Setup(registry, assetStore, renderer);
+	if (currentSceneRef) currentSceneRef->Setup(renderer);
 }
 
-void SceneManager::CurrentSceneInput(std::unique_ptr<EventBus>& eventBus)
+void SceneManager::CurrentSceneInput()
 {
-	currentScene->Input(eventBus);
+	currentSceneRef->Input();
 }
 
-void SceneManager::CurrentSceneUpdate(std::unique_ptr<Registry>& registry, std::unique_ptr<EventBus>& eventBus, const float dt)
+void SceneManager::CurrentSceneUpdate(const float dt)
 {
-	currentScene->Update(registry, eventBus, dt);
+	currentSceneRef->Update(dt);
 }
 
-void SceneManager::CurrentSceneDraw(std::unique_ptr<Registry>& registry, std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer)
+void SceneManager::CurrentSceneRender(SDL_Renderer* renderer)
 {
-	currentScene->Render(registry, assetStore, renderer);
+	currentSceneRef->Render(renderer, Engine::Camera());
+}
+
+void SceneManager::CurrentSceneShutdown()
+{
+	currentSceneRef->Shutdown();
 }
