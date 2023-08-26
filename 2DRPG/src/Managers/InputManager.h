@@ -3,9 +3,6 @@
 class InputManager
 {
 public:
-	InputManager() {}
-	~InputManager() {}
-
 	static void Update(const float dt);
 
 	static inline const bool UpPressed() { return mUpPressed; }
@@ -31,6 +28,9 @@ public:
 	static inline const bool EPressed() { return mEPressed; }
 
 private:
+	InputManager() {}
+	~InputManager() {}
+
 	static bool mUpPressed;
 	static bool mUpHeld;
 	static bool mUpReleased;

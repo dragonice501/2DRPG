@@ -11,30 +11,29 @@
 class SceneManager
 {
 public:
-	static SceneManager& Instance();
-
 	static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
 	static bool GetIsOverworld() { return mIsOverworld; }
 
-	bool CurrentScene() { return currentScene != nullptr; }
+	static bool CurrentScene() { return currentScene != nullptr; }
 
-	bool SceneReadyToLoad() const;
-	void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
+	static bool SceneReadyToLoad();
+	static void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
 
-	void LoadScene(SDL_Renderer* renderer);
+	static void LoadScene(SDL_Renderer* renderer);
 
-	void CurrentSceneInput();
-	void CurrentSceneUpdate(const float dt);
-	void CurrentSceneRender(SDL_Renderer* renderer);
+	static void CurrentSceneInput();
+	static void CurrentSceneUpdate(const float dt);
+	static void CurrentSceneRender(SDL_Renderer* renderer);
 
-	void CurrentSceneShutdown();
+	static void CurrentSceneShutdown();
 
 private:
 	SceneManager() {};
+	~SceneManager() {};
 
-	std::unique_ptr<Scene> currentScene = nullptr;
+	static std::unique_ptr<Scene> currentScene;
 
-	SceneNames mSceneToLoad = NONE;
+	static SceneNames mSceneToLoad;
 	static int mSceneEntranceIndex;
 	static bool mIsOverworld;
 };

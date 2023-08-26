@@ -8,18 +8,18 @@ SceneTown::~SceneTown()
 void SceneTown::Setup(SDL_Renderer* renderer)
 {
     SceneExploration::Setup(renderer);
-
+    
     for (const SceneEntrance& entrance : mSceneEntrances)
     {
-        if (entrance.sceneEntranceIndex == SceneManager::Instance().GetSceneEntranceIndex())
+        if (entrance.sceneEntranceIndex == SceneManager::GetSceneEntranceIndex())
         {
             spawnPosition = entrance.position + entrance.spawnOffset;
         }
     }
-    
-    if (SceneManager::Instance().GetSceneEntranceIndex() == -1)
+
+    if (SceneManager::GetSceneEntranceIndex() == -1)
     {
-        spawnPosition = { 16 * TILE_SIZE, 16 * TILE_SIZE };
+        spawnPosition = Vec2(16.0f, 16.0f) * TILE_SIZE;
     }
 
     /*Character newCharacter;
@@ -77,7 +77,7 @@ void SceneTown::Update(const float dt)
             {
                 if (mSigurd.GetPosition() == entrance.position)
                 {
-                    SceneManager::Instance().SetSceneToLoad(OVERWORLD, entrance.sceneEntranceIndex);
+                    SceneManager::SetSceneToLoad(OVERWORLD, entrance.sceneEntranceIndex);
                 }
             }
         }

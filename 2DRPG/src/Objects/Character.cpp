@@ -156,7 +156,7 @@ bool Character::CanMove(const Vec2& desiredPosition, int width, int height, cons
         if (desiredPosition == actor.GetPosition()) return false;
     }
 
-    if (SceneManager::Instance().GetIsOverworld())
+    if (SceneManager::GetIsOverworld())
     {
         ETerrainType terrain = tiles[x + y * width].terrainType;
 

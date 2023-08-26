@@ -13,7 +13,7 @@ void SceneOverworld::Setup(SDL_Renderer* renderer)
 
     for (const SceneEntrance& entrance : mSceneEntrances)
     {
-        if (entrance.sceneEntranceIndex == SceneManager::Instance().GetSceneEntranceIndex())
+        if (entrance.sceneEntranceIndex == SceneManager::GetSceneEntranceIndex())
         {
             spawnPosition = entrance.position + entrance.spawnOffset;
         }
@@ -45,7 +45,7 @@ void SceneOverworld::Update(const float dt)
         {
             if (mSigurd.GetPosition() == entrance.position)
             {
-                SceneManager::Instance().SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
+                SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
             }
         }
     }

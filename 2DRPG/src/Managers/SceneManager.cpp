@@ -1,15 +1,11 @@
 #include "SceneManager.h"
 
+std::unique_ptr<Scene> SceneManager::currentScene = nullptr;
+SceneNames SceneManager::mSceneToLoad = OVERWORLD;
 int SceneManager::mSceneEntranceIndex = -1;
 bool SceneManager::mIsOverworld = true;
 
-SceneManager& SceneManager::Instance()
-{
-	static SceneManager* instance = new SceneManager();
-	return *instance;
-}
-
-bool SceneManager::SceneReadyToLoad() const
+bool SceneManager::SceneReadyToLoad()
 {
 	return mSceneToLoad != NONE;
 }

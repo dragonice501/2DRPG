@@ -46,8 +46,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
             SceneEntrance newEntrance =
             {
-                Vec2(sceneEntrancePosX * TILE_SIZE, sceneEntrancePosY * TILE_SIZE),
-                Vec2(sceneEntranceOffsetX * TILE_SIZE, sceneEntranceOffsetY * TILE_SIZE),
+                Vec2(sceneEntrancePosX, sceneEntrancePosY) * TILE_SIZE,
+                Vec2(sceneEntranceOffsetX, sceneEntranceOffsetY) * TILE_SIZE,
                 sceneName,
                 sceneEntranceIndex
             };
