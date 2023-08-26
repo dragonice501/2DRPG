@@ -16,16 +16,17 @@ void SceneTown::Setup(SDL_Renderer* renderer)
             spawnPosition = entrance.position + entrance.spawnOffset;
         }
     }
-
-    /*Actor newActor;
-    newActor.Init("Dancer", "DancerAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
-    mActors.push_back(newActor);*/
+    
+    if (SceneManager::Instance().GetSceneEntranceIndex() == -1)
+    {
+        spawnPosition = { 16 * TILE_SIZE, 16 * TILE_SIZE };
+    }
 
     /*Character newCharacter;
     newCharacter.Init("Sigurd", "SigurdAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
     mCharacters.push_back(newCharacter);*/
 
-    mSigurd.Init("Sigurd", "SigurdAnimations", Vec2(16 * TILE_SIZE, 16 * TILE_SIZE), renderer);
+    mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
 }
 
 void SceneTown::Shutdown()
@@ -37,13 +38,21 @@ void SceneTown::Input()
 {
     if (InputManager::EPressed())
     {
-        Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
-        for (Actor& actor : mActors)
+        if (mSigurd.GetCharacterState() != CS_INTERACTING)
         {
-            if (position == actor.GetPosition())
+            Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
+            for (Actor& actor : mActors)
             {
-                std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
+                if (position == actor.GetPosition())
+                {
+                    std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
+                    mSigurd.SetCharacterState(CS_INTERACTING);
+                }
             }
+        }
+        else
+        {
+            mSigurd.SetCharacterState(CS_MOVING);
         }
     }
 }
@@ -57,16 +66,19 @@ void SceneTown::Update(const float dt)
         actor.Update(dt);
     }
 
-    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
-    mSigurd.Update(dt);
-
-    if (mSigurd.mMovement.stepTaken)
+    if (mSigurd.GetCharacterState() == CS_MOVING)
     {
-        for (const SceneEntrance& entrance : mSceneEntrances)
+        mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
+        mSigurd.Update(dt);
+
+        if (mSigurd.mMovement.stepTaken)
         {
-            if (mSigurd.GetPosition() == entrance.position)
+            for (const SceneEntrance& entrance : mSceneEntrances)
             {
-                SceneManager::Instance().SetSceneToLoad(OVERWORLD, entrance.sceneEntranceIndex);
+                if (mSigurd.GetPosition() == entrance.position)
+                {
+                    SceneManager::Instance().SetSceneToLoad(OVERWORLD, entrance.sceneEntranceIndex);
+                }
             }
         }
     }

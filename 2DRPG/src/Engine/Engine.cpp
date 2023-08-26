@@ -80,7 +80,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::Instance().SetSceneToLoad(TOWN, 0);
+    SceneManager::Instance().SetSceneToLoad(TOWN, -1);
 
     while (isRunning)
     {

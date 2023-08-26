@@ -6,12 +6,6 @@
 
 class Character : Actor
 {
-	enum EMovementState
-	{
-		MS_IDLE,
-		MS_MOVING
-	};
-
 public:
 	Character();
 	~Character();
@@ -22,6 +16,9 @@ public:
 	void Render(SDL_Renderer* renderer) override;
 	void UpdateAnimation() override;
 	const Vec2& GetPosition() const override { return mPosition; }
+
+	inline const ECharacterState GetCharacterState() const { return mCharacterState; }
+	inline void SetCharacterState(const ECharacterState state) { mCharacterState = state; }
 
 	void CheckInteracting();
 
@@ -36,4 +33,5 @@ public:
 
 private:
 	EMovementState mMovementState = MS_IDLE;
+	ECharacterState mCharacterState = CS_MOVING;
 };

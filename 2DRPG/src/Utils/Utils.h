@@ -7,6 +7,18 @@ enum SceneNames
 	NONE
 };
 
+enum EMovementState
+{
+	MS_IDLE,
+	MS_MOVING
+};
+
+enum ECharacterState
+{
+	CS_MOVING,
+	CS_INTERACTING
+};
+
 enum ETownTileType
 {
 	WALKABLE,
