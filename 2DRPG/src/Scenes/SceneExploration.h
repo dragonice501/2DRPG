@@ -5,6 +5,8 @@
 #include "../Objects/Character.h"
 #include "../Objects/Components.h"
 
+#include "../Managers/InputManager.h"
+
 #include "../Utils/Utils.h"
 
 #include <SDL_image.h>

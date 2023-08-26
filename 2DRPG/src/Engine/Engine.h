@@ -36,5 +36,6 @@ private:
 	SDL_Renderer* mRenderer;
 	int millisecondsPreviousFrame;
 	bool isDebug;
+
 };
 

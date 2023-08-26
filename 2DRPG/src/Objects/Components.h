@@ -41,22 +41,6 @@ struct Animation
 	int startTime;
 };
 
-struct Input
-{
-	Input(bool upPressed = false, bool downPressed = false, bool leftPressed = false, bool rightPressed = false)
-	{
-		this->upPressed = upPressed;
-		this->downPressed = downPressed;
-		this->leftPressed = leftPressed;
-		this->rightPressed = rightPressed;
-	}
-
-	bool upPressed;
-	bool downPressed;
-	bool leftPressed;
-	bool rightPressed;
-};
-
 struct Movement
 {
 	Movement(Vec2 start = Vec2(0.0f), Vec2 destination = Vec2(0.0f), float rate = 0.0f)

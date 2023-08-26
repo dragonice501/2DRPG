@@ -95,10 +95,10 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
             {
                 mMovementState = MS_IDLE;
 
-                if (mInput.upPressed) mRigidbody.lastVelocity = Vec2(0.0f, -1.0f);
-                else if (mInput.downPressed) mRigidbody.lastVelocity = Vec2(0.0f, 1.0f);
-                else if (mInput.leftPressed) mRigidbody.lastVelocity = Vec2(-1.0f, 0.0f);
-                else if (mInput.rightPressed) mRigidbody.lastVelocity = Vec2(1.0f, 0.0f);
+                if (InputManager::UpHeld()) mRigidbody.lastVelocity = Vec2(0.0f, -1.0f);
+                else if (InputManager::DownHeld()) mRigidbody.lastVelocity = Vec2(0.0f, 1.0f);
+                else if (InputManager::LeftHeld()) mRigidbody.lastVelocity = Vec2(-1.0f, 0.0f);
+                else if (InputManager::RightHeld()) mRigidbody.lastVelocity = Vec2(1.0f, 0.0f);
             }
         }
     }
@@ -106,26 +106,26 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
 
 bool Character::MovementPressed()
 {
-    return mInput.upPressed || mInput.downPressed || mInput.leftPressed || mInput.rightPressed;
+    return InputManager::UpHeld() || InputManager::DownHeld() || InputManager::LeftHeld() || InputManager::RightHeld();
 }
 
 Vec2 Character::GetDesiredPosition()
 {
     Vec2 desiredPosition;
 
-    if (mInput.upPressed)
+    if (InputManager::UpHeld())
     {
         desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y - TILE_SIZE));
     }
-    else if (mInput.downPressed)
+    else if (InputManager::DownHeld())
     {
         desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y + TILE_SIZE));
     }
-    else if (mInput.leftPressed)
+    else if (InputManager::LeftHeld())
     {
         desiredPosition = Vec2(static_cast<int>(mPosition.x - TILE_SIZE), static_cast<int>(mPosition.y));
     }
-    else if (mInput.rightPressed)
+    else if (InputManager::RightHeld())
     {
         desiredPosition = Vec2(static_cast<int>(mPosition.x + TILE_SIZE), static_cast<int>(mPosition.y));
     }
@@ -167,25 +167,25 @@ bool Character::CanMove(const Vec2& desiredPosition, int width, int height, cons
 
 void Character::SetMovement()
 {
-    if (mInput.upPressed)
+    if (InputManager::UpHeld())
     {
         mRigidbody.velocity = Vec2(0.0f, -TILE_SIZE);
         mMovement.start = mPosition;
         mMovement.destination = mPosition + mRigidbody.velocity;
     }
-    else if (mInput.downPressed)
+    else if (InputManager::DownHeld())
     {
         mRigidbody.velocity = Vec2(0.0f, TILE_SIZE);
         mMovement.start = mPosition;
         mMovement.destination = mPosition + mRigidbody.velocity;
     }
-    else if (mInput.leftPressed)
+    else if (InputManager::LeftHeld())
     {
         mRigidbody.velocity = Vec2(-TILE_SIZE, 0.0f);
         mMovement.start = mPosition;
         mMovement.destination = mPosition + mRigidbody.velocity;
     }
-    else if (mInput.rightPressed)
+    else if (InputManager::RightHeld())
     {
         mRigidbody.velocity = Vec2(TILE_SIZE, 0.0f);
         mMovement.start = mPosition;

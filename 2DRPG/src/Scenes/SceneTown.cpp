@@ -18,7 +18,7 @@ void SceneTown::Setup(SDL_Renderer* renderer)
     }
 
     mDancer.Init("Dancer", "DancerAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
-    mSigurd.Init("Sigurd", "SigurdAnimations", Vec2(17 * TILE_SIZE, 17 * TILE_SIZE), renderer);
+    mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
 }
 
 void SceneTown::Shutdown()

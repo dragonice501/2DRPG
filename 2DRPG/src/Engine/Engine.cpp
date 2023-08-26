@@ -6,6 +6,8 @@
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneOverworld.h"
 
+#include "../Managers/InputManager.h"
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -82,19 +84,21 @@ void Engine::Run()
 
     while (isRunning)
     {
+        // Calculate Delta Time
         int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
         if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME)
         {
             SDL_Delay(timeToWait);
         }
 
-        // The difference in ticks since the last frame, converted to seconds
         double deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0;
         if (deltaTime > MILLISECONDS_PER_FRAME) deltaTime = MILLISECONDS_PER_FRAME;
 
-        // Store the "previous" frame time
         millisecondsPreviousFrame = SDL_GetTicks();
 
+        InputManager::Input(deltaTime);
+
+        // Load Scene if one is ready
         if (SceneManager::Instance().SceneReadyToLoad())
         {
             if (SceneManager::Instance().CurrentScene())
@@ -104,6 +108,7 @@ void Engine::Run()
             SceneManager::Instance().LoadScene(mRenderer);
         }
 
+        // Game Loop
         SceneManager::Instance().CurrentSceneInput();
         SceneManager::Instance().CurrentSceneUpdate(deltaTime);
         SceneManager::Instance().CurrentSceneRender(mRenderer);
