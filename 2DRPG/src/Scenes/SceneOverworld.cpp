@@ -29,14 +29,14 @@ void SceneOverworld::Shutdown()
 
 void SceneOverworld::Input()
 {
-    SceneExploration::Input(mSigurd);
+    
 }
 
 void SceneOverworld::Update(const float dt)
 {
     SceneExploration::Update(dt);
 
-    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, dt);
+    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
     mSigurd.Update(dt);
 
     if (mSigurd.mMovement.stepTaken)

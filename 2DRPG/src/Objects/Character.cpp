@@ -26,8 +26,10 @@ void Character::LoadAnimations(std::string animationsFileName)
 
 void Character::Update(const float dt)
 {
-    UpdateAnimation();
+    CheckInteracting();
+
     Actor::UpdateAnimation();
+    UpdateAnimation();
 }
 
 void Character::Render(SDL_Renderer* renderer)
@@ -35,7 +37,12 @@ void Character::Render(SDL_Renderer* renderer)
     Actor::Render(renderer);
 }
 
-void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt)
+void Character::CheckInteracting()
+{
+    
+}
+
+void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt)
 {
     mMovement.stepTaken = false;
 
@@ -60,15 +67,15 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
                 if (MovementPressed())
                 {
                     Vec2 desiredPosition = GetDesiredPosition();
-                    if (
-                        MovementInsideMap(desiredPosition, mapWidth, mapHeight) &&
-                        CanMove(desiredPosition, mapWidth, mapHeight, mTiles))
+                    if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, actors))
                     {
                         SetMovement();
                     }
                     else
                     {
                         mMovementState = MS_IDLE;
+
+                        mRigidbody.lastVelocity = desiredPosition - mPosition;
                     }
                 }
                 else
@@ -83,13 +90,10 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
         if (MovementPressed())
         {
             Vec2 desiredPosition = GetDesiredPosition();
-            if (MovementInsideMap(desiredPosition, mapWidth, mapHeight))
+            if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, actors))
             {
-                if(CanMove(desiredPosition, mapWidth, mapHeight, mTiles))
-                {
-                    mMovementState = MS_MOVING;
-                    SetMovement();
-                }
+                mMovementState = MS_MOVING;
+                SetMovement();
             }
             else
             {
@@ -142,14 +146,19 @@ bool Character::MovementInsideMap(const Vec2& position, const int width, const i
         position.y + TILE_SIZE > height * TILE_SIZE);
 }
 
-bool Character::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& mTiles)
+bool Character::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors)
 {
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
 
+    for (const Actor& actor : actors)
+    {
+        if (desiredPosition == actor.GetPosition()) return false;
+    }
+
     if (SceneManager::Instance().GetIsOverworld())
     {
-        ETerrainType terrain = mTiles[x + y * width].terrainType;
+        ETerrainType terrain = tiles[x + y * width].terrainType;
 
         if (terrain == CLIFF) return false;
         else if (terrain == RIVER) return false;
@@ -157,7 +166,7 @@ bool Character::CanMove(const Vec2& desiredPosition, int width, int height, cons
     }
     else
     {
-        ETownTileType townTile = mTiles[x + y * width].townType;
+        ETownTileType townTile = tiles[x + y * width].townType;
 
         if (townTile == UNWALKABLE) return false;
     }

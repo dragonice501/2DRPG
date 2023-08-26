@@ -80,7 +80,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::Instance().SetSceneToLoad(OVERWORLD, 0);
+    SceneManager::Instance().SetSceneToLoad(TOWN, 0);
 
     while (isRunning)
     {
@@ -96,8 +96,6 @@ void Engine::Run()
 
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        InputManager::Input(deltaTime);
-
         // Load Scene if one is ready
         if (SceneManager::Instance().SceneReadyToLoad())
         {
@@ -107,6 +105,9 @@ void Engine::Run()
             }
             SceneManager::Instance().LoadScene(mRenderer);
         }
+
+        // Update Input Manager
+        InputManager::Update(deltaTime);
 
         // Game Loop
         SceneManager::Instance().CurrentSceneInput();

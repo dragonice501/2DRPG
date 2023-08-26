@@ -23,11 +23,13 @@ public:
 	void UpdateAnimation() override;
 	const Vec2& GetPosition() const override { return mPosition; }
 
-	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& mTiles, const float dt);
+	void CheckInteracting();
+
+	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt);
 	bool MovementPressed();
 	Vec2 GetDesiredPosition();
 	bool MovementInsideMap(const Vec2& position, const int width, const int height);
-	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& mTiles);
+	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors);
 	void SetMovement();
 	Movement mMovement;
 	Rigidbody mRigidbody;

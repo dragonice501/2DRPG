@@ -17,8 +17,15 @@ void SceneTown::Setup(SDL_Renderer* renderer)
         }
     }
 
-    mDancer.Init("Dancer", "DancerAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
-    mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
+    /*Actor newActor;
+    newActor.Init("Dancer", "DancerAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
+    mActors.push_back(newActor);*/
+
+    /*Character newCharacter;
+    newCharacter.Init("Sigurd", "SigurdAnimations", Vec2(16 * TILE_SIZE, 14 * TILE_SIZE), renderer);
+    mCharacters.push_back(newCharacter);*/
+
+    mSigurd.Init("Sigurd", "SigurdAnimations", Vec2(16 * TILE_SIZE, 16 * TILE_SIZE), renderer);
 }
 
 void SceneTown::Shutdown()
@@ -28,16 +35,29 @@ void SceneTown::Shutdown()
 
 void SceneTown::Input()
 {
-    SceneExploration::Input(mSigurd);
+    if (InputManager::EPressed())
+    {
+        Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
+        for (Actor& actor : mActors)
+        {
+            if (position == actor.GetPosition())
+            {
+                std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
+            }
+        }
+    }
 }
 
 void SceneTown::Update(const float dt)
 {
     SceneExploration::Update(dt);
 
-    mDancer.Update(dt);
+    for (Actor& actor : mActors)
+    {
+        actor.Update(dt);
+    }
 
-    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, dt);
+    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
     mSigurd.Update(dt);
 
     if (mSigurd.mMovement.stepTaken)
@@ -50,6 +70,12 @@ void SceneTown::Update(const float dt)
             }
         }
     }
+
+    /*for (Character& character : mCharacters)
+    {
+        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
+        character.Update(dt);
+    }*/
 }
 
 void SceneTown::Render(SDL_Renderer* renderer, SDL_Rect& camera)
@@ -62,6 +88,15 @@ void SceneTown::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
     SceneExploration::Render(renderer, camera);
 
-    mDancer.Render(renderer);
+    for (Actor& actor : mActors)
+    {
+        actor.Render(renderer);
+    }
+
+    /*for (Character& character : mCharacters)
+    {
+        character.Render(renderer);
+    }*/
+
     mSigurd.Render(renderer);
 }

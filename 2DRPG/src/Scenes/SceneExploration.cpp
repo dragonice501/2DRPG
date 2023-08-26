@@ -54,6 +54,20 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
             mSceneEntrances.push_back(newEntrance);
         }
+        else if (type == "Npc")
+        {
+            std::string npcName;
+            int npcXPos;
+            int npcYPos;
+
+            file >> npcName >> npcXPos >> npcYPos;
+
+            Vec2 position = { static_cast<float>(npcXPos * TILE_SIZE), static_cast<float>(npcYPos * TILE_SIZE) };
+
+            Actor newActor;
+            newActor.Init(npcName, npcName + "Animations", position, renderer);
+            mActors.push_back(newActor);
+        }
         else if (type == "Tile")
         {
             int tileType;

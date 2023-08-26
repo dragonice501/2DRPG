@@ -6,7 +6,7 @@ public:
 	InputManager() {}
 	~InputManager() {}
 
-	static void Input(const float dt);
+	static void Update(const float dt);
 
 	static inline const bool UpPressed() { return mUpPressed; }
 	static inline const bool UpHeld() { return mUpHeld; }
@@ -28,6 +28,8 @@ public:
 	static inline const bool RightReleased() { return mRightReleased; }
 	static inline const float RightHeldTime() { return mRightHeldTime; }
 
+	static inline const bool EPressed() { return mEPressed; }
+
 private:
 	static bool mUpPressed;
 	static bool mUpHeld;
@@ -48,4 +50,6 @@ private:
 	static bool mRightHeld;
 	static bool mRightReleased;
 	static float mRightHeldTime;
+
+	static bool mEPressed;
 };

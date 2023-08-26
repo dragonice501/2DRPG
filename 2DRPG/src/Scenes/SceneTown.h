@@ -22,5 +22,4 @@ public:
 	void Render(SDL_Renderer* renderer, SDL_Rect& camera) override;
 
 	Character mSigurd;
-	Actor mDancer;
 };
