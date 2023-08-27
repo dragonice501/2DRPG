@@ -27,6 +27,10 @@ void SceneTown::Setup(SDL_Renderer* renderer)
     mCharacters.push_back(newCharacter);*/
 
     mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
+    if (GameManager::GetExitVelocity() != Vec2(0.0f))
+    {
+        mSigurd.mRigidbody.lastVelocity = GameManager::GetExitVelocity();
+    }
 }
 
 void SceneTown::Shutdown()
@@ -77,6 +81,7 @@ void SceneTown::Update(const float dt)
             {
                 if (mSigurd.GetPosition() == entrance.position)
                 {
+                    GameManager::SetExitVelocity(mSigurd.mRigidbody.lastVelocity);
                     SceneManager::SetSceneToLoad(OVERWORLD, entrance.sceneEntranceIndex);
                 }
             }

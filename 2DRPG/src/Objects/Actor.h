@@ -28,6 +28,7 @@ public:
 
 	virtual const Vec2& GetPosition() const { return mPosition; }
 
+	void LoadDialogue(const std::string filePathName);
 
 protected:
 	Vec2 mPosition;
@@ -36,4 +37,6 @@ protected:
 
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation;
+
+	std::map<std::string, std::string> mDialogueMap;
 };

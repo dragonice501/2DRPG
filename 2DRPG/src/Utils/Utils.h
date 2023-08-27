@@ -150,3 +150,7 @@ float Clampf(const float v, const float min, const float max);
 ETownTileType GetTownTileType(const int mapSpriteIndex);
 ETerrainType GetTerrainType(const int mapSpriteIndex);
 void PrintTerrainType(const ETerrainType terrain);
+
+#include <string>
+
+void ConvertDialogueDashes(std::string& string);

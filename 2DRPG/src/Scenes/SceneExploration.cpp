@@ -59,13 +59,15 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             std::string npcName;
             int npcXPos;
             int npcYPos;
+            std::string dialogueFile;
 
-            file >> npcName >> npcXPos >> npcYPos;
+            file >> npcName >> npcXPos >> npcYPos >> dialogueFile;
 
             Vec2 position = { static_cast<float>(npcXPos * TILE_SIZE), static_cast<float>(npcYPos * TILE_SIZE) };
 
             Actor newActor;
             newActor.Init(npcName, npcName + "Animations", position, renderer);
+            newActor.LoadDialogue(dialogueFile);
             mActors.push_back(newActor);
         }
         else if (type == "Tile")
@@ -93,7 +95,7 @@ void SceneExploration::Shutdown()
     SDL_DestroyTexture(mSpriteSheet);
 }
 
-void SceneExploration::Input(Character& character)
+void SceneExploration::Input()
 {
     
 }

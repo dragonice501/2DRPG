@@ -74,7 +74,6 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
                     else
                     {
                         mMovementState = MS_IDLE;
-
                         mRigidbody.lastVelocity = desiredPosition - mPosition;
                     }
                 }
@@ -99,10 +98,10 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
             {
                 mMovementState = MS_IDLE;
 
-                if (InputManager::UpHeld()) mRigidbody.lastVelocity = Vec2(0.0f, -1.0f);
-                else if (InputManager::DownHeld()) mRigidbody.lastVelocity = Vec2(0.0f, 1.0f);
-                else if (InputManager::LeftHeld()) mRigidbody.lastVelocity = Vec2(-1.0f, 0.0f);
-                else if (InputManager::RightHeld()) mRigidbody.lastVelocity = Vec2(1.0f, 0.0f);
+                if (InputManager::UpHeld()) mRigidbody.lastVelocity = Vec2(0.0f, -16.0f);
+                else if (InputManager::DownHeld()) mRigidbody.lastVelocity = Vec2(0.0f, 16.0f);
+                else if (InputManager::LeftHeld()) mRigidbody.lastVelocity = Vec2(-16.0f, 0.0f);
+                else if (InputManager::RightHeld()) mRigidbody.lastVelocity = Vec2(16.0f, 0.0f);
             }
         }
     }

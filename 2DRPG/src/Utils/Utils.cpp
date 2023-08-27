@@ -172,3 +172,11 @@ void PrintTerrainType(const ETerrainType terrain)
 		case UNDEFINED: std::cout << "UNDEFINED" << std::endl; break;
 	}
 }
+
+void ConvertDialogueDashes(std::string& string)
+{
+	for (char& c : string)
+	{
+		if (c == '-') c = ' ';
+	}
+}

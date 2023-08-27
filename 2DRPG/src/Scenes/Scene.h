@@ -6,6 +6,10 @@
 #include "../Utils/Constants.h"
 #include "../Utils/Vec2.h"
 
+#include "../Managers/InputManager.h"
+#include "../Managers/GraphicsManager.h"
+#include "../Managers/GameManager.h"
+
 #include <SDL.h>
 #include <memory>
 #include <fstream>
@@ -20,7 +24,6 @@ public:
 	virtual void Shutdown() = 0;
 
 	virtual void Input() = 0;
-	virtual void Input(Character& character) = 0;
 	virtual void Update(const float dt) = 0;
 	virtual void Render(SDL_Renderer* renderer, SDL_Rect& camera) = 0;
 

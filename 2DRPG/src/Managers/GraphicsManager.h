@@ -7,28 +7,16 @@
 #include <vector>
 #include <string>
 
-struct Graphics
+class GraphicsManager
 {
-    static int windowWidth;
-    static int windowHeight;
-    static int screenWidth;
-    static int screenHeight;
-
-    static uint32_t* colorBuffer;
-    static SDL_Texture* colorBufferTexture;
-    static SDL_Window* window;
-    static SDL_Renderer* renderer;
-
-    static Vec2 screenOffset;
-    static float screenZoom;
-
+public:
     static bool OpenWindow();
     static void CloseWindow();
 
-    static int WindowWidth();
-    static int WindowHeight();
-    static int ScreenWidth();
-    static int ScreenHeight();
+    inline static int WindowWidth() { return mWindowWidth; }
+    inline static int WindowHeight() { return mWindowHeight; }
+    inline static int ScreenWidth() { return mScreenWidth; }
+    inline static int ScreenHeight() { return mScreenHeight; }
 
     static void AdjustScreenOffset(const Vec2& offset);
     static void ResetScreenOffset();
@@ -55,4 +43,18 @@ struct Graphics
     static void DrawString(const int& x, const int& y, const char* string, const uint32_t& color, const bool& lockToScreen);
 
     static void DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen);
+
+private:
+    static int mWindowWidth;
+    static int mWindowHeight;
+    static int mScreenWidth;
+    static int mScreenHeight;
+
+    static uint32_t* mColorBuffer;
+    static SDL_Texture* mColorBufferTexture;
+    static SDL_Window* mWindow;
+    static SDL_Renderer* mRenderer;
+
+    static Vec2 mScreenOffset;
+    static float mScreenZoom;
 };

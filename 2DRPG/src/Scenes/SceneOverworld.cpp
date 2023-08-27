@@ -19,7 +19,16 @@ void SceneOverworld::Setup(SDL_Renderer* renderer)
         }
     }
 
+    if (SceneManager::GetSceneEntranceIndex() == -1)
+    {
+        spawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
+    }
+
     mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
+    if (GameManager::GetExitVelocity() != Vec2(0.0f))
+    {
+        mSigurd.mRigidbody.lastVelocity = GameManager::GetExitVelocity();
+    }
 }
 
 void SceneOverworld::Shutdown()
@@ -45,6 +54,7 @@ void SceneOverworld::Update(const float dt)
         {
             if (mSigurd.GetPosition() == entrance.position)
             {
+                GameManager::SetExitVelocity(mSigurd.mRigidbody.lastVelocity);
                 SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
             }
         }

@@ -86,3 +86,34 @@ void Actor::UpdateAnimation()
     mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
     mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 }
+
+void Actor::LoadDialogue(const std::string filePathName)
+{
+    std::string  fileName = "./assets/" + filePathName + ".txt";
+    std::ifstream file(fileName);
+    std::string type;
+    while (file >> type)
+    {
+        if (type == "Dialogue")
+        {
+            std::string dialogueType;
+            std::string dialogueAnswerWord;
+            std::string dialogueActual;
+
+            file >> dialogueType;
+
+            if (dialogueType == "Greeting")
+            {
+                file >> dialogueActual;
+            }
+            else if (dialogueType == "Answer")
+            {
+                file >> dialogueAnswerWord >> dialogueActual;
+            }
+
+            ConvertDialogueDashes(dialogueActual);
+
+            mDialogueMap.emplace(dialogueType, dialogueActual);
+        }
+    }
+}
