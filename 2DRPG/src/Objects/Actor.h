@@ -28,6 +28,7 @@ public:
 	virtual void UpdateAnimation();
 
 	virtual const Vec2& GetPosition() const { return mPosition; }
+	virtual const std::string& GetDialogue(const std::string& dialogue) const { return mDialogueMap.at(dialogue); }
 
 	void LoadDialogue(const std::string filePathName);
 

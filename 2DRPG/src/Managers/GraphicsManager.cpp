@@ -122,9 +122,11 @@ void GraphicsManager::RenderFrame()
 
 void GraphicsManager::DrawPixel(const int& x, const int& y, const uint32_t& color)
 {
-    if (x < 0 || x >= mScreenWidth || y < 0 || y >= mScreenHeight) return;
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_Rect rect = { x, y, PIXEL_SIZE, PIXEL_SIZE };
+    SDL_RenderFillRect(mRenderer, &rect);
 
-    mColorBuffer[x + y * mScreenWidth] = color;
+    SDL_RenderDrawRect(mRenderer, &rect);
 }
 
 void GraphicsManager::DrawLine(const int& x0, const int& y0, const int& x1, const int& y1, const uint32_t& color, const bool& lockToScreen)
@@ -181,13 +183,11 @@ void GraphicsManager::DrawRect(const int& x, const int& y, const int& width, con
 
 void GraphicsManager::DrawFillRect(const int& x, const int& y, const int& width, const int& height, const uint32_t& color)
 {
-    for (int i = y; i < y + height; i++)
-    {
-        for (int j = x; j < x + width; j++)
-        {
-            DrawPixel(j, i, color);
-        }
-    }
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
+    SDL_Rect rect = { x, y, width, height };
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    SDL_RenderDrawRect(mRenderer, &rect);
 }
 
 void GraphicsManager::DrawCircle(const int& x, const int& y, const int& radius, const float& angle, const uint32_t& color, const bool& lockToScreen)
@@ -216,8 +216,6 @@ void GraphicsManager::DrawCircle(const int& x, const int& y, const int& radius, 
 
         DisplayBresenhamCircle(x, y, x0, y0, color, lockToScreen);
     }
-
-    //DrawLine(x, y, x + cos(angle) * radius, y + sin(angle) * radius, color, lockToScreen);
 }
 
 void GraphicsManager::DrawFillCircle(const int& x, const int& y, const int& radius, const uint32_t& color)
@@ -277,9 +275,9 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
             if (Font::fontMap[std::tolower(character)][k + j * Font::fontWidth])
             {
                 if (lockToScreen)
-                    DrawPixel(x + k, y + j, color);
+                    DrawPixel(x + k * PIXEL_SIZE, y + j * PIXEL_SIZE, color);
                 else
-                    DrawPixel(x + k + mScreenOffset.x, y + j + mScreenOffset.y, color);
+                    DrawPixel(x + k * PIXEL_SIZE, y+ j * PIXEL_SIZE, color);
             }
         }
     }
@@ -294,13 +292,26 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
     {
         DrawChar(xPos, yPos, string[i], color, lockToScreen);
         i++;
-        xPos += Font::fontWidth + Font::fontSpacing;
+        xPos += Font::fontWidth * PIXEL_SIZE + Font::fontSpacing * PIXEL_SIZE;
     }
 }
 
 void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect)
 {
     SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);
+}
+
+void GraphicsManager::DrawDialogueBox()
+{
+    SDL_Rect rect = { mWindowWidth / 2 - 255, mWindowHeight / 4 - 5, 510, 60 };
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    rect = { mWindowWidth / 2 - 250, mWindowHeight / 4, 500, 50 };
+    SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    SDL_RenderDrawRect(mRenderer, &rect);
 }
 
 void GraphicsManager::DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen)

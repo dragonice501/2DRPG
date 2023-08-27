@@ -20,7 +20,7 @@ void SceneTown::Setup(static SDL_Renderer* renderer)
 
     if (SceneManager::GetSceneEntranceIndex() == -1)
     {
-        spawnPosition = Vec2(16.0f, 16.0f) * TILE_SIZE;
+        spawnPosition = Vec2(16.0f, 17.0f) * TILE_SIZE;
     }
 
     mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
@@ -42,13 +42,15 @@ void SceneTown::Input()
             {
                 if (position == actor.GetPosition())
                 {
-                    std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
+                    mCharacterState = CS_INTERACTING;
+                    mInteractedActor = &actor;
                 }
             }
         }
         else
         {
             mCharacterState = CS_MOVING;
+            mInteractedActor = nullptr;
         }
     }
 }
@@ -99,6 +101,14 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 
     if (mCharacterState == CS_INTERACTING)
     {
-        
+        //GraphicsManager::DrawFillRect(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 4, 300, 50, 0xFFFFFFFF);
+        GraphicsManager::DrawDialogueBox();
+
+        GraphicsManager::DrawString(
+            GraphicsManager::WindowWidth() / 2 - 130,
+            GraphicsManager::WindowHeight() / 4 + 20,
+            mInteractedActor->GetDialogue("Greeting").c_str(),
+            0xFFFFFFFF,
+            true);
     }
 }

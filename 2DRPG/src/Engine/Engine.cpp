@@ -40,7 +40,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    SceneManager::SetSceneToLoad(OVERWORLD, 0);
+    SceneManager::SetSceneToLoad(TOWN, -1);
 
     while (isRunning)
     {
