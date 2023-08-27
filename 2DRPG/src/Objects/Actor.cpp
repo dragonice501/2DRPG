@@ -67,13 +67,14 @@ void Actor::Render(SDL_Renderer* renderer)
 {
     SDL_Rect destRect =
     {
-        mPosition.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - Engine::Camera().x,
-        mPosition.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - Engine::Camera().y,
+        mPosition.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
+        mPosition.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
         mSprite.width * TILE_SPRITE_SCALE,
         mSprite.height * TILE_SPRITE_SCALE
     };
 
-    SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect);
+    GraphicsManager::DrawSpriteRect(mSpriteSheet, mSprite.srcRect, destRect);
+    //SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect);
 }
 
 void Actor::UpdateAnimation()

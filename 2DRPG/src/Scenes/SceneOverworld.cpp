@@ -7,7 +7,7 @@ SceneOverworld::~SceneOverworld()
     
 }
 
-void SceneOverworld::Setup(SDL_Renderer* renderer)
+void SceneOverworld::Setup(static SDL_Renderer* renderer)
 {
     SceneExploration::Setup(renderer);
 
@@ -16,6 +16,7 @@ void SceneOverworld::Setup(SDL_Renderer* renderer)
         if (entrance.sceneEntranceIndex == SceneManager::GetSceneEntranceIndex())
         {
             spawnPosition = entrance.position + entrance.spawnOffset;
+            mSigurd.mRigidbody.lastVelocity = entrance.spawnOffset;
         }
     }
 
@@ -25,10 +26,6 @@ void SceneOverworld::Setup(SDL_Renderer* renderer)
     }
 
     mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
-    if (GameManager::GetExitVelocity() != Vec2(0.0f))
-    {
-        mSigurd.mRigidbody.lastVelocity = GameManager::GetExitVelocity();
-    }
 }
 
 void SceneOverworld::Shutdown()
@@ -38,33 +35,52 @@ void SceneOverworld::Shutdown()
 
 void SceneOverworld::Input()
 {
-    
+    if (InputManager::EPressed())
+    {
+        if (mCharacterState != CS_INTERACTING)
+        {
+            Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
+            for (Actor& actor : mActors)
+            {
+                if (position == actor.GetPosition())
+                {
+                    std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
+                }
+            }
+        }
+        else
+        {
+            mCharacterState = CS_MOVING;
+        }
+    }
 }
 
 void SceneOverworld::Update(const float dt)
 {
     SceneExploration::Update(dt);
 
-    mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
-    mSigurd.Update(dt);
-
-    if (mSigurd.mMovement.stepTaken)
+    if (mCharacterState == CS_MOVING)
     {
-        for (const SceneEntrance& entrance : mSceneEntrances)
+        mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
+        mSigurd.Update(dt);
+
+        if (mSigurd.mMovement.stepTaken)
         {
-            if (mSigurd.GetPosition() == entrance.position)
+            for (const SceneEntrance& entrance : mSceneEntrances)
             {
-                GameManager::SetExitVelocity(mSigurd.mRigidbody.lastVelocity);
-                SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
+                if (mSigurd.GetPosition() == entrance.position)
+                {
+                    SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
+                }
             }
         }
     }
 }
 
-void SceneOverworld::Render(SDL_Renderer* renderer, SDL_Rect& camera)
+void SceneOverworld::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 {
-    camera.x = mSigurd.GetPosition().x * TILE_SPRITE_SCALE - (Engine::mWindowWidth / 2);
-    camera.y = mSigurd.GetPosition().y * TILE_SPRITE_SCALE - (Engine::mWindowHeight / 2);
+    camera.x = mSigurd.GetPosition().x * TILE_SPRITE_SCALE - (GraphicsManager::WindowWidth() / 2);
+    camera.y = mSigurd.GetPosition().y * TILE_SPRITE_SCALE - (GraphicsManager::WindowHeight() / 2);
 
     camera.x = Clampf(camera.x, 0, mMapWidth * TILE_SIZE * TILE_SPRITE_SCALE - camera.w);
     camera.y = Clampf(camera.y, 0, mMapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);

@@ -18,11 +18,6 @@
 
 #include <fstream>
 
-int Engine::mWindowWidth;
-int Engine::mWindowHeight;
-int Engine::mapWidth;
-int Engine::mapHeight;
-SDL_Rect Engine::camera;
 bool Engine::isRunning;
 
 Engine::Engine()
@@ -38,49 +33,14 @@ void Engine::SetIsRunning(const bool running)
 
 bool Engine::Init()
 {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        return false;
-    }
-    if (TTF_Init() != 0)
-    {
-        return false;
-    }
-
-    SDL_DisplayMode displayMode;
-    SDL_GetCurrentDisplayMode(0, &displayMode);
-    mWindowWidth = displayMode.w;
-    mWindowHeight = displayMode.h;
-    mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
-    mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
-    mWindow = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
-
-    if (!mWindow)
-    {
-        return false;
-    }
-    mRenderer = SDL_CreateRenderer(mWindow, -1, 0);
-
-    if (!mRenderer)
-    {
-        return false;
-    }
-
-    // Initialize the camera view with the entire screen area
-    camera.x = 0.0f;
-    camera.y = 0.0f;
-    camera.w = mWindowWidth;
-    camera.h = mWindowHeight;
-
-    //SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN);
-    isRunning = true;
+    isRunning = GraphicsManager::OpenWindow();;
 
     return true;
 }
 
 void Engine::Run()
 {
-    SceneManager::SetSceneToLoad(TOWN, -1);
+    SceneManager::SetSceneToLoad(OVERWORLD, 0);
 
     while (isRunning)
     {
@@ -103,7 +63,7 @@ void Engine::Run()
             {
                 SceneManager::CurrentSceneShutdown();
             }
-            SceneManager::LoadScene(mRenderer);
+            SceneManager::LoadScene();
         }
 
         // Update Input Manager
@@ -112,15 +72,13 @@ void Engine::Run()
         // Game Loop
         SceneManager::CurrentSceneInput();
         SceneManager::CurrentSceneUpdate(deltaTime);
-        SceneManager::CurrentSceneRender(mRenderer);
+        SceneManager::CurrentSceneRender();
 
-        SDL_RenderPresent(mRenderer);
+        GraphicsManager::PresentRender();
     }
 }
 
 void Engine::Destroy()
 {
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
-    SDL_Quit();
+    GraphicsManager::CloseWindow();
 }

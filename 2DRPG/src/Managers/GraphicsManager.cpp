@@ -12,6 +12,7 @@ uint32_t* GraphicsManager::mColorBuffer = nullptr;
 SDL_Texture* GraphicsManager::mColorBufferTexture = nullptr;
 SDL_Window* GraphicsManager::mWindow = nullptr;
 SDL_Renderer* GraphicsManager::mRenderer = nullptr;
+SDL_Rect GraphicsManager::mCamera;
 
 Vec2 GraphicsManager::mScreenOffset = { 0.0f, 0.0f };
 float GraphicsManager::mScreenZoom = 1.0f;
@@ -23,13 +24,19 @@ bool GraphicsManager::OpenWindow()
         std::cerr << "Error initializing SDL" << std::endl;
         return false;
     }
+    if (TTF_Init() != 0)
+    {
+        return false;
+    }
 
     SDL_DisplayMode display_mode;
     SDL_GetCurrentDisplayMode(0, &display_mode);
     mWindowWidth = display_mode.w;
     mWindowHeight = display_mode.h;
-    mScreenWidth = mWindowWidth * SCREEN_SCALE;
-    mScreenHeight = mWindowHeight * SCREEN_SCALE;
+    mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
+    mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
+    /*mScreenWidth = mWindowWidth * SCREEN_SCALE;
+    mScreenHeight = mWindowHeight * SCREEN_SCALE;*/
     mWindow = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
     if (!mWindow)
     {
@@ -47,15 +54,27 @@ bool GraphicsManager::OpenWindow()
     mColorBuffer = new uint32_t[mScreenWidth * mScreenHeight];
     mColorBufferTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, mScreenWidth, mScreenHeight);
 
+    // Initialize the camera view with the entire screen area
+    mCamera.x = 0.0f;
+    mCamera.y = 0.0f;
+    mCamera.w = mWindowWidth;
+    mCamera.h = mWindowHeight;
+
     return true;
 }
 
 void GraphicsManager::CloseWindow(void)
 {
     delete[] mColorBuffer;
+    SDL_DestroyTexture(mColorBufferTexture);
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
+}
+
+void GraphicsManager::PresentRender()
+{
+    SDL_RenderPresent(mRenderer);
 }
 
 void GraphicsManager::AdjustScreenOffset(const Vec2& offset)
@@ -277,6 +296,11 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
         i++;
         xPos += Font::fontWidth + Font::fontSpacing;
     }
+}
+
+void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect)
+{
+    SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);
 }
 
 void GraphicsManager::DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen)

@@ -5,6 +5,7 @@
 #include "../Utils/Constants.h"
 
 #include "../Engine/Engine.h"
+#include "../Managers/GraphicsManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>

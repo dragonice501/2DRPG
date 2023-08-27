@@ -30,9 +30,6 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         if (type == "MapSize")
         {
             file >> mMapWidth >> mMapHeight;
-
-            Engine::mapWidth = mMapWidth;
-            Engine::mapHeight = mMapHeight;
         }
         else if (type == "SceneEntrance")
         {
@@ -104,7 +101,7 @@ void SceneExploration::Update(const float dt)
 {
 }
 
-void SceneExploration::Render(SDL_Renderer* renderer, SDL_Rect& camera)
+void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 {
     for (int i = 0; i < mTiles.size(); i++)
     {
@@ -118,12 +115,12 @@ void SceneExploration::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
         SDL_Rect destRect =
         {
-            mTiles[i].position.x * TILE_SPRITE_SCALE - Engine::Camera().x,
-            mTiles[i].position.y * TILE_SPRITE_SCALE - Engine::Camera().y,
+            mTiles[i].position.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
+            mTiles[i].position.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
             TILE_SIZE * TILE_SPRITE_SCALE,
             TILE_SIZE * TILE_SPRITE_SCALE
         };
 
-        SDL_RenderCopy(renderer, mSpriteSheet, &srcRect, &destRect);
+        GraphicsManager::DrawSpriteRect(mSpriteSheet, srcRect, destRect);
     }
 }

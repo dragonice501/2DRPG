@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-std::unique_ptr<Scene> SceneManager::currentScene = nullptr;
+std::unique_ptr<Scene> SceneManager::mCurrentScene = nullptr;
 SceneNames SceneManager::mSceneToLoad = OVERWORLD;
 int SceneManager::mSceneEntranceIndex = -1;
 bool SceneManager::mIsOverworld = true;
@@ -16,12 +16,12 @@ void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entran
 	mSceneEntranceIndex = entranceIndex;
 }
 
-void SceneManager::LoadScene(SDL_Renderer* renderer)
+void SceneManager::LoadScene()
 {
-	if (currentScene)
+	if (mCurrentScene)
 	{
-		currentScene->Shutdown();
-		currentScene.reset();
+		mCurrentScene->Shutdown();
+		mCurrentScene.reset();
 	}
 
 	switch (mSceneToLoad)
@@ -29,38 +29,38 @@ void SceneManager::LoadScene(SDL_Renderer* renderer)
 		case OVERWORLD:
 		{
 			mIsOverworld = true;
-			currentScene = std::make_unique<SceneOverworld>();
+			mCurrentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
 		case TOWN:
 		{
 			mIsOverworld = false;
-			currentScene = std::make_unique<SceneTown>();
+			mCurrentScene = std::make_unique<SceneTown>();
 			break;
 		}
 	}
 
 	mSceneToLoad = NONE;
 
-	if (currentScene) currentScene->Setup(renderer);
+	if (mCurrentScene) mCurrentScene->Setup(GraphicsManager::Renderer());
 }
 
 void SceneManager::CurrentSceneInput()
 {
-	currentScene->Input();
+	mCurrentScene->Input();
 }
 
 void SceneManager::CurrentSceneUpdate(const float dt)
 {
-	currentScene->Update(dt);
+	mCurrentScene->Update(dt);
 }
 
-void SceneManager::CurrentSceneRender(SDL_Renderer* renderer)
+void SceneManager::CurrentSceneRender()
 {
-	currentScene->Render(renderer, Engine::Camera());
+	mCurrentScene->Render(GraphicsManager::Renderer(), GraphicsManager::Camera());
 }
 
 void SceneManager::CurrentSceneShutdown()
 {
-	currentScene->Shutdown();
+	mCurrentScene->Shutdown();
 }

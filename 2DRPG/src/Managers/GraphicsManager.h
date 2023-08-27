@@ -1,8 +1,12 @@
 #pragma once
 
 #include "../Utils/Vec2.h"
+#include "../Utils/Constants.h"
 
 #include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+
 #include <stdint.h>
 #include <vector>
 #include <string>
@@ -13,10 +17,16 @@ public:
     static bool OpenWindow();
     static void CloseWindow();
 
+    static void PresentRender();
+
+    inline static SDL_Renderer* Renderer() { return mRenderer; }
+
     inline static int WindowWidth() { return mWindowWidth; }
     inline static int WindowHeight() { return mWindowHeight; }
     inline static int ScreenWidth() { return mScreenWidth; }
     inline static int ScreenHeight() { return mScreenHeight; }
+
+    inline static SDL_Rect& Camera() { return mCamera; }
 
     static void AdjustScreenOffset(const Vec2& offset);
     static void ResetScreenOffset();
@@ -42,6 +52,8 @@ public:
     static void DrawChar(const int& x, const int& y, const char& character, const uint32_t& color, const bool& lockToScreen);
     static void DrawString(const int& x, const int& y, const char* string, const uint32_t& color, const bool& lockToScreen);
 
+    static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
+
     static void DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen);
 
 private:
@@ -54,6 +66,7 @@ private:
     static SDL_Texture* mColorBufferTexture;
     static SDL_Window* mWindow;
     static SDL_Renderer* mRenderer;
+    static SDL_Rect mCamera;
 
     static Vec2 mScreenOffset;
     static float mScreenZoom;
