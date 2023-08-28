@@ -16,8 +16,10 @@ enum EMovementState
 enum ECharacterState
 {
 	CS_MOVING,
-	CS_INTERACTING,
-	CS_INTERACT_MENU
+	CS_INTERACT_MENU,
+	CS_TALKING,
+	CS_ASKING,
+	CS_LISTENING
 };
 
 enum ETownTileType

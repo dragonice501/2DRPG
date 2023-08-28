@@ -38,18 +38,18 @@ void SceneTown::Input()
         if (InputManager::UpPressed())
         {
             mInteractMenuIndex--;
-            if (mInteractMenuIndex < 0) mInteractMenuIndex = 1;
+            if (mInteractMenuIndex < 0) mInteractMenuIndex = 2;
         }
         if (InputManager::DownPressed())
         {
             mInteractMenuIndex++;
-            if (mInteractMenuIndex > 1) mInteractMenuIndex = 0;
+            if (mInteractMenuIndex > 2) mInteractMenuIndex = 0;
         }
     }
 
     if (InputManager::EPressed())
     {
-        if (mCharacterState != CS_INTERACT_MENU)
+        if (mCharacterState == CS_MOVING)
         {
             Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
             for (Actor& actor : mActors)
@@ -61,16 +61,30 @@ void SceneTown::Input()
                 }
             }
         }
-        else
+        else if(mCharacterState == CS_INTERACT_MENU)
         {
-            /*if (mInteractedActor && mInteractedActor->CycleThroughDialogue()) {}
-            else
+            if (mInteractMenuIndex == 0)
+            {
+                mCharacterState = CS_TALKING;
+            }
+            else if (mInteractMenuIndex == 1)
+            {
+
+            }
+            else if (mInteractMenuIndex == 2)
             {
                 mCharacterState = CS_MOVING;
                 mInteractedActor = nullptr;
-            }*/
-
-            mCharacterState = CS_MOVING;
+                mInteractMenuIndex = 0;
+            }
+        }
+        else if (mCharacterState == CS_TALKING)
+        {
+            if (mInteractedActor && mInteractedActor->CycleThroughDialogue()) {}
+            else
+            {
+                mCharacterState = CS_INTERACT_MENU;
+            }
         }
     }
 }
@@ -119,7 +133,16 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 
     mSigurd.Render(renderer);
 
-    if (mCharacterState == CS_INTERACTING)
+    if (mCharacterState == CS_INTERACT_MENU)
+    {
+        SDL_Rect rect = GraphicsManager::DrawUIBox(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 2 - 50, INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT);
+        GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mInteractMenuIndex, rect.w, 30);
+
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Talk", 0xFFFFFFFF);
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Ask", 0xFFFFFFFF);
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Leave", 0xFFFFFFFF);
+    }
+    else if (mCharacterState == CS_TALKING)
     {
         GraphicsManager::DrawDialogueBox();
 
@@ -129,13 +152,5 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
             mInteractedActor->GetDialogue().c_str(),
             0xFFFFFFFF,
             true);
-    }
-    else if (mCharacterState == CS_INTERACT_MENU)
-    {
-        SDL_Rect rect = GraphicsManager::DrawUIBox(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 2 - 50, INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT);
-        GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mInteractMenuIndex, rect.w, 30);
-
-        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Talk", 0xFFFFFFFF);
-        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Ask", 0xFFFFFFFF);
     }
 }

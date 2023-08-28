@@ -37,21 +37,7 @@ void SceneOverworld::Input()
 {
     if (InputManager::EPressed())
     {
-        if (mCharacterState != CS_INTERACTING)
-        {
-            Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
-            for (Actor& actor : mActors)
-            {
-                if (position == actor.GetPosition())
-                {
-                    std::cout << "interaction made at " << position.x << ',' << position.y << std::endl;
-                }
-            }
-        }
-        else
-        {
-            mCharacterState = CS_MOVING;
-        }
+        
     }
 }
 

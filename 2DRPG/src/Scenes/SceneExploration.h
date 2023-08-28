@@ -26,7 +26,6 @@ public:
 	std::string mFileName;
 
 protected:
-
 	std::vector<Tile> mTiles;
 	SDL_Texture* mSpriteSheet;
 

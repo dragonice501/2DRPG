@@ -11,7 +11,7 @@ const int TEXT_SIZE = 3;
 const int TEXT_PADDING = 10;
 
 const int INTERACT_MENU_WIDTH = 100;
-const int INTERACT_MENU_HEIGHT = 70;
+const int INTERACT_MENU_HEIGHT = 100;
 const int UI_BOX_BORDER_SIZE = 5;
 
 const int MENU_SELECTOR_PADDING = 5;
