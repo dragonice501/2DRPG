@@ -74,7 +74,6 @@ void Actor::Render(SDL_Renderer* renderer)
     };
 
     GraphicsManager::DrawSpriteRect(mSpriteSheet, mSprite.srcRect, destRect);
-    //SDL_RenderCopy(renderer, mSpriteSheet, &mSprite.srcRect, &destRect);
 }
 
 void Actor::UpdateAnimation()
@@ -88,33 +87,64 @@ void Actor::UpdateAnimation()
     mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 }
 
+bool Actor::CycleThroughDialogue()
+{
+    mCurrentDialogueIndex++;
+    if (mCurrentDialogueIndex >= mDialogueMap[mCurrentDialogueKey].size())
+    {
+        mCurrentDialogueIndex = 0;
+        return false;
+    }
+
+    return true;
+}
+
 void Actor::LoadDialogue(const std::string filePathName)
 {
+    std::string dialogueType;
+    std::string dialogueAnswer;
+    std::string diaglogue;
+    std::vector<std::string> stringVec;
+
     std::string  fileName = "./assets/" + filePathName + ".txt";
     std::ifstream file(fileName);
-    std::string type;
-    while (file >> type)
+    std::string text;
+    while (file >> text)
     {
-        if (type == "Dialogue")
+        if (text == "Dialogue")
         {
-            std::string dialogueType;
-            std::string dialogueAnswerWord;
-            std::string dialogueActual;
-
             file >> dialogueType;
-
-            if (dialogueType == "Greeting")
+            continue;
+        }
+        else if (text == "Answer")
+        {
+            file >> dialogueAnswer;
+            continue;
+        }
+        else if (text == "End")
+        {
+            if (dialogueAnswer != "")
             {
-                file >> dialogueActual;
+                mAnswersMap.emplace(dialogueAnswer, stringVec);
             }
-            else if (dialogueType == "Answer")
+            else
             {
-                file >> dialogueAnswerWord >> dialogueActual;
+                mDialogueMap.emplace(dialogueType, stringVec);
             }
 
-            ConvertDialogueDashes(dialogueActual);
+            stringVec.clear();
+            dialogueType.clear();
+            dialogueAnswer.clear();
+        }
+        else
+        {
+            std::string newDialogue;
+            std::string string;
+            std::getline(file, string);
 
-            mDialogueMap.emplace(dialogueType, dialogueActual);
+            newDialogue = text + string;
+
+            stringVec.push_back(newDialogue);
         }
     }
 }

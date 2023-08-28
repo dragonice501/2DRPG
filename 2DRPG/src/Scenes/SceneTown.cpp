@@ -49,8 +49,12 @@ void SceneTown::Input()
         }
         else
         {
-            mCharacterState = CS_MOVING;
-            mInteractedActor = nullptr;
+            if (mInteractedActor && mInteractedActor->CycleThroughDialogue()) {}
+            else
+            {
+                mCharacterState = CS_MOVING;
+                mInteractedActor = nullptr;
+            }
         }
     }
 }
@@ -101,13 +105,12 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 
     if (mCharacterState == CS_INTERACTING)
     {
-        //GraphicsManager::DrawFillRect(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 4, 300, 50, 0xFFFFFFFF);
         GraphicsManager::DrawDialogueBox();
 
         GraphicsManager::DrawString(
             GraphicsManager::WindowWidth() / 2 - 130,
             GraphicsManager::WindowHeight() / 4 + 20,
-            mInteractedActor->GetDialogue("Greeting").c_str(),
+            mInteractedActor->GetDialogue().c_str(),
             0xFFFFFFFF,
             true);
     }

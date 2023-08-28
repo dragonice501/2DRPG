@@ -28,7 +28,8 @@ public:
 	virtual void UpdateAnimation();
 
 	virtual const Vec2& GetPosition() const { return mPosition; }
-	virtual const std::string& GetDialogue(const std::string& dialogue) const { return mDialogueMap.at(dialogue); }
+	const std::string& GetDialogue() const { return mDialogueMap.at(mCurrentDialogueKey)[mCurrentDialogueIndex]; }
+	bool CycleThroughDialogue();
 
 	void LoadDialogue(const std::string filePathName);
 
@@ -40,5 +41,9 @@ protected:
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation;
 
-	std::map<std::string, std::string> mDialogueMap;
+	std::map<std::string, std::vector<std::string>> mDialogueMap;
+	std::map<std::string, std::vector<std::string>> mAnswersMap;
+
+	std::string mCurrentDialogueKey = "Greeting";
+	int mCurrentDialogueIndex = 0;
 };
