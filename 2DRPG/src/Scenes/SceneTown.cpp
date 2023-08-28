@@ -33,28 +33,44 @@ void SceneTown::Shutdown()
 
 void SceneTown::Input()
 {
+    if (mCharacterState == CS_INTERACT_MENU)
+    {
+        if (InputManager::UpPressed())
+        {
+            mInteractMenuIndex--;
+            if (mInteractMenuIndex < 0) mInteractMenuIndex = 1;
+        }
+        if (InputManager::DownPressed())
+        {
+            mInteractMenuIndex++;
+            if (mInteractMenuIndex > 1) mInteractMenuIndex = 0;
+        }
+    }
+
     if (InputManager::EPressed())
     {
-        if (mCharacterState != CS_INTERACTING)
+        if (mCharacterState != CS_INTERACT_MENU)
         {
             Vec2 position = mSigurd.GetPosition() + mSigurd.mRigidbody.lastVelocity;
             for (Actor& actor : mActors)
             {
                 if (position == actor.GetPosition())
                 {
-                    mCharacterState = CS_INTERACTING;
+                    mCharacterState = CS_INTERACT_MENU;
                     mInteractedActor = &actor;
                 }
             }
         }
         else
         {
-            if (mInteractedActor && mInteractedActor->CycleThroughDialogue()) {}
+            /*if (mInteractedActor && mInteractedActor->CycleThroughDialogue()) {}
             else
             {
                 mCharacterState = CS_MOVING;
                 mInteractedActor = nullptr;
-            }
+            }*/
+
+            mCharacterState = CS_MOVING;
         }
     }
 }
@@ -108,10 +124,18 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
         GraphicsManager::DrawDialogueBox();
 
         GraphicsManager::DrawString(
-            GraphicsManager::WindowWidth() / 2 - 130,
-            GraphicsManager::WindowHeight() / 4 + 20,
+            GraphicsManager::WindowWidth() / 2 - DIALOGUE_BOX_WIDTH / 2 + TEXT_PADDING,
+            GraphicsManager::WindowHeight() * 0.75f + DIALOGUE_BOX_HEIGHT / 2 - DIALOGUE_BOX_HEIGHT / 2 + TEXT_PADDING,
             mInteractedActor->GetDialogue().c_str(),
             0xFFFFFFFF,
             true);
+    }
+    else if (mCharacterState == CS_INTERACT_MENU)
+    {
+        SDL_Rect rect = GraphicsManager::DrawUIBox(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 2 - 50, INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT);
+        GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mInteractMenuIndex, rect.w, 30);
+
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Talk", 0xFFFFFFFF);
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Ask", 0xFFFFFFFF);
     }
 }

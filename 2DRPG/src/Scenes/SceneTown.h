@@ -24,4 +24,7 @@ public:
 	ECharacterState mCharacterState = CS_MOVING;
 	Character mSigurd;
 	Actor* mInteractedActor = nullptr;
+
+	int mInteractMenuIndex = 0;
+	int mInteractMenuOptions = 2;
 };

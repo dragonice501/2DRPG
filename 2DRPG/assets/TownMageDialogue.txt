@@ -1,0 +1,5 @@
+Dialogue Greeting
+Some monsters are weak to magic!
+I can teach you fire magic if you want.
+By the way, the king is looking for warriors.
+End

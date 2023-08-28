@@ -35,8 +35,7 @@ bool GraphicsManager::OpenWindow()
     mWindowHeight = display_mode.h;
     mWindowWidth = 16 * TILE_SIZE * TILE_SPRITE_SCALE;
     mWindowHeight = 9 * TILE_SIZE * TILE_SPRITE_SCALE;
-    /*mScreenWidth = mWindowWidth * SCREEN_SCALE;
-    mScreenHeight = mWindowHeight * SCREEN_SCALE;*/
+
     mWindow = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWindowWidth, mWindowHeight, SDL_WINDOW_BORDERLESS);
     if (!mWindow)
     {
@@ -123,7 +122,7 @@ void GraphicsManager::RenderFrame()
 void GraphicsManager::DrawPixel(const int& x, const int& y, const uint32_t& color)
 {
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    SDL_Rect rect = { x, y, PIXEL_SIZE, PIXEL_SIZE };
+    SDL_Rect rect = { x, y, TEXT_SIZE, TEXT_SIZE };
     SDL_RenderFillRect(mRenderer, &rect);
 
     SDL_RenderDrawRect(mRenderer, &rect);
@@ -275,9 +274,9 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
             if (Font::fontMap[std::tolower(character)][k + j * Font::fontWidth])
             {
                 if (lockToScreen)
-                    DrawPixel(x + k * PIXEL_SIZE, y + j * PIXEL_SIZE, color);
+                    DrawPixel(x + k * TEXT_SIZE, y + j * TEXT_SIZE, color);
                 else
-                    DrawPixel(x + k * PIXEL_SIZE, y+ j * PIXEL_SIZE, color);
+                    DrawPixel(x + k * TEXT_SIZE, y+ j * TEXT_SIZE, color);
             }
         }
     }
@@ -292,7 +291,7 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
     {
         DrawChar(xPos, yPos, string[i], color, lockToScreen);
         i++;
-        xPos += Font::fontWidth * PIXEL_SIZE + Font::fontSpacing * PIXEL_SIZE;
+        xPos += Font::fontWidth * TEXT_SIZE + Font::fontSpacing * TEXT_SIZE;
     }
 }
 
@@ -303,14 +302,60 @@ void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect
 
 void GraphicsManager::DrawDialogueBox()
 {
-    SDL_Rect rect = { mWindowWidth / 2 - 255, mWindowHeight / 4 - 5, 510, 60 };
+    SDL_Rect rect =
+    {
+        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2 - DIALOGUE_BOX_BORDER_SIZE,
+        static_cast<int>(mWindowHeight * 0.75f - DIALOGUE_BOX_BORDER_SIZE),
+        DIALOGUE_BOX_WIDTH + DIALOGUE_BOX_BORDER_SIZE * 2,
+        DIALOGUE_BOX_HEIGHT + DIALOGUE_BOX_BORDER_SIZE * 2
+    };
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_RenderFillRect(mRenderer, &rect);
 
-    rect = { mWindowWidth / 2 - 250, mWindowHeight / 4, 500, 50 };
+    rect =
+    {
+        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2,
+        static_cast<int>(mWindowHeight * 0.75f),
+        DIALOGUE_BOX_WIDTH,
+        DIALOGUE_BOX_HEIGHT
+    };
     SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
     SDL_RenderFillRect(mRenderer, &rect);
 
+    SDL_RenderDrawRect(mRenderer, &rect);
+}
+
+SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, const int height)
+{
+    SDL_Rect rect =
+    {
+        x - DIALOGUE_BOX_BORDER_SIZE,
+        y - DIALOGUE_BOX_BORDER_SIZE,
+        width + UI_BOX_BORDER_SIZE * 2,
+        height + UI_BOX_BORDER_SIZE * 2
+    };
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    rect = { x, y, width, height };
+    SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    SDL_RenderDrawRect(mRenderer, &rect);
+
+    return rect;
+}
+
+void GraphicsManager::DrawUISelector(const int x, const int y, const int width, const int height)
+{
+    SDL_Rect rect =
+    {
+        x,
+        y,
+        width,
+        height
+    };
+    SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
     SDL_RenderDrawRect(mRenderer, &rect);
 }
 

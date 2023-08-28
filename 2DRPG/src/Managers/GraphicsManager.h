@@ -54,6 +54,8 @@ public:
 
     static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
     static void DrawDialogueBox();
+    static SDL_Rect DrawUIBox(const int x, const int y, const int width, const int height);
+    static void DrawUISelector(const int x, const int y, const int width, const int height);
 
     static void DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen = false);
 

@@ -16,7 +16,8 @@ enum EMovementState
 enum ECharacterState
 {
 	CS_MOVING,
-	CS_INTERACTING
+	CS_INTERACTING,
+	CS_INTERACT_MENU
 };
 
 enum ETownTileType

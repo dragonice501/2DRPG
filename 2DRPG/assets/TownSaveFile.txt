@@ -3,6 +3,7 @@ SceneEntrance 0 0 3 12 1 0
 SceneEntrance 0 1 24 26 0 -1
 Npc Dancer 16 15 TownDancerDialogue
 Npc Knight 19 13 TownKnightDialogue
+Npc Mage 14 17 TownMageDialogue
 Tile 0
 Tile 0
 Tile 0
