@@ -7,8 +7,11 @@ const float TILE_SPRITE_SCALE = 4.0f;
 const int DIALOGUE_BOX_WIDTH = 500;
 const int DIALOGUE_BOX_HEIGHT = 100;
 const int DIALOGUE_BOX_BORDER_SIZE = 5;
+const int DIALOGUE_BOX_MAX_CHAR_WIDTH = 41;
+
 const int TEXT_SIZE = 3;
 const int TEXT_PADDING = 10;
+const int TEXT_VERTICAL_PADDING = 5;
 
 const int INTERACT_MENU_WIDTH = 100;
 const int INTERACT_MENU_HEIGHT = 100;

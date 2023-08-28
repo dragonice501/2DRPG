@@ -33,7 +33,7 @@ public:
 
 	void LoadDialogue(const std::string filePathName);
 
-protected:
+public:
 	Vec2 mPosition;
 	Sprite mSprite;
 	SDL_Texture* mSpriteSheet;
@@ -43,6 +43,8 @@ protected:
 
 	std::map<std::string, std::vector<std::string>> mDialogueMap;
 	std::map<std::string, std::vector<std::string>> mAnswersMap;
+
+	std::map<std::string, std::vector<std::string>> mGreetingDialogue;
 
 	std::string mCurrentDialogueKey = "Greeting";
 	int mCurrentDialogueIndex = 0;

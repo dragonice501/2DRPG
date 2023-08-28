@@ -144,13 +144,14 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
     }
     else if (mCharacterState == CS_TALKING)
     {
-        GraphicsManager::DrawDialogueBox();
+        SDL_Rect rect = GraphicsManager::DrawDialogueBox();
+        GraphicsManager::DrawDialogue(rect, mInteractedActor->mGreetingDialogue.at("Greeting"));
 
-        GraphicsManager::DrawString(
+        /*GraphicsManager::DrawString(
             GraphicsManager::WindowWidth() / 2 - DIALOGUE_BOX_WIDTH / 2 + TEXT_PADDING,
             GraphicsManager::WindowHeight() * 0.75f + DIALOGUE_BOX_HEIGHT / 2 - DIALOGUE_BOX_HEIGHT / 2 + TEXT_PADDING,
             mInteractedActor->GetDialogue().c_str(),
             0xFFFFFFFF,
-            true);
+            true);*/
     }
 }

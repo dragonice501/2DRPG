@@ -1,8 +1,4 @@
-Dialogue Greeting
-I'm Arylon the dancer!
-I've been dancing since I was a little girl.
-End
-
-Answer Monster
-There's a monster that's been lurking around the town.
+Start Greeting
+Beware the monster that lurks outside of town.
+It makes a horrible sound that sends shivers down your spine.
 End

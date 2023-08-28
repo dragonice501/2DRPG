@@ -300,7 +300,7 @@ void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect
     SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);
 }
 
-void GraphicsManager::DrawDialogueBox()
+SDL_Rect GraphicsManager::DrawDialogueBox()
 {
     SDL_Rect rect =
     {
@@ -323,6 +323,28 @@ void GraphicsManager::DrawDialogueBox()
     SDL_RenderFillRect(mRenderer, &rect);
 
     SDL_RenderDrawRect(mRenderer, &rect);
+
+    return rect;
+}
+
+void GraphicsManager::DrawDialogue(const SDL_Rect& rect, const std::vector<std::string>& dialogue)
+{
+    int columnIndex = 0;
+    int xOffset = 0;
+    int yOffset = 0;
+    for (const std::string& string : dialogue)
+    {
+        DrawString(rect.x + TEXT_PADDING + xOffset, rect.y + TEXT_PADDING + yOffset, string.c_str(), 0xFFFFFFFF);
+
+        columnIndex += string.size() + 1;
+        xOffset += (string.size() + 1) * Font::fontWidth * TEXT_SIZE + string.size() * Font::fontSpacing * TEXT_SIZE;
+        if (columnIndex >= DIALOGUE_BOX_MAX_CHAR_WIDTH)
+        {
+            columnIndex = 0;
+            xOffset = 0;
+            yOffset += Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE;
+        }
+    }
 }
 
 SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, const int height)

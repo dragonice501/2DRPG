@@ -53,7 +53,8 @@ public:
     static void DrawString(const int& x, const int& y, const char* string, const uint32_t& color, const bool& lockToScreen = false);
 
     static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
-    static void DrawDialogueBox();
+    static SDL_Rect DrawDialogueBox();
+    static void DrawDialogue(const SDL_Rect& rect, const std::vector<std::string>& dialogue);
     static SDL_Rect DrawUIBox(const int x, const int y, const int width, const int height);
     static void DrawUISelector(const int x, const int y, const int width, const int height);
 

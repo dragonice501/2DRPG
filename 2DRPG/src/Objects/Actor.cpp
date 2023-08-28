@@ -106,12 +106,14 @@ void Actor::LoadDialogue(const std::string filePathName)
     std::string diaglogue;
     std::vector<std::string> stringVec;
 
+    std::vector<std::string> dialogueVec;
+
     std::string  fileName = "./assets/" + filePathName + ".txt";
     std::ifstream file(fileName);
     std::string text;
     while (file >> text)
     {
-        if (text == "Dialogue")
+        if (text == "Start")
         {
             file >> dialogueType;
             continue;
@@ -130,9 +132,12 @@ void Actor::LoadDialogue(const std::string filePathName)
             else
             {
                 mDialogueMap.emplace(dialogueType, stringVec);
+                mGreetingDialogue.emplace(dialogueType, dialogueVec);
             }
 
             stringVec.clear();
+            dialogueVec.clear();
+
             dialogueType.clear();
             dialogueAnswer.clear();
         }
@@ -143,6 +148,24 @@ void Actor::LoadDialogue(const std::string filePathName)
             std::getline(file, string);
 
             newDialogue = text + string;
+
+            for (int i = 0, j = i; i <= newDialogue.size(); i++)
+            {
+                if (newDialogue[i] == ' ')
+                {
+                    std::string string = newDialogue.substr(j, (i) - j);
+                    j = i + 1;
+
+                    dialogueVec.push_back(string);
+                }
+
+                if (i == newDialogue.size())
+                {
+                    std::string string = newDialogue.substr(j, i - j);
+
+                    dialogueVec.push_back(string);
+                }
+            }
 
             stringVec.push_back(newDialogue);
         }

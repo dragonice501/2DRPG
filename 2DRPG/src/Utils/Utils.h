@@ -22,6 +22,12 @@ enum ECharacterState
 	CS_LISTENING
 };
 
+enum EDialogueState
+{
+	DS_PRINTING,
+	DS_FINISHED
+};
+
 enum ETownTileType
 {
 	WALKABLE,
