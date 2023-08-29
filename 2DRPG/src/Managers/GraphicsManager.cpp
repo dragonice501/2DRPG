@@ -271,7 +271,7 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
         {
             if (character == ' ') continue;
 
-            if (Font::fontMap[std::tolower(character)][k + j * Font::fontWidth])
+            if (Font::fontMap[std::toupper(character)][k + j * Font::fontWidth])
             {
                 if (lockToScreen)
                     DrawPixel(x + k * TEXT_SIZE, y + j * TEXT_SIZE, color);

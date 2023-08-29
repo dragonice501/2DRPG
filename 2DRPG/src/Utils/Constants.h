@@ -9,7 +9,7 @@ const int DIALOGUE_BOX_HEIGHT = 100;
 const int DIALOGUE_BOX_BORDER_SIZE = 5;
 const int DIALOGUE_BOX_MAX_CHAR_WIDTH = 41;
 
-const int TEXT_SIZE = 3;
+const int TEXT_SIZE = 2;
 const int TEXT_PADDING = 10;
 const int TEXT_VERTICAL_PADDING = 5;
 
