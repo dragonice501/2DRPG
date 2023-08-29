@@ -105,8 +105,9 @@ void Actor::LoadDialogue(const std::string filePathName)
     std::string dialogueAnswer;
     std::string diaglogue;
     std::vector<std::string> stringVec;
+    std::vector<std::vector<std::string>> dialogueVec;
 
-    std::vector<std::string> dialogueVec;
+    std::string newDialogue;
 
     std::string  fileName = "./assets/" + filePathName + ".txt";
     std::ifstream file(fileName);
@@ -117,6 +118,13 @@ void Actor::LoadDialogue(const std::string filePathName)
         {
             file >> dialogueType;
             continue;
+        }
+        else if (text == "Break")
+        {
+            dialogueVec.push_back(stringVec);
+
+            stringVec.clear();
+            newDialogue.clear();
         }
         else if (text == "Answer")
         {
@@ -131,41 +139,20 @@ void Actor::LoadDialogue(const std::string filePathName)
             }
             else
             {
-                mDialogueMap.emplace(dialogueType, stringVec);
-                mGreetingDialogue.emplace(dialogueType, dialogueVec);
+                mDialogueMap.emplace(dialogueType, dialogueVec);
             }
 
             stringVec.clear();
-            dialogueVec.clear();
 
             dialogueType.clear();
             dialogueAnswer.clear();
         }
         else
         {
-            std::string newDialogue;
             std::string string;
             std::getline(file, string);
 
             newDialogue = text + string;
-
-            for (int i = 0, j = i; i <= newDialogue.size(); i++)
-            {
-                if (newDialogue[i] == ' ')
-                {
-                    std::string string = newDialogue.substr(j, (i) - j);
-                    j = i + 1;
-
-                    dialogueVec.push_back(string);
-                }
-
-                if (i == newDialogue.size())
-                {
-                    std::string string = newDialogue.substr(j, i - j);
-
-                    dialogueVec.push_back(string);
-                }
-            }
 
             stringVec.push_back(newDialogue);
         }

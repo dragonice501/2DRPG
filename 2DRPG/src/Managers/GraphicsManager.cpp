@@ -329,21 +329,16 @@ SDL_Rect GraphicsManager::DrawDialogueBox()
 
 void GraphicsManager::DrawDialogue(const SDL_Rect& rect, const std::vector<std::string>& dialogue)
 {
-    int columnIndex = 0;
     int xOffset = 0;
     int yOffset = 0;
-    for (const std::string& string : dialogue)
-    {
-        DrawString(rect.x + TEXT_PADDING + xOffset, rect.y + TEXT_PADDING + yOffset, string.c_str(), 0xFFFFFFFF);
 
-        columnIndex += string.size() + 1;
-        xOffset += (string.size() + 1) * Font::fontWidth * TEXT_SIZE + string.size() * Font::fontSpacing * TEXT_SIZE;
-        if (columnIndex >= DIALOGUE_BOX_MAX_CHAR_WIDTH)
-        {
-            columnIndex = 0;
-            xOffset = 0;
-            yOffset += Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE;
-        }
+    for (int i = 0; i < dialogue.size(); i++)
+    {
+        DrawString(
+            rect.x + TEXT_PADDING,
+            rect.y + TEXT_PADDING + i * Font::fontHeight * TEXT_SIZE + i * TEXT_VERTICAL_PADDING * TEXT_SIZE,
+            dialogue[i].c_str(),
+            0xFFFFFFFF);
     }
 }
 

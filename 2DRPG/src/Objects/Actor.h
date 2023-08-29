@@ -28,7 +28,7 @@ public:
 	virtual void UpdateAnimation();
 
 	virtual const Vec2& GetPosition() const { return mPosition; }
-	const std::string& GetDialogue() const { return mDialogueMap.at(mCurrentDialogueKey)[mCurrentDialogueIndex]; }
+	const std::vector<std::string>& GetDialogue() const { return mDialogueMap.at(mCurrentDialogueKey)[mCurrentDialogueIndex]; }
 	bool CycleThroughDialogue();
 
 	void LoadDialogue(const std::string filePathName);
@@ -41,10 +41,8 @@ public:
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation;
 
-	std::map<std::string, std::vector<std::string>> mDialogueMap;
+	std::map<std::string, std::vector<std::vector<std::string>>> mDialogueMap;
 	std::map<std::string, std::vector<std::string>> mAnswersMap;
-
-	std::map<std::string, std::vector<std::string>> mGreetingDialogue;
 
 	std::string mCurrentDialogueKey = "Greeting";
 	int mCurrentDialogueIndex = 0;

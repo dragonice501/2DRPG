@@ -1,4 +1,10 @@
 Start Greeting
-Beware the monster that lurks outside of town.
-It makes a horrible sound that sends shivers down your spine.
+Beware the monster that lurks outside of
+the town. It makes a horrible sound that
+sends shivers down your spine.
+Break
+If you need to prepare for battle then
+you should see the blacksmith. He makes 
+the best weapons in the region!
+Break
 End

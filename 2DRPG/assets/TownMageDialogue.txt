@@ -1,5 +1,13 @@
-Dialogue Greeting
-Some monsters are weak to magic!
-I can teach you fire magic if you want.
-By the way, the king is looking for warriors.
+Start Greeting
+Even though most monsters are dangerous,
+most are vunerable to magic.
+Break
+Being a magician I don't have much
+trouble dealing with them. I could teach
+you some magic if you want.
+Break
+By the way... I here the king is looking
+for warriors to join the army and
+protect the kingdom.
+Break
 End

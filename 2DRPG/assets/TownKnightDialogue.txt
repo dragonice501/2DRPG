@@ -1,3 +1,8 @@
-Dialogue Greeting
-Don't cuase any trouble.
+Start Greeting
+Don't cuase any trouble while you're
+here.
+Break
+But be on the look out for any monsters.
+They like to come out at night.
+Break
 End

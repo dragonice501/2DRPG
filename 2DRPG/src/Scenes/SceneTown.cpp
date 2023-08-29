@@ -145,7 +145,7 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
     else if (mCharacterState == CS_TALKING)
     {
         SDL_Rect rect = GraphicsManager::DrawDialogueBox();
-        GraphicsManager::DrawDialogue(rect, mInteractedActor->mGreetingDialogue.at("Greeting"));
+        GraphicsManager::DrawDialogue(rect, mInteractedActor->GetDialogue());
 
         /*GraphicsManager::DrawString(
             GraphicsManager::WindowWidth() / 2 - DIALOGUE_BOX_WIDTH / 2 + TEXT_PADDING,
