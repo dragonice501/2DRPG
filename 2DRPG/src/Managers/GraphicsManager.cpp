@@ -309,6 +309,9 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
 void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect)
 {
     SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);
+
+    //SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    //SDL_RenderFillRect(mRenderer, &destRect);
 }
 
 SDL_Rect GraphicsManager::DrawDialogueBox()

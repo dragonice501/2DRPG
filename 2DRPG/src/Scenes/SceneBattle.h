@@ -2,11 +2,13 @@
 
 #include "Scene.h"
 #include "../Utils/Utils.h"
+#include "../Objects/Enemy.h"
 
 #include "../Managers/SceneManager.h"
 
 #include <SDL.h>
 #include <string>
+#include <vector>
 
 class SceneBattle : public Scene
 {
@@ -24,6 +26,9 @@ public:
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;
 	std::string mBackgroundImageFilePath;
+
+	SDL_Texture* mEnemiesTexture = nullptr;
+	std::vector<Enemy> mEnemies;
 
 	int mBattleMenuIndex = 0;
 	int mBattleMenuIndexOptions = 4;
