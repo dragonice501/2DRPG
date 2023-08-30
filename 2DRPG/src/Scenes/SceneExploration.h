@@ -4,6 +4,8 @@
 #include "../Objects/Actor.h"
 #include "../Objects/Character.h"
 #include "../Objects/Components.h"
+#include "../Objects/Enemy.h"
+#include "../Objects/EnemyEncounter.h"
 
 #include "../Utils/Utils.h"
 
@@ -32,9 +34,10 @@ protected:
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<Actor> mActors;
 	std::vector<Character> mCharacters;
+	std::vector<EnemyEncounter> mEnemyEncounters;
 
 	Vec2 spawnPosition;
 
-	int mStepsUntilEncounterMax = 15;
+	int mStepsUntilEncounterMax = 5;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

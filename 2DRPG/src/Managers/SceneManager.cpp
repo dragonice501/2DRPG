@@ -5,20 +5,18 @@ SceneNames SceneManager::mSceneToLoad = OVERWORLD;
 int SceneManager::mSceneEntranceIndex = -1;
 bool SceneManager::mIsOverworld = true;
 ETerrainType SceneManager::mBattleBakgroundType = UNDEFINED;
+std::vector<EnemyEncounter> SceneManager::mEnemyEncounters;
 bool SceneManager::mReturnToOverworld = false;
 Vec2 SceneManager::mPreviousOverworldPosition = Vec2(0.0f);
 Vec2 SceneManager::mPreviousDirection = Vec2(0.0f);
 
-bool SceneManager::SceneReadyToLoad()
-{
-	return mSceneToLoad != NONE;
-}
-
-void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, ETerrainType battleBackgroundType, bool returnToOverworld)
+void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, bool returnToOverworld,
+	ETerrainType battleBackgroundType, const std::vector<EnemyEncounter>& enemyEncounters)
 {
 	mSceneToLoad = sceneToLoad;
 	mSceneEntranceIndex = entranceIndex;
 	mBattleBakgroundType = battleBackgroundType;
+	mEnemyEncounters = enemyEncounters;
 	mReturnToOverworld = returnToOverworld;
 }
 
@@ -35,7 +33,7 @@ void SceneManager::LoadScene()
 		case BATTLE:
 		{
 			mIsOverworld = false;
-			mCurrentScene = std::make_unique<SceneBattle>(mBattleBakgroundType);
+			mCurrentScene = std::make_unique<SceneBattle>(mBattleBakgroundType, mEnemyEncounters);
 			break;
 		}
 		case OVERWORLD:

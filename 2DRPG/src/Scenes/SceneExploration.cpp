@@ -82,6 +82,29 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             i++;
         }
     }
+
+    EnemyEncounter newEncounter;
+    fileName = "./assets/" + mFileName + "Encounters.txt";
+    std::ifstream encountersFile(fileName);
+    while (encountersFile >> type)
+    {
+        if (type == "End")
+        {
+            mEnemyEncounters.push_back(newEncounter);
+
+            newEncounter.enemyNames.clear();
+            newEncounter.enemyPositions.clear();
+        }
+        else
+        {
+            int enemyPosition;
+
+            encountersFile >> enemyPosition;
+
+            newEncounter.enemyNames.push_back(type);
+            newEncounter.enemyPositions.push_back(enemyPosition);
+        }
+    }
 }
 
 void SceneExploration::Shutdown()

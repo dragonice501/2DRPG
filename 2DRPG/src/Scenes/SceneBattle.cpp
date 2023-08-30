@@ -1,6 +1,6 @@
 #include "SceneBattle.h"
 
-SceneBattle::SceneBattle(ETerrainType terrain)
+SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter> enemyEncounters)
 {
 	switch (terrain)
 	{
@@ -19,6 +19,11 @@ SceneBattle::SceneBattle(ETerrainType terrain)
 			mBackgroundImageFilePath = "./assets/BattlePlain.png";
 			break;
 		}
+		case RIVER:
+		{
+			mBackgroundImageFilePath = "./assets/BattleRiver.png";
+			break;
+		}
 		case ROAD:
 		{
 			mBackgroundImageFilePath = "./assets/BattlePlain.png";
@@ -30,6 +35,8 @@ SceneBattle::SceneBattle(ETerrainType terrain)
 			break;
 		}
 	}
+
+	mEnemyEncounters = enemyEncounters;
 }
 
 void SceneBattle::Setup(SDL_Renderer* renderer)
@@ -60,8 +67,27 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 			file >> name >> xOffset >> yOffset >> width >> height;
 
 			Enemy newEnemy = { xOffset, yOffset, width, height };
-			mEnemies.push_back(newEnemy);
+			mEnemyMap.emplace(name, newEnemy);
 		}
+	}
+
+	EnemyEncounter encounter;
+	srand(time(NULL));
+	int randomIndex = rand() % mEnemyEncounters.size();
+	for (int i = 0; i < mEnemyEncounters.size(); i++)
+	{
+		if (i == randomIndex)
+		{
+			encounter = mEnemyEncounters[i];
+			break;
+		}
+	}
+
+	for (int i = 0; i < encounter.enemyNames.size(); i++)
+	{
+		Enemy newEnemy = mEnemyMap.at(encounter.enemyNames[i]);
+		newEnemy.battleSpawnPosition = encounter.enemyPositions[i];
+		mEnemies.push_back(newEnemy);
 	}
 }
 
@@ -100,7 +126,7 @@ void SceneBattle::Input()
 		}
 		else if (mBattleMenuIndex == 3)
 		{
-			SceneManager::SetSceneToLoad(OVERWORLD, -1, UNDEFINED, true);
+			SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
 		}
 	}
 }
@@ -117,11 +143,13 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	{
 		SDL_Rect destRect =
 		{
-			i * 32 * TILE_SPRITE_SCALE,
-			i * 32 * TILE_SPRITE_SCALE,
+			mSmallEnemyPositions[mEnemies[i].battleSpawnPosition].x,
+			mSmallEnemyPositions[mEnemies[i].battleSpawnPosition].y,
 			mEnemies[i].rect.w * TILE_SPRITE_SCALE,
 			mEnemies[i].rect.h * TILE_SPRITE_SCALE
 		};
+
+		//std::cout << destRect.x << ',' << destRect.y << std::endl;
 
 		GraphicsManager::DrawSpriteRect(mEnemiesTexture, mEnemies[i].rect, destRect);
 	}

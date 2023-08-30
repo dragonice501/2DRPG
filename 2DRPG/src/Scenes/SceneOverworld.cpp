@@ -75,7 +75,7 @@ void SceneOverworld::Update(const float dt)
 
                     SceneManager::SetPreviousOverworldPosition(mSigurd.GetPosition());
                     SceneManager::SetPreviousDirection(mSigurd.mRigidbody.lastVelocity);
-                    SceneManager::SetSceneToLoad(BATTLE, -1, currentTerrain);
+                    SceneManager::SetSceneToLoad(BATTLE, -1, false, currentTerrain, mEnemyEncounters);
                 }
             }
         }

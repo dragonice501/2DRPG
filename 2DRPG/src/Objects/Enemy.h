@@ -8,6 +8,6 @@ struct Enemy
 	{
 		rect = { xOffset, yOffset, width, height };
 	}
-	Vec2 position;
+	size_t battleSpawnPosition;
 	SDL_Rect rect;
 };

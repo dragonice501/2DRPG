@@ -5,6 +5,8 @@
 #include "../Scenes/SceneOverworld.h"
 #include "../Scenes/SceneTown.h"
 
+#include "../Objects/EnemyEncounter.h"
+
 #include "../Managers/GraphicsManager.h"
 
 #include "../Utils/Utils.h"
@@ -25,8 +27,10 @@ public:
 	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPosition = position; }
 	inline static void SetPreviousDirection(const Vec2& direction) { mPreviousDirection = direction; }
 
-	static bool SceneReadyToLoad();
-	static void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, ETerrainType battleBackgroundType = UNDEFINED, bool returnToOverworld = false);
+	static inline const bool SceneReadyToLoad() { return mSceneToLoad != NONE; }
+	static void SetSceneToLoad(
+		const SceneNames sceneToLoad, const int entranceIndex, bool returnToOverworld = false,
+		ETerrainType battleBackgroundType = UNDEFINED, const std::vector<EnemyEncounter>& enemyEncounters = std::vector<EnemyEncounter>());
 
 	static void LoadScene();
 
@@ -44,8 +48,10 @@ private:
 
 	static SceneNames mSceneToLoad;
 	static int mSceneEntranceIndex;
+
 	static bool mIsOverworld;
 	static ETerrainType mBattleBakgroundType;
+	static std::vector<EnemyEncounter> mEnemyEncounters;
 	static bool mReturnToOverworld;
 	static Vec2 mPreviousOverworldPosition;
 	static Vec2 mPreviousDirection;
