@@ -146,12 +146,5 @@ void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
     {
         SDL_Rect rect = GraphicsManager::DrawDialogueBox();
         GraphicsManager::DrawDialogue(rect, mInteractedActor->GetDialogue());
-
-        /*GraphicsManager::DrawString(
-            GraphicsManager::WindowWidth() / 2 - DIALOGUE_BOX_WIDTH / 2 + TEXT_PADDING,
-            GraphicsManager::WindowHeight() * 0.75f + DIALOGUE_BOX_HEIGHT / 2 - DIALOGUE_BOX_HEIGHT / 2 + TEXT_PADDING,
-            mInteractedActor->GetDialogue().c_str(),
-            0xFFFFFFFF,
-            true);*/
     }
 }

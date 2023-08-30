@@ -18,3 +18,6 @@ const int INTERACT_MENU_HEIGHT = 100;
 const int UI_BOX_BORDER_SIZE = 5;
 
 const int MENU_SELECTOR_PADDING = 5;
+
+const int BATTLE_MENU_WIDTH = 100;
+const int BATTLE_MENU_HEIGHT = 130;

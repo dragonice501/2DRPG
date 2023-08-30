@@ -17,6 +17,9 @@ SDL_Rect GraphicsManager::mCamera;
 Vec2 GraphicsManager::mScreenOffset = { 0.0f, 0.0f };
 float GraphicsManager::mScreenZoom = 1.0f;
 
+bool GraphicsManager::mHighlighted = false;
+int GraphicsManager::mHighlightedOffset = 0;
+
 bool GraphicsManager::OpenWindow()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -119,9 +122,10 @@ void GraphicsManager::RenderFrame()
     SDL_RenderPresent(mRenderer);
 }
 
-void GraphicsManager::DrawPixel(const int& x, const int& y, const uint32_t& color)
+void GraphicsManager::DrawPixel(const int& x, const int& y, const bool highlighted)
 {
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    if (highlighted) SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
+    else SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_Rect rect = { x, y, TEXT_SIZE, TEXT_SIZE };
     SDL_RenderFillRect(mRenderer, &rect);
 
@@ -263,7 +267,7 @@ void GraphicsManager::DrawTexture(const int& x, const int& y, const int& width, 
     SDL_RenderCopyEx(mRenderer, texture, nullptr, &dstRect, rotationDeg, nullptr, SDL_FLIP_NONE);
 }
 
-void GraphicsManager::DrawChar(const int& x, const int& y, const char& character, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawChar(const int& x, const int& y, const char& character, const bool& lockToScreen)
 {
     for (int j = 0; j < Font::fontHeight; j++)
     {
@@ -273,10 +277,14 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
 
             if (Font::fontMap[std::toupper(character)][k + j * Font::fontWidth])
             {
-                if (lockToScreen)
-                    DrawPixel(x + k * TEXT_SIZE, y + j * TEXT_SIZE, color);
-                else
-                    DrawPixel(x + k * TEXT_SIZE, y+ j * TEXT_SIZE, color);
+                if (character == '/')
+                {
+                    mHighlighted = !mHighlighted;
+                    mHighlightedOffset++;
+                    continue;
+                }
+                
+                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y+ j * TEXT_SIZE, mHighlighted);
             }
         }
     }
@@ -289,10 +297,13 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
     int yPos = y;
     while (string[i] != '\0')
     {
-        DrawChar(xPos, yPos, string[i], color, lockToScreen);
+        DrawChar(xPos, yPos, string[i], false);
         i++;
         xPos += Font::fontWidth * TEXT_SIZE + Font::fontSpacing * TEXT_SIZE;
     }
+
+    mHighlighted = false;
+    mHighlightedOffset = 0;
 }
 
 void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect)
@@ -374,6 +385,11 @@ void GraphicsManager::DrawUISelector(const int x, const int y, const int width, 
     };
     SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
     SDL_RenderDrawRect(mRenderer, &rect);
+}
+
+void GraphicsManager::DrawBattleBackground(SDL_Texture* texture)
+{
+    SDL_RenderCopy(mRenderer, texture, NULL, NULL);
 }
 
 void GraphicsManager::DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen)

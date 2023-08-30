@@ -108,6 +108,7 @@ void Actor::LoadDialogue(const std::string filePathName)
     std::vector<std::vector<std::string>> dialogueVec;
 
     std::string newDialogue;
+    std::string keyWord;
 
     std::string  fileName = "./assets/" + filePathName + ".txt";
     std::ifstream file(fileName);
@@ -117,6 +118,14 @@ void Actor::LoadDialogue(const std::string filePathName)
         if (text == "Start")
         {
             file >> dialogueType;
+            if (keyWord != "")
+            {
+
+            }
+            if (dialogueType == "Information")
+            {
+                file >> keyWord;
+            }
             continue;
         }
         else if (text == "Break")
@@ -133,6 +142,8 @@ void Actor::LoadDialogue(const std::string filePathName)
         }
         else if (text == "End")
         {
+            dialogueVec.push_back(stringVec);
+
             if (dialogueAnswer != "")
             {
                 mAnswersMap.emplace(dialogueAnswer, stringVec);

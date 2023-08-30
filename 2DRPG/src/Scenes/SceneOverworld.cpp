@@ -20,7 +20,12 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         }
     }
 
-    if (SceneManager::GetSceneEntranceIndex() == -1)
+    if (SceneManager::ReturnToOverworld())
+    {
+        spawnPosition = SceneManager::GetPreviousOverworldPosition();
+        mSigurd.mRigidbody.lastVelocity = SceneManager::GetPreviousDirection();
+    }
+    else if (SceneManager::GetSceneEntranceIndex() == -1)
     {
         spawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
     }
@@ -57,6 +62,20 @@ void SceneOverworld::Update(const float dt)
                 if (mSigurd.GetPosition() == entrance.position)
                 {
                     SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
+                }
+            }
+
+            if (SceneManager::GetIsOverworld())
+            {
+                mStepsUntilEncounter--;
+                if (mStepsUntilEncounter <= 0)
+                {
+                    int index = mSigurd.GetPosition().x / TILE_SIZE + (mSigurd.GetPosition().y * mMapWidth) / TILE_SIZE;
+                    ETerrainType currentTerrain = mTiles[index].terrainType;
+
+                    SceneManager::SetPreviousOverworldPosition(mSigurd.GetPosition());
+                    SceneManager::SetPreviousDirection(mSigurd.mRigidbody.lastVelocity);
+                    SceneManager::SetSceneToLoad(BATTLE, -1, currentTerrain);
                 }
             }
         }

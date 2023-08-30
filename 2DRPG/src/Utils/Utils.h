@@ -2,6 +2,7 @@
 
 enum SceneNames
 {
+	BATTLE,
 	OVERWORLD,
 	TOWN,
 	NONE

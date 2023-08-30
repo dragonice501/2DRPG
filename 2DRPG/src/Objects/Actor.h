@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Components.h"
+
+#include "../Dialogue/Dialogue.h"
 #include "../Utils/Vec2.h"
 #include "../Utils/Constants.h"
 
@@ -42,6 +44,7 @@ public:
 	std::string mCurrentAnimation;
 
 	std::map<std::string, std::vector<std::vector<std::string>>> mDialogueMap;
+	std::pair<std::string, std::vector<std::vector<std::string>>> mInformationMap;
 	std::map<std::string, std::vector<std::string>> mAnswersMap;
 
 	std::string mCurrentDialogueKey = "Greeting";

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Scenes/Scene.h"
+#include "../Scenes/SceneBattle.h"
 #include "../Scenes/SceneOverworld.h"
 #include "../Scenes/SceneTown.h"
 
@@ -17,9 +18,15 @@ public:
 	static bool GetIsOverworld() { return mIsOverworld; }
 
 	inline static bool CurrentScene() { return mCurrentScene != nullptr; }
+	inline static bool ReturnToOverworld() { return mReturnToOverworld; }
+	inline static Vec2 GetPreviousOverworldPosition() { return mPreviousOverworldPosition; }
+	inline static Vec2 GetPreviousDirection() { return mPreviousDirection; }
+
+	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPosition = position; }
+	inline static void SetPreviousDirection(const Vec2& direction) { mPreviousDirection = direction; }
 
 	static bool SceneReadyToLoad();
-	static void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex);
+	static void SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, ETerrainType battleBackgroundType = UNDEFINED, bool returnToOverworld = false);
 
 	static void LoadScene();
 
@@ -38,4 +45,8 @@ private:
 	static SceneNames mSceneToLoad;
 	static int mSceneEntranceIndex;
 	static bool mIsOverworld;
+	static ETerrainType mBattleBakgroundType;
+	static bool mReturnToOverworld;
+	static Vec2 mPreviousOverworldPosition;
+	static Vec2 mPreviousDirection;
 };

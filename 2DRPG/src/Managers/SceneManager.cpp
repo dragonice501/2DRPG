@@ -4,16 +4,22 @@ std::unique_ptr<Scene> SceneManager::mCurrentScene = nullptr;
 SceneNames SceneManager::mSceneToLoad = OVERWORLD;
 int SceneManager::mSceneEntranceIndex = -1;
 bool SceneManager::mIsOverworld = true;
+ETerrainType SceneManager::mBattleBakgroundType = UNDEFINED;
+bool SceneManager::mReturnToOverworld = false;
+Vec2 SceneManager::mPreviousOverworldPosition = Vec2(0.0f);
+Vec2 SceneManager::mPreviousDirection = Vec2(0.0f);
 
 bool SceneManager::SceneReadyToLoad()
 {
 	return mSceneToLoad != NONE;
 }
 
-void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex)
+void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, ETerrainType battleBackgroundType, bool returnToOverworld)
 {
 	mSceneToLoad = sceneToLoad;
 	mSceneEntranceIndex = entranceIndex;
+	mBattleBakgroundType = battleBackgroundType;
+	mReturnToOverworld = returnToOverworld;
 }
 
 void SceneManager::LoadScene()
@@ -26,6 +32,12 @@ void SceneManager::LoadScene()
 
 	switch (mSceneToLoad)
 	{
+		case BATTLE:
+		{
+			mIsOverworld = false;
+			mCurrentScene = std::make_unique<SceneBattle>(mBattleBakgroundType);
+			break;
+		}
 		case OVERWORLD:
 		{
 			mIsOverworld = true;

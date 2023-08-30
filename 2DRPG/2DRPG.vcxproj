@@ -137,6 +137,7 @@
     <ClCompile Include="src\Managers\GraphicsManager.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Objects\Actor.cpp" />
+    <ClCompile Include="src\Scenes\SceneBattle.cpp" />
     <ClCompile Include="src\Scenes\SceneExploration.cpp" />
     <ClCompile Include="src\Objects\Character.cpp" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
@@ -155,10 +156,12 @@
     <ClCompile Include="src\Utils\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Dialogue\Dialogue.h" />
     <ClInclude Include="src\Managers\GameManager.h" />
     <ClInclude Include="src\Managers\GraphicsManager.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Objects\Actor.h" />
+    <ClInclude Include="src\Scenes\SceneBattle.h" />
     <ClInclude Include="src\Scenes\SceneExploration.h" />
     <ClInclude Include="src\Objects\Character.h" />
     <ClInclude Include="src\Objects\Components.h" />

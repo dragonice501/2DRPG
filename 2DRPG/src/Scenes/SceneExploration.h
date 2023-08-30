@@ -34,4 +34,7 @@ protected:
 	std::vector<Character> mCharacters;
 
 	Vec2 spawnPosition;
+
+	int mStepsUntilEncounterMax = 15;
+	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

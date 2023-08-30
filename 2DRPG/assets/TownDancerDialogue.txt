@@ -1,10 +1,8 @@
 Start Greeting
-Beware the monster that lurks outside of
-the town. It makes a horrible sound that
-sends shivers down your spine.
+I'm Arylon the dancer. I've been 
+dancing since I was a little girl.
 Break
 If you need to prepare for battle then
-you should see the blacksmith. He makes 
+you should see the /blacksmith/ . He makes 
 the best weapons in the region!
-Break
 End
