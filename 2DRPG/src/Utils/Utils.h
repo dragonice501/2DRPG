@@ -23,6 +23,25 @@ enum ECharacterState
 	CS_LISTENING
 };
 
+enum ECharacterClass
+{
+	KNIGHT,
+	THIEF,
+	MONK,
+	WHITE_MAGE,
+	RED_MAGE,
+	BLACK_MAGE
+};
+
+enum EElementAffect
+{
+	IMMUNE,
+	ABSORB,
+	HALF,
+	NORMAL,
+	WEAK
+};
+
 enum EDialogueState
 {
 	DS_PRINTING,

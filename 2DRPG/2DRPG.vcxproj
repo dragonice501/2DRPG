@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Managers\PlayerManager.cpp" />
     <ClCompile Include="src\Objects\Enemy.cpp" />
     <ClCompile Include="src\Managers\GameManager.cpp" />
     <ClCompile Include="src\Managers\GraphicsManager.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\Utils\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Managers\PlayerManager.h" />
     <ClInclude Include="src\Objects\Enemy.h" />
     <ClInclude Include="src\Dialogue\Dialogue.h" />
     <ClInclude Include="src\Managers\GameManager.h" />

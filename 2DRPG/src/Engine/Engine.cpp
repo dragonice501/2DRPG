@@ -7,6 +7,7 @@
 #include "../Scenes/SceneOverworld.h"
 
 #include "../Managers/InputManager.h"
+#include "../Managers/PlayerManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -40,6 +41,7 @@ bool Engine::Init()
 
 void Engine::Run()
 {
+    PlayerManager::LoadCharacters();
     SceneManager::SetSceneToLoad(OVERWORLD, -1);
 
     while (isRunning)

@@ -41,12 +41,14 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 
 void SceneBattle::Setup(SDL_Renderer* renderer)
 {
+	// load background image
 	SDL_Surface* surface = IMG_Load(mBackgroundImageFilePath.c_str());
 	if (surface)
 	{
 		mBackgroundTexture = SDL_CreateTextureFromSurface(renderer, surface);
 	}
 
+	// load enemy sprite sheet
 	std::string filePath = "./assets/Enemies.png";
 	surface = IMG_Load(filePath.c_str());
 	if (surface)
@@ -55,6 +57,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 	SDL_FreeSurface(surface);
 
+	// load enemy sprites
 	std::ifstream file("./assets/Enemies.txt");
 	std::string type;
 	while (file >> type)
@@ -71,6 +74,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		}
 	}
 
+	// Pick random encounter
 	EnemyEncounter encounter;
 	srand(time(NULL));
 	int randomIndex = rand() % mEnemyEncounters.size();
@@ -83,10 +87,12 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		}
 	}
 
+	// load enemy attributes and set screen positions
 	for (int i = 0; i < encounter.enemyNames.size(); i++)
 	{
 		Enemy newEnemy = mEnemyMap.at(encounter.enemyNames[i]);
 		newEnemy.battleSpawnPosition = encounter.enemyPositions[i];
+		newEnemy.LoadEnemyAttributtes(encounter.enemyNames[i]);
 		mEnemies.push_back(newEnemy);
 	}
 }

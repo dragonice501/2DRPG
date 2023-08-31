@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <vector>
 #include <map>
+#include <string>
 #include <iostream>
 
 struct AnimationFrame
@@ -39,6 +40,37 @@ struct Animation
 	int frameRateSpeed;
 	bool shouldLoop;
 	int startTime;
+};
+
+struct CharacterAttributes
+{
+	CharacterAttributes(std::string characterName = "", int health = 0, int healthMax = 0, int magic = 0, int magicMax = 0, int strength = 0, int defense = 0, int intelligence = 0, int speed = 0, int skill = 0, int luck = 0)
+	{
+		this->characterName = characterName;
+		this->health = health;
+		this->healthMax = healthMax;
+		this->magic = magic;
+		this->magicMax = magicMax;
+		this->strength = strength;
+		this->defense = defense;
+		this->intelligence = intelligence;
+		this->speed = speed;
+		this->skill = skill;
+		this->luck = luck;
+	}
+
+	std::string characterName;
+
+	int health;
+	int healthMax;
+	int magic;
+	int magicMax;
+	int strength;
+	int defense;
+	int intelligence;
+	int speed;
+	int skill;
+	int luck;
 };
 
 struct Movement
