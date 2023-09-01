@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 #include "../Objects/Actor.h"
-#include "../Objects/Character.h"
+#include "../Objects/CharacterExploration.h"
 #include "../Objects/Components.h"
 #include "../Objects/Enemy.h"
 #include "../Objects/EnemyEncounter.h"
@@ -33,11 +33,11 @@ protected:
 
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<Actor> mActors;
-	std::vector<Character> mCharacters;
+	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
 	Vec2 spawnPosition;
 
-	int mStepsUntilEncounterMax = 5;
+	int mStepsUntilEncounterMax = 15;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

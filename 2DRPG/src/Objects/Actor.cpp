@@ -8,9 +8,9 @@ Actor::~Actor()
 {
 }
 
-void Actor::Init(const std::string& spriteSheetPath, const std::string& animationsFilePath, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
+void Actor::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    std::string filePath = "./assets/" + spriteSheetPath + ".png";
+    std::string filePath = "./assets/" + name + ".png";
     SDL_Surface* surface = IMG_Load(filePath.c_str());
     if (surface)
     {
@@ -18,9 +18,8 @@ void Actor::Init(const std::string& spriteSheetPath, const std::string& animatio
     }
 
     mPosition = spawnPosition;
-    mSprite = { 32, 32, 0, -16, 0, 64 };
-
-    LoadAnimations(animationsFilePath);
+    mSprite.positionOffset = { 0.0f, -16.0f };
+    LoadAnimations(name);
     mCurrentAnimation = startinAnimation;
 }
 
@@ -29,7 +28,7 @@ void Actor::LoadAnimations(std::string animationsFilePath)
     Animation newAnimation;
     std::string animationName;
 
-    std::string filePath = "./assets/" + animationsFilePath + ".txt";
+    std::string filePath = "./assets/" + animationsFilePath + "Animations.txt";
     std::ifstream file(filePath);
     std::string type;
     while (file >> type)
@@ -65,12 +64,19 @@ void Actor::Update(const float dt)
 
 void Actor::Render(SDL_Renderer* renderer)
 {
+    /*GraphicsManager::DrawFillRect(
+        mPosition.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
+        mPosition.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
+        mSprite.srcRect.w * TILE_SPRITE_SCALE,
+        mSprite.srcRect.h * TILE_SPRITE_SCALE,
+        0xFFFFFFFF);*/
+
     SDL_Rect destRect =
     {
-        mPosition.x * TILE_SPRITE_SCALE + mSprite.xOffset * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
-        mPosition.y * TILE_SPRITE_SCALE + mSprite.yOffset * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
-        mSprite.width * TILE_SPRITE_SCALE,
-        mSprite.height * TILE_SPRITE_SCALE
+        mPosition.x * TILE_SPRITE_SCALE + mSprite.positionOffset.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
+        mPosition.y * TILE_SPRITE_SCALE + mSprite.positionOffset.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
+        mSprite.srcRect.w * TILE_SPRITE_SCALE,
+        mSprite.srcRect.h * TILE_SPRITE_SCALE
     };
 
     GraphicsManager::DrawSpriteRect(mSpriteSheet, mSprite.srcRect, destRect);

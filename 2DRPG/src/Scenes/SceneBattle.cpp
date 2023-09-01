@@ -95,6 +95,12 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		newEnemy.LoadEnemyAttributtes(encounter.enemyNames[i]);
 		mEnemies.push_back(newEnemy);
 	}
+
+	// setup player party
+	for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+	{
+		
+	}
 }
 
 void SceneBattle::Shutdown()
@@ -145,6 +151,11 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 {
 	GraphicsManager::DrawBattleBackground(mBackgroundTexture);
 
+	for (int i = 0; i < mPlayerCharacters.size(); i++)
+	{
+		
+	}
+
 	for (int i = 0; i < mEnemies.size(); i++)
 	{
 		SDL_Rect destRect =
@@ -154,8 +165,6 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 			mEnemies[i].rect.w * TILE_SPRITE_SCALE,
 			mEnemies[i].rect.h * TILE_SPRITE_SCALE
 		};
-
-		//std::cout << destRect.x << ',' << destRect.y << std::endl;
 
 		GraphicsManager::DrawSpriteRect(mEnemiesTexture, mEnemies[i].rect, destRect);
 	}

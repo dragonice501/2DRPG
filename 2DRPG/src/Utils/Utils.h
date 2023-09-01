@@ -25,12 +25,10 @@ enum ECharacterState
 
 enum ECharacterClass
 {
+	DANCER,
 	KNIGHT,
-	THIEF,
-	MONK,
-	WHITE_MAGE,
-	RED_MAGE,
-	BLACK_MAGE
+	MAGE,
+	PALADIN
 };
 
 enum EElementAffect

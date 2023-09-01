@@ -23,7 +23,7 @@ void SceneTown::Setup(static SDL_Renderer* renderer)
         spawnPosition = Vec2(16.0f, 17.0f) * TILE_SIZE;
     }
 
-    mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
+    mSigurd.Init("Sigurd", spawnPosition, renderer);
 }
 
 void SceneTown::Shutdown()

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Engine/Engine.h"
-#include "../Objects/Character.h"
+#include "../Objects/CharacterExploration.h"
 
 #include "../Utils/Constants.h"
 #include "../Utils/Vec2.h"

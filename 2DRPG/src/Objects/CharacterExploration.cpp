@@ -1,30 +1,30 @@
-#include "Character.h"
+#include "CharacterExploration.h"
 
 #include "../Managers/SceneManager.h"
 #include "../Utils/Constants.h"
 
-Character::Character()
+CharacterExploration::CharacterExploration()
 {
 }
 
-Character::~Character()
+CharacterExploration::~CharacterExploration()
 {
 	SDL_DestroyTexture(mSpriteSheet);
 }
 
-void Character::Init(const std::string& spriteSheetName, const std::string& animationsFileName, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
+void CharacterExploration::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    Actor::Init(spriteSheetName, animationsFileName, spawnPosition, renderer);
+    Actor::Init(name, spawnPosition, renderer);
 
     mPosition = spawnPosition;
 }
 
-void Character::LoadAnimations(std::string animationsFileName)
+void CharacterExploration::LoadAnimations(std::string animationsFileName)
 {
     Actor::LoadAnimations(animationsFileName);
 }
 
-void Character::Update(const float dt)
+void CharacterExploration::Update(const float dt)
 {
     CheckInteracting();
 
@@ -32,17 +32,17 @@ void Character::Update(const float dt)
     UpdateAnimation();
 }
 
-void Character::Render(SDL_Renderer* renderer)
+void CharacterExploration::Render(SDL_Renderer* renderer)
 {
     Actor::Render(renderer);
 }
 
-void Character::CheckInteracting()
+void CharacterExploration::CheckInteracting()
 {
     
 }
 
-void Character::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt)
+void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt)
 {
     mMovement.stepTaken = false;
 
@@ -107,12 +107,12 @@ void Character::UpdateMovement(const int mapWidth, const int mapHeight, const st
     }
 }
 
-bool Character::MovementPressed()
+bool CharacterExploration::MovementPressed()
 {
     return InputManager::UpHeld() || InputManager::DownHeld() || InputManager::LeftHeld() || InputManager::RightHeld();
 }
 
-Vec2 Character::GetDesiredPosition()
+Vec2 CharacterExploration::GetDesiredPosition()
 {
     Vec2 desiredPosition;
 
@@ -136,7 +136,7 @@ Vec2 Character::GetDesiredPosition()
     return desiredPosition;
 }
 
-bool Character::MovementInsideMap(const Vec2& position, const int width, const int height)
+bool CharacterExploration::MovementInsideMap(const Vec2& position, const int width, const int height)
 {
     return !(
         position.x < 0 ||
@@ -145,7 +145,7 @@ bool Character::MovementInsideMap(const Vec2& position, const int width, const i
         position.y + TILE_SIZE > height * TILE_SIZE);
 }
 
-bool Character::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors)
+bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors)
 {
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
@@ -173,7 +173,7 @@ bool Character::CanMove(const Vec2& desiredPosition, int width, int height, cons
     return true;
 }
 
-void Character::SetMovement()
+void CharacterExploration::SetMovement()
 {
     if (InputManager::UpHeld())
     {
@@ -201,7 +201,7 @@ void Character::SetMovement()
     }
 }
 
-void Character::UpdateAnimation()
+void CharacterExploration::UpdateAnimation()
 {
     if (mMovementState == MS_MOVING)
     {

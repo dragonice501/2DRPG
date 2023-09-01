@@ -30,7 +30,7 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         spawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
     }
 
-    mSigurd.Init("Sigurd", "SigurdAnimations", spawnPosition, renderer);
+    mSigurd.Init("Sigurd", spawnPosition, renderer);
 }
 
 void SceneOverworld::Shutdown()

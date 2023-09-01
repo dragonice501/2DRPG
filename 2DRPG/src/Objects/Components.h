@@ -119,20 +119,14 @@ struct SceneEntrance
 
 struct Sprite
 {
-	Sprite(int width = 0, int height = 0, int xOffset = 0, int yOffset = 0, int srcRectX = 0, int srcRectY = 0)
+	Sprite(int srcX = 0, int srcY = 0, int width = 0, int height = 0, int xOffset = 0, int yOffset = 0)
 	{
-		this->width = width;
-		this->height = height;
-		this->xOffset = xOffset;
-		this->yOffset = yOffset;
-		this->srcRect = { srcRectX, srcRectY, width, height };
+		this->srcRect = { srcX, srcY, width, height };
+		this->positionOffset = Vec2(xOffset, yOffset);
 	}
 
-	int width;
-	int height;
-	int xOffset;
-	int yOffset;
 	SDL_Rect srcRect;
+	Vec2 positionOffset;
 };
 
 struct Tile

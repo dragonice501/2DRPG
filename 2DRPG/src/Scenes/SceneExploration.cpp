@@ -63,7 +63,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             Vec2 position = { static_cast<float>(npcXPos * TILE_SIZE), static_cast<float>(npcYPos * TILE_SIZE) };
 
             Actor newActor;
-            newActor.Init(npcName, npcName + "Animations", position, renderer);
+            newActor.Init(npcName, position, renderer);
             newActor.LoadDialogue(dialogueFile);
             mActors.push_back(newActor);
         }
