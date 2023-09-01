@@ -21,7 +21,7 @@ public:
 	Actor();
 	~Actor();
 
-	virtual void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation = "IdleDown");
+	virtual void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown");
 	virtual void LoadAnimations(std::string animationsFilePath);
 
 	virtual void Update(const float dt);

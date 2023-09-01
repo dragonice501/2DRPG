@@ -38,6 +38,6 @@ protected:
 
 	Vec2 spawnPosition;
 
-	int mStepsUntilEncounterMax = 15;
+	int mStepsUntilEncounterMax = 5;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

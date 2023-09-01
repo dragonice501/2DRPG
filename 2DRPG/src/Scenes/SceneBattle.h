@@ -6,6 +6,8 @@
 #include "../Objects/EnemyEncounter.h"
 #include "../Objects/CharacterBattle.h"
 
+#include "../Graphics/Font.h"
+
 #include "../Managers/SceneManager.h"
 #include "../Managers/PlayerManager.h"
 
@@ -33,7 +35,7 @@ private:
 	SDL_Texture* mBackgroundTexture = nullptr;
 	std::string mBackgroundImageFilePath;
 
-	std::vector<CharacterExploration> mPlayerCharacters;
+	std::vector<CharacterBattle> mPlayerCharacters;
 
 	SDL_Texture* mEnemiesTexture = nullptr;
 	std::map<std::string, Enemy> mEnemyMap;
@@ -46,7 +48,7 @@ private:
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{
-		Vec2(GraphicsManager::WindowWidth() - 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE) + Vec2(0.0f) * TILE_SPRITE_SCALE * 32
+		Vec2(GraphicsManager::WindowWidth() - 64 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE) + Vec2(0.0f) * TILE_SPRITE_SCALE * 32
 	};
 
 	std::vector<Vec2> mSmallEnemyPositions =

@@ -99,7 +99,10 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	// setup player party
 	for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
 	{
-		
+		CharacterBattle newCharacter;
+		newCharacter.LoadAnimations(PlayerManager::GetCharacterAttributes()[i].characterName);
+		newCharacter.mSprite.positionOffset = Vec2(0.0f, 16.0f);
+		mPlayerCharacters.push_back(newCharacter);
 	}
 }
 
@@ -153,7 +156,22 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
 	for (int i = 0; i < mPlayerCharacters.size(); i++)
 	{
-		
+		Animation& anim = mPlayerCharacters[i].mAnimations[mPlayerCharacters[i].mCurrentAnimation];
+
+		mPlayerCharacters[i].mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
+		mPlayerCharacters[i].mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
+		mPlayerCharacters[i].mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
+		mPlayerCharacters[i].mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
+
+		SDL_Rect destRect =
+		{
+			mPlayerCharacterPositions[i].x + mPlayerCharacters[i].mSprite.positionOffset.x * TILE_SPRITE_SCALE,
+			mPlayerCharacterPositions[i].y + mPlayerCharacters[i].mSprite.positionOffset.x * TILE_SPRITE_SCALE,
+			32 * TILE_SPRITE_SCALE,
+			32 * TILE_SPRITE_SCALE
+		};
+
+		GraphicsManager::DrawSpriteRect(PlayerManager::GetCharacterTextures()[i], mPlayerCharacters[i].mSprite.srcRect, destRect);
 	}
 
 	for (int i = 0; i < mEnemies.size(); i++)
@@ -170,7 +188,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	}
 
 	SDL_Rect rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2, 
+		GraphicsManager::WindowWidth() / 2 + 100,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
 		BATTLE_MENU_WIDTH,
 		BATTLE_MENU_HEIGHT);
@@ -179,4 +197,24 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item", 0xFFFFFFFF);
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run", 0xFFFFFFFF);
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
+
+
+	rect = GraphicsManager::DrawUIBox(
+		GraphicsManager::WindowWidth() / 2 + BATTLE_MENU_WIDTH + UI_BOX_BORDER_SIZE + 100,
+		GraphicsManager::WindowHeight() - BATTLE_PARTY_UI_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
+		BATTLE_PARTY_UI_WIDTH,
+		BATTLE_PARTY_UI_HEIGHT);
+
+	for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+	{
+		const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
+		GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, attributes.characterName.c_str(), 0xFFFFFFFF);
+
+		std::string string = std::to_string(attributes.health) + '-' + std::to_string(attributes.healthMax) + " HP";
+		GraphicsManager::DrawString(
+			(rect.x + rect.w) - string.length() * Font::fontWidth * TEXT_SIZE - Font::fontSpacing * string.length() * TEXT_SIZE,
+			rect.y + TEXT_PADDING,
+			string.c_str(),
+			0xFFFFFFFF);
+	}
 }

@@ -1,2 +1,2 @@
 Enemy Goblin 0 0 31 31
-Enemy Wolf 63 0 29 30
+Enemy Wolf 62 0 30 30
