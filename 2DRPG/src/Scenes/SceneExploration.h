@@ -37,7 +37,8 @@ protected:
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
 	Vec2 spawnPosition;
+	std::vector<Vec2> mSpawnPositions;
 
-	int mStepsUntilEncounterMax = 5;
+	int mStepsUntilEncounterMax = 99;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

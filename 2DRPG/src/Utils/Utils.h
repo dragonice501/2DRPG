@@ -28,7 +28,8 @@ enum ECharacterClass
 	DANCER,
 	KNIGHT,
 	MAGE,
-	PALADIN
+	PALADIN,
+	NO_CLASS
 };
 
 enum EElementAffect

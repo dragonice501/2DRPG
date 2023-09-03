@@ -29,6 +29,8 @@ public:
 
 	virtual void UpdateAnimation();
 
+	inline void SetCurrentAnimation(const std::string& animation) { mCurrentAnimation = animation; }
+
 	virtual const Vec2& GetPosition() const { return mPosition; }
 	const std::vector<std::string>& GetDialogue() const { return mDialogueMap.at(mCurrentDialogueKey)[mCurrentDialogueIndex]; }
 	bool CycleThroughDialogue();

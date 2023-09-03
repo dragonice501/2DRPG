@@ -210,11 +210,22 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
 		GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, attributes.characterName.c_str(), 0xFFFFFFFF);
 
-		std::string string = std::to_string(attributes.health) + '-' + std::to_string(attributes.healthMax) + " HP";
+		std::string hpString = std::to_string(attributes.health) + '-' + std::to_string(attributes.healthMax) + "HP";
+		std::string mpString = std::to_string(attributes.magic) + '-' + std::to_string(attributes.magicMax) + "MP";
+
+		int hpLength = hpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * hpString.length() * TEXT_SIZE;
+		int mpLength = mpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * mpString.length() * TEXT_SIZE;
+
 		GraphicsManager::DrawString(
-			(rect.x + rect.w) - string.length() * Font::fontWidth * TEXT_SIZE - Font::fontSpacing * string.length() * TEXT_SIZE,
+			(rect.x + rect.w) - hpLength - BATTLE_PARTY_UI_BUFFER * TEXT_SIZE - mpLength,
 			rect.y + TEXT_PADDING,
-			string.c_str(),
+			hpString.c_str(),
+			0xFFFFFFFF);
+
+		GraphicsManager::DrawString(
+			(rect.x + rect.w) - mpLength,
+			rect.y + TEXT_PADDING,
+			mpString.c_str(),
 			0xFFFFFFFF);
 	}
 }

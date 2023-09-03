@@ -18,7 +18,11 @@ public:
 	const Vec2& GetPosition() const override { return mPosition; }
 
 	inline const ECharacterState GetCharacterState() const { return mCharacterState; }
+	inline const SDL_Texture* GetSpriteSheet() const { return mSpriteSheet; }
+
 	inline void SetCharacterState(const ECharacterState state) { mCharacterState = state; }
+	inline void SetPosition(const Vec2& position) { mPosition = position; }
+	inline void SetSpriteSheet(SDL_Texture* spriteSheet) { mSpriteSheet = spriteSheet; }
 
 	void CheckInteracting();
 

@@ -1,11 +1,12 @@
 #include "PlayerManager.h"
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
-std::vector<ECharacterClass> PlayerManager::mCharacterClasses;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 
 void PlayerManager::LoadCharacters()
 {
+    SDL_Surface* surface = nullptr;
+
     std::string fileName = "./assets/PlayerSaveFile.txt";
     std::ifstream file(fileName);
     std::string type;
@@ -23,17 +24,16 @@ void PlayerManager::LoadCharacters()
 
             CharacterAttributes newCharacterAttributes =
             {
-                characterName, health, healthMax, magic, magicMax,
+                characterName, static_cast<ECharacterClass>(characterClass),
+                health, healthMax, magic, magicMax,
                 strength, defense, intelligence, speed, skill, luck
             };
 
             mCharacterAttributes.push_back(newCharacterAttributes);
-            mCharacterClasses.push_back(static_cast<ECharacterClass>(characterClass));
 
-            SDL_Surface* surface = nullptr;
             SDL_Texture* texture = nullptr;
             std::string surfacePath;
-            switch (static_cast<ECharacterClass>(characterClass))
+            switch (newCharacterAttributes.characterClass)
             {
                 case DANCER:
                 {
@@ -44,6 +44,7 @@ void PlayerManager::LoadCharacters()
                         texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
+                    break;
                 }
                 case KNIGHT:
                 {
@@ -54,6 +55,7 @@ void PlayerManager::LoadCharacters()
                         texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
+                    break;
                 }
                 case MAGE:
                 {
@@ -64,6 +66,7 @@ void PlayerManager::LoadCharacters()
                         texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
+                    break;
                 }
                 case PALADIN:
                 {
@@ -74,15 +77,15 @@ void PlayerManager::LoadCharacters()
                         texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
+                    break;
                 }
-
-            }
-
-            if (surface)
-            {
-                SDL_FreeSurface(surface);
             }
         }
+    }
+
+    if (surface)
+    {
+        SDL_FreeSurface(surface);
     }
 }
 

@@ -1,1 +1,4 @@
 Character Sigurd 25 25 15 15 10 5 4 4 5 3 3
+Character Elan 13 13 19 19 5 2 7 4 2 4 0
+Character Don 17 17 24 24 4 3 8 5 3 2 2
+Character Ark 22 22 12 12 12 13 3 2 4 2 1

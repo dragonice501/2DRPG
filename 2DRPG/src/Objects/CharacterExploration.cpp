@@ -9,7 +9,7 @@ CharacterExploration::CharacterExploration()
 
 CharacterExploration::~CharacterExploration()
 {
-	SDL_DestroyTexture(mSpriteSheet);
+	
 }
 
 void CharacterExploration::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
@@ -22,6 +22,9 @@ void CharacterExploration::Init(const std::string& name, const Vec2& spawnPositi
 void CharacterExploration::LoadAnimations(std::string animationsFileName)
 {
     Actor::LoadAnimations(animationsFileName);
+
+    mCurrentAnimation = "IdleRight";
+    mSprite = { 0, 0, 32, 32, 0, -16 };
 }
 
 void CharacterExploration::Update(const float dt)

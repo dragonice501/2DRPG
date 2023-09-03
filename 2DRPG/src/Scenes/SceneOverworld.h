@@ -22,6 +22,5 @@ public:
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
 
 	ECharacterState mCharacterState = CS_MOVING;
-	CharacterExploration mSigurd;
 	Actor* mInteractedActor = nullptr;
 };
