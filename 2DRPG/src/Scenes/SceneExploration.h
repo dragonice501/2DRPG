@@ -39,6 +39,6 @@ protected:
 	Vec2 spawnPosition;
 	std::vector<Vec2> mSpawnPositions;
 
-	int mStepsUntilEncounterMax = 99;
+	int mStepsUntilEncounterMax = 20;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

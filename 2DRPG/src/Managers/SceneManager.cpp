@@ -7,8 +7,8 @@ bool SceneManager::mIsOverworld = true;
 ETerrainType SceneManager::mBattleBakgroundType = UNDEFINED;
 std::vector<EnemyEncounter> SceneManager::mEnemyEncounters;
 bool SceneManager::mReturnToOverworld = false;
-Vec2 SceneManager::mPreviousOverworldPosition = Vec2(0.0f);
-Vec2 SceneManager::mPreviousDirection = Vec2(0.0f);
+std::vector<Vec2> SceneManager::mPreviousOverworldPositions;
+std::vector<Vec2> SceneManager::mPreviousDirections;
 
 void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, bool returnToOverworld,
 	ETerrainType battleBackgroundType, const std::vector<EnemyEncounter>& enemyEncounters)

@@ -21,11 +21,12 @@ public:
 
 	inline static bool CurrentScene() { return mCurrentScene != nullptr; }
 	inline static bool ReturnToOverworld() { return mReturnToOverworld; }
-	inline static Vec2 GetPreviousOverworldPosition() { return mPreviousOverworldPosition; }
-	inline static Vec2 GetPreviousDirection() { return mPreviousDirection; }
+	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousOverworldPositions[index]; }
+	inline static Vec2 GetPreviousDirection(const int index) { return mPreviousDirections[index]; }
 
-	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPosition = position; }
-	inline static void SetPreviousDirection(const Vec2& direction) { mPreviousDirection = direction; }
+	inline static void ClearPositionsAndDirections() { mPreviousOverworldPositions.clear(); mPreviousDirections.clear(); }
+	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPositions.push_back(position); }
+	inline static void SetPreviousDirection(const Vec2& direction) { mPreviousDirections.push_back(direction); }
 
 	static inline const bool SceneReadyToLoad() { return mSceneToLoad != NONE; }
 	static void SetSceneToLoad(
@@ -52,7 +53,8 @@ private:
 	static bool mIsOverworld;
 	static ETerrainType mBattleBakgroundType;
 	static std::vector<EnemyEncounter> mEnemyEncounters;
+
 	static bool mReturnToOverworld;
-	static Vec2 mPreviousOverworldPosition;
-	static Vec2 mPreviousDirection;
+	static std::vector<Vec2> mPreviousOverworldPositions;
+	static std::vector<Vec2> mPreviousDirections;
 };

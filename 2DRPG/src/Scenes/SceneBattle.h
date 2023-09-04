@@ -48,7 +48,10 @@ private:
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{
-		Vec2(GraphicsManager::WindowWidth() - 64 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE) + Vec2(0.0f) * TILE_SPRITE_SCALE * 32
+		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE),
+		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(16.0f, 16.0f) * TILE_SPRITE_SCALE,
+		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(32.0f, 32.0f) * TILE_SPRITE_SCALE,
+		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(48.0f, 48.0f) * TILE_SPRITE_SCALE
 	};
 
 	std::vector<Vec2> mSmallEnemyPositions =

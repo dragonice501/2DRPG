@@ -23,9 +23,10 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
 
     if (SceneManager::ReturnToOverworld())
     {
-        spawnPosition = SceneManager::GetPreviousOverworldPosition();
-        for (CharacterExploration& character : mCharacters)
-            character.mRigidbody.lastVelocity = SceneManager::GetPreviousDirection();
+        for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+        {
+            mSpawnPositions.push_back(SceneManager::GetPreviousOverworldPosition(i));
+        }
     }
     else if (SceneManager::GetSceneEntranceIndex() == -1)
     {
@@ -68,6 +69,8 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         newCharacter.SetSpriteSheet(PlayerManager::GetCharacterTextures()[i]);
         newCharacter.LoadAnimations(name);
         newCharacter.SetPosition(mSpawnPositions[i]);
+        if (SceneManager::ReturnToOverworld())
+            newCharacter.mRigidbody.lastVelocity = SceneManager::GetPreviousDirection(i);
         newCharacter.mPartyIndex = i;
 
         mCharacters.push_back(newCharacter);
@@ -111,8 +114,12 @@ void SceneOverworld::Update(const float dt)
                     int index = character.GetPosition().x / TILE_SIZE + (character.GetPosition().y * mMapWidth) / TILE_SIZE;
                     ETerrainType currentTerrain = mTiles[index].terrainType;
 
-                    SceneManager::SetPreviousOverworldPosition(character.GetPosition());
-                    SceneManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
+                    SceneManager::ClearPositionsAndDirections();
+                    for (int i = 0; i < mCharacters.size(); i++)
+                    {
+                        SceneManager::SetPreviousOverworldPosition(mCharacters[i].GetPosition());
+                        SceneManager::SetPreviousDirection(mCharacters[i].mRigidbody.lastVelocity);
+                    }
                     SceneManager::SetSceneToLoad(BATTLE, -1, false, currentTerrain, mEnemyEncounters);
                 }
             }

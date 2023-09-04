@@ -100,8 +100,34 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
 	{
 		CharacterBattle newCharacter;
-		newCharacter.LoadAnimations(PlayerManager::GetCharacterAttributes()[i].characterName);
+		std::string name;
+		switch (PlayerManager::GetCharacterAttributes()[i].characterClass)
+		{
+		case DANCER:
+		{
+			name = "Dancer";
+			break;
+		}
+		case KNIGHT:
+		{
+			name = "Knight";
+			break;
+		}
+		case MAGE:
+		{
+			name = "Mage";
+			break;
+		}
+		case PALADIN:
+		{
+			name = "Sigurd";
+			break;
+		}
+		}
+
+		newCharacter.LoadAnimations(name);
 		newCharacter.mSprite.positionOffset = Vec2(0.0f, 16.0f);
+
 		mPlayerCharacters.push_back(newCharacter);
 	}
 }
@@ -154,6 +180,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 {
 	GraphicsManager::DrawBattleBackground(mBackgroundTexture);
 
+	// Draw Party
 	for (int i = 0; i < mPlayerCharacters.size(); i++)
 	{
 		Animation& anim = mPlayerCharacters[i].mAnimations[mPlayerCharacters[i].mCurrentAnimation];
@@ -174,6 +201,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		GraphicsManager::DrawSpriteRect(PlayerManager::GetCharacterTextures()[i], mPlayerCharacters[i].mSprite.srcRect, destRect);
 	}
 
+	// Draw Enemies
 	for (int i = 0; i < mEnemies.size(); i++)
 	{
 		SDL_Rect destRect =
@@ -187,6 +215,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		GraphicsManager::DrawSpriteRect(mEnemiesTexture, mEnemies[i].rect, destRect);
 	}
 
+	// Draw Battle UI Options
 	SDL_Rect rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + 100,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
@@ -198,7 +227,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run", 0xFFFFFFFF);
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
 
-
+	// Draw Party Stats
 	rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + BATTLE_MENU_WIDTH + UI_BOX_BORDER_SIZE + 100,
 		GraphicsManager::WindowHeight() - BATTLE_PARTY_UI_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
@@ -208,7 +237,11 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
 	{
 		const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
-		GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, attributes.characterName.c_str(), 0xFFFFFFFF);
+		GraphicsManager::DrawString(
+			rect.x + TEXT_PADDING,
+			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
+			attributes.characterName.c_str(),
+			0xFFFFFFFF);
 
 		std::string hpString = std::to_string(attributes.health) + '-' + std::to_string(attributes.healthMax) + "HP";
 		std::string mpString = std::to_string(attributes.magic) + '-' + std::to_string(attributes.magicMax) + "MP";
@@ -218,13 +251,13 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - hpLength - BATTLE_PARTY_UI_BUFFER * TEXT_SIZE - mpLength,
-			rect.y + TEXT_PADDING,
+			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
 			hpString.c_str(),
 			0xFFFFFFFF);
 
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - mpLength,
-			rect.y + TEXT_PADDING,
+			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
 			mpString.c_str(),
 			0xFFFFFFFF);
 	}
