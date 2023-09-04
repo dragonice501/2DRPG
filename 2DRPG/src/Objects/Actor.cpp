@@ -57,6 +57,10 @@ void Actor::LoadAnimations(std::string animationsFilePath)
     }
 }
 
+void Actor::Input()
+{
+}
+
 void Actor::Update(const float dt)
 {
     UpdateAnimation();

@@ -8,6 +8,7 @@
 
 #include "../Engine/Engine.h"
 #include "../Managers/GraphicsManager.h"
+#include "../Managers/InputManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -24,6 +25,7 @@ public:
 	virtual void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown");
 	virtual void LoadAnimations(std::string animationsFilePath);
 
+	virtual void Input();
 	virtual void Update(const float dt);
 	virtual void Render(SDL_Renderer* renderer);
 

@@ -2,7 +2,10 @@
 
 #include "SceneExploration.h"
 
+#include "../Objects/CharacterExploration.h"
 #include "../Managers/SceneManager.h"
+
+#include <vector>
 
 class SceneTown : public SceneExploration
 {
@@ -24,6 +27,7 @@ public:
 	ECharacterState mCharacterState = CS_MOVING;
 	CharacterExploration mSigurd;
 	Actor* mInteractedActor = nullptr;
+	std::vector<CharacterExploration> mCharacters;
 
 	int mInteractMenuIndex = 0;
 	int mInteractMenuOptions = 2;

@@ -32,8 +32,8 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         spawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
         mSpawnPositions.push_back(Vec2(39.0f, 32.0f) * TILE_SIZE);
         mSpawnPositions.push_back(Vec2(40.0f, 32.0f) * TILE_SIZE);
-        mSpawnPositions.push_back(Vec2(39.0f, 33.0f) * TILE_SIZE);
         mSpawnPositions.push_back(Vec2(40.0f, 33.0f) * TILE_SIZE);
+        mSpawnPositions.push_back(Vec2(39.0f, 33.0f) * TILE_SIZE);
     }
 
     for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
@@ -68,6 +68,7 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         newCharacter.SetSpriteSheet(PlayerManager::GetCharacterTextures()[i]);
         newCharacter.LoadAnimations(name);
         newCharacter.SetPosition(mSpawnPositions[i]);
+        newCharacter.mPartyIndex = i;
 
         mCharacters.push_back(newCharacter);
     }
@@ -87,35 +88,32 @@ void SceneOverworld::Update(const float dt)
 {
     SceneExploration::Update(dt);
 
-    if (mCharacterState == CS_MOVING)
+    for (CharacterExploration& character : mCharacters)
     {
-        for (CharacterExploration& character : mCharacters)
+        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, dt);
+        character.Update(dt);
+
+        if (character.mMovement.stepTaken && character.mPartyIndex == 0)
         {
-            character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
-            character.Update(dt);
-
-            if (character.mMovement.stepTaken)
+            for (const SceneEntrance& entrance : mSceneEntrances)
             {
-                for (const SceneEntrance& entrance : mSceneEntrances)
+                if (character.GetPosition() == entrance.position)
                 {
-                    if (character.GetPosition() == entrance.position)
-                    {
-                        SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
-                    }
+                    SceneManager::SetSceneToLoad(TOWN, entrance.sceneEntranceIndex);
                 }
+            }
 
-                if (SceneManager::GetIsOverworld())
+            if (SceneManager::GetIsOverworld())
+            {
+                mStepsUntilEncounter--;
+                if (mStepsUntilEncounter <= 0)
                 {
-                    mStepsUntilEncounter--;
-                    if (mStepsUntilEncounter <= 0)
-                    {
-                        int index = character.GetPosition().x / TILE_SIZE + (character.GetPosition().y * mMapWidth) / TILE_SIZE;
-                        ETerrainType currentTerrain = mTiles[index].terrainType;
+                    int index = character.GetPosition().x / TILE_SIZE + (character.GetPosition().y * mMapWidth) / TILE_SIZE;
+                    ETerrainType currentTerrain = mTiles[index].terrainType;
 
-                        SceneManager::SetPreviousOverworldPosition(character.GetPosition());
-                        SceneManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
-                        SceneManager::SetSceneToLoad(BATTLE, -1, false, currentTerrain, mEnemyEncounters);
-                    }
+                    SceneManager::SetPreviousOverworldPosition(character.GetPosition());
+                    SceneManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
+                    SceneManager::SetSceneToLoad(BATTLE, -1, false, currentTerrain, mEnemyEncounters);
                 }
             }
         }

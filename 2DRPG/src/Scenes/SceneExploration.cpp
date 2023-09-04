@@ -122,6 +122,7 @@ void SceneExploration::Input()
 
 void SceneExploration::Update(const float dt)
 {
+
 }
 
 void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)

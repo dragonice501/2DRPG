@@ -23,14 +23,17 @@ void CharacterExploration::LoadAnimations(std::string animationsFileName)
 {
     Actor::LoadAnimations(animationsFileName);
 
-    mCurrentAnimation = "IdleRight";
+    mCurrentAnimation = "IdleDown";
     mSprite = { 0, 0, 32, 32, 0, -16 };
+}
+
+void CharacterExploration::Input()
+{
+    
 }
 
 void CharacterExploration::Update(const float dt)
 {
-    CheckInteracting();
-
     Actor::UpdateAnimation();
     UpdateAnimation();
 }
@@ -40,12 +43,12 @@ void CharacterExploration::Render(SDL_Renderer* renderer)
     Actor::Render(renderer);
 }
 
-void CharacterExploration::CheckInteracting()
+void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)
 {
     
 }
 
-void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt)
+void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const float dt)
 {
     mMovement.stepTaken = false;
 
@@ -69,10 +72,10 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
 
                 if (MovementPressed())
                 {
-                    Vec2 desiredPosition = GetDesiredPosition();
-                    if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, actors))
+                    Vec2 desiredPosition = GetDesiredPosition(characters);
+                    if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters))
                     {
-                        SetMovement();
+                        SetMovement(characters);
                     }
                     else
                     {
@@ -91,11 +94,11 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
     {
         if (MovementPressed())
         {
-            Vec2 desiredPosition = GetDesiredPosition();
-            if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, actors))
+            Vec2 desiredPosition = GetDesiredPosition(characters);
+            if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters))
             {
                 mMovementState = MS_MOVING;
-                SetMovement();
+                SetMovement(characters);
             }
             else
             {
@@ -115,25 +118,32 @@ bool CharacterExploration::MovementPressed()
     return InputManager::UpHeld() || InputManager::DownHeld() || InputManager::LeftHeld() || InputManager::RightHeld();
 }
 
-Vec2 CharacterExploration::GetDesiredPosition()
+Vec2 CharacterExploration::GetDesiredPosition(const std::vector<CharacterExploration>& characters)
 {
     Vec2 desiredPosition;
 
-    if (InputManager::UpHeld())
+    if (mPartyIndex == 0)
     {
-        desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y - TILE_SIZE));
+        if (InputManager::UpHeld())
+        {
+            desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y - TILE_SIZE));
+        }
+        else if (InputManager::DownHeld())
+        {
+            desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y + TILE_SIZE));
+        }
+        else if (InputManager::LeftHeld())
+        {
+            desiredPosition = Vec2(static_cast<int>(mPosition.x - TILE_SIZE), static_cast<int>(mPosition.y));
+        }
+        else if (InputManager::RightHeld())
+        {
+            desiredPosition = Vec2(static_cast<int>(mPosition.x + TILE_SIZE), static_cast<int>(mPosition.y));
+        }
     }
-    else if (InputManager::DownHeld())
+    else
     {
-        desiredPosition = Vec2(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y + TILE_SIZE));
-    }
-    else if (InputManager::LeftHeld())
-    {
-        desiredPosition = Vec2(static_cast<int>(mPosition.x - TILE_SIZE), static_cast<int>(mPosition.y));
-    }
-    else if (InputManager::RightHeld())
-    {
-        desiredPosition = Vec2(static_cast<int>(mPosition.x + TILE_SIZE), static_cast<int>(mPosition.y));
+        desiredPosition = characters[mPartyIndex - 1].GetPosition();
     }
 
     return desiredPosition;
@@ -148,15 +158,10 @@ bool CharacterExploration::MovementInsideMap(const Vec2& position, const int wid
         position.y + TILE_SIZE > height * TILE_SIZE);
 }
 
-bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors)
+bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)
 {
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
-
-    for (const Actor& actor : actors)
-    {
-        if (desiredPosition == actor.GetPosition()) return false;
-    }
 
     if (SceneManager::GetIsOverworld())
     {
@@ -176,29 +181,40 @@ bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int h
     return true;
 }
 
-void CharacterExploration::SetMovement()
+void CharacterExploration::SetMovement(const std::vector<CharacterExploration>& characters)
 {
-    if (InputManager::UpHeld())
+    if (mPartyIndex == 0)
     {
-        mRigidbody.velocity = Vec2(0.0f, -TILE_SIZE);
-        mMovement.start = mPosition;
-        mMovement.destination = mPosition + mRigidbody.velocity;
+        if (InputManager::UpHeld())
+        {
+            mRigidbody.velocity = Vec2(0.0f, -TILE_SIZE);
+            mMovement.start = mPosition;
+            mMovement.destination = mPosition + mRigidbody.velocity;
+        }
+        else if (InputManager::DownHeld())
+        {
+            mRigidbody.velocity = Vec2(0.0f, TILE_SIZE);
+            mMovement.start = mPosition;
+            mMovement.destination = mPosition + mRigidbody.velocity;
+        }
+        else if (InputManager::LeftHeld())
+        {
+            mRigidbody.velocity = Vec2(-TILE_SIZE, 0.0f);
+            mMovement.start = mPosition;
+            mMovement.destination = mPosition + mRigidbody.velocity;
+        }
+        else if (InputManager::RightHeld())
+        {
+            mRigidbody.velocity = Vec2(TILE_SIZE, 0.0f);
+            mMovement.start = mPosition;
+            mMovement.destination = mPosition + mRigidbody.velocity;
+        }
     }
-    else if (InputManager::DownHeld())
+    else
     {
-        mRigidbody.velocity = Vec2(0.0f, TILE_SIZE);
-        mMovement.start = mPosition;
-        mMovement.destination = mPosition + mRigidbody.velocity;
-    }
-    else if (InputManager::LeftHeld())
-    {
-        mRigidbody.velocity = Vec2(-TILE_SIZE, 0.0f);
-        mMovement.start = mPosition;
-        mMovement.destination = mPosition + mRigidbody.velocity;
-    }
-    else if (InputManager::RightHeld())
-    {
-        mRigidbody.velocity = Vec2(TILE_SIZE, 0.0f);
+        Vec2 targetPosition = characters[mPartyIndex - 1].GetPosition();
+
+        mRigidbody.velocity = targetPosition - mPosition;
         mMovement.start = mPosition;
         mMovement.destination = mPosition + mRigidbody.velocity;
     }

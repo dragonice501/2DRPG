@@ -3,6 +3,7 @@
 #include "Actor.h"
 
 #include "../Managers/InputManager.h"
+#include "../Managers/PlayerManager.h"
 
 class CharacterExploration : Actor
 {
@@ -10,8 +11,9 @@ public:
 	CharacterExploration();
 	~CharacterExploration();
 
-	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer,std::string startinAnimation = "IdleDown") override;
+	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation = "IdleDown") override;
 	void LoadAnimations(std::string animationsFileName) override;
+	void Input() override;
 	void Update(const float dt) override;
 	void Render(SDL_Renderer* renderer) override;
 	void UpdateAnimation() override;
@@ -24,16 +26,18 @@ public:
 	inline void SetPosition(const Vec2& position) { mPosition = position; }
 	inline void SetSpriteSheet(SDL_Texture* spriteSheet) { mSpriteSheet = spriteSheet; }
 
-	void CheckInteracting();
+	void CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters);
 
-	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<Actor>& actors, const float dt);
+	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const float dt);
 	bool MovementPressed();
-	Vec2 GetDesiredPosition();
+	Vec2 GetDesiredPosition(const std::vector<CharacterExploration>& characters);
 	bool MovementInsideMap(const Vec2& position, const int width, const int height);
-	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<Actor>& actors);
-	void SetMovement();
+	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters);
+	void SetMovement(const std::vector<CharacterExploration>& characters);
+	
 	Movement mMovement;
 	Rigidbody mRigidbody;
+	int mPartyIndex;
 
 private:
 	EMovementState mMovementState = MS_IDLE;

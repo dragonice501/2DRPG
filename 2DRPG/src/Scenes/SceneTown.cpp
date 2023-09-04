@@ -100,7 +100,7 @@ void SceneTown::Update(const float dt)
 
     if (mCharacterState == CS_MOVING)
     {
-        mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mActors, dt);
+        mSigurd.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, dt);
         mSigurd.Update(dt);
 
         if (mSigurd.mMovement.stepTaken)
