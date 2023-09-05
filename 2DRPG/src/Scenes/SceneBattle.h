@@ -31,20 +31,31 @@ public:
 	void Update(const float dt);
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
 
+	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawCursor(static SDL_Renderer* renderer);
+
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;
 	std::string mBackgroundImageFilePath;
 
-	std::vector<CharacterBattle> mPlayerCharacters;
+	SDL_Texture* mBattleIconsTexture = nullptr;
+	std::string mBattleIconsFilePath = "./assets/MenuIcons.png";
+	std::map<std::string, Sprite> mBattleIconsMap;
 
 	SDL_Texture* mEnemiesTexture = nullptr;
 	std::map<std::string, Enemy> mEnemyMap;
 	std::vector<Enemy> mEnemies;
+	
+	EBattleState mBattleState = BS_SELECTING_ACTION;
+
+	std::vector<CharacterBattle> mPlayerCharacters;
 
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
 	int mBattleMenuIndex = 0;
 	int mBattleMenuIndexOptions = 4;
+	int mBattleSelectedEnemyIndex = 0;
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{

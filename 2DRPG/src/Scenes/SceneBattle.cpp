@@ -48,6 +48,26 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		mBackgroundTexture = SDL_CreateTextureFromSurface(renderer, surface);
 	}
 
+	// load battle icons
+	surface = IMG_Load(mBattleIconsFilePath.c_str());
+	if (surface)
+	{
+		mBattleIconsTexture = SDL_CreateTextureFromSurface(renderer, surface);
+	}
+
+	std::ifstream battleIconsFile("./assets/BattleIcons.txt");
+	std::string type;
+	while (battleIconsFile >> type)
+	{
+		if (type == "Cursor")
+		{
+			Sprite newSprite;
+
+			battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
+			mBattleIconsMap.emplace("Cursor", newSprite);
+		}
+	}
+
 	// load enemy sprite sheet
 	std::string filePath = "./assets/Enemies.png";
 	surface = IMG_Load(filePath.c_str());
@@ -59,7 +79,6 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 	// load enemy sprites
 	std::ifstream file("./assets/Enemies.txt");
-	std::string type;
 	while (file >> type)
 	{
 		if (type == "Enemy")
@@ -91,7 +110,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	for (int i = 0; i < encounter.enemyNames.size(); i++)
 	{
 		Enemy newEnemy = mEnemyMap.at(encounter.enemyNames[i]);
-		newEnemy.battleSpawnPosition = encounter.enemyPositions[i];
+		newEnemy.position = mSmallEnemyPositions[encounter.enemyPositions[i]];
 		newEnemy.LoadEnemyAttributtes(encounter.enemyNames[i]);
 		mEnemies.push_back(newEnemy);
 	}
@@ -135,6 +154,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 void SceneBattle::Shutdown()
 {
 	SDL_DestroyTexture(mBackgroundTexture);
+	SDL_DestroyTexture(mBattleIconsTexture);
 	SDL_DestroyTexture(mEnemiesTexture);
 }
 
@@ -142,32 +162,84 @@ void SceneBattle::Input()
 {
 	if (InputManager::UpPressed())
 	{
-		mBattleMenuIndex--;
-		if (mBattleMenuIndex < 0) mBattleMenuIndex = mBattleMenuIndexOptions - 1;
+		switch (mBattleState)
+		{
+			case BS_SELECTING_ACTION:
+			{
+
+				mBattleMenuIndex--;
+				if (mBattleMenuIndex < 0) mBattleMenuIndex = mBattleMenuIndexOptions - 1;
+				break;
+			}
+			case BS_SELECTING_TARGET:
+			{
+				mBattleSelectedEnemyIndex--;
+				if (mBattleSelectedEnemyIndex < 0) mBattleSelectedEnemyIndex = mEnemies.size() - 1;
+				break;
+			}
+			case BS_SELECTING_ITEM:
+			{
+
+				break;
+			}
+		}
 	}
 	if (InputManager::DownPressed())
 	{
-		mBattleMenuIndex++;
-		if (mBattleMenuIndex >= mBattleMenuIndexOptions) mBattleMenuIndex = 0;
+		switch (mBattleState)
+		{
+			case BS_SELECTING_ACTION:
+			{
+				mBattleMenuIndex++;
+				if (mBattleMenuIndex >= mBattleMenuIndexOptions) mBattleMenuIndex = 0;
+				break;
+			}
+			case BS_SELECTING_TARGET:
+			{
+				mBattleSelectedEnemyIndex++;
+				if (mBattleSelectedEnemyIndex >= mEnemies.size()) mBattleSelectedEnemyIndex = 0;
+				break;
+			}
+			case BS_SELECTING_ITEM:
+			{
+
+				break;
+			}
+		}
 	}
 
 	if (InputManager::EPressed())
 	{
-		if (mBattleMenuIndex == 0)
+		switch (mBattleState)
 		{
-			
-		}
-		else if (mBattleMenuIndex == 1)
-		{
+			case BS_SELECTING_ACTION:
+			{
+				if (mBattleMenuIndex == 0)
+				{
+					mBattleState = BS_SELECTING_TARGET;
+				}
+				else if (mBattleMenuIndex == 1)
+				{
 
-		}
-		else if (mBattleMenuIndex == 2)
-		{
-			
-		}
-		else if (mBattleMenuIndex == 3)
-		{
-			SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
+				}
+				else if (mBattleMenuIndex == 2)
+				{
+
+				}
+				else if (mBattleMenuIndex == 3)
+				{
+					SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
+				}
+				break;
+			}
+			case BS_SELECTING_TARGET:
+			{
+				mBattleState = BS_SELECTING_ACTION;
+
+				break;
+			}
+			case BS_SELECTING_ITEM:
+				break;
 		}
 	}
 }
@@ -206,8 +278,8 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	{
 		SDL_Rect destRect =
 		{
-			mSmallEnemyPositions[mEnemies[i].battleSpawnPosition].x,
-			mSmallEnemyPositions[mEnemies[i].battleSpawnPosition].y,
+			mEnemies[i].position.x,
+			mEnemies[i].position.y,
 			mEnemies[i].rect.w * TILE_SPRITE_SCALE,
 			mEnemies[i].rect.h * TILE_SPRITE_SCALE
 		};
@@ -215,8 +287,29 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		GraphicsManager::DrawSpriteRect(mEnemiesTexture, mEnemies[i].rect, destRect);
 	}
 
+	SDL_Rect rect;
+	switch (mBattleState)
+	{
+		case BS_SELECTING_ACTION:
+		{
+			DrawActions(renderer, rect);
+			DrawPartyStats(renderer, rect);
+			break;
+		}
+		case BS_SELECTING_TARGET:
+		{
+			DrawCursor(renderer);
+			break;
+		}
+		case BS_SELECTING_ITEM:
+			break;
+	}
+}
+
+void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
+{
 	// Draw Battle UI Options
-	SDL_Rect rect = GraphicsManager::DrawUIBox(
+	rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + 100,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
 		BATTLE_MENU_WIDTH,
@@ -226,7 +319,10 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item", 0xFFFFFFFF);
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run", 0xFFFFFFFF);
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
+}
 
+void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
+{
 	// Draw Party Stats
 	rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + BATTLE_MENU_WIDTH + UI_BOX_BORDER_SIZE + 100,
@@ -239,7 +335,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
 		GraphicsManager::DrawString(
 			rect.x + TEXT_PADDING,
-			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
+			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
 			attributes.characterName.c_str(),
 			0xFFFFFFFF);
 
@@ -251,14 +347,29 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - hpLength - BATTLE_PARTY_UI_BUFFER * TEXT_SIZE - mpLength,
-			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
+			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
 			hpString.c_str(),
 			0xFFFFFFFF);
 
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - mpLength,
-			rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + BATTLE_TEXT_VERTICAL_PADDING * i,
+			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
 			mpString.c_str(),
 			0xFFFFFFFF);
 	}
+}
+
+void SceneBattle::DrawCursor(SDL_Renderer* renderer)
+{
+	SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
+
+	SDL_Rect destRect =
+	{
+		mEnemies[mBattleSelectedEnemyIndex].position.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+		mEnemies[mBattleSelectedEnemyIndex].position.y + (mEnemies[mBattleSelectedEnemyIndex].rect.h / 2) * TILE_SPRITE_SCALE,
+		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
+	};
+
+	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
 }

@@ -32,6 +32,13 @@ enum ECharacterClass
 	NO_CLASS
 };
 
+enum EBattleState
+{
+	BS_SELECTING_ACTION,
+	BS_SELECTING_TARGET,
+	BS_SELECTING_ITEM,
+};
+
 enum EElementAffect
 {
 	IMMUNE,

@@ -40,7 +40,7 @@ struct Enemy
 		}
 	}
 
-	size_t battleSpawnPosition;
+	Vec2 position;
 	SDL_Rect rect;
 
 	CharacterAttributes attributes;
