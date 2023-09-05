@@ -11,16 +11,6 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
 {
     SceneExploration::Setup(renderer);
 
-    for (const SceneEntrance& entrance : mSceneEntrances)
-    {
-        if (entrance.sceneEntranceIndex == SceneManager::GetSceneEntranceIndex())
-        {
-            spawnPosition = entrance.position + entrance.spawnOffset;
-            for(CharacterExploration& character : mCharacters)
-                character.mRigidbody.lastVelocity = entrance.spawnOffset;
-        }
-    }
-
     if (SceneManager::ReturnToOverworld())
     {
         for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
@@ -30,11 +20,25 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
     }
     else if (SceneManager::GetSceneEntranceIndex() == -1)
     {
-        spawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
+        mSpawnPosition = Vec2(39.0f, 32.0f) * TILE_SIZE;
         mSpawnPositions.push_back(Vec2(39.0f, 32.0f) * TILE_SIZE);
         mSpawnPositions.push_back(Vec2(40.0f, 32.0f) * TILE_SIZE);
         mSpawnPositions.push_back(Vec2(40.0f, 33.0f) * TILE_SIZE);
         mSpawnPositions.push_back(Vec2(39.0f, 33.0f) * TILE_SIZE);
+    }
+    else
+    {
+        for (const SceneEntrance& entrance : mSceneEntrances)
+        {
+            if (entrance.sceneEntranceIndex == SceneManager::GetSceneEntranceIndex())
+            {
+                for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+                {
+                    mSpawnPositions.push_back(entrance.position + entrance.spawnOffset);
+                }
+                mSpawnDirection = entrance.spawnOffset;
+            }
+        }
     }
 
     for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
@@ -71,6 +75,8 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         newCharacter.SetPosition(mSpawnPositions[i]);
         if (SceneManager::ReturnToOverworld())
             newCharacter.mRigidbody.lastVelocity = SceneManager::GetPreviousDirection(i);
+        else
+            newCharacter.mRigidbody.lastVelocity = mSpawnDirection;
         newCharacter.mPartyIndex = i;
 
         mCharacters.push_back(newCharacter);
@@ -131,7 +137,7 @@ void SceneOverworld::Render(static SDL_Renderer* renderer, static SDL_Rect& came
 { 
     SceneExploration::Render(renderer, camera);
 
-    for (int i = 0; i < mCharacters.size(); i++)
+    for (int i = mCharacters.size() - 1; i >= 0; i--)
     {
         if (i == 0)
         {

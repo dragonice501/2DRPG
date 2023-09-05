@@ -36,9 +36,10 @@ protected:
 	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
-	Vec2 spawnPosition;
+	Vec2 mSpawnPosition;
 	std::vector<Vec2> mSpawnPositions;
+	Vec2 mSpawnDirection;
 
-	int mStepsUntilEncounterMax = 20;
+	int mStepsUntilEncounterMax = 15;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 };

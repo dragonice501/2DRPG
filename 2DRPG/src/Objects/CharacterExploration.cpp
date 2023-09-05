@@ -163,6 +163,14 @@ bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int h
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
 
+    if (mPartyIndex != 0)
+    {
+        if (mPosition == characters[mPartyIndex - 1].GetPosition())
+        {
+            return false;
+        }
+    }
+
     if (SceneManager::GetIsOverworld())
     {
         ETerrainType terrain = tiles[x + y * width].terrainType;
