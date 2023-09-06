@@ -234,8 +234,7 @@ void SceneBattle::Input()
 			}
 			case BS_SELECTING_TARGET:
 			{
-				mBattleState = BS_SELECTING_ACTION;
-
+				mBattleState = BS_ATTACKING;
 				break;
 			}
 			case BS_SELECTING_ITEM:
@@ -246,6 +245,39 @@ void SceneBattle::Input()
 
 void SceneBattle::Update(const float dt)
 {
+	switch (mBattleState)
+	{
+		case BS_SELECTING_ACTION:
+			break;
+		case BS_SELECTING_TARGET:
+			break;
+		case BS_SELECTING_ITEM:
+			break;
+		case BS_ATTACKING:
+		{
+			mAttackTimeRemaining -= dt;
+			if (mAttackTimeRemaining <= 0)
+			{
+				mAttackTimeRemaining = mAttackTime;
+				mBattleState = BS_ATTACK_RESULT;
+			}
+			break;
+		}
+		case BS_ATTACK_RESULT:
+		{
+			mAttackResultTimeRemaining -= dt;
+			if (mAttackResultTimeRemaining <= 0)
+			{
+				mAttackResultTimeRemaining = mAttackResultTime;
+				mBattleState = BS_SELECTING_ACTION;
+
+				mSelectedCharacterIndex++;
+				if (mSelectedCharacterIndex > PlayerManager::GetCharacterAttributes().size() - 1) mSelectedCharacterIndex = 0;
+			}
+
+			break;
+		}
+	}
 }
 
 void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
@@ -298,11 +330,26 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		}
 		case BS_SELECTING_TARGET:
 		{
+			DrawActions(renderer, rect);
+			DrawPartyStats(renderer, rect);
 			DrawCursor(renderer);
 			break;
 		}
 		case BS_SELECTING_ITEM:
+		{
+
 			break;
+		}
+		case BS_ATTACKING:
+		{
+			DrawBattleAction(renderer, rect);
+			break;
+		}
+		case BS_ATTACK_RESULT:
+		{
+			DrawBattleResult(renderer, rect);
+			break;
+		}
 	}
 }
 
@@ -314,10 +361,12 @@ void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
 		BATTLE_MENU_WIDTH,
 		BATTLE_MENU_HEIGHT);
+
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Fight", 0xFFFFFFFF);
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Magic", 0xFFFFFFFF);
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item", 0xFFFFFFFF);
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run", 0xFFFFFFFF);
+
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
 }
 
@@ -357,6 +406,8 @@ void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 			mpString.c_str(),
 			0xFFFFFFFF);
 	}
+
+	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mSelectedCharacterIndex, 100, 30);
 }
 
 void SceneBattle::DrawCursor(SDL_Renderer* renderer)
@@ -372,4 +423,49 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 	};
 
 	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+}
+
+void SceneBattle::DrawBattleAction(SDL_Renderer* renderer, SDL_Rect& rect)
+{
+	std::string battleString =
+		PlayerManager::GetCharacterAttributes()[mSelectedCharacterIndex].characterName +
+		" attacks " +
+		mEnemies[mBattleSelectedEnemyIndex].attributes.characterName;
+
+	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
+
+	rect = GraphicsManager::DrawUIBox(
+		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
+		GraphicsManager::WindowHeight() - BATTLE_ATTACK_UI_HEIGHT - 50,
+		battleStringLength + TEXT_PADDING * 2,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
+
+	GraphicsManager::DrawString(
+		rect.x + TEXT_PADDING,
+		rect.y + TEXT_PADDING,
+		battleString.c_str(),
+		0xFFFFFFFF);
+}
+void SceneBattle::DrawBattleResult(SDL_Renderer* renderer, SDL_Rect& rect)
+{
+	int damage = PlayerManager::GetCharacterAttributes()[mSelectedCharacterIndex].strength - mEnemies[mBattleSelectedEnemyIndex].attributes.defense;
+	std::string battleString =
+		PlayerManager::GetCharacterAttributes()[mSelectedCharacterIndex].characterName +
+		" did " +
+		std::to_string(damage) +
+		" damage ";
+
+	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
+
+	rect = GraphicsManager::DrawUIBox(
+		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
+		GraphicsManager::WindowHeight() - BATTLE_ATTACK_UI_HEIGHT - 50,
+		battleStringLength + TEXT_PADDING * 2,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
+
+	GraphicsManager::DrawString(
+		rect.x + TEXT_PADDING,
+		rect.y + TEXT_PADDING,
+		battleString.c_str(),
+		0xFFFFFFFF);
 }

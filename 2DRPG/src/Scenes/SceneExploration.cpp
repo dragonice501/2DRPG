@@ -109,9 +109,6 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
 void SceneExploration::Shutdown()
 {
-    mTiles.clear();
-    mActors.clear();
-
     SDL_DestroyTexture(mSpriteSheet);
 }
 

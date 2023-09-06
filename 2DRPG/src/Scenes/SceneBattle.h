@@ -34,6 +34,8 @@ public:
 	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawCursor(static SDL_Renderer* renderer);
+	void DrawBattleAction(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawBattleResult(static SDL_Renderer* renderer, SDL_Rect& rect);
 
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;
@@ -55,7 +57,14 @@ private:
 
 	int mBattleMenuIndex = 0;
 	int mBattleMenuIndexOptions = 4;
+
+	int mSelectedCharacterIndex = 0;
 	int mBattleSelectedEnemyIndex = 0;
+
+	float mAttackTime = 1.5f;
+	float mAttackTimeRemaining = 1.5f;
+	float mAttackResultTime = 1.5f;
+	float mAttackResultTimeRemaining = 1.5f;
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{
