@@ -14,28 +14,51 @@ struct Enemy
 
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{
-		std::string enemy;
+		std::string type;
 		std::string fileName = "./assets/EnemyAttributes.txt";
 		std::ifstream file(fileName);
-		while (file >> enemy)
+		while (file >> type)
 		{
-			if (enemy == enemyName)
+			if (type == "Name")
 			{
-				attributes.characterName = enemyName;
-				int fireAffect;
+				std::string name;
+				file >> name;
+				if (name == enemyName)
+				{
+					attributes.characterName = enemyName;
+					while (file >> type)
+					{
+						if (type == "Health")
+						{
+							file >> attributes.healthMax;
+							attributes.health = attributes.healthMax;
+						}
+						else if (type == "Magic")
+						{
+							file >> attributes.magicMax;
+							attributes.magic = attributes.magicMax;
+						}
+						else if (type == "Strength") file >> attributes.strength;
+						else if (type == "Defense") file >> attributes.defense;
+						else if (type == "Intelligence") file >> attributes.intelligence;
+						else if (type == "Speed") file >> attributes.speed;
+						else if (type == "Skill") file >> attributes.skill;
+						else if (type == "Luck") file >> attributes.luck;
+						else if (type == "FireAffect")
+						{
+							int fireAffect;
+							file >> fireAffect;
+							this->fireAffect = static_cast<EElementAffect>(fireAffect);
 
-				file >>
-					attributes.health >> attributes.healthMax >> attributes.magic >> attributes.magicMax >>
-					attributes.strength >> attributes.defense >> attributes.intelligence >> attributes.speed >> attributes.skill >> attributes.luck >>
-					fireAffect;
-
-				this->fireAffect = static_cast<EElementAffect>(fireAffect);
-
-				break;
-			}
-			else
-			{
-				file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+							return;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i < 10; i++)
+						file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				}
 			}
 		}
 	}

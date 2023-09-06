@@ -1,2 +1,21 @@
-Goblin 10 10 3 3 3 2 1 3 2 1 3
-Wolf 10 10 3 3 3 2 1 3 2 1 3
+Name Goblin
+Health 10 
+Magic 3
+Strength 3 
+Defense 3
+Intelligence 2
+Speed 1
+Skill 3
+Luck 2
+FireAffect 3
+
+Name Wolf
+Health 10 
+Magic 3
+Strength 3 
+Defense 3
+Intelligence 2
+Speed 1
+Skill 3
+Luck 2
+FireAffect 3

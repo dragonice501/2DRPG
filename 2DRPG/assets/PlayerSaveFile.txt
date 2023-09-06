@@ -1,4 +1,43 @@
-Character Sigurd 25 25 15 15 10 5 4 4 5 3 3
-Character Elan 13 13 19 19 5 2 7 4 2 4 0
-Character Don 17 17 24 24 4 3 8 5 3 2 2
-Character Ark 22 22 12 12 12 13 3 2 4 2 1
+Character Sigurd
+Class 3
+Health 25 
+Magic 15
+Strength 10
+Defense 5
+Intelligence 4
+Speed 4
+Skill 5
+Luck 3
+
+Character Elan
+Class 0 
+Health 13
+Magic 19 
+Strength 5
+Defense 2
+Intelligence 7
+Speed 4
+Skill 2
+Luck 4
+
+Character Don
+Class 2
+Health 17
+Magic 24
+Strength 4
+Defense 3
+Intelligence 8
+Speed 5
+Skill 3
+Luck 2
+
+Character Ark
+Class 1
+Health 22 
+Magic 12
+Strength 13
+Defnse 12
+Intelligence 3
+Speed 2
+Skill 4
+Luck 2

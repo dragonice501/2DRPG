@@ -14,20 +14,38 @@ void PlayerManager::LoadCharacters()
     {
         if (type == "Character")
         {
-            std::string characterName;
-            int health, healthMax, magic, magicMax, strength, defense, intelligence, speed, skill, luck, characterClass;
+            CharacterAttributes newCharacterAttributes;
+            file >> newCharacterAttributes.characterName;
 
-            file >>
-                characterName >> health >> healthMax >> magic >> magicMax >>
-                strength >> defense >> intelligence >> speed >> skill >> luck >>
-                characterClass;
-
-            CharacterAttributes newCharacterAttributes =
+            while (file >> type)
             {
-                characterName, static_cast<ECharacterClass>(characterClass),
-                health, healthMax, magic, magicMax,
-                strength, defense, intelligence, speed, skill, luck
-            };
+                if (type == "Class")
+                {
+                    int characterClass;
+                    file >> characterClass;
+                    newCharacterAttributes.characterClass = static_cast<ECharacterClass>(characterClass);
+                }
+                else if (type == "Health")
+                {
+                    file >> newCharacterAttributes.healthMax;
+                    newCharacterAttributes.health = newCharacterAttributes.healthMax;
+                }
+                else if (type == "Magic")
+                {
+                    file >> newCharacterAttributes.magicMax;
+                    newCharacterAttributes.magic = newCharacterAttributes.magicMax;
+                }
+                else if (type == "Strength") file >> newCharacterAttributes.strength;
+                else if (type == "Defense") file >> newCharacterAttributes.defense;
+                else if (type == "Intelligence") file >> newCharacterAttributes.intelligence;
+                else if (type == "Speed") file >> newCharacterAttributes.speed;
+                else if (type == "Skill") file >> newCharacterAttributes.skill;
+                else if (type == "Luck")
+                {
+                    file >> newCharacterAttributes.luck;
+                    break;
+                }
+            }
 
             mCharacterAttributes.push_back(newCharacterAttributes);
 
