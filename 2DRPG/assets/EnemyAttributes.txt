@@ -4,18 +4,18 @@ Magic 3
 Strength 3 
 Defense 3
 Intelligence 2
-Speed 1
+Speed 4
 Skill 3
 Luck 2
 FireAffect 3
 
 Name Wolf
-Health 10 
+Health 8 
 Magic 3
-Strength 3 
-Defense 3
+Strength 2 
+Defense 2
 Intelligence 2
-Speed 1
+Speed 6
 Skill 3
 Luck 2
 FireAffect 3

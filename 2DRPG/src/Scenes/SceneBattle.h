@@ -31,11 +31,16 @@ public:
 	void Update(const float dt);
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
 
+	void BuildTurnOrder();
+	void NextTurn();
+
 	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawCursor(static SDL_Renderer* renderer);
 	void DrawBattleAction(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawBattleResult(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawEnemyBattleAction(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawEnemyBattleResult(static SDL_Renderer* renderer, SDL_Rect& rect);
 
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;
@@ -52,8 +57,18 @@ private:
 	EBattleState mBattleState = BS_SELECTING_ACTION;
 
 	std::vector<CharacterBattle> mPlayerCharacters;
-
 	std::vector<EnemyEncounter> mEnemyEncounters;
+
+	struct Turn
+	{
+		std::string characterName;
+		bool partyMember;
+		int characterIndex;
+		int characterSpeed;
+	};
+
+	std::vector<Turn> mTurnOrder;
+	int mTurnIndex = 0;
 
 	int mBattleMenuIndex = 0;
 	int mBattleMenuIndexOptions = 4;
