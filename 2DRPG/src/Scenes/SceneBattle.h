@@ -4,7 +4,9 @@
 #include "../Utils/Utils.h"
 #include "../Objects/Enemy.h"
 #include "../Objects/EnemyEncounter.h"
+#include "../Objects/ActorBattle.h"
 #include "../Objects/CharacterBattle.h"
+#include "../Objects/EnemyBattle.h"
 
 #include "../Graphics/Font.h"
 
@@ -29,18 +31,15 @@ public:
 
 	void Input();
 	void Update(const float dt);
-	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
 
 	void BuildTurnOrder();
 	void NextTurn();
 
+	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
 	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawCursor(static SDL_Renderer* renderer);
-	void DrawBattleAction(static SDL_Renderer* renderer, SDL_Rect& rect);
-	void DrawBattleResult(static SDL_Renderer* renderer, SDL_Rect& rect);
-	void DrawEnemyBattleAction(static SDL_Renderer* renderer, SDL_Rect& rect);
-	void DrawEnemyBattleResult(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawBattleEvent(static SDL_Renderer* renderer, SDL_Rect& rect, const std::string& eventString);
 
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;
@@ -59,6 +58,10 @@ private:
 	std::vector<CharacterBattle> mPlayerCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
+	std::vector<ActorBattle*> mBattleTurns;
+	std::vector<CharacterBattle*> mBattleCharacters;
+	std::vector<EnemyBattle*> mBattleEnemies;
+
 	struct Turn
 	{
 		std::string characterName;
@@ -76,10 +79,12 @@ private:
 	int mSelectedCharacterIndex = 0;
 	int mBattleSelectedEnemyIndex = 0;
 
-	float mAttackTime = 1.5f;
-	float mAttackTimeRemaining = 1.5f;
-	float mAttackResultTime = 1.5f;
-	float mAttackResultTimeRemaining = 1.5f;
+	float mTurnTime = 1.5f;
+	float mTurnTimeRemaining = mTurnTime;
+
+	int mDamageDealt = 0;
+	int mEnemyTargetIndex = 0;
+	int mCurrentPlayerIndex = 0;
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{

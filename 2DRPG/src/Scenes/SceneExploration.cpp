@@ -11,11 +11,11 @@ SceneExploration::~SceneExploration()
 
 void SceneExploration::Setup(SDL_Renderer* renderer)
 {
-    std::string fileName = "./assets/" + mFileName + "SpriteSheet.png";
+    std::string fileName = "./assets/" + mFileName + "TileMap.png";
     SDL_Surface* surface = IMG_Load(fileName.c_str());
     if (surface)
     {
-        mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
+        mTileMap = SDL_CreateTextureFromSurface(renderer, surface);
     }
     SDL_FreeSurface(surface);
 
@@ -109,7 +109,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
 void SceneExploration::Shutdown()
 {
-    SDL_DestroyTexture(mSpriteSheet);
+    SDL_DestroyTexture(mTileMap);
 }
 
 void SceneExploration::Input()
@@ -142,6 +142,6 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
             TILE_SIZE * TILE_SPRITE_SCALE
         };
 
-        GraphicsManager::DrawSpriteRect(mSpriteSheet, srcRect, destRect);
+        GraphicsManager::DrawSpriteRect(mTileMap, srcRect, destRect);
     }
 }

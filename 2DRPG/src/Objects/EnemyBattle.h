@@ -1,18 +1,14 @@
 #pragma once
 
-#include "Components.h"
+#include "CharacterBattle.h"
 
 #include <string>
-#include <fstream>
 
-struct Enemy
+class EnemyBattle : public ActorBattle
 {
-	Enemy(const int xOffset = 0, const int yOffset = 0, const int width = 0, const int height = 0)
-	{
-		rect = { xOffset, yOffset, width, height };
-	}
-
-	const bool IsAlive() const { return attributes.health > 0; }
+public:
+	EnemyBattle() {}
+	~EnemyBattle() {}
 
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{
@@ -65,9 +61,6 @@ struct Enemy
 		}
 	}
 
-	Vec2 position;
-	SDL_Rect rect;
+private:
 
-	CharacterAttributes attributes;
-	EElementAffect fireAffect;
 };

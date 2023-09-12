@@ -159,6 +159,7 @@
     <ClCompile Include="src\Utils\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Objects\ActorBattle.h" />
     <ClInclude Include="src\Objects\CharacterBattle.h" />
     <ClInclude Include="src\Managers\PlayerManager.h" />
     <ClInclude Include="src\Objects\Enemy.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\Managers\GraphicsManager.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Objects\Actor.h" />
+    <ClInclude Include="src\Objects\EnemyBattle.h" />
     <ClInclude Include="src\Objects\EnemyEncounter.h" />
     <ClInclude Include="src\Scenes\SceneBattle.h" />
     <ClInclude Include="src\Scenes\SceneExploration.h" />

@@ -15,7 +15,7 @@ public:
 	static void LoadCharacters();
 	static void SaveCharacters();
 
-	static const std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
+	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
 	static const std::vector<SDL_Texture*>& GetCharacterTextures() { return mCharacterTextures; }
 
 private:

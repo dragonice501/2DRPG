@@ -6,6 +6,7 @@ Actor::Actor()
 
 Actor::~Actor()
 {
+    
 }
 
 void Actor::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
@@ -16,6 +17,7 @@ void Actor::Init(const std::string& name, const Vec2& spawnPosition, SDL_Rendere
     {
         mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
     }
+    SDL_FreeSurface(surface);
 
     mPosition = spawnPosition;
     mSprite.positionOffset = { 0.0f, -16.0f };

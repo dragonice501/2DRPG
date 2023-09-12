@@ -2,7 +2,7 @@
 
 SceneTown::~SceneTown()
 {
-	SDL_DestroyTexture(mSpriteSheet);
+	SDL_DestroyTexture(mTileMap);
 }
 
 void SceneTown::Setup(static SDL_Renderer* renderer)

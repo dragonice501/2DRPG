@@ -1,15 +1,17 @@
 #pragma once
 
-#include "Actor.h"
+#include "ActorBattle.h"
 #include "../Objects/Components.h"
 
 #include <SDL.h>
 #include <string>
+#include <fstream>
 
-class CharacterBattle
+class CharacterBattle : public ActorBattle
 {
 public:
-	CharacterBattle();
+	CharacterBattle() {}
+	~CharacterBattle() {}
 
 	void LoadAnimations(std::string name);
 
@@ -17,6 +19,8 @@ public:
 
 	size_t battleSpawnPosition;
 	SDL_Rect rect;
+
+	SDL_Texture* mTexture;
 
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation = "IdleLeft";

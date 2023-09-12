@@ -61,10 +61,6 @@ void Engine::Run()
         // Load Scene if one is ready
         if (SceneManager::SceneReadyToLoad())
         {
-            if (SceneManager::CurrentScene())
-            {
-                SceneManager::CurrentSceneShutdown();
-            }
             SceneManager::LoadScene();
         }
 

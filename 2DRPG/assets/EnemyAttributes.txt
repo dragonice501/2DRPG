@@ -15,7 +15,7 @@ Magic 3
 Strength 2 
 Defense 2
 Intelligence 2
-Speed 6
+Speed 20
 Skill 3
 Luck 2
 FireAffect 3

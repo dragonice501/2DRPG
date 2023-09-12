@@ -2,10 +2,10 @@ Character Sigurd
 Class 3
 Health 25 
 Magic 15
-Strength 10
+Strength 15
 Defense 5
 Intelligence 4
-Speed 4
+Speed 10
 Skill 5
 Luck 3
 
@@ -24,10 +24,10 @@ Character Don
 Class 2
 Health 17
 Magic 24
-Strength 4
+Strength 15
 Defense 3
 Intelligence 8
-Speed 5
+Speed 10
 Skill 3
 Luck 2
 

@@ -29,7 +29,7 @@ public:
 
 protected:
 	std::vector<Tile> mTiles;
-	SDL_Texture* mSpriteSheet;
+	SDL_Texture* mTileMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<Actor> mActors;

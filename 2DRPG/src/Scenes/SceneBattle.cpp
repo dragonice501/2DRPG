@@ -43,19 +43,21 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 
 void SceneBattle::Setup(SDL_Renderer* renderer)
 {
-	// load background image
+	// Load background image
 	SDL_Surface* surface = IMG_Load(mBackgroundImageFilePath.c_str());
 	if (surface)
 	{
 		mBackgroundTexture = SDL_CreateTextureFromSurface(renderer, surface);
 	}
+	SDL_FreeSurface(surface);
 
-	// load battle icons
+	// Load battle icons
 	surface = IMG_Load(mBattleIconsFilePath.c_str());
 	if (surface)
 	{
 		mBattleIconsTexture = SDL_CreateTextureFromSurface(renderer, surface);
 	}
+	SDL_FreeSurface(surface);
 
 	std::ifstream battleIconsFile("./assets/BattleIcons.txt");
 	std::string type;
@@ -70,7 +72,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		}
 	}
 
-	// load enemy sprite sheet
+	// Load enemy sprite sheet
 	std::string filePath = "./assets/Enemies.png";
 	surface = IMG_Load(filePath.c_str());
 	if (surface)
@@ -79,7 +81,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 	SDL_FreeSurface(surface);
 
-	// load enemy sprites
+	// Load enemy sprites
 	std::ifstream file("./assets/EnemySprites.txt");
 	while (file >> type)
 	{
@@ -108,57 +110,82 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 		}
 	}
 
-	// load enemy attributes and set screen positions
+	// Load enemy attributes and set screen positions
 	for (int i = 0; i < encounter.enemyNames.size(); i++)
 	{
 		Enemy newEnemy = mEnemyMap.at(encounter.enemyNames[i]);
 		newEnemy.position = mSmallEnemyPositions[encounter.enemyPositions[i]];
 		newEnemy.LoadEnemyAttributtes(encounter.enemyNames[i]);
 		mEnemies.push_back(newEnemy);
+
+		EnemyBattle* newBattleEnemy = new EnemyBattle();
+		newBattleEnemy->rect = mEnemyMap.at(encounter.enemyNames[i]).rect;
+		newBattleEnemy->battlePosition = mSmallEnemyPositions[encounter.enemyPositions[i]];
+		newBattleEnemy->isEnemy = true;
+		newBattleEnemy->LoadEnemyAttributtes(encounter.enemyNames[i]);
+
+		mBattleEnemies.push_back(newBattleEnemy);
 	}
 
-	// setup player party
+	// Setup player party
 	for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
 	{
 		CharacterBattle newCharacter;
 		std::string name;
 		switch (PlayerManager::GetCharacterAttributes()[i].characterClass)
 		{
-		case DANCER:
-		{
-			name = "Dancer";
-			break;
-		}
-		case KNIGHT:
-		{
-			name = "Knight";
-			break;
-		}
-		case MAGE:
-		{
-			name = "Mage";
-			break;
-		}
-		case PALADIN:
-		{
-			name = "Sigurd";
-			break;
-		}
+			case DANCER:
+			{
+				name = "Dancer";
+				break;
+			}
+			case KNIGHT:
+			{
+				name = "Knight";
+				break;
+			}
+			case MAGE:
+			{
+				name = "Mage";
+				break;
+			}
+			case PALADIN:
+			{
+				name = "Sigurd";
+				break;
+			}
 		}
 
 		newCharacter.LoadAnimations(name);
 		newCharacter.mSprite.positionOffset = Vec2(0.0f, 16.0f);
 
 		mPlayerCharacters.push_back(newCharacter);
+
+		CharacterBattle* newBattleCharacter = new CharacterBattle();
+		newBattleCharacter->LoadAnimations(name);
+		newBattleCharacter->mTexture = PlayerManager::GetCharacterTextures()[i];
+		newBattleCharacter->battlePosition = mPlayerCharacterPositions[i];
+		newBattleCharacter->mSprite.positionOffset = Vec2(0.0f, 16.0f);
+		newBattleCharacter->attributes = PlayerManager::GetCharacterAttributes()[i];
+
+		mBattleCharacters.push_back(newBattleCharacter);
 	}
 
 	BuildTurnOrder();
-	if (mTurnOrder[mTurnIndex].partyMember) mBattleState = BS_SELECTING_ACTION;
-	else mBattleState = BS_ENEMY_ATTACKING;
 }
 
 void SceneBattle::Shutdown()
 {
+	for (CharacterBattle* character : mBattleCharacters)
+	{
+		delete character;
+	}
+
+	for (EnemyBattle* enemy : mBattleEnemies)
+	{
+		delete enemy;
+	}
+
 	SDL_DestroyTexture(mBackgroundTexture);
 	SDL_DestroyTexture(mBattleIconsTexture);
 	SDL_DestroyTexture(mEnemiesTexture);
@@ -180,7 +207,9 @@ void SceneBattle::Input()
 			case BS_SELECTING_TARGET:
 			{
 				mBattleSelectedEnemyIndex--;
-				if (mBattleSelectedEnemyIndex < 0) mBattleSelectedEnemyIndex = mEnemies.size() - 1;
+
+				if (mBattleSelectedEnemyIndex < 0) mBattleSelectedEnemyIndex = mBattleEnemies.size() - 1;
+
 				break;
 			}
 			case BS_SELECTING_ITEM:
@@ -203,7 +232,9 @@ void SceneBattle::Input()
 			case BS_SELECTING_TARGET:
 			{
 				mBattleSelectedEnemyIndex++;
-				if (mBattleSelectedEnemyIndex >= mEnemies.size()) mBattleSelectedEnemyIndex = 0;
+
+				if (mBattleSelectedEnemyIndex >= mBattleEnemies.size()) mBattleSelectedEnemyIndex = 0;
+
 				break;
 			}
 			case BS_SELECTING_ITEM:
@@ -253,6 +284,10 @@ void SceneBattle::Update(const float dt)
 {
 	switch (mBattleState)
 	{
+		case BS_MONSTERS_APPEARED:
+		{
+			break;
+		}
 		case BS_SELECTING_ACTION:
 			break;
 		case BS_SELECTING_TARGET:
@@ -261,50 +296,191 @@ void SceneBattle::Update(const float dt)
 			break;
 		case BS_PLAYER_ATTACKING:
 		{
-			mAttackTimeRemaining -= dt;
-			if (mAttackTimeRemaining <= 0)
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
 			{
-				mAttackTimeRemaining = mAttackTime;
+				mTurnTimeRemaining = mTurnTime;
 				mBattleState = BS_PLAYER_ATTACK_RESULT;
+
+				mDamageDealt =
+					mBattleTurns[mTurnIndex]->attributes.strength -
+					mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.defense;
+				if (mDamageDealt <= 0) mDamageDealt = 1;
 			}
 			break;
 		}
 		case BS_PLAYER_ATTACK_RESULT:
 		{
-			mAttackResultTimeRemaining -= dt;
-			if (mAttackResultTimeRemaining <= 0)
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
 			{
-				mAttackResultTimeRemaining = mAttackResultTime;
-				mBattleState = BS_SELECTING_ACTION;
+				mTurnTimeRemaining = mTurnTime;
 
-				NextTurn();
+				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.health -= mDamageDealt;
+				CharacterAttributes& enemyAttributes = mBattleEnemies[mBattleSelectedEnemyIndex]->attributes;
+				std::cout << enemyAttributes.characterName << ' ' << enemyAttributes.health << '/' << enemyAttributes.healthMax << std::endl << std::endl;
+
+				if (enemyAttributes.health <= 0)
+				{
+					enemyAttributes.health = 0;
+					mBattleState = BS_ENEMY_DIED;
+				}
+				else
+				{
+					NextTurn();
+				}
 			}
 
 			break;
 		}
+		case BS_PLAYER_DIED:
+		{
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
+			{
+				mTurnTimeRemaining = mTurnTime;
+
+				NextTurn();
+			}
+			break;
+		}
 		case BS_ENEMY_ATTACKING:
 		{
-			mAttackTimeRemaining -= dt;
-			if (mAttackTimeRemaining <= 0)
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
 			{
-				mAttackTimeRemaining = mAttackTime;
+				mTurnTimeRemaining = mTurnTime;
 				mBattleState = BS_ENEMY_ATTACK_RESULT;
+
+				mDamageDealt =
+					mBattleTurns[mTurnIndex]->attributes.strength -
+					mBattleCharacters[mEnemyTargetIndex]->attributes.defense;
+				if (mDamageDealt <= 0) mDamageDealt = 1;
 			}
 			break;
 		}
 		case BS_ENEMY_ATTACK_RESULT:
 		{
-			mAttackResultTimeRemaining -= dt;
-			if (mAttackResultTimeRemaining <= 0)
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
 			{
-				mAttackResultTimeRemaining = mAttackResultTime;
-				mBattleState = BS_SELECTING_ACTION;
+				mTurnTimeRemaining = mTurnTime;
+
+				mBattleCharacters[mEnemyTargetIndex]->attributes.health -= mDamageDealt;
 
 				NextTurn();
 			}
 			break;
 		}
+		case BS_ENEMY_DIED:
+		{
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
+			{
+				mTurnTimeRemaining = mTurnTime;
+
+				for (int i = 0; i < mBattleTurns.size(); i++)
+				{
+					if (mBattleTurns[i] == mBattleEnemies[mBattleSelectedEnemyIndex])
+					{
+						mBattleTurns.erase(mBattleTurns.begin() + i);
+
+						if (i < mTurnIndex) mTurnIndex--;
+
+						break;
+					}
+				}
+
+				mBattleEnemies.erase(mBattleEnemies.begin() + mBattleSelectedEnemyIndex);
+
+				if (mBattleEnemies.size() == 0) mBattleState = BS_MONSTERS_DEFEATED;
+				else NextTurn();
+			}
+			break;
+		}
+		case BS_MONSTERS_DEFEATED:
+		{
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
+			{
+				mTurnTimeRemaining = mTurnTime;
+
+				for (int i = 0; i < mBattleCharacters.size(); i++)
+				{
+					PlayerManager::GetCharacterAttributes()[i] = mBattleCharacters[i]->attributes;
+				}
+
+				SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
+			}
+			break;
+		}
+		case BS_PARTY_DEFEATED:
+		{
+			break;
+		}
 	}
+}
+
+void SceneBattle::BuildTurnOrder()
+{
+	for (CharacterBattle* character : mBattleCharacters)
+	{
+		if(character->IsAlive())
+			mBattleTurns.push_back(character);
+	}
+
+	for (EnemyBattle* enemy : mBattleEnemies)
+	{
+		if(enemy->IsAlive())
+			mBattleTurns.push_back(enemy);
+	}
+
+	std::sort(mBattleTurns.begin(), mBattleTurns.end(), [](const ActorBattle* lhs, const ActorBattle* rhs)
+	{
+		return lhs->attributes.speed > rhs->attributes.speed;
+	});
+
+	for (ActorBattle* actor : mBattleTurns)
+	{
+		std::cout << actor->attributes.characterName << ' ' << actor->attributes.speed << std::endl;
+	}
+
+	std::cout << std::endl;
+
+	if (!mBattleTurns[mTurnIndex]->isEnemy)
+	{
+		mBattleState = BS_SELECTING_ACTION;
+	}
+	else
+	{
+		mBattleState = BS_ENEMY_ATTACKING;
+	}
+}
+
+void SceneBattle::NextTurn()
+{
+	mTurnIndex++;
+	if (mTurnIndex >= mBattleTurns.size())
+	{
+		mTurnIndex = 0;
+		mBattleTurns.clear();
+		BuildTurnOrder();
+	}
+
+	if (!mBattleTurns[mTurnIndex]->isEnemy)
+	{
+		mBattleState = BS_SELECTING_ACTION;
+		mBattleSelectedEnemyIndex = 0;
+		for (int i = 0; i < mBattleCharacters.size(); i++)
+		{
+			if (mBattleCharacters[i] == mBattleTurns[mTurnIndex])
+			{
+				mCurrentPlayerIndex = i;
+				break;
+			}
+		}
+	}
+	else mBattleState = BS_ENEMY_ATTACKING;
 }
 
 void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
@@ -312,41 +488,45 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	GraphicsManager::DrawBattleBackground(mBackgroundTexture);
 
 	// Draw Party
-	for (int i = 0; i < mPlayerCharacters.size(); i++)
+	for (CharacterBattle* character : mBattleCharacters)
 	{
-		Animation& anim = mPlayerCharacters[i].mAnimations[mPlayerCharacters[i].mCurrentAnimation];
+		Animation& anim = character->mAnimations[character->mCurrentAnimation];
 
-		mPlayerCharacters[i].mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
-		mPlayerCharacters[i].mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
-		mPlayerCharacters[i].mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
-		mPlayerCharacters[i].mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
+		character->mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
+		character->mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
+		character->mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
+		character->mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 
 		SDL_Rect destRect =
 		{
-			mPlayerCharacterPositions[i].x + mPlayerCharacters[i].mSprite.positionOffset.x * TILE_SPRITE_SCALE,
-			mPlayerCharacterPositions[i].y + mPlayerCharacters[i].mSprite.positionOffset.x * TILE_SPRITE_SCALE,
+			character->battlePosition.x + character->mSprite.positionOffset.x * TILE_SPRITE_SCALE,
+			character->battlePosition.y + character->mSprite.positionOffset.x * TILE_SPRITE_SCALE,
 			32 * TILE_SPRITE_SCALE,
 			32 * TILE_SPRITE_SCALE
 		};
 
-		GraphicsManager::DrawSpriteRect(PlayerManager::GetCharacterTextures()[i], mPlayerCharacters[i].mSprite.srcRect, destRect);
+		GraphicsManager::DrawSpriteRect(character->mTexture, character->mSprite.srcRect, destRect);
 	}
 
 	// Draw Enemies
-	for (int i = 0; i < mEnemies.size(); i++)
+	for (EnemyBattle* enemy : mBattleEnemies)
 	{
-		SDL_Rect destRect =
+		if (enemy->IsAlive())
 		{
-			mEnemies[i].position.x,
-			mEnemies[i].position.y,
-			mEnemies[i].rect.w * TILE_SPRITE_SCALE,
-			mEnemies[i].rect.h * TILE_SPRITE_SCALE
-		};
+			SDL_Rect destRect =
+			{
+				enemy->battlePosition.x,
+				enemy->battlePosition.y,
+				enemy->rect.w * TILE_SPRITE_SCALE,
+				enemy->rect.h * TILE_SPRITE_SCALE
+			};
 
-		GraphicsManager::DrawSpriteRect(mEnemiesTexture, mEnemies[i].rect, destRect);
+			GraphicsManager::DrawSpriteRect(mEnemiesTexture, enemy->rect, destRect);
+		}
 	}
 
 	SDL_Rect rect;
+	std::string battleString;
 	switch (mBattleState)
 	{
 		case BS_SELECTING_ACTION:
@@ -369,84 +549,81 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		}
 		case BS_PLAYER_ATTACKING:
 		{
-			DrawBattleAction(renderer, rect);
+			battleString =
+				mBattleTurns[mTurnIndex]->attributes.characterName +
+				" attacks " +
+				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.characterName;
+
+			DrawBattleEvent(renderer, rect, battleString);
 			break;
 		}
 		case BS_PLAYER_ATTACK_RESULT:
 		{
-			DrawBattleResult(renderer, rect);
+			battleString =
+				mBattleTurns[mTurnIndex]->attributes.characterName +
+				" did " +
+				std::to_string(mDamageDealt) +
+				" damage ";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_PLAYER_DIED:
+		{
+			battleString =
+				PlayerManager::GetCharacterAttributes()[mTurnOrder[mTurnIndex].characterIndex].characterName +
+				" fainted.";
+
+			DrawBattleEvent(renderer, rect, battleString);
 			break;
 		}
 		case BS_ENEMY_ATTACKING:
 		{
-			DrawEnemyBattleAction(renderer, rect);
+			battleString =
+				mBattleTurns[mTurnIndex]->attributes.characterName +
+				" attacks " +
+				mBattleCharacters[mEnemyTargetIndex]->attributes.characterName;
+
+			DrawBattleEvent(renderer, rect, battleString);
 			break;
 		}
 		case BS_ENEMY_ATTACK_RESULT:
 		{
-			DrawEnemyBattleResult(renderer, rect);
+			battleString =
+				mBattleTurns[mTurnIndex]->attributes.characterName +
+				" did " +
+				std::to_string(mDamageDealt) +
+				" damage ";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_ENEMY_DIED:
+		{
+			battleString =
+				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.characterName +
+				" perished.";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_MONSTERS_DEFEATED:
+		{
+			battleString = "Monsters Perished";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_PARTY_DEFEATED:
+		{
+
 			break;
 		}
 	}
 }
 
-void SceneBattle::BuildTurnOrder()
-{
-	for (int i = 0; i < mPlayerCharacters.size(); i++)
-	{
-		Turn turn =
-		{
-			PlayerManager::GetCharacterAttributes()[i].characterName,
-			true,
-			i,
-			PlayerManager::GetCharacterAttributes()[i].speed
-		};
-		mTurnOrder.push_back(turn);
-	}
-
-	for (int i = 0; i < mEnemies.size(); i++)
-	{
-		Turn turn =
-		{
-			mEnemies[i].attributes.characterName,
-			false,
-			i,
-			mEnemies[i].attributes.speed
-		};
-		mTurnOrder.push_back(turn);
-	}
-
-	std::sort(mTurnOrder.begin(), mTurnOrder.end(), [](const Turn& lhs, const Turn& rhs)
-	{
-			return lhs.characterSpeed > rhs.characterSpeed;
-	});
-
-	for (int i = 0; i < mTurnOrder.size(); i++)
-	{
-		std::cout << mTurnOrder[i].characterName << ',' << mTurnOrder[i].characterSpeed << std::endl;
-	}
-
-	if (mTurnOrder[0].partyMember) mBattleState = BS_SELECTING_ACTION;
-	else mBattleState = BS_ENEMY_ATTACKING;
-}
-
-void SceneBattle::NextTurn()
-{
-	mTurnIndex++;
-	if (mTurnIndex > mTurnOrder.size() - 1)
-	{
-		mTurnIndex = 0;
-		mTurnOrder.clear();
-		BuildTurnOrder();
-	}
-
-	if (mTurnOrder[mTurnIndex].partyMember) mBattleState = BS_SELECTING_ACTION;
-	else mBattleState = BS_ENEMY_ATTACKING;
-}
-
 void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 {
-	// Draw Battle UI Options
 	rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + 100,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
@@ -463,16 +640,15 @@ void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 
 void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 {
-	// Draw Party Stats
 	rect = GraphicsManager::DrawUIBox(
 		GraphicsManager::WindowWidth() / 2 + BATTLE_MENU_WIDTH + UI_BOX_BORDER_SIZE + 100,
 		GraphicsManager::WindowHeight() - BATTLE_PARTY_UI_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
 		BATTLE_PARTY_UI_WIDTH,
 		BATTLE_PARTY_UI_HEIGHT);
 
-	for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+	for (int i = 0; i < mBattleCharacters.size(); i++)
 	{
-		const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
+		const CharacterAttributes& attributes = mBattleCharacters[i]->attributes;
 		GraphicsManager::DrawString(
 			rect.x + TEXT_PADDING,
 			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
@@ -498,7 +674,7 @@ void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 			0xFFFFFFFF);
 	}
 
-	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mTurnOrder[mTurnIndex].characterIndex, 100, 30);
+	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mCurrentPlayerIndex, 100, 30);
 }
 
 void SceneBattle::DrawCursor(SDL_Renderer* renderer)
@@ -507,8 +683,8 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 
 	SDL_Rect destRect =
 	{
-		mEnemies[mBattleSelectedEnemyIndex].position.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
-		mEnemies[mBattleSelectedEnemyIndex].position.y + (mEnemies[mBattleSelectedEnemyIndex].rect.h / 2) * TILE_SPRITE_SCALE,
+		mBattleEnemies[mBattleSelectedEnemyIndex]->battlePosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+		mBattleEnemies[mBattleSelectedEnemyIndex]->battlePosition.y + (mBattleEnemies[mBattleSelectedEnemyIndex]->rect.h / 2) * TILE_SPRITE_SCALE,
 		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
 	};
@@ -516,102 +692,19 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
 }
 
-void SceneBattle::DrawBattleAction(SDL_Renderer* renderer, SDL_Rect& rect)
+void SceneBattle::DrawBattleEvent(SDL_Renderer* renderer, SDL_Rect& rect, const std::string& eventString)
 {
-	std::string battleString =
-		PlayerManager::GetCharacterAttributes()[mTurnOrder[mTurnIndex].characterIndex].characterName +
-		" attacks " +
-		mEnemies[mBattleSelectedEnemyIndex].attributes.characterName;
-
-	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
+	int stringLength = eventString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * eventString.length() * TEXT_SIZE;
 
 	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
+		GraphicsManager::WindowWidth() / 2 - stringLength / 2 - TEXT_PADDING,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		battleStringLength + TEXT_PADDING * 2,
+		stringLength + TEXT_PADDING * 2,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
 
 	GraphicsManager::DrawString(
 		rect.x + TEXT_PADDING,
 		rect.y + TEXT_PADDING,
-		battleString.c_str(),
-		0xFFFFFFFF);
-}
-
-void SceneBattle::DrawBattleResult(SDL_Renderer* renderer, SDL_Rect& rect)
-{
-	int damage =
-		PlayerManager::GetCharacterAttributes()[mTurnOrder[mTurnIndex].characterIndex].strength -
-		mEnemies[mBattleSelectedEnemyIndex].attributes.defense;
-	if (damage <= 0) damage = 1;
-
-	std::string battleString =
-		PlayerManager::GetCharacterAttributes()[mTurnOrder[mTurnIndex].characterIndex].characterName +
-		" did " +
-		std::to_string(damage) +
-		" damage ";
-
-	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
-
-	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		battleStringLength + TEXT_PADDING * 2,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
-
-	GraphicsManager::DrawString(
-		rect.x + TEXT_PADDING,
-		rect.y + TEXT_PADDING,
-		battleString.c_str(),
-		0xFFFFFFFF);
-}
-
-void SceneBattle::DrawEnemyBattleAction(SDL_Renderer* renderer, SDL_Rect& rect)
-{
-	std::string battleString =
-		mEnemies[mTurnOrder[mTurnIndex].characterIndex].attributes.characterName +
-		" attacks " +
-		PlayerManager::GetCharacterAttributes()[0].characterName;
-
-	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
-
-	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		battleStringLength + TEXT_PADDING * 2,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
-
-	GraphicsManager::DrawString(
-		rect.x + TEXT_PADDING,
-		rect.y + TEXT_PADDING,
-		battleString.c_str(),
-		0xFFFFFFFF);
-}
-
-void SceneBattle::DrawEnemyBattleResult(SDL_Renderer* renderer, SDL_Rect& rect)
-{
-	int damage =
-		mEnemies[mTurnOrder[mTurnIndex].characterIndex].attributes.strength -
-		PlayerManager::GetCharacterAttributes()[0].defense;
-	if (damage <= 0) damage = 1;
-
-	std::string battleString =
-		mEnemies[mTurnOrder[mTurnIndex].characterIndex].attributes.characterName +
-		" did " +
-		std::to_string(damage) +
-		" damage ";
-
-	int battleStringLength = battleString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * battleString.length() * TEXT_SIZE;
-
-	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 - battleStringLength / 2 - TEXT_PADDING,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		battleStringLength + TEXT_PADDING * 2,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
-
-	GraphicsManager::DrawString(
-		rect.x + TEXT_PADDING,
-		rect.y + TEXT_PADDING,
-		battleString.c_str(),
+		eventString.c_str(),
 		0xFFFFFFFF);
 }

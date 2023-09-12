@@ -1,9 +1,5 @@
 #include "CharacterBattle.h"
 
-CharacterBattle::CharacterBattle()
-{
-}
-
 void CharacterBattle::LoadAnimations(std::string name)
 {
     Animation newAnimation;
