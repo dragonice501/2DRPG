@@ -275,16 +275,18 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
         {
             if (character == ' ') continue;
 
-            if (Font::fontMap[std::toupper(character)][k + j * Font::fontWidth])
+            if (Font::fontMap[character][k + j * Font::fontWidth])
             {
+                int yOffset = 0;
                 if (character == '/' && highlight)
                 {
                     mHighlighted = !mHighlighted;
                     mHighlightedOffset++;
                     continue;
                 }
+                if (character == 'g' || character == 'j' || character == 'p' || character == 'q' || character == 'y') yOffset = 2 * TEXT_SIZE;
                 
-                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y+ j * TEXT_SIZE, highlight);
+                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y + yOffset + j * TEXT_SIZE, highlight);
             }
         }
     }

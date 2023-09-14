@@ -208,3 +208,4 @@ void PrintTerrainType(const ETerrainType terrain);
 #include <string>
 
 void ConvertDialogueDashes(std::string& string);
+const std::string GetClassName(ECharacterClass characterClass);

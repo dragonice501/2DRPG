@@ -180,3 +180,15 @@ void ConvertDialogueDashes(std::string& string)
 		if (c == '-') c = ' ';
 	}
 }
+
+const std::string GetClassName(ECharacterClass characterClass)
+{
+	switch (characterClass)
+	{
+		case DANCER: return "Dancer";
+		case KNIGHT: return "Knight";
+		case MAGE: return "Mage";
+		case PALADIN: return "Paladin";
+		case NO_CLASS: return "";
+	}
+}

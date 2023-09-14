@@ -186,7 +186,7 @@ void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
     SDL_Rect firstRect;
     std::string string;
 
-    string = std::to_string(PlayerManager::GetPartyMoney()) + " g";
+    string = std::to_string(PlayerManager::GetPartyMoney()) + 'g';
 
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
 
@@ -221,26 +221,38 @@ void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
     firstRect = GraphicsManager::DrawUIBox(
         firstRect.x + firstRect.w + UI_BOX_BORDER_SIZE * 3,
         firstRect.y,
-        Font::fontWidth * TEXT_SIZE * 28 + Font::fontSpacing * TEXT_SIZE * 28 + TEXT_PADDING * 2,
+        Font::fontWidth * TEXT_SIZE * 36 + Font::fontSpacing * TEXT_SIZE * 36 + TEXT_PADDING * 2,
         firstRect.h + optionsRect.h + UI_BOX_BORDER_SIZE * 3);
 
     for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
     {
+        int characterXOffset = (Font::fontWidth * TEXT_SIZE * 20 + Font::fontSpacing * TEXT_SIZE * 20) * mCharacterUIPositions[i].x;
+        int characterYOffset = (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 3 * mCharacterUIPositions[i].y;
+
         const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
 
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + TEXT_PADDING * i,
-            attributes.characterName.c_str());
+        string = attributes.characterName + "  " + GetClassName(attributes.characterClass);
 
-        std::string string =
-            "lv." + std::to_string(attributes.level) + ' ' +
+        GraphicsManager::DrawString(
+            firstRect.x + TEXT_PADDING + characterXOffset,
+            firstRect.y + TEXT_PADDING + characterYOffset,
+            string.c_str());
+
+        string =
+            "Lv." + std::to_string(attributes.level) + ' ' + "Next Lv." + std::to_string(129);
+
+        GraphicsManager::DrawString(
+            firstRect.x + TEXT_PADDING + characterXOffset,
+            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE + TEXT_PADDING + characterYOffset,
+            string.c_str());
+
+        string =
             std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP " +
             std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
 
         GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + Font::fontWidth * TEXT_SIZE * 10,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + TEXT_PADDING * i,
+            firstRect.x + TEXT_PADDING + characterXOffset,
+            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2 + characterYOffset,
             string.c_str());
     }
 }

@@ -6,7 +6,7 @@ Magic 15
 Strength 15
 Defense 5
 Intelligence 4
-Speed 10
+Speed 11
 Skill 5
 Luck 3
 

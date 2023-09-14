@@ -51,4 +51,12 @@ protected:
 
 	int mStepsUntilEncounterMax = 5;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
+
+	Vec2 mCharacterUIPositions[4] =
+	{
+		Vec2(0.0f, 0.0f),
+		Vec2(1.0f, 0.0f),
+		Vec2(0.0f, 1.2f),
+		Vec2(1.0f, 1.2f)
+	};
 };

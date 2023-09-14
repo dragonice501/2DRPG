@@ -657,7 +657,11 @@ void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item");
 	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run");
 
-	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
+	GraphicsManager::DrawUISelector(
+		rect.x,
+		rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mBattleMenuIndex,
+		rect.w,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 }
 
 void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
@@ -693,7 +697,11 @@ void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 			mpString.c_str());
 	}
 
-	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mCurrentPlayerIndex, 100, 30);
+	GraphicsManager::DrawUISelector(
+		rect.x,
+		rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mCurrentPlayerIndex,
+		rect.w,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 }
 
 void SceneBattle::DrawCursor(SDL_Renderer* renderer)
