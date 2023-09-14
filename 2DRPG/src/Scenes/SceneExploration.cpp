@@ -183,38 +183,64 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
 
 void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
 {
-    SDL_Rect rect;
+    SDL_Rect firstRect;
     std::string string;
 
     string = std::to_string(PlayerManager::GetPartyMoney()) + " g";
 
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
 
-    rect = GraphicsManager::DrawUIBox(
+    firstRect = GraphicsManager::DrawUIBox(
         GraphicsManager::WindowWidth() / 2 - GraphicsManager::WindowWidth() / 4,
         GraphicsManager::WindowHeight() / 2 - GraphicsManager::WindowHeight() / 4,
         stringLength + TEXT_PADDING * 2,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
 
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, string.c_str(), 0xFFFFFFFF);
+    GraphicsManager::DrawString(firstRect.x + TEXT_PADDING, firstRect.y + TEXT_PADDING, string.c_str());
 
-    rect = GraphicsManager::DrawUIBox(
-        rect.x,
-        rect.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3,
+    SDL_Rect optionsRect;
+    optionsRect = GraphicsManager::DrawUIBox(
+        firstRect.x,
+        firstRect.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3,
         stringLength + TEXT_PADDING * 2,
-        TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndexOptions + TEXT_PADDING * (mPartyMenuIndexOptions - 1)
-    );
+        TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndexOptions + TEXT_PADDING * (mPartyMenuIndexOptions - 1));
 
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 0, "Party", 0xFFFFFFFF);
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * 1, "Status", 0xFFFFFFFF);
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING * 3 + Font::fontHeight * TEXT_SIZE * 2, "Inventory", 0xFFFFFFFF);
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING * 4 + Font::fontHeight * TEXT_SIZE * 3, "Equip", 0xFFFFFFFF);
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING * 5 + Font::fontHeight * TEXT_SIZE * 4, "Magic", 0xFFFFFFFF);
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING * 6 + Font::fontHeight * TEXT_SIZE * 5, "Exit", 0xFFFFFFFF);
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 0, "Party");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * 1, "Status");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 3 + Font::fontHeight * TEXT_SIZE * 2, "Inventory");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 4 + Font::fontHeight * TEXT_SIZE * 3, "Equip");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 5 + Font::fontHeight * TEXT_SIZE * 4, "Magic");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 6 + Font::fontHeight * TEXT_SIZE * 5, "Exit");
 
     GraphicsManager::DrawUISelector(
-        rect.x,
-        rect.y + TEXT_PADDING - TEXT_PADDING / 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndex + TEXT_PADDING * mPartyMenuIndex,
-        rect.w,
+        optionsRect.x,
+        optionsRect.y + TEXT_PADDING - TEXT_PADDING / 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndex + TEXT_PADDING * mPartyMenuIndex,
+        optionsRect.w,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    firstRect = GraphicsManager::DrawUIBox(
+        firstRect.x + firstRect.w + UI_BOX_BORDER_SIZE * 3,
+        firstRect.y,
+        Font::fontWidth * TEXT_SIZE * 28 + Font::fontSpacing * TEXT_SIZE * 28 + TEXT_PADDING * 2,
+        firstRect.h + optionsRect.h + UI_BOX_BORDER_SIZE * 3);
+
+    for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+    {
+        const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
+
+        GraphicsManager::DrawString(
+            firstRect.x + TEXT_PADDING,
+            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + TEXT_PADDING * i,
+            attributes.characterName.c_str());
+
+        std::string string =
+            "lv." + std::to_string(attributes.level) + ' ' +
+            std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP " +
+            std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
+
+        GraphicsManager::DrawString(
+            firstRect.x + TEXT_PADDING + Font::fontWidth * TEXT_SIZE * 10,
+            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * i + TEXT_PADDING * i,
+            string.c_str());
+    }
 }

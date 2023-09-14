@@ -652,10 +652,10 @@ void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 		BATTLE_MENU_WIDTH,
 		BATTLE_MENU_HEIGHT);
 
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Fight", 0xFFFFFFFF);
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Magic", 0xFFFFFFFF);
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item", 0xFFFFFFFF);
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run", 0xFFFFFFFF);
+	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Fight");
+	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Magic");
+	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item");
+	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run");
 
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mBattleMenuIndex, rect.w, 30);
 }
@@ -674,11 +674,10 @@ void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 		GraphicsManager::DrawString(
 			rect.x + TEXT_PADDING,
 			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			attributes.characterName.c_str(),
-			0xFFFFFFFF);
+			attributes.characterName.c_str());
 
-		std::string hpString = std::to_string(attributes.health) + '-' + std::to_string(attributes.healthMax) + "HP";
-		std::string mpString = std::to_string(attributes.magic) + '-' + std::to_string(attributes.magicMax) + "MP";
+		std::string hpString = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP";
+		std::string mpString = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
 
 		int hpLength = hpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * hpString.length() * TEXT_SIZE;
 		int mpLength = mpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * mpString.length() * TEXT_SIZE;
@@ -686,14 +685,12 @@ void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - hpLength - BATTLE_PARTY_UI_BUFFER * TEXT_SIZE - mpLength,
 			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			hpString.c_str(),
-			0xFFFFFFFF);
+			hpString.c_str());
 
 		GraphicsManager::DrawString(
 			(rect.x + rect.w) - mpLength,
 			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			mpString.c_str(),
-			0xFFFFFFFF);
+			mpString.c_str());
 	}
 
 	GraphicsManager::DrawUISelector(rect.x, rect.y + 30 * mCurrentPlayerIndex, 100, 30);
@@ -727,6 +724,5 @@ void SceneBattle::DrawBattleEvent(SDL_Renderer* renderer, SDL_Rect& rect, const 
 	GraphicsManager::DrawString(
 		rect.x + TEXT_PADDING,
 		rect.y + TEXT_PADDING,
-		eventString.c_str(),
-		0xFFFFFFFF);
+		eventString.c_str());
 }

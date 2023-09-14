@@ -267,7 +267,7 @@ void GraphicsManager::DrawTexture(const int& x, const int& y, const int& width, 
     SDL_RenderCopyEx(mRenderer, texture, nullptr, &dstRect, rotationDeg, nullptr, SDL_FLIP_NONE);
 }
 
-void GraphicsManager::DrawChar(const int& x, const int& y, const char& character, const bool& lockToScreen)
+void GraphicsManager::DrawChar(const int& x, const int& y, const char& character, const bool highlight, const bool lockToScreen)
 {
     for (int j = 0; j < Font::fontHeight; j++)
     {
@@ -277,20 +277,20 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
 
             if (Font::fontMap[std::toupper(character)][k + j * Font::fontWidth])
             {
-                if (character == '/')
+                if (character == '/' && highlight)
                 {
                     mHighlighted = !mHighlighted;
                     mHighlightedOffset++;
                     continue;
                 }
                 
-                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y+ j * TEXT_SIZE, mHighlighted);
+                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y+ j * TEXT_SIZE, highlight);
             }
         }
     }
 }
 
-void GraphicsManager::DrawString(const int& x, const int& y, const char* string, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawString(const int& x, const int& y, const char* string, const bool highlight, const bool lockToScreen)
 {
     int i = 0;
     int xPos = x;

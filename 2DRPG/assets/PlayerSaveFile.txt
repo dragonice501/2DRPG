@@ -1,5 +1,6 @@
 Character Sigurd
 Class 3
+Level 1
 Health 25 
 Magic 15
 Strength 15
@@ -10,7 +11,8 @@ Skill 5
 Luck 3
 
 Character Elan
-Class 0 
+Class 0
+Level 1
 Health 13
 Magic 19 
 Strength 5
@@ -22,6 +24,7 @@ Luck 4
 
 Character Don
 Class 2
+Level 1
 Health 17
 Magic 24
 Strength 15
@@ -33,6 +36,7 @@ Luck 2
 
 Character Ark
 Class 1
+Level 1
 Health 22 
 Magic 12
 Strength 13

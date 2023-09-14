@@ -49,8 +49,8 @@ public:
     static void DrawFillPolygon(const int& x, const int& y, const std::vector<Vec2>& vertices, const uint32_t& color, const bool& lockToScreen = false);
     static void DrawTexture(const int& x, const int& y, const int& width, const int& height, const float& rotation, SDL_Texture* texture);
 
-    static void DrawChar(const int& x, const int& y, const char& character, const bool& lockToScreen = false);
-    static void DrawString(const int& x, const int& y, const char* string, const uint32_t& color, const bool& lockToScreen = false);
+    static void DrawChar(const int& x, const int& y, const char& character, const bool highlight = false, const bool lockToScreen = false);
+    static void DrawString(const int& x, const int& y, const char* string, const bool highlight = false, const bool lockToScreen = false);
 
     static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
     static SDL_Rect DrawDialogueBox();

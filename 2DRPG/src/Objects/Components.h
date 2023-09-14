@@ -46,12 +46,13 @@ struct CharacterAttributes
 {
 	CharacterAttributes(
 		std::string characterName = "", ECharacterClass characterClass = NO_CLASS,
-		int health = 0, int healthMax = 0, int magic = 0, int magicMax = 0,
+		int level = 0, int health = 0, int healthMax = 0, int magic = 0, int magicMax = 0,
 		int strength = 0, int defense = 0, int intelligence = 0, int speed = 0, int skill = 0, int luck = 0,
 		int exp = 0, int expNextLevel = 0)
 	{
 		this->characterName = characterName;
 		this->characterClass = characterClass;
+		this->level = level;
 		this->health = health;
 		this->healthMax = healthMax;
 		this->magic = magic;
@@ -70,6 +71,7 @@ struct CharacterAttributes
 	std::string characterName;
 	ECharacterClass characterClass;
 
+	int level;
 	int health;
 	int healthMax;
 	int magic;

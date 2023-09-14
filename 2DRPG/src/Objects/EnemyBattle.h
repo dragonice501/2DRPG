@@ -26,7 +26,8 @@ public:
 					attributes.characterName = enemyName;
 					while (file >> type)
 					{
-						if (type == "Health")
+						if (type == "Level") file >> attributes.level;
+						else if (type == "Health")
 						{
 							file >> attributes.healthMax;
 							attributes.health = attributes.healthMax;
@@ -54,7 +55,7 @@ public:
 				}
 				else
 				{
-					for (int i = 0; i < 10; i++)
+					for (int i = 0; i < 11; i++)
 						file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				}
 			}

@@ -27,6 +27,7 @@ void PlayerManager::LoadCharacters()
                     file >> characterClass;
                     newCharacterAttributes.characterClass = static_cast<ECharacterClass>(characterClass);
                 }
+                else if (type == "Level") file >> newCharacterAttributes.level;
                 else if (type == "Health")
                 {
                     file >> newCharacterAttributes.healthMax;
