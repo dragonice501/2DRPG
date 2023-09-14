@@ -88,6 +88,8 @@ void SceneTown::Shutdown()
 
 void SceneTown::Input()
 {
+    SceneExploration::Input();
+
     if (mCharacterState == CS_INTERACT_MENU)
     {
         if (InputManager::UpPressed())

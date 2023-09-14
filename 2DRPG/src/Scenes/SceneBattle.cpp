@@ -172,6 +172,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 
 	BuildTurnOrder();
+	mBattleState = BS_MONSTERS_APPEARED;
 }
 
 void SceneBattle::Shutdown()
@@ -286,6 +287,19 @@ void SceneBattle::Update(const float dt)
 	{
 		case BS_MONSTERS_APPEARED:
 		{
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
+			{
+				mBattleEndTimeRemaing = mBattleEndTime;
+				if (!mBattleTurns[mTurnIndex]->isEnemy)
+				{
+					mBattleState = BS_SELECTING_ACTION;
+				}
+				else
+				{
+					mBattleState = BS_ENEMY_ATTACKING;
+				}
+			}
 			break;
 		}
 		case BS_SELECTING_ACTION:
@@ -391,6 +405,7 @@ void SceneBattle::Update(const float dt)
 					}
 				}
 
+				delete mBattleEnemies[mBattleSelectedEnemyIndex];
 				mBattleEnemies.erase(mBattleEnemies.begin() + mBattleSelectedEnemyIndex);
 
 				if (mBattleEnemies.size() == 0) mBattleState = BS_MONSTERS_DEFEATED;
@@ -400,10 +415,10 @@ void SceneBattle::Update(const float dt)
 		}
 		case BS_MONSTERS_DEFEATED:
 		{
-			mTurnTimeRemaining -= dt;
-			if (mTurnTimeRemaining <= 0)
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
 			{
-				mTurnTimeRemaining = mTurnTime;
+				mBattleEndTimeRemaing = mBattleEndTime;
 
 				for (int i = 0; i < mBattleCharacters.size(); i++)
 				{
@@ -446,15 +461,6 @@ void SceneBattle::BuildTurnOrder()
 	}
 
 	std::cout << std::endl;
-
-	if (!mBattleTurns[mTurnIndex]->isEnemy)
-	{
-		mBattleState = BS_SELECTING_ACTION;
-	}
-	else
-	{
-		mBattleState = BS_ENEMY_ATTACKING;
-	}
 }
 
 void SceneBattle::NextTurn()
@@ -465,6 +471,15 @@ void SceneBattle::NextTurn()
 		mTurnIndex = 0;
 		mBattleTurns.clear();
 		BuildTurnOrder();
+
+		if (!mBattleTurns[mTurnIndex]->isEnemy)
+		{
+			mBattleState = BS_SELECTING_ACTION;
+		}
+		else
+		{
+			mBattleState = BS_ENEMY_ATTACKING;
+		}
 	}
 
 	if (!mBattleTurns[mTurnIndex]->isEnemy)
@@ -529,6 +544,13 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	std::string battleString;
 	switch (mBattleState)
 	{
+		case BS_MONSTERS_APPEARED:
+		{
+			battleString = "Monsters Appeared";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
 		case BS_SELECTING_ACTION:
 		{
 			DrawActions(renderer, rect);
@@ -572,7 +594,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		{
 			battleString =
 				PlayerManager::GetCharacterAttributes()[mTurnOrder[mTurnIndex].characterIndex].characterName +
-				" fainted.";
+				" fainted";
 
 			DrawBattleEvent(renderer, rect, battleString);
 			break;
@@ -602,7 +624,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		{
 			battleString =
 				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.characterName +
-				" perished.";
+				" perished";
 
 			DrawBattleEvent(renderer, rect, battleString);
 			break;

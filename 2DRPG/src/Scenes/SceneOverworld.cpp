@@ -90,12 +90,14 @@ void SceneOverworld::Shutdown()
 
 void SceneOverworld::Input()
 {
-    
+    SceneExploration::Input();
 }
 
 void SceneOverworld::Update(const float dt)
 {
     SceneExploration::Update(dt);
+
+    if (mExplorationState == ES_MENUING) return;
 
     for (CharacterExploration& character : mCharacters)
     {
@@ -149,5 +151,10 @@ void SceneOverworld::Render(static SDL_Renderer* renderer, static SDL_Rect& came
         }
 
         mCharacters[i].Render(renderer);
+    }
+
+    if (mExplorationState == ES_MENUING)
+    {
+        DrawPartyMenu(renderer);
     }
 }

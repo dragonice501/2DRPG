@@ -81,6 +81,8 @@ private:
 
 	float mTurnTime = 1.5f;
 	float mTurnTimeRemaining = mTurnTime;
+	float mBattleEndTime = 2.0f;
+	float mBattleEndTimeRemaing = mBattleEndTime;
 
 	int mDamageDealt = 0;
 	int mEnemyTargetIndex = 0;

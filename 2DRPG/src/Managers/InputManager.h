@@ -27,6 +27,8 @@ public:
 
 	static inline const bool EPressed() { return mEPressed; }
 
+	static inline const bool OPressed() { return mOPressed; }
+
 private:
 	InputManager() {}
 	~InputManager() {}
@@ -52,4 +54,5 @@ private:
 	static float mRightHeldTime;
 
 	static bool mEPressed;
+	static bool mOPressed;
 };

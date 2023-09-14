@@ -17,8 +17,11 @@ public:
 
 	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
 	static const std::vector<SDL_Texture*>& GetCharacterTextures() { return mCharacterTextures; }
+	static const int GetPartyMoney() { return mPartyMoney; }
 
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
+
+	static int mPartyMoney;
 };

@@ -26,6 +26,7 @@ bool InputManager::mRightReleased = false;
 float InputManager::mRightHeldTime = 0.0f;
 
 bool InputManager::mEPressed = false;
+bool InputManager::mOPressed = false;
 
 void InputManager::Update(const float dt)
 {
@@ -78,6 +79,8 @@ void InputManager::Update(const float dt)
     }
 
     if (mEPressed) mEPressed = false;
+
+    if (mOPressed) mOPressed = false;
 
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -133,6 +136,13 @@ void InputManager::Update(const float dt)
                     mEPressed = true;
                     break;
                 }
+
+                if (sdlEvent.key.keysym.sym == SDLK_o)
+                {
+                    mOPressed = true;
+                    break;
+                }
+                
                 break;
             }
             case SDL_KEYUP:

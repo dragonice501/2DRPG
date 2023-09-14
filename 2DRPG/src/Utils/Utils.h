@@ -32,6 +32,12 @@ enum ECharacterClass
 	NO_CLASS
 };
 
+enum EExplorationState
+{
+	ES_EXPLORING,
+	ES_MENUING
+};
+
 enum EBattleState
 {
 	BS_MONSTERS_APPEARED,

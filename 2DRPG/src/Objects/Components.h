@@ -45,9 +45,10 @@ struct Animation
 struct CharacterAttributes
 {
 	CharacterAttributes(
-		std::string characterName = "",  ECharacterClass characterClass = NO_CLASS,
-		int health = 0, int healthMax = 0, int magic = 0, int magicMax = 0, 
-		int strength = 0, int defense = 0, int intelligence = 0, int speed = 0, int skill = 0, int luck = 0)
+		std::string characterName = "", ECharacterClass characterClass = NO_CLASS,
+		int health = 0, int healthMax = 0, int magic = 0, int magicMax = 0,
+		int strength = 0, int defense = 0, int intelligence = 0, int speed = 0, int skill = 0, int luck = 0,
+		int exp = 0, int expNextLevel = 0)
 	{
 		this->characterName = characterName;
 		this->characterClass = characterClass;
@@ -61,6 +62,9 @@ struct CharacterAttributes
 		this->speed = speed;
 		this->skill = skill;
 		this->luck = luck;
+
+		this->exp = exp;
+		this->expNextLevel = expNextLevel;
 	}
 
 	std::string characterName;
@@ -76,6 +80,9 @@ struct CharacterAttributes
 	int speed;
 	int skill;
 	int luck;
+
+	int exp;
+	int expNextLevel;
 };
 
 struct Movement

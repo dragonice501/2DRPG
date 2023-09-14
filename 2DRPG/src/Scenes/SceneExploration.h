@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Scene.h"
+
+#include "../Graphics/Font.h"
+
 #include "../Objects/Actor.h"
 #include "../Objects/CharacterExploration.h"
 #include "../Objects/Components.h"
@@ -25,6 +28,8 @@ public:
 	virtual void Update(const float dt) override;
 	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
 
+	virtual void DrawPartyMenu(static SDL_Renderer* renderer);
+
 	std::string mFileName;
 
 protected:
@@ -39,6 +44,10 @@ protected:
 	Vec2 mSpawnPosition;
 	std::vector<Vec2> mSpawnPositions;
 	Vec2 mSpawnDirection;
+
+	EExplorationState mExplorationState = ES_EXPLORING;
+	int mPartyMenuIndex = 0;
+	int mPartyMenuIndexOptions = 6;
 
 	int mStepsUntilEncounterMax = 5;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;

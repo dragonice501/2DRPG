@@ -3,6 +3,8 @@
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 
+int PlayerManager::mPartyMoney = 10000;
+
 void PlayerManager::LoadCharacters()
 {
     SDL_Surface* surface = nullptr;
