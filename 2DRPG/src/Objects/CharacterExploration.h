@@ -19,6 +19,8 @@ public:
 	void UpdateAnimation() override;
 	const Vec2& GetPosition() const override { return mPosition; }
 
+	void Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection);
+
 	inline const ECharacterState GetCharacterState() const { return mCharacterState; }
 	inline const SDL_Texture* GetSpriteSheet() const { return mSpriteSheet; }
 

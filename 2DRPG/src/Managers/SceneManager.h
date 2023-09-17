@@ -30,7 +30,7 @@ public:
 
 	static inline const bool SceneReadyToLoad() { return mSceneToLoad != NONE; }
 	static void SetSceneToLoad(
-		const SceneNames sceneToLoad, const int entranceIndex, bool returnToOverworld = false,
+		const SceneName sceneToLoad, const int entranceIndex, bool returnToOverworld = false,
 		ETerrainType battleBackgroundType = UNDEFINED, const std::vector<EnemyEncounter>& enemyEncounters = std::vector<EnemyEncounter>());
 
 	static void LoadScene();
@@ -47,7 +47,7 @@ private:
 
 	static std::unique_ptr<Scene> mCurrentScene;
 
-	static SceneNames mSceneToLoad;
+	static SceneName mSceneToLoad;
 	static int mSceneEntranceIndex;
 
 	static bool mIsOverworld;

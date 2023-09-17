@@ -27,6 +27,43 @@ void CharacterExploration::LoadAnimations(std::string animationsFileName)
     mSprite = { 0, 0, 32, 32, 0, -16 };
 }
 
+void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection)
+{
+    std::string name;
+    switch (PlayerManager::GetCharacterAttributes()[partyIndex].characterClass)
+    {
+    case DANCER:
+    {
+        name = "Dancer";
+        break;
+    }
+    case KNIGHT:
+    {
+        name = "Knight";
+        break;
+    }
+    case MAGE:
+    {
+        name = "Mage";
+        break;
+    }
+    case PALADIN:
+    {
+        name = "Sigurd";
+        break;
+    }
+    }
+
+    SetSpriteSheet(PlayerManager::GetCharacterTextures()[partyIndex]);
+    LoadAnimations(name);
+    SetPosition(spawnPosition);
+    if (SceneManager::ReturnToOverworld())
+        mRigidbody.lastVelocity = SceneManager::GetPreviousDirection(partyIndex);
+    else
+        mRigidbody.lastVelocity = spawnDirection;
+    mPartyIndex = partyIndex;
+}
+
 void CharacterExploration::Input()
 {
     

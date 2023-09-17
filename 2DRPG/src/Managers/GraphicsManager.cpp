@@ -299,7 +299,7 @@ void GraphicsManager::DrawString(const int& x, const int& y, const char* string,
     int yPos = y;
     while (string[i] != '\0')
     {
-        DrawChar(xPos, yPos, string[i], false);
+        DrawChar(xPos, yPos, string[i], highlight);
         i++;
         xPos += Font::fontWidth * TEXT_SIZE + Font::fontSpacing * TEXT_SIZE;
     }
@@ -351,7 +351,7 @@ void GraphicsManager::DrawDialogue(const SDL_Rect& rect, const std::vector<std::
             rect.x + TEXT_PADDING,
             rect.y + TEXT_PADDING + i * Font::fontHeight * TEXT_SIZE + i * TEXT_VERTICAL_PADDING * TEXT_SIZE,
             dialogue[i].c_str(),
-            0xFFFFFFFF);
+            true);
     }
 }
 

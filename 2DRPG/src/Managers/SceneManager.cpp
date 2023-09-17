@@ -1,16 +1,19 @@
 #include "SceneManager.h"
 
 std::unique_ptr<Scene> SceneManager::mCurrentScene = nullptr;
-SceneNames SceneManager::mSceneToLoad = OVERWORLD;
+
+SceneName SceneManager::mSceneToLoad = OVERWORLD;
 int SceneManager::mSceneEntranceIndex = -1;
+
 bool SceneManager::mIsOverworld = true;
 ETerrainType SceneManager::mBattleBakgroundType = UNDEFINED;
 std::vector<EnemyEncounter> SceneManager::mEnemyEncounters;
+
 bool SceneManager::mReturnToOverworld = false;
 std::vector<Vec2> SceneManager::mPreviousOverworldPositions;
 std::vector<Vec2> SceneManager::mPreviousDirections;
 
-void SceneManager::SetSceneToLoad(const SceneNames sceneToLoad, const int entranceIndex, bool returnToOverworld,
+void SceneManager::SetSceneToLoad(const SceneName sceneToLoad, const int entranceIndex, bool returnToOverworld,
 	ETerrainType battleBackgroundType, const std::vector<EnemyEncounter>& enemyEncounters)
 {
 	mSceneToLoad = sceneToLoad;
@@ -28,29 +31,29 @@ void SceneManager::LoadScene()
 		mCurrentScene.reset();
 	}
 
-	switch (mSceneToLoad)
+	switch (GameManager::GetSceneToLoad())
 	{
 		case BATTLE:
 		{
-			mIsOverworld = false;
+			GameManager::SetIsOverworld(false);
 			mCurrentScene = std::make_unique<SceneBattle>(mBattleBakgroundType, mEnemyEncounters);
 			break;
 		}
 		case OVERWORLD:
 		{
-			mIsOverworld = true;
+			GameManager::SetIsOverworld(true);
 			mCurrentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
 		case TOWN:
 		{
-			mIsOverworld = false;
+			GameManager::SetIsOverworld(false);
 			mCurrentScene = std::make_unique<SceneTown>();
 			break;
 		}
 	}
 
-	mSceneToLoad = NONE;
+	GameManager::SetSceneToLoad(NONE);
 
 	if (mCurrentScene) mCurrentScene->Setup(GraphicsManager::Renderer());
 }

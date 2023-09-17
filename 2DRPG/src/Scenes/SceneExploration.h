@@ -30,6 +30,8 @@ public:
 
 	virtual void DrawPartyMenu(static SDL_Renderer* renderer);
 
+	void SetupCharacters();
+
 	std::string mFileName;
 
 protected:

@@ -1,6 +1,6 @@
 #pragma once
 
-enum SceneNames
+enum SceneName
 {
 	BATTLE,
 	OVERWORLD,
@@ -35,6 +35,7 @@ enum ECharacterClass
 enum EExplorationState
 {
 	ES_EXPLORING,
+	ES_INTERACTING,
 	ES_MENUING
 };
 

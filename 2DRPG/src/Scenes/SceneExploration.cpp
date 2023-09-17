@@ -11,6 +11,7 @@ SceneExploration::~SceneExploration()
 
 void SceneExploration::Setup(SDL_Renderer* renderer)
 {
+    // Get level tilemap
     std::string fileName = "./assets/" + mFileName + "TileMap.png";
     SDL_Surface* surface = IMG_Load(fileName.c_str());
     if (surface)
@@ -22,6 +23,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     int i = 0;
     Vec2 spawnPosition;
 
+    // Load level tiles, entrances and actors
     fileName = "./assets/" + mFileName + "SaveFile.txt";
     std::ifstream file(fileName);
     std::string type;
@@ -83,6 +85,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         }
     }
 
+    // Load enemy encounters
     EnemyEncounter newEncounter;
     fileName = "./assets/" + mFileName + "Encounters.txt";
     std::ifstream encountersFile(fileName);
@@ -105,6 +108,39 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             newEncounter.enemyPositions.push_back(enemyPosition);
         }
     }
+
+    if (GameManager::GetReturnToOverworld())
+    {
+        for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+        {
+            mSpawnPositions.push_back(GameManager::GetPreviousOverworldPosition(i));
+        }
+    }
+    else
+    {
+        for (const SceneEntrance& entrance : mSceneEntrances)
+        {
+            if (entrance.sceneEntranceIndex == GameManager::GetSceneEntranceIndex())
+            {
+                for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+                {
+                    mSpawnPositions.push_back(entrance.position + entrance.spawnOffset);
+                }
+                mSpawnDirection = entrance.spawnOffset;
+            }
+        }
+    }
+}
+
+void SceneExploration::SetupCharacters()
+{
+    for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+    {
+        CharacterExploration newCharacter;
+        newCharacter.Setup(i, mSpawnPositions[i], mSpawnDirection);
+
+        mCharacters.push_back(newCharacter);
+    }
 }
 
 void SceneExploration::Shutdown()
@@ -114,21 +150,18 @@ void SceneExploration::Shutdown()
 
 void SceneExploration::Input()
 {
-    if (InputManager::OPressed())
-    {
-        if (mExplorationState == ES_EXPLORING) mExplorationState = ES_MENUING;
-        else mExplorationState = ES_EXPLORING;
-    }
-
-    if (InputManager::EPressed())
-    {
-        if (mExplorationState == ES_MENUING && mPartyMenuIndex == mPartyMenuIndexOptions - 1) mExplorationState = ES_EXPLORING;
-    }
-
     if (InputManager::UpPressed())
     {
         switch (mExplorationState)
         {
+            case ES_EXPLORING:
+            {
+                break;
+            }
+            case ES_INTERACTING:
+            {
+                break;
+            }
             case ES_MENUING:
             {
                 mPartyMenuIndex--;
@@ -142,6 +175,14 @@ void SceneExploration::Input()
     {
         switch (mExplorationState)
         {
+            case ES_EXPLORING:
+            {
+                break;
+            }
+            case ES_INTERACTING:
+            {
+                break;
+            }
             case ES_MENUING:
             {
                 mPartyMenuIndex++;
@@ -150,11 +191,63 @@ void SceneExploration::Input()
             }
         }
     }
+
+    if (InputManager::OPressed())
+    {
+        switch (mExplorationState)
+        {
+            case ES_EXPLORING:
+            {
+                mExplorationState = ES_MENUING;
+                break;
+            }
+            case ES_INTERACTING:
+            {
+                break;
+            }
+            case ES_MENUING:
+            {
+                break;
+            }
+        }
+    }
+
+    if (InputManager::EPressed())
+    {
+        switch (mExplorationState)
+        {
+            case ES_EXPLORING:
+            {
+                break;
+            }
+            case ES_INTERACTING:
+            {
+                break;
+            }
+            case ES_MENUING:
+            {
+                if (mPartyMenuIndex == mPartyMenuIndexOptions - 1) mExplorationState = ES_EXPLORING;
+                break;
+            }
+        }
+    }
 }
 
 void SceneExploration::Update(const float dt)
 {
-    
+    if (mExplorationState == ES_MENUING) return;
+
+    for (Actor& actor : mActors)
+    {
+        actor.UpdateAnimation();
+        actor.Update(dt);
+    }
+
+    for (CharacterExploration& character : mCharacters)
+    {
+        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, dt);
+        character.Update(dt);
+    }
 }
 
 void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
@@ -178,6 +271,30 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         };
 
         GraphicsManager::DrawSpriteRect(mTileMap, srcRect, destRect);
+    }
+
+    for (Actor& actor : mActors)
+    {
+        actor.Render(renderer);
+    }
+
+    for (int i = mCharacters.size() - 1; i >= 0; i--)
+    {
+        if (i == 0)
+        {
+            camera.x = mCharacters[i].GetPosition().x * TILE_SPRITE_SCALE - (GraphicsManager::WindowWidth() / 2);
+            camera.y = mCharacters[i].GetPosition().y * TILE_SPRITE_SCALE - (GraphicsManager::WindowHeight() / 2);
+
+            camera.x = Clampf(camera.x, 0, mMapWidth * TILE_SIZE * TILE_SPRITE_SCALE - camera.w);
+            camera.y = Clampf(camera.y, 0, mMapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);
+        }
+
+        mCharacters[i].Render(renderer);
+    }
+
+    if (mExplorationState == ES_MENUING)
+    {
+        DrawPartyMenu(renderer);
     }
 }
 

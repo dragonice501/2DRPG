@@ -2,12 +2,13 @@
 
 #include "../Utils/Vec2.h"
 
-#include "../Managers/SceneManager.h"
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneOverworld.h"
 
+#include "../Managers/GameManager.h"
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
+#include "../Managers/SceneManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -42,7 +43,7 @@ bool Engine::Init()
 void Engine::Run()
 {
     PlayerManager::LoadCharacters();
-    SceneManager::SetSceneToLoad(OVERWORLD, -1);
+    GameManager::SetSceneToLoad(OVERWORLD, -1);
 
     while (isRunning)
     {
@@ -59,7 +60,7 @@ void Engine::Run()
         millisecondsPreviousFrame = SDL_GetTicks();
 
         // Load Scene if one is ready
-        if (SceneManager::SceneReadyToLoad())
+        if (GameManager::SceneReadyToLoad())
         {
             SceneManager::LoadScene();
         }
