@@ -117,17 +117,29 @@ struct Rigidbody
 
 struct SceneEntrance
 {
-	SceneEntrance(const Vec2& position, const Vec2& spawnOffset, const int sceneName, const int sceneEntranceIndex)
+	SceneEntrance(const Vec2& position, const Vec2& spawnOffset, const std::string& sceneName, const int sceneEntranceIndex)
 	{
 		this->position = position;
 		this->spawnOffset = spawnOffset;
-		this->sceneName = sceneName;
+		this->scene = GetSceneName(sceneName);
 		this->sceneEntranceIndex = sceneEntranceIndex;
+	}
+
+	const SceneName GetSceneName(const std::string& sceneName)
+	{
+		if (sceneName == "Town")
+		{
+			return TOWN;
+		}
+		else if (sceneName == "Overworld")
+		{
+			return OVERWORLD;
+		}
 	}
 
 	Vec2 position;
 	Vec2 spawnOffset;
-	int sceneName;
+	SceneName scene;
 	int sceneEntranceIndex;
 };
 

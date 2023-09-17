@@ -35,18 +35,32 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         }
         else if (type == "SceneEntrance")
         {
-            int sceneName;
+            std::string sceneName;
             int sceneEntranceIndex;
-            int sceneEntrancePosX;
-            int sceneEntrancePosY;
-            int sceneEntranceOffsetX;
-            int sceneEntranceOffsetY;
-            file >> sceneName >> sceneEntranceIndex >> sceneEntrancePosX >> sceneEntrancePosY >> sceneEntranceOffsetX >> sceneEntranceOffsetY;
+            Vec2 sceneEntrancePosition;
+            Vec2 sceneEntranceOffset;
+
+            while (file >> type)
+            {
+                if (type == "Name")
+                {
+                    file >> sceneName >> sceneEntranceIndex;
+                }
+                else if (type == "Position")
+                {
+                    file >> sceneEntrancePosition.x >> sceneEntrancePosition.y;
+                }
+                else if (type == "Offset")
+                {
+                    file >> sceneEntranceOffset.x >> sceneEntranceOffset.y;
+                    break;
+                }
+            }
 
             SceneEntrance newEntrance =
             {
-                Vec2(sceneEntrancePosX, sceneEntrancePosY) * TILE_SIZE,
-                Vec2(sceneEntranceOffsetX, sceneEntranceOffsetY) * TILE_SIZE,
+                sceneEntrancePosition * TILE_SIZE,
+                sceneEntranceOffset * TILE_SIZE,
                 sceneName,
                 sceneEntranceIndex
             };
@@ -114,6 +128,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
         {
             mSpawnPositions.push_back(GameManager::GetPreviousOverworldPosition(i));
+            mSpawnDirections.push_back(GameManager::GetPreviousDirection(i));
         }
     }
     else
@@ -125,8 +140,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
                 for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
                 {
                     mSpawnPositions.push_back(entrance.position + entrance.spawnOffset);
+                    mSpawnDirections.push_back(entrance.spawnOffset);
                 }
-                mSpawnDirection = entrance.spawnOffset;
             }
         }
     }
@@ -137,7 +152,7 @@ void SceneExploration::SetupCharacters()
     for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
     {
         CharacterExploration newCharacter;
-        newCharacter.Setup(i, mSpawnPositions[i], mSpawnDirection);
+        newCharacter.Setup(i, mSpawnPositions[i], mSpawnDirections[i]);
 
         mCharacters.push_back(newCharacter);
     }
@@ -247,6 +262,30 @@ void SceneExploration::Update(const float dt)
     {
         character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, dt);
         character.Update(dt);
+
+        if (character.mMovement.stepTaken && character.mPartyIndex == 0)
+        {
+            for (const SceneEntrance& entrance : mSceneEntrances)
+            {
+                if (entrance.position == character.GetPosition())
+                {
+                    GameManager::SetSceneToLoad(entrance.scene, entrance.sceneEntranceIndex);
+                }
+            }
+
+            mStepsUntilEncounter--;
+            if (mStepsUntilEncounter <= 0)
+            {
+                GameManager::ClearPositionsAndDirections();
+                for (CharacterExploration& character : mCharacters)
+                {
+                    GameManager::SetPreviousOverworldPosition(character.GetPosition());
+                    GameManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
+                }
+
+                GameManager::SetSceneToLoad(BATTLE, -1, true, FOREST, mEnemyEncounters);
+            }
+        }
     }
 }
 

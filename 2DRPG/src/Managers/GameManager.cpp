@@ -7,7 +7,7 @@ std::vector<Vec2> GameManager::mPreviousOverworldPositions;
 std::vector<Vec2> GameManager::mPreviousDirections;
 SceneName GameManager::mSceneToLoad = OVERWORLD;
 
-ETerrainType GameManager::mBattleBakgroundType = UNDEFINED;
+ETerrainType GameManager::mBattleBackgroundType = UNDEFINED;
 std::vector<EnemyEncounter> GameManager::mEnemyEncounters;
 
 void GameManager::SetSceneToLoad(const SceneName sceneToLoad, const int entranceIndex, bool returnToOverworld,
@@ -15,7 +15,7 @@ void GameManager::SetSceneToLoad(const SceneName sceneToLoad, const int entrance
 {
 	mSceneToLoad = sceneToLoad;
 	mSceneEntranceIndex = entranceIndex;
-	mBattleBakgroundType = battleBackgroundType;
+	mBattleBackgroundType = battleBackgroundType;
 	mEnemyEncounters = enemyEncounters;
 	mReturnToOverworld = returnToOverworld;
 }

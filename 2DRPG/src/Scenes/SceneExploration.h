@@ -45,7 +45,7 @@ protected:
 
 	Vec2 mSpawnPosition;
 	std::vector<Vec2> mSpawnPositions;
-	Vec2 mSpawnDirection;
+	std::vector<Vec2> mSpawnDirections;
 
 	EExplorationState mExplorationState = ES_EXPLORING;
 	int mPartyMenuIndex = 0;

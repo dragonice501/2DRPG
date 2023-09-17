@@ -36,7 +36,7 @@ void SceneManager::LoadScene()
 		case BATTLE:
 		{
 			GameManager::SetIsOverworld(false);
-			mCurrentScene = std::make_unique<SceneBattle>(mBattleBakgroundType, mEnemyEncounters);
+			mCurrentScene = std::make_unique<SceneBattle>(GameManager::GetBattleBackground(), GameManager::GetEnemyEncounters());
 			break;
 		}
 		case OVERWORLD:

@@ -18,6 +18,8 @@ public:
 	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousOverworldPositions[index]; }
 	inline static Vec2 GetPreviousDirection(const int index) { return mPreviousDirections[index]; }
 	inline static SceneName GetSceneToLoad() { return mSceneToLoad; }
+	inline static ETerrainType GetBattleBackground() { return mBattleBackgroundType; }
+	inline static std::vector<EnemyEncounter>& GetEnemyEncounters() { return mEnemyEncounters; }
 
 	inline static void SetIsOverworld(const bool isOverworld) { mIsOverworld = isOverworld; }
 	inline static void SetSceneToLoad(const SceneName scene) { mSceneToLoad = scene; }
@@ -38,6 +40,6 @@ private:
 	static std::vector<Vec2> mPreviousDirections;
 	static SceneName mSceneToLoad;
 	
-	static ETerrainType mBattleBakgroundType;
+	static ETerrainType mBattleBackgroundType;
 	static std::vector<EnemyEncounter> mEnemyEncounters;
 };

@@ -266,7 +266,7 @@ void SceneBattle::Input()
 				}
 				else if (mBattleMenuIndex == 3)
 				{
-					SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
+					GameManager::SetSceneToLoad(OVERWORLD, -2, true);
 				}
 				break;
 			}
