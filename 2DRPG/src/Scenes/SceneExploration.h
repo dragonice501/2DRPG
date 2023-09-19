@@ -5,9 +5,9 @@
 #include "../Graphics/Font.h"
 
 #include "../Objects/Actor.h"
+#include "../Objects/ActorNpc.h"
 #include "../Objects/CharacterExploration.h"
 #include "../Objects/Components.h"
-#include "../Objects/Enemy.h"
 #include "../Objects/EnemyEncounter.h"
 
 #include "../Utils/Utils.h"
@@ -21,6 +21,12 @@ public:
 	SceneExploration();
 	~SceneExploration();
 
+	inline const int GetMapWidth() const { return mMapWidth; }
+	inline const int GetMapHeight() const { return mMapHeight; }
+
+	//inline const std::vector<Tile>& GetTiles() const { return mTiles; }
+	//inline const std::vector<CharacterExploration>& GetCharacters() const { return mCharacters; }
+
 	virtual void Setup(static SDL_Renderer* renderer);
 	virtual void Shutdown() override;
 
@@ -29,6 +35,8 @@ public:
 	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
 
 	virtual void DrawPartyMenu(static SDL_Renderer* renderer);
+	SDL_Rect DrawInteractMenu(static SDL_Renderer* renderer);
+	SDL_Rect DrawKeywordsMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
 
 	void SetupCharacters();
 
@@ -39,7 +47,7 @@ protected:
 	SDL_Texture* mTileMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
-	std::vector<Actor> mActors;
+	std::vector<ActorNpc> mActors;
 	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
@@ -50,6 +58,15 @@ protected:
 	EExplorationState mExplorationState = ES_EXPLORING;
 	int mPartyMenuIndex = 0;
 	int mPartyMenuIndexOptions = 6;
+
+	ECharacterState mCharacterState = CS_MOVING;
+	
+	int mInteractMenuIndex = 0;
+	int mInteractMenuOptions = 3;
+
+	int mAskingMenuIndex = 0;
+
+	ActorNpc* mInteractedActor = nullptr;
 
 	int mStepsUntilEncounterMax = 5;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;

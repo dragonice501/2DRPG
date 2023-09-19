@@ -23,12 +23,4 @@ public:
 	void Input() override;
 	void Update(const float dt) override;
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
-
-	ECharacterState mCharacterState = CS_MOVING;
-	CharacterExploration mSigurd;
-	Actor* mInteractedActor = nullptr;
-	std::vector<CharacterExploration> mCharacters;
-
-	int mInteractMenuIndex = 0;
-	int mInteractMenuOptions = 2;
 };

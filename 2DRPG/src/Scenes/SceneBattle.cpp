@@ -246,7 +246,7 @@ void SceneBattle::Input()
 		}
 	}
 
-	if (InputManager::EPressed())
+	if (InputManager::AcceptPressed())
 	{
 		switch (mBattleState)
 		{
@@ -425,7 +425,7 @@ void SceneBattle::Update(const float dt)
 					PlayerManager::GetCharacterAttributes()[i] = mBattleCharacters[i]->attributes;
 				}
 
-				SceneManager::SetSceneToLoad(OVERWORLD, -1, true);
+				GameManager::SetSceneToLoad(OVERWORLD, -2, true);
 			}
 			break;
 		}

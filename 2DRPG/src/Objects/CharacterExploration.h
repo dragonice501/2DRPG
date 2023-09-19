@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Actor.h"
+#include "../Objects/ActorNpc.h"
 
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
@@ -30,11 +31,16 @@ public:
 
 	void CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters);
 
-	void UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const float dt);
+	void UpdateMovement(
+		const int mapWidth, const int mapHeight,
+		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors,
+		const float dt);
 	bool MovementPressed();
 	Vec2 GetDesiredPosition(const std::vector<CharacterExploration>& characters);
 	bool MovementInsideMap(const Vec2& position, const int width, const int height);
-	bool CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters);
+	bool CanMove(
+		const Vec2& desiredPosition, int width, int height,
+		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors);
 	void SetMovement(const std::vector<CharacterExploration>& characters);
 	
 	Movement mMovement;

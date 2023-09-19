@@ -25,9 +25,9 @@ public:
 	static inline const bool RightReleased() { return mRightReleased; }
 	static inline const float RightHeldTime() { return mRightHeldTime; }
 
-	static inline const bool EPressed() { return mEPressed; }
-
-	static inline const bool OPressed() { return mOPressed; }
+	static inline const bool AcceptPressed() { return mAcceptPressed; }
+	static inline const bool BackPressed() { return mBackPressed; }
+	static inline const bool StartPressed() { return mStartPressed; }
 
 private:
 	InputManager() {}
@@ -53,6 +53,7 @@ private:
 	static bool mRightReleased;
 	static float mRightHeldTime;
 
-	static bool mEPressed;
-	static bool mOPressed;
+	static bool mAcceptPressed;
+	static bool mBackPressed;
+	static bool mStartPressed;
 };

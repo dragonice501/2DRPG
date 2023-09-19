@@ -11,8 +11,8 @@ Position 24 26
 Offset 0 -1
 
 Npc Dancer 16 15 TownDancerDialogue
-//Npc Knight 19 13 TownKnightDialogue
-//Npc Mage 14 17 TownMageDialogue
+Npc Knight 19 13 TownKnightDialogue
+Npc Mage 14 17 TownMageDialogue
 
 Tile 0
 Tile 0

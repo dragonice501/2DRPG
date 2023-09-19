@@ -126,6 +126,7 @@ void GraphicsManager::DrawPixel(const int& x, const int& y, const bool highlight
 {
     if (highlighted) SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
     else SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+
     SDL_Rect rect = { x, y, TEXT_SIZE, TEXT_SIZE };
     SDL_RenderFillRect(mRenderer, &rect);
 
@@ -284,9 +285,9 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
                     mHighlightedOffset++;
                     continue;
                 }
-                if (character == 'g' || character == 'j' || character == 'p' || character == 'q' || character == 'y') yOffset = 2 * TEXT_SIZE;
+                if (character == 'g' || character == 'j' || character == 'p' || character == 'q' || character == 'y' || character == ',') yOffset = 2 * TEXT_SIZE;
                 
-                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y + yOffset + j * TEXT_SIZE, highlight);
+                DrawPixel(x + k * TEXT_SIZE - mHighlightedOffset * TEXT_SIZE, y + yOffset + j * TEXT_SIZE, mHighlighted);
             }
         }
     }

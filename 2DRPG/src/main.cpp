@@ -2,7 +2,6 @@
 
 int main(int argc, char* argv[])
 {
-
 	if (Engine::Instance().Init())
 	{
 		Engine::Instance().Run();

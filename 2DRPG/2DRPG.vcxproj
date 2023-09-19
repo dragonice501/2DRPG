@@ -133,13 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Objects\ActorNpc.cpp" />
     <ClCompile Include="src\Objects\CharacterBattle.cpp" />
     <ClCompile Include="src\Managers\PlayerManager.cpp" />
-    <ClCompile Include="src\Objects\Enemy.cpp" />
     <ClCompile Include="src\Managers\GameManager.cpp" />
     <ClCompile Include="src\Managers\GraphicsManager.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Objects\Actor.cpp" />
+    <ClCompile Include="src\Objects\Enemy.cpp" />
     <ClCompile Include="src\Scenes\SceneBattle.cpp" />
     <ClCompile Include="src\Scenes\SceneExploration.cpp" />
     <ClCompile Include="src\Objects\CharacterExploration.cpp" />
@@ -159,15 +160,16 @@
     <ClCompile Include="src\Utils\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Objects\ActorNpc.h" />
     <ClInclude Include="src\Objects\ActorBattle.h" />
     <ClInclude Include="src\Objects\CharacterBattle.h" />
     <ClInclude Include="src\Managers\PlayerManager.h" />
-    <ClInclude Include="src\Objects\Enemy.h" />
     <ClInclude Include="src\Dialogue\Dialogue.h" />
     <ClInclude Include="src\Managers\GameManager.h" />
     <ClInclude Include="src\Managers\GraphicsManager.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Objects\Actor.h" />
+    <ClInclude Include="src\Objects\Enemy.h" />
     <ClInclude Include="src\Objects\EnemyBattle.h" />
     <ClInclude Include="src\Objects\EnemyEncounter.h" />
     <ClInclude Include="src\Scenes\SceneBattle.h" />

@@ -78,7 +78,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
             Vec2 position = { static_cast<float>(npcXPos * TILE_SIZE), static_cast<float>(npcYPos * TILE_SIZE) };
 
-            Actor newActor;
+            ActorNpc newActor;
             newActor.Init(npcName, position, renderer);
             newActor.LoadDialogue(dialogueFile);
             mActors.push_back(newActor);
@@ -165,85 +165,194 @@ void SceneExploration::Shutdown()
 
 void SceneExploration::Input()
 {
-    if (InputManager::UpPressed())
+    switch (mExplorationState)
     {
-        switch (mExplorationState)
+        case ES_EXPLORING:
         {
-            case ES_EXPLORING:
+            if (InputManager::UpHeld())
             {
-                break;
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.upHeld = true;
+                }
             }
-            case ES_INTERACTING:
+            else
             {
-                break;
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.upHeld = false;
+                }
             }
-            case ES_MENUING:
+
+            if (InputManager::DownHeld())
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.downHeld = true;
+                }
+            }
+            else
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.downHeld = false;
+                }
+            }
+
+            if (InputManager::RightHeld())
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.rightHeld = true;
+                }
+            }
+            else
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.rightHeld = false;
+                }
+            }
+
+            if (InputManager::LeftHeld())
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.leftHeld = true;
+                }
+            }
+            else
+            {
+                for (CharacterExploration& character : mCharacters)
+                {
+                    character.mMovement.leftHeld = false;
+                }
+            }
+
+            if (InputManager::AcceptPressed())
+            {
+                for (ActorNpc& actor : mActors)
+                {
+                    Vec2 interactPosition = mCharacters[0].GetPosition() + mCharacters[0].mRigidbody.lastVelocity;
+
+                    if (actor.GetPosition() == interactPosition)
+                    {
+                        mInteractedActor = &actor;
+                        if (mInteractedActor)
+                            mInteractedActor->mCurrentDialogueMode = ED_GREETING;
+
+                        mInteractMenuIndex = 0;
+                        mExplorationState = ES_INTERACTING;
+                    }
+                }
+            }
+            else if (InputManager::StartPressed())
+            {
+                mExplorationState = ES_MENUING;
+            }
+            break;
+        }
+        case ES_INTERACTING:
+        {
+            if (InputManager::UpPressed())
+            {
+                mInteractMenuIndex--;
+                if (mInteractMenuIndex < 0) mInteractMenuIndex = mInteractMenuOptions - 1;
+            }
+            else if (InputManager::DownPressed())
+            {
+                mInteractMenuIndex++;
+                if (mInteractMenuIndex >= mInteractMenuOptions) mInteractMenuIndex = 0;
+            }
+            else if (InputManager::AcceptPressed())
+            {
+                if (mInteractMenuIndex == 0)
+                {
+                    mExplorationState = ES_TALKING;
+                }
+                else if (mInteractMenuIndex == 1)
+                {
+                    mExplorationState = ES_ASKING;
+                }
+                else if (mInteractMenuIndex == mInteractMenuOptions - 1)
+                {
+                    if (mInteractedActor) mInteractedActor = nullptr;
+                    mExplorationState = ES_EXPLORING;
+                }
+            }
+            break;
+        }
+        case ES_TALKING:
+        {
+            if (InputManager::AcceptPressed())
+            {
+                if (mInteractedActor)
+                {
+                    if (!mInteractedActor->CycleThroughDialogue())
+                    {
+                        if (mInteractedActor->HasNewInformation(PlayerManager::GetLearnedKeywords()))
+                        {
+                            mInteractedActor->SetDialogueMode(ED_INFORMATION);
+
+                            PlayerManager::LearnNewKeyword(mInteractedActor->GetKeyword());
+                        }
+                        else
+                        {
+                            mInteractedActor->SetDialogueMode(ED_GREETING);
+                            mExplorationState = ES_INTERACTING;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        case ES_ASKING:
+        {
+            if (InputManager::UpPressed())
+            {
+                mAskingMenuIndex--;
+                if (mAskingMenuIndex < 0) mAskingMenuIndex = PlayerManager::GetLearnedKeywords().size() - 1;
+            }
+            else if (InputManager::DownPressed())
+            {
+                mAskingMenuIndex++;
+                if (mAskingMenuIndex >= PlayerManager::GetLearnedKeywords().size()) mAskingMenuIndex = 0;
+            }
+            if (InputManager::AcceptPressed())
+            {
+                if (mInteractedActor)
+                {
+                    if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]))
+                    {
+                        mInteractedActor->SetAnswerKey(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]);
+                        mInteractedActor->SetDialogueMode(ED_ANSWER);
+                        mExplorationState = ES_TALKING;
+                    }
+                }
+            }
+            if (InputManager::BackPressed())
+            {
+                mExplorationState = ES_INTERACTING;
+            }
+            break;
+        }
+        case ES_MENUING:
+        {
+            if (InputManager::UpPressed())
             {
                 mPartyMenuIndex--;
                 if (mPartyMenuIndex < 0) mPartyMenuIndex = mPartyMenuIndexOptions - 1;
-                break;
             }
-        }
-    }
-
-    if (InputManager::DownPressed())
-    {
-        switch (mExplorationState)
-        {
-            case ES_EXPLORING:
-            {
-                break;
-            }
-            case ES_INTERACTING:
-            {
-                break;
-            }
-            case ES_MENUING:
+            else if (InputManager::DownPressed())
             {
                 mPartyMenuIndex++;
                 if (mPartyMenuIndex >= mPartyMenuIndexOptions) mPartyMenuIndex = 0;
-                break;
             }
-        }
-    }
-
-    if (InputManager::OPressed())
-    {
-        switch (mExplorationState)
-        {
-            case ES_EXPLORING:
-            {
-                mExplorationState = ES_MENUING;
-                break;
-            }
-            case ES_INTERACTING:
-            {
-                break;
-            }
-            case ES_MENUING:
-            {
-                break;
-            }
-        }
-    }
-
-    if (InputManager::EPressed())
-    {
-        switch (mExplorationState)
-        {
-            case ES_EXPLORING:
-            {
-                break;
-            }
-            case ES_INTERACTING:
-            {
-                break;
-            }
-            case ES_MENUING:
+            else if (InputManager::BackPressed())
             {
                 if (mPartyMenuIndex == mPartyMenuIndexOptions - 1) mExplorationState = ES_EXPLORING;
-                break;
             }
+            break;
         }
     }
 }
@@ -260,7 +369,7 @@ void SceneExploration::Update(const float dt)
 
     for (CharacterExploration& character : mCharacters)
     {
-        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, dt);
+        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, mActors, dt);
         character.Update(dt);
 
         if (character.mMovement.stepTaken && character.mPartyIndex == 0)
@@ -273,7 +382,8 @@ void SceneExploration::Update(const float dt)
                 }
             }
 
-            mStepsUntilEncounter--;
+            if(GameManager::GetIsOverworld()) mStepsUntilEncounter--;
+
             if (mStepsUntilEncounter <= 0)
             {
                 GameManager::ClearPositionsAndDirections();
@@ -283,7 +393,9 @@ void SceneExploration::Update(const float dt)
                     GameManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
                 }
 
-                GameManager::SetSceneToLoad(BATTLE, -1, true, FOREST, mEnemyEncounters);
+                int terrainIndex = static_cast<int>(character.GetPosition().x) / 16 + (static_cast<int>(character.GetPosition().y) / 16) * mMapWidth;
+
+                GameManager::SetSceneToLoad(BATTLE, -1, true, mTiles[terrainIndex].terrainType, mEnemyEncounters);
             }
         }
     }
@@ -331,9 +443,35 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         mCharacters[i].Render(renderer);
     }
 
-    if (mExplorationState == ES_MENUING)
+    switch (mExplorationState)
     {
-        DrawPartyMenu(renderer);
+        case ES_EXPLORING:
+        {
+            break;
+        }
+        case ES_INTERACTING:
+        {
+            DrawInteractMenu(renderer);
+            break;
+        }
+        case ES_TALKING:
+        {
+            SDL_Rect dialogueRect = GraphicsManager::DrawDialogueBox();
+            if(mInteractedActor)
+                GraphicsManager::DrawDialogue(dialogueRect, mInteractedActor->GetCurrentDialogue());
+            break;
+        }
+        case ES_ASKING:
+        {
+            SDL_Rect rect = DrawInteractMenu(renderer);
+            DrawKeywordsMenu(renderer, rect);
+            break;
+        }
+        case ES_MENUING:
+        { 
+            DrawPartyMenu(renderer);
+            break;
+        }
     }
 }
 
@@ -411,4 +549,29 @@ void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
             firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2 + characterYOffset,
             string.c_str());
     }
+}
+
+SDL_Rect SceneExploration::DrawInteractMenu(SDL_Renderer* renderer)
+{
+    SDL_Rect rect = GraphicsManager::DrawUIBox(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 2 - 50, INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT);
+    GraphicsManager::DrawUISelector(rect.x, rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mInteractMenuIndex, rect.w, 30);
+
+    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Talk");
+    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Ask");
+    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Leave");
+
+    return rect;
+}
+
+SDL_Rect SceneExploration::DrawKeywordsMenu(SDL_Renderer* renderer, SDL_Rect& rect)
+{
+    rect = GraphicsManager::DrawUIBox(rect.x + rect.w + UI_BOX_BORDER_SIZE * 3, rect.y, 200, INTERACT_MENU_HEIGHT);
+    GraphicsManager::DrawUISelector(rect.x, rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mAskingMenuIndex, rect.w, 30);
+
+    for (int i = 0; i < PlayerManager::GetLearnedKeywords().size(); i++)
+    {
+        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30 * i, PlayerManager::GetLearnedKeywords()[i].c_str());
+    }
+
+    return rect;
 }

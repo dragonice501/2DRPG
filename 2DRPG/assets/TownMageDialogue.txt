@@ -1,12 +1,20 @@
-Start Greeting
+Greeting
 Even though most monsters are dangerous,
 most are vunerable to magic.
 Break
 Being a magician I don't have much
 trouble dealing with them. I could teach
 you some magic if you want.
-Break
-By the way... I here the /king/ is looking
+End
+
+Information King
+By the way... I hear the /king/ is looking
 for warriors to join the army and
 protect the kingdom.
+End
+
+Answer King
+I hear the king is looking for warriors
+to join the army and protect the
+kingdom.
 End

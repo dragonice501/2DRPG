@@ -1,8 +1,25 @@
-Start Greeting
-I'm Arylon the dancer. I've been 
+// Dialogue types:
+// Greeting
+// Information-Keyword
+// Answer-Keyword
+// Max line col size is 41, 43 with /keyword/
+
+Greeting
+I'm Arylon the dancer. I've been
 dancing since I was a little girl.
 Break
-If you need to prepare for battle then
-you should see the /blacksmith/ . He makes 
-the best weapons in the region!
+If you need better weapons or armor then
+you should see the blacksmith. He makes
+the best gear around!
+End
+
+Information Monster
+Be careful about the /monster/ that's
+outside of the town! It makes a 
+terrible sound.
+End
+
+Answer Monster
+The monster lurks outside of town and
+makes a terrible sound.
 End

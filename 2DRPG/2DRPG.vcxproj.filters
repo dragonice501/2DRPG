@@ -78,13 +78,16 @@
     <ClCompile Include="src\Scenes\SceneBattle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Managers\PlayerManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Objects\CharacterBattle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\ActorNpc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -443,9 +446,6 @@
     <ClInclude Include="src\Scenes\SceneBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Objects\EnemyEncounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -459,6 +459,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Objects\ActorBattle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Objects\ActorNpc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Objects\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

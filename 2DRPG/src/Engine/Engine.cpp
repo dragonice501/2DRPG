@@ -43,7 +43,7 @@ bool Engine::Init()
 void Engine::Run()
 {
     PlayerManager::LoadCharacters();
-    GameManager::SetSceneToLoad(OVERWORLD, -1);
+    GameManager::SetSceneToLoad(TOWN, -1);
 
     while (isRunning)
     {

@@ -1,4 +1,4 @@
-Start Greeting
+Greeting
 Don't cuase any trouble while you're
 here.
 Break

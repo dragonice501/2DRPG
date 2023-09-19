@@ -95,12 +95,21 @@ struct Movement
 		this->destination = destination;
 		this->rate = rate;
 		stepTaken = false;
+		this->upHeld = false;
+		this->downHeld = false;
+		this->rightHeld = false;
+		this->leftHeld = false;
 	}
 
 	Vec2 start;
 	Vec2 destination;
 	float rate;
 	bool stepTaken;
+
+	bool upHeld;
+	bool downHeld;
+	bool rightHeld;
+	bool leftHeld;
 };
 
 struct Rigidbody

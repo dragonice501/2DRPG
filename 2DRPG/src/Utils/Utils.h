@@ -23,6 +23,14 @@ enum ECharacterState
 	CS_LISTENING
 };
 
+enum EDialogueType
+{
+	ED_GREETING,
+	ED_INFORMATION,
+	ED_ANSWER,
+	ED_NONE
+};
+
 enum ECharacterClass
 {
 	DANCER,
@@ -36,6 +44,8 @@ enum EExplorationState
 {
 	ES_EXPLORING,
 	ES_INTERACTING,
+	ES_TALKING,
+	ES_ASKING,
 	ES_MENUING
 };
 

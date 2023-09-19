@@ -57,8 +57,8 @@ void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition
     SetSpriteSheet(PlayerManager::GetCharacterTextures()[partyIndex]);
     LoadAnimations(name);
     SetPosition(spawnPosition);
-    if (SceneManager::ReturnToOverworld())
-        mRigidbody.lastVelocity = SceneManager::GetPreviousDirection(partyIndex);
+    if (GameManager::GetReturnToOverworld())
+        mRigidbody.lastVelocity = GameManager::GetPreviousDirection(partyIndex);
     else
         mRigidbody.lastVelocity = spawnDirection;
     mPartyIndex = partyIndex;
@@ -85,7 +85,10 @@ void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, c
     
 }
 
-void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const float dt)
+void CharacterExploration::UpdateMovement(
+    const int mapWidth, const int mapHeight, 
+    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors,
+    const float dt)
 {
     mMovement.stepTaken = false;
 
@@ -110,7 +113,9 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
                 if (MovementPressed())
                 {
                     Vec2 desiredPosition = GetDesiredPosition(characters);
-                    if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters))
+                    if (
+                        MovementInsideMap(desiredPosition, mapWidth, mapHeight) &&
+                        CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters, actors))
                     {
                         SetMovement(characters);
                     }
@@ -132,7 +137,9 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
         if (MovementPressed())
         {
             Vec2 desiredPosition = GetDesiredPosition(characters);
-            if (MovementInsideMap(desiredPosition, mapWidth, mapHeight) && CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters))
+            if (
+                MovementInsideMap(desiredPosition, mapWidth, mapHeight) &&
+                CanMove(desiredPosition, mapWidth, mapHeight, tiles, characters, actors))
             {
                 mMovementState = MS_MOVING;
                 SetMovement(characters);
@@ -141,10 +148,13 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
             {
                 mMovementState = MS_IDLE;
 
-                if (InputManager::UpHeld()) mRigidbody.lastVelocity = Vec2(0.0f, -16.0f);
-                else if (InputManager::DownHeld()) mRigidbody.lastVelocity = Vec2(0.0f, 16.0f);
-                else if (InputManager::LeftHeld()) mRigidbody.lastVelocity = Vec2(-16.0f, 0.0f);
-                else if (InputManager::RightHeld()) mRigidbody.lastVelocity = Vec2(16.0f, 0.0f);
+                if (mPartyIndex == 0)
+                {
+                    if (InputManager::UpHeld()) mRigidbody.lastVelocity = Vec2(0.0f, -16.0f);
+                    else if (InputManager::DownHeld()) mRigidbody.lastVelocity = Vec2(0.0f, 16.0f);
+                    else if (InputManager::LeftHeld()) mRigidbody.lastVelocity = Vec2(-16.0f, 0.0f);
+                    else if (InputManager::RightHeld()) mRigidbody.lastVelocity = Vec2(16.0f, 0.0f);
+                }
             }
         }
     }
@@ -152,7 +162,7 @@ void CharacterExploration::UpdateMovement(const int mapWidth, const int mapHeigh
 
 bool CharacterExploration::MovementPressed()
 {
-    return InputManager::UpHeld() || InputManager::DownHeld() || InputManager::LeftHeld() || InputManager::RightHeld();
+    return mMovement.upHeld || mMovement.downHeld || mMovement.rightHeld || mMovement.leftHeld;
 }
 
 Vec2 CharacterExploration::GetDesiredPosition(const std::vector<CharacterExploration>& characters)
@@ -195,20 +205,32 @@ bool CharacterExploration::MovementInsideMap(const Vec2& position, const int wid
         position.y + TILE_SIZE > height * TILE_SIZE);
 }
 
-bool CharacterExploration::CanMove(const Vec2& desiredPosition, int width, int height, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)
+bool CharacterExploration::CanMove(
+    const Vec2& desiredPosition, int width, int height,
+    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors)
 {
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
 
     if (mPartyIndex != 0)
     {
-        if (mPosition == characters[mPartyIndex - 1].GetPosition())
+        if (mPosition == characters[mPartyIndex - 1].GetPosition() || characters[0].mMovementState == MS_IDLE)
         {
             return false;
         }
     }
+    else
+    {
+        for (Actor actor : actors)
+        {
+            if (actor.GetPosition() == desiredPosition)
+            {
+                return false;
+            }
+        }
+    }
 
-    if (SceneManager::GetIsOverworld())
+    if (GameManager::GetIsOverworld())
     {
         ETerrainType terrain = tiles[x + y * width].terrainType;
 
