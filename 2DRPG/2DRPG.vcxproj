@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\UI\PartyMenu.cpp" />
     <ClCompile Include="src\Objects\ActorNpc.cpp" />
     <ClCompile Include="src\Objects\CharacterBattle.cpp" />
     <ClCompile Include="src\Managers\PlayerManager.cpp" />
@@ -158,8 +159,10 @@
     <ClCompile Include="src\Scenes\SceneTown.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />
     <ClCompile Include="src\Utils\Vec2.cpp" />
+    <ClCompile Include="src\UI\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\UI\PartyMenu.h" />
     <ClInclude Include="src\Objects\ActorNpc.h" />
     <ClInclude Include="src\Objects\ActorBattle.h" />
     <ClInclude Include="src\Objects\CharacterBattle.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="src\Utils\Utils.h" />
     <ClInclude Include="src\Utils\Vec2.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\UI\UIButton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

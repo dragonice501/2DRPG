@@ -32,6 +32,8 @@ public:
 	void Input();
 	void Update(const float dt);
 
+	void ExitMenu() override {}
+
 	void BuildTurnOrder();
 	void NextTurn();
 

@@ -1,7 +1,7 @@
 Greeting
 Don't cuase any trouble while you're
-here.
+here. But be on the look out for any
+monsters.
 Break
-But be on the look out for any monsters.
 They like to come out at night.
 End

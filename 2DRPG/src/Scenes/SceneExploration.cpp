@@ -2,7 +2,7 @@
 
 SceneExploration::SceneExploration()
 {
-    
+    mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
 }
 
 SceneExploration::~SceneExploration()
@@ -157,6 +157,7 @@ void SceneExploration::SetupCharacters()
         mCharacters.push_back(newCharacter);
     }
 }
+
 
 void SceneExploration::Shutdown()
 {
@@ -330,7 +331,7 @@ void SceneExploration::Input()
                     }
                 }
             }
-            if (InputManager::BackPressed())
+            if (InputManager::CancelPressed())
             {
                 mExplorationState = ES_INTERACTING;
             }
@@ -338,7 +339,37 @@ void SceneExploration::Input()
         }
         case ES_MENUING:
         {
-            if (InputManager::UpPressed())
+            if (InputManager::StartPressed())
+            {
+                mExplorationState = ES_EXPLORING;
+            }
+
+            if (InputManager::UpPressed() && mPartyMenu.GetCurrentButton().OnUpAction)
+            {
+                mPartyMenu.GetCurrentButton().OnUpAction();
+            }
+            else if (InputManager::DownPressed() && mPartyMenu.GetCurrentButton().OnDownAction)
+            {
+                mPartyMenu.GetCurrentButton().OnDownAction();
+            }
+            else if (InputManager::RightPressed() && mPartyMenu.GetCurrentButton().OnRightAction)
+            {
+                mPartyMenu.GetCurrentButton().OnRightAction();
+            }
+            else if (InputManager::LeftPressed() && mPartyMenu.GetCurrentButton().OnLeftAction)
+            {
+                mPartyMenu.GetCurrentButton().OnLeftAction();
+            }
+            else if (InputManager::AcceptPressed() && mPartyMenu.GetCurrentButton().OnAcceptAction)
+            {
+                mPartyMenu.GetCurrentButton().OnAcceptAction();
+            }
+            else if (InputManager::CancelPressed() && mPartyMenu.GetCurrentButton().OnCancelAction)
+            {
+                mPartyMenu.GetCurrentButton().OnCancelAction();
+            }
+
+            /*if (InputManager::UpPressed())
             {
                 mPartyMenuIndex--;
                 if (mPartyMenuIndex < 0) mPartyMenuIndex = mPartyMenuIndexOptions - 1;
@@ -348,10 +379,19 @@ void SceneExploration::Input()
                 mPartyMenuIndex++;
                 if (mPartyMenuIndex >= mPartyMenuIndexOptions) mPartyMenuIndex = 0;
             }
-            else if (InputManager::BackPressed())
+            else if (InputManager::AcceptPressed())
             {
-                if (mPartyMenuIndex == mPartyMenuIndexOptions - 1) mExplorationState = ES_EXPLORING;
+                if (mPartyMenuIndex == mPartyMenuIndexOptions - 1)
+                {
+                    mPartyMenuIndex = 0;
+                    mExplorationState = ES_EXPLORING;
+                }
             }
+            else if (InputManager::CancelPressed())
+            {
+                mExplorationState = ES_EXPLORING;
+                mPartyMenuIndex = 0;
+            }*/
             break;
         }
     }
@@ -469,7 +509,8 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
         case ES_MENUING:
         { 
-            DrawPartyMenu(renderer);
+            //DrawPartyMenu(renderer);
+            mPartyMenu.Render(renderer);
             break;
         }
     }
@@ -502,9 +543,10 @@ void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
     GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 0, "Party");
     GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * 1, "Status");
     GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 3 + Font::fontHeight * TEXT_SIZE * 2, "Inventory");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 4 + Font::fontHeight * TEXT_SIZE * 3, "Equip");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 5 + Font::fontHeight * TEXT_SIZE * 4, "Magic");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 6 + Font::fontHeight * TEXT_SIZE * 5, "Exit");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 4 + Font::fontHeight * TEXT_SIZE * 3, "Journal");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 5 + Font::fontHeight * TEXT_SIZE * 4, "Equip");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 6 + Font::fontHeight * TEXT_SIZE * 5, "Magic");
+    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 7 + Font::fontHeight * TEXT_SIZE * 6, "Exit");
 
     GraphicsManager::DrawUISelector(
         optionsRect.x,

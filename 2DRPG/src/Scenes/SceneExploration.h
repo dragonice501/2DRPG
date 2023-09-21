@@ -10,6 +10,9 @@
 #include "../Objects/Components.h"
 #include "../Objects/EnemyEncounter.h"
 
+#include "../UI/UIButton.h"
+#include "../UI/PartyMenu.h"
+
 #include "../Utils/Utils.h"
 
 #include <SDL_image.h>
@@ -34,6 +37,8 @@ public:
 	virtual void Update(const float dt) override;
 	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
 
+	void ExitMenu() override { mExplorationState = ES_EXPLORING; }
+
 	virtual void DrawPartyMenu(static SDL_Renderer* renderer);
 	SDL_Rect DrawInteractMenu(static SDL_Renderer* renderer);
 	SDL_Rect DrawKeywordsMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
@@ -57,7 +62,7 @@ protected:
 
 	EExplorationState mExplorationState = ES_EXPLORING;
 	int mPartyMenuIndex = 0;
-	int mPartyMenuIndexOptions = 6;
+	int mPartyMenuIndexOptions = 7;
 
 	ECharacterState mCharacterState = CS_MOVING;
 	
@@ -65,6 +70,9 @@ protected:
 	int mInteractMenuOptions = 3;
 
 	int mAskingMenuIndex = 0;
+
+	UIButton mButton;
+	PartyMenu mPartyMenu;
 
 	ActorNpc* mInteractedActor = nullptr;
 

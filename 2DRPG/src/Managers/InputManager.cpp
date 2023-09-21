@@ -26,7 +26,7 @@ bool InputManager::mRightReleased = false;
 float InputManager::mRightHeldTime = 0.0f;
 
 bool InputManager::mAcceptPressed = false;
-bool InputManager::mBackPressed = false;
+bool InputManager::mCancelPressed = false;
 bool InputManager::mStartPressed = false;
 
 void InputManager::Update(const float dt)
@@ -80,7 +80,7 @@ void InputManager::Update(const float dt)
     }
 
     if (mAcceptPressed) mAcceptPressed = false;
-    if (mBackPressed) mBackPressed = false;
+    if (mCancelPressed) mCancelPressed = false;
     if (mStartPressed) mStartPressed = false;
 
     SDL_Event sdlEvent;
@@ -139,7 +139,7 @@ void InputManager::Update(const float dt)
                 }
                 else if (sdlEvent.key.keysym.sym == SDLK_k)
                 {
-                    mBackPressed = true;
+                    mCancelPressed = true;
                     break;
                 }
                 else if (sdlEvent.key.keysym.sym == SDLK_o)

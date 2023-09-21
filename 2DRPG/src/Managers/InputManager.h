@@ -26,7 +26,7 @@ public:
 	static inline const float RightHeldTime() { return mRightHeldTime; }
 
 	static inline const bool AcceptPressed() { return mAcceptPressed; }
-	static inline const bool BackPressed() { return mBackPressed; }
+	static inline const bool CancelPressed() { return mCancelPressed; }
 	static inline const bool StartPressed() { return mStartPressed; }
 
 private:
@@ -54,6 +54,6 @@ private:
 	static float mRightHeldTime;
 
 	static bool mAcceptPressed;
-	static bool mBackPressed;
+	static bool mCancelPressed;
 	static bool mStartPressed;
 };

@@ -27,6 +27,8 @@ public:
 	virtual void Update(const float dt) = 0;
 	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) = 0;
 
+	virtual void ExitMenu() = 0;
+
 protected:
 	int mMapWidth = 0;
 	int mMapHeight = 0;
