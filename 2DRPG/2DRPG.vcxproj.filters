@@ -93,7 +93,13 @@
     <ClCompile Include="src\UI\UIButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\PartyMenu.cpp">
+    <ClCompile Include="src\UI\MenuParty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\MenuInteract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -476,7 +482,13 @@
     <ClInclude Include="src\UI\UIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\PartyMenu.h">
+    <ClInclude Include="src\UI\MenuParty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\MenuInteract.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

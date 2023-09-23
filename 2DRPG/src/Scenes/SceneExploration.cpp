@@ -2,7 +2,62 @@
 
 SceneExploration::SceneExploration()
 {
+    mInteractMenu.mTalkButton.OnSelected = [this]()
+    {
+        mInteractMenu.mMainButtonIndex = 0;
+    };
+    mInteractMenu.mTalkButton.OnUpAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(& mInteractMenu.mLeaveButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+    mInteractMenu.mTalkButton.OnDownAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+    mInteractMenu.mTalkButton.OnAcceptAction = [this]()
+    {
+        mExplorationState = ES_TALKING;
+    };
+
+    mInteractMenu.mAskButton.OnSelected = [this]()
+    {
+        mInteractMenu.mMainButtonIndex = 1;
+    };
+    mInteractMenu.mAskButton.OnUpAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+    mInteractMenu.mAskButton.OnDownAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mLeaveButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+
+    mInteractMenu.mLeaveButton.OnSelected = [this]()
+    {
+        mInteractMenu.mMainButtonIndex = 2;
+    };
+    mInteractMenu.mLeaveButton.OnUpAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+    mInteractMenu.mLeaveButton.OnDownAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mInteractMenu.GetCurrentButton().OnSelected();
+    };
+    mInteractMenu.mLeaveButton.OnAcceptAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mExplorationState = ES_EXPLORING;
+    };
+
     mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
+    mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
 }
 
 SceneExploration::~SceneExploration()
@@ -255,30 +310,36 @@ void SceneExploration::Input()
         }
         case ES_INTERACTING:
         {
-            if (InputManager::UpPressed())
+            if (InputManager::UpPressed() && mInteractMenu.GetCurrentButton().OnUpAction)
             {
-                mInteractMenuIndex--;
-                if (mInteractMenuIndex < 0) mInteractMenuIndex = mInteractMenuOptions - 1;
+                mInteractMenu.GetCurrentButton().OnUpAction();
             }
-            else if (InputManager::DownPressed())
+            else if (InputManager::DownPressed() && mInteractMenu.GetCurrentButton().OnDownAction)
             {
-                mInteractMenuIndex++;
-                if (mInteractMenuIndex >= mInteractMenuOptions) mInteractMenuIndex = 0;
+                mInteractMenu.GetCurrentButton().OnDownAction();
             }
-            else if (InputManager::AcceptPressed())
+            else if (InputManager::RightPressed() && mInteractMenu.GetCurrentButton().OnRightAction)
             {
-                if (mInteractMenuIndex == 0)
+                mInteractMenu.GetCurrentButton().OnRightAction();
+            }
+            else if (InputManager::LeftPressed() && mInteractMenu.GetCurrentButton().OnLeftAction)
+            {
+                mInteractMenu.GetCurrentButton().OnLeftAction();
+            }
+            else if (InputManager::AcceptPressed() && mInteractMenu.GetCurrentButton().OnAcceptAction)
+            {
+                mInteractMenu.GetCurrentButton().OnAcceptAction();
+            }
+            else if (InputManager::CancelPressed())
+            {
+                if (mInteractMenu.mIsInteractMenu)
                 {
-                    mExplorationState = ES_TALKING;
-                }
-                else if (mInteractMenuIndex == 1)
-                {
-                    mExplorationState = ES_ASKING;
-                }
-                else if (mInteractMenuIndex == mInteractMenuOptions - 1)
-                {
-                    if (mInteractedActor) mInteractedActor = nullptr;
                     mExplorationState = ES_EXPLORING;
+                }
+                else if (mInteractMenu.GetCurrentButton().OnCancelAction)
+                {
+                    mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+                    mInteractMenu.GetCurrentButton().OnCancelAction();
                 }
             }
             break;
@@ -291,11 +352,33 @@ void SceneExploration::Input()
                 {
                     if (!mInteractedActor->CycleThroughDialogue())
                     {
-                        if (mInteractedActor->HasNewInformation(PlayerManager::GetLearnedKeywords()))
+                        if (mInteractedActor->HasNewInformation())
                         {
                             mInteractedActor->SetDialogueMode(ED_INFORMATION);
 
-                            PlayerManager::LearnNewKeyword(mInteractedActor->GetKeyword());
+                            switch (mInteractedActor->GetKeywordType())
+                            {
+                                case EJ_PERSON:
+                                {
+                                    PlayerManager::LearnNewPeopleKeyword(mInteractedActor->GetKeyword());
+                                    break;
+                                }
+                                case EJ_PLACE:
+                                {
+                                    PlayerManager::LearnNewPlaceKeyword(mInteractedActor->GetKeyword());
+                                    break;
+                                }
+                                case EJ_MYSTERY:
+                                {
+                                    PlayerManager::LearnNewMysteryKeyword(mInteractedActor->GetKeyword());
+                                }
+                                case EJ_BESTIARY:
+                                {
+                                    PlayerManager::LearnNewMysteryKeyword(mInteractedActor->GetKeyword());
+                                }
+                            }
+
+                            //PlayerManager::LearnNewKeyword(mInteractedActor->GetKeyword());
                         }
                         else
                         {
@@ -312,23 +395,23 @@ void SceneExploration::Input()
             if (InputManager::UpPressed())
             {
                 mAskingMenuIndex--;
-                if (mAskingMenuIndex < 0) mAskingMenuIndex = PlayerManager::GetLearnedKeywords().size() - 1;
+                //if (mAskingMenuIndex < 0) mAskingMenuIndex = PlayerManager::GetLearnedKeywords().size() - 1;
             }
             else if (InputManager::DownPressed())
             {
                 mAskingMenuIndex++;
-                if (mAskingMenuIndex >= PlayerManager::GetLearnedKeywords().size()) mAskingMenuIndex = 0;
+                //if (mAskingMenuIndex >= PlayerManager::GetLearnedKeywords().size()) mAskingMenuIndex = 0;
             }
             if (InputManager::AcceptPressed())
             {
                 if (mInteractedActor)
                 {
-                    if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]))
+                    /*if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]))
                     {
                         mInteractedActor->SetAnswerKey(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]);
                         mInteractedActor->SetDialogueMode(ED_ANSWER);
                         mExplorationState = ES_TALKING;
-                    }
+                    }*/
                 }
             }
             if (InputManager::CancelPressed())
@@ -364,34 +447,18 @@ void SceneExploration::Input()
             {
                 mPartyMenu.GetCurrentButton().OnAcceptAction();
             }
-            else if (InputManager::CancelPressed() && mPartyMenu.GetCurrentButton().OnCancelAction)
-            {
-                mPartyMenu.GetCurrentButton().OnCancelAction();
-            }
-
-            /*if (InputManager::UpPressed())
-            {
-                mPartyMenuIndex--;
-                if (mPartyMenuIndex < 0) mPartyMenuIndex = mPartyMenuIndexOptions - 1;
-            }
-            else if (InputManager::DownPressed())
-            {
-                mPartyMenuIndex++;
-                if (mPartyMenuIndex >= mPartyMenuIndexOptions) mPartyMenuIndex = 0;
-            }
-            else if (InputManager::AcceptPressed())
-            {
-                if (mPartyMenuIndex == mPartyMenuIndexOptions - 1)
-                {
-                    mPartyMenuIndex = 0;
-                    mExplorationState = ES_EXPLORING;
-                }
-            }
             else if (InputManager::CancelPressed())
             {
-                mExplorationState = ES_EXPLORING;
-                mPartyMenuIndex = 0;
-            }*/
+                if (mPartyMenu.mIsMainMenu)
+                {
+                    mExplorationState = ES_EXPLORING;
+                }
+                else if (mPartyMenu.GetCurrentButton().OnCancelAction)
+                {
+                    mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
+                    mPartyMenu.GetCurrentButton().OnCancelAction();
+                }
+            }
             break;
         }
     }
@@ -491,7 +558,7 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
         case ES_INTERACTING:
         {
-            DrawInteractMenu(renderer);
+            mInteractMenu.Render(renderer);
             break;
         }
         case ES_TALKING:
@@ -503,117 +570,12 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
         case ES_ASKING:
         {
-            SDL_Rect rect = DrawInteractMenu(renderer);
-            DrawKeywordsMenu(renderer, rect);
             break;
         }
         case ES_MENUING:
         { 
-            //DrawPartyMenu(renderer);
             mPartyMenu.Render(renderer);
             break;
         }
     }
-}
-
-void SceneExploration::DrawPartyMenu(SDL_Renderer* renderer)
-{
-    SDL_Rect firstRect;
-    std::string string;
-
-    string = std::to_string(PlayerManager::GetPartyMoney()) + 'g';
-
-    int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
-
-    firstRect = GraphicsManager::DrawUIBox(
-        GraphicsManager::WindowWidth() / 2 - GraphicsManager::WindowWidth() / 4,
-        GraphicsManager::WindowHeight() / 2 - GraphicsManager::WindowHeight() / 4,
-        stringLength + TEXT_PADDING * 2,
-        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
-
-    GraphicsManager::DrawString(firstRect.x + TEXT_PADDING, firstRect.y + TEXT_PADDING, string.c_str());
-
-    SDL_Rect optionsRect;
-    optionsRect = GraphicsManager::DrawUIBox(
-        firstRect.x,
-        firstRect.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3,
-        stringLength + TEXT_PADDING * 2,
-        TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndexOptions + TEXT_PADDING * (mPartyMenuIndexOptions - 1));
-
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 0, "Party");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * 1, "Status");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 3 + Font::fontHeight * TEXT_SIZE * 2, "Inventory");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 4 + Font::fontHeight * TEXT_SIZE * 3, "Journal");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 5 + Font::fontHeight * TEXT_SIZE * 4, "Equip");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 6 + Font::fontHeight * TEXT_SIZE * 5, "Magic");
-    GraphicsManager::DrawString(optionsRect.x + TEXT_PADDING, optionsRect.y + TEXT_PADDING * 7 + Font::fontHeight * TEXT_SIZE * 6, "Exit");
-
-    GraphicsManager::DrawUISelector(
-        optionsRect.x,
-        optionsRect.y + TEXT_PADDING - TEXT_PADDING / 2 + Font::fontHeight * TEXT_SIZE * mPartyMenuIndex + TEXT_PADDING * mPartyMenuIndex,
-        optionsRect.w,
-        Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-
-    firstRect = GraphicsManager::DrawUIBox(
-        firstRect.x + firstRect.w + UI_BOX_BORDER_SIZE * 3,
-        firstRect.y,
-        Font::fontWidth * TEXT_SIZE * 36 + Font::fontSpacing * TEXT_SIZE * 36 + TEXT_PADDING * 2,
-        firstRect.h + optionsRect.h + UI_BOX_BORDER_SIZE * 3);
-
-    for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
-    {
-        int characterXOffset = (Font::fontWidth * TEXT_SIZE * 20 + Font::fontSpacing * TEXT_SIZE * 20) * mCharacterUIPositions[i].x;
-        int characterYOffset = (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 3 * mCharacterUIPositions[i].y;
-
-        const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
-
-        string = attributes.characterName + "  " + GetClassName(attributes.characterClass);
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + characterYOffset,
-            string.c_str());
-
-        string =
-            "Lv." + std::to_string(attributes.level) + ' ' + "Next Lv." + std::to_string(129);
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE + TEXT_PADDING + characterYOffset,
-            string.c_str());
-
-        string =
-            std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP " +
-            std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2 + characterYOffset,
-            string.c_str());
-    }
-}
-
-SDL_Rect SceneExploration::DrawInteractMenu(SDL_Renderer* renderer)
-{
-    SDL_Rect rect = GraphicsManager::DrawUIBox(GraphicsManager::WindowWidth() / 2 - 150, GraphicsManager::WindowHeight() / 2 - 50, INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT);
-    GraphicsManager::DrawUISelector(rect.x, rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mInteractMenuIndex, rect.w, 30);
-
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Talk");
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Ask");
-    GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Leave");
-
-    return rect;
-}
-
-SDL_Rect SceneExploration::DrawKeywordsMenu(SDL_Renderer* renderer, SDL_Rect& rect)
-{
-    rect = GraphicsManager::DrawUIBox(rect.x + rect.w + UI_BOX_BORDER_SIZE * 3, rect.y, 200, INTERACT_MENU_HEIGHT);
-    GraphicsManager::DrawUISelector(rect.x, rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mAskingMenuIndex, rect.w, 30);
-
-    for (int i = 0; i < PlayerManager::GetLearnedKeywords().size(); i++)
-    {
-        GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30 * i, PlayerManager::GetLearnedKeywords()[i].c_str());
-    }
-
-    return rect;
 }

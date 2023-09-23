@@ -4,6 +4,11 @@ std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 std::vector<std::string> PlayerManager::mLearnedKeywords;
 
+std::vector<std::string> PlayerManager::mPeopleKeywords;
+std::vector<std::string> PlayerManager::mPlacesKeywords;
+std::vector<std::string> PlayerManager::mMysteryKeywords;
+std::vector<std::string> PlayerManager::mBestiaryKeywords;
+
 int PlayerManager::mPartyMoney = 10000;
 
 void PlayerManager::LoadCharacters()

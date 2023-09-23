@@ -1,90 +1,118 @@
-#include "PartyMenu.h"
+#include "MenuParty.h"
 
-PartyMenu::PartyMenu()
+MenuParty::MenuParty()
 {
+    mIsMainMenu = true;
+
+    mPartyButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 0;
+    };
     mPartyButton.OnUpAction = [this]()
     {
         mCurrentButton = &mExitButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mPartyButton.OnDownAction = [this]()
     {
         mCurrentButton = &mStatusButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mStatusButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 1;
+    };
     mStatusButton.OnUpAction = [this]()
     {
         mCurrentButton = &mPartyButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mStatusButton.OnDownAction = [this]()
     {
         mCurrentButton = &mInventoryButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mInventoryButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 2;
+    };
     mInventoryButton.OnUpAction = [this]()
     {
         mCurrentButton = &mStatusButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mInventoryButton.OnDownAction = [this]()
     {
         mCurrentButton = &mJournalButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mJournalButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 3;
+    };
     mJournalButton.OnUpAction = [this]()
     {
         mCurrentButton = &mInventoryButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mJournalButton.OnDownAction = [this]()
     {
         mCurrentButton = &mEquipButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mEquipButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 4;
+    };
     mEquipButton.OnUpAction = [this]()
     {
         mCurrentButton = &mJournalButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mEquipButton.OnDownAction = [this]()
     {
         mCurrentButton = &mMagicButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mMagicButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 5;
+    };
     mMagicButton.OnUpAction = [this]()
     {
         mCurrentButton = &mEquipButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mMagicButton.OnDownAction = [this]()
     {
         mCurrentButton = &mExitButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
 
+    mExitButton.OnSelected = [this]()
+    {
+        mMainButtonIndex = 6;
+    };
     mExitButton.OnUpAction = [this]()
     {
         mCurrentButton = &mMagicButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
     mExitButton.OnDownAction = [this]()
     {
         mCurrentButton = &mPartyButton;
-        std::cout << mCurrentButton->mText << " button selected" << std::endl;
+        mCurrentButton->OnSelected();
     };
-    mExitButton.OnAcceptAction = [this]()
-    {
-        
-    };
+
+    mCurrentButton = &mPartyButton;
 }
 
-void PartyMenu::Render(SDL_Renderer* renderer)
+void MenuParty::Render(SDL_Renderer* renderer)
 {
     SDL_Rect firstRect;
     std::string string;
@@ -112,8 +140,15 @@ void PartyMenu::Render(SDL_Renderer* renderer)
     {
         GraphicsManager::DrawString(
             optionsRect.x + TEXT_PADDING,
-            optionsRect.y + TEXT_PADDING + TEXT_PADDING * i + Font::fontHeight * TEXT_SIZE * i, mMainMenuButtons[i]->mText.c_str());
+            optionsRect.y + TEXT_PADDING + TEXT_PADDING * i + Font::fontHeight * TEXT_SIZE * i,
+            mMainMenuButtons[i]->mText.c_str());
     }
+
+    GraphicsManager::DrawUISelector(
+        optionsRect.x,
+        optionsRect.y + TEXT_PADDING - TEXT_PADDING / 2 + Font::fontHeight * TEXT_SIZE * mMainButtonIndex + TEXT_PADDING * mMainButtonIndex,
+        optionsRect.w,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
     firstRect = GraphicsManager::DrawUIBox(
         firstRect.x + firstRect.w + UI_BOX_BORDER_SIZE * 3,

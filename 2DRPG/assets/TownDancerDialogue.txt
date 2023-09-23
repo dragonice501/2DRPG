@@ -13,7 +13,7 @@ you should see the blacksmith. He makes
 the best gear around!
 End
 
-Information Monster
+Information Mystery Monster
 Be careful about the /monster/ that's
 outside of the town! It makes a 
 terrible sound.

@@ -31,6 +31,15 @@ enum EDialogueType
 	ED_NONE
 };
 
+enum EJournalType
+{
+	EJ_PERSON,
+	EJ_PLACE,
+	EJ_MYSTERY,
+	EJ_BESTIARY,
+	EJ_NONE
+};
+
 enum ECharacterClass
 {
 	DANCER,

@@ -11,7 +11,8 @@
 #include "../Objects/EnemyEncounter.h"
 
 #include "../UI/UIButton.h"
-#include "../UI/PartyMenu.h"
+#include "../UI/MenuParty.h"
+#include "../UI/MenuInteract.h"
 
 #include "../Utils/Utils.h"
 
@@ -39,8 +40,6 @@ public:
 
 	void ExitMenu() override { mExplorationState = ES_EXPLORING; }
 
-	virtual void DrawPartyMenu(static SDL_Renderer* renderer);
-	SDL_Rect DrawInteractMenu(static SDL_Renderer* renderer);
 	SDL_Rect DrawKeywordsMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
 
 	void SetupCharacters();
@@ -72,7 +71,8 @@ protected:
 	int mAskingMenuIndex = 0;
 
 	UIButton mButton;
-	PartyMenu mPartyMenu;
+	MenuParty mPartyMenu;
+	MenuInteract mInteractMenu;
 
 	ActorNpc* mInteractedActor = nullptr;
 

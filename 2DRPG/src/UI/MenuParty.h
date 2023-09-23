@@ -1,30 +1,17 @@
 #pragma once
 
-#include "UIButton.h"
+#include "Menu.h"
 
-#include "../Managers/GameManager.h"
-#include "../Managers/GraphicsManager.h"
-#include "../Managers/PlayerManager.h"
-#include "../Graphics/Font.h"
-
-#include "../Utils/Vec2.h"
-
-#include <SDL.h>
-#include <vector>
-
-class PartyMenu
+class MenuParty : public Menu
 {
 public:
-	PartyMenu();
+	MenuParty();
 
-	const UIButton& GetCurrentButton() const { return *mCurrentButton; }
-	void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
+	void Render(static SDL_Renderer* renderer) override;
 
-	void Render(static SDL_Renderer* renderer);
+	bool mIsMainMenu = false;
 
 public:
-	UIButton* mCurrentButton;
-
 	Vec2 mCharacterUIPositions[4] =
 	{
 		Vec2(0.0f, 0.0f),
@@ -41,6 +28,7 @@ public:
 	UIButton mEquipButton = UIButton("Equip");
 	UIButton mMagicButton = UIButton("Magic");
 	UIButton mExitButton = UIButton("Exit");
+	int mMainButtonIndex = 0;
 
 private:
 	std::vector<UIButton*> mMainMenuButtons = 
@@ -53,6 +41,4 @@ private:
 		&mMagicButton,
 		&mExitButton
 	};
-
-	int value = 1234;
 };

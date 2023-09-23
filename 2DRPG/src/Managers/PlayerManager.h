@@ -17,15 +17,28 @@ public:
 
 	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
 	static const std::vector<SDL_Texture*>& GetCharacterTextures() { return mCharacterTextures; }
-	static const std::vector<std::string>& GetLearnedKeywords() { return mLearnedKeywords; }
 	static const int GetPartyMoney() { return mPartyMoney; }
+	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
+	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
+	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
+	static const std::vector<std::string>& GetBestiaryKeywords() { return mBestiaryKeywords; }
 
 	static void LearnNewKeyword(const std::string& keyword) { mLearnedKeywords.push_back(keyword); }
+
+	static void LearnNewPeopleKeyword(const std::string& keyword) { mPeopleKeywords.push_back(keyword); }
+	static void LearnNewPlaceKeyword(const std::string& keyword) { mPlacesKeywords.push_back(keyword); }
+	static void LearnNewMysteryKeyword(const std::string& keyword) { mMysteryKeywords.push_back(keyword); }
+	static void LearnNewBestiaryKeyword(const std::string& keyword) { mBestiaryKeywords.push_back(keyword); }
 
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
 	static std::vector<std::string> mLearnedKeywords;
+
+	static std::vector<std::string> mPeopleKeywords;
+	static std::vector<std::string> mPlacesKeywords;
+	static std::vector<std::string> mMysteryKeywords;
+	static std::vector<std::string> mBestiaryKeywords;
 
 	static int mPartyMoney;
 };

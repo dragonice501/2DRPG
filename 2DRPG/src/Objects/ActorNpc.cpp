@@ -21,6 +21,21 @@ const std::vector<std::string>& ActorNpc::GetCurrentDialogue() const
     }
 }
 
+const EJournalType ActorNpc::GetKeywordType()
+{
+    std::string string = mInformationMap.begin()->first;
+
+    for (auto it = mKeywordType.begin(); it != mKeywordType.end(); it++)
+    {
+        if (string == it->first)
+        {
+            return it->second;
+        }
+    }
+
+    return EJ_NONE;
+}
+
 bool ActorNpc::CycleThroughDialogue()
 {
     mCurrentDialogueIndex++;
@@ -71,6 +86,7 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
 
     std::string dialogueLine;
     std::string keyWord;
+    std::string keywordJournalType;
 
     std::string  fileName = "./assets/" + filePathName + ".txt";
     std::ifstream file(fileName);
@@ -91,7 +107,7 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
         else if (text == "Information")
         {
             dialogueType = ED_INFORMATION;
-            file >> keyWord;
+            file >> keywordJournalType >> keyWord;
             continue;
         }
         else if (text == "Answer")
@@ -121,6 +137,11 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
                 case ED_INFORMATION:
                 {
                     mInformationMap.emplace(keyWord, dialogueVec);
+                   
+                    if (keywordJournalType == "Person") mKeywordType.emplace(keyWord, EJ_PERSON);
+                    else if (keywordJournalType == "Place") mKeywordType.emplace(keyWord, EJ_PLACE);
+                    else if (keywordJournalType == "Mystery") mKeywordType.emplace(keyWord, EJ_MYSTERY);
+                    else if (keywordJournalType == "Bestiary") mKeywordType.emplace(keyWord, EJ_BESTIARY);
                     break;
                 }
                 case ED_ANSWER:
@@ -166,15 +187,50 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
     }
 }
 
-bool ActorNpc::HasNewInformation(const std::vector<std::string> learnedWords)
+bool ActorNpc::HasNewInformation()
 {
-    if (mInformationMap.size() == 0) return false;
-
-    for (const std::string& word : learnedWords)
+    std::vector<std::string> vec = PlayerManager::GetPeopleKeywords();
+    for (int i = 0; i < vec.size(); i++)
     {
         for (auto it = mInformationMap.begin(); it != mInformationMap.end(); it++)
         {
-            if (word == it->first)
+            if (it->first == vec[i])
+            {
+                return false;
+            }
+        }
+    }
+
+    vec = PlayerManager::GetPlacesKeywords();
+    for (int i = 0; i < vec.size(); i++)
+    {
+        for (auto it = mInformationMap.begin(); it != mInformationMap.end(); it++)
+        {
+            if (it->first == vec[i])
+            {
+                return false;
+            }
+        }
+    }
+
+    vec = PlayerManager::GetMysteryKeywords();
+    for (int i = 0; i < vec.size(); i++)
+    {
+        for (auto it = mInformationMap.begin(); it != mInformationMap.end(); it++)
+        {
+            if (it->first == vec[i])
+            {
+                return false;
+            }
+        }
+    }
+
+    vec = PlayerManager::GetBestiaryKeywords();
+    for (int i = 0; i < vec.size(); i++)
+    {
+        for (auto it = mInformationMap.begin(); it != mInformationMap.end(); it++)
+        {
+            if (it->first == vec[i])
             {
                 return false;
             }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor.h"
 
+#include "../Managers/PlayerManager.h"
+
 class ActorNpc : public Actor
 {
 private:
@@ -10,6 +12,7 @@ public:
 
 	const std::vector<std::string>& GetCurrentDialogue() const;
 	const std::string GetKeyword() const { return mInformationMap.begin()->first; }
+	const EJournalType GetKeywordType();
 
 	void SetDialogueMode(const EDialogueType dialogueMode) { mCurrentDialogueMode = dialogueMode; }
 	void SetAnswerKey(const std::string& keyword) { mCurrentAnswerKey = keyword; }
@@ -17,12 +20,14 @@ public:
 	bool CycleThroughDialogue();
 
 	void LoadDialogue(const std::string filePathName);
-	bool HasNewInformation(const std::vector<std::string> learnedWords);
+	bool HasNewInformation();
 	bool HasAnswerToKeyword(const std::string& keyword);
 
 	std::map<std::string, std::vector<std::vector<std::string>>> mDialogueMap;
 	std::map<std::string, std::vector<std::vector<std::string>>> mInformationMap;
 	std::map<std::string, std::vector<std::vector<std::string>>> mAnswersMap;
+
+	std::map<std::string, EJournalType> mKeywordType;
 
 	std::string mCurrentDialogueKey;
 	std::string mCurrentInformationKey;

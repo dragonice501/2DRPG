@@ -22,6 +22,7 @@ public:
 
 	using ButtonAction = std::function<void()>;
 
+	ButtonAction OnSelected;
 	ButtonAction OnUpAction;
 	ButtonAction OnDownAction;
 	ButtonAction OnRightAction;
