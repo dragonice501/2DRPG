@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Managers/GraphicsManager.h"
+
 #include "../Utils/Vec2.h"
 
 #include <iostream>
@@ -10,12 +12,16 @@
 class UIButton
 {
 public:
-	UIButton(const std::string& text = "")
+	UIButton(const std::string& text = "", const Vec2& position = Vec2(0.0f))
 	{
 		this->mText = text;
+		this->mPosition = position;
 	}
 
-	void Render(static SDL_Renderer* renderer);
+	void Render()
+	{
+		GraphicsManager::DrawString(mPosition.x, mPosition.y, mText.c_str());
+	}
 
 	std::string mText;
 	Vec2 mPosition;

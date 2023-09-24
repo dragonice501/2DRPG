@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UIButton.h"
+#include "UIPanel.h"
 
 #include "../Managers/GameManager.h"
 #include "../Managers/GraphicsManager.h"

@@ -122,7 +122,7 @@ void GraphicsManager::RenderFrame()
     SDL_RenderPresent(mRenderer);
 }
 
-void GraphicsManager::DrawPixel(const int& x, const int& y, const bool highlighted)
+void GraphicsManager::DrawPixel(const int x, const int y, const bool highlighted)
 {
     if (highlighted) SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
     else SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
@@ -268,7 +268,7 @@ void GraphicsManager::DrawTexture(const int& x, const int& y, const int& width, 
     SDL_RenderCopyEx(mRenderer, texture, nullptr, &dstRect, rotationDeg, nullptr, SDL_FLIP_NONE);
 }
 
-void GraphicsManager::DrawChar(const int& x, const int& y, const char& character, const bool highlight, const bool lockToScreen)
+void GraphicsManager::DrawChar(const int x, const int y, const char& character, const bool highlight, const bool lockToScreen)
 {
     for (int j = 0; j < Font::fontHeight; j++)
     {
@@ -293,7 +293,7 @@ void GraphicsManager::DrawChar(const int& x, const int& y, const char& character
     }
 }
 
-void GraphicsManager::DrawString(const int& x, const int& y, const char* string, const bool highlight, const bool lockToScreen)
+void GraphicsManager::DrawString(const int x, const int y, const char* string, const bool highlight, const bool lockToScreen)
 {
     int i = 0;
     int xPos = x;

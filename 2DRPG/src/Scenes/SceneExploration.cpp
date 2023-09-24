@@ -35,6 +35,10 @@ SceneExploration::SceneExploration()
         mInteractMenu.SetCurrentButton(&mInteractMenu.mLeaveButton);
         mInteractMenu.GetCurrentButton().OnSelected();
     };
+    mInteractMenu.mAskButton.OnAcceptAction = [this]()
+    {
+        
+    };
 
     mInteractMenu.mLeaveButton.OnSelected = [this]()
     {
@@ -212,7 +216,6 @@ void SceneExploration::SetupCharacters()
         mCharacters.push_back(newCharacter);
     }
 }
-
 
 void SceneExploration::Shutdown()
 {
