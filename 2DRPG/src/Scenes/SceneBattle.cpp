@@ -39,6 +39,60 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	}
 
 	mEnemyEncounters = enemyEncounters;
+
+	mBattleMenu.mFightButton.OnUpAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mRunButton);
+	};
+	mBattleMenu.mFightButton.OnDownAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mMagicButton);
+	};
+	mBattleMenu.mFightButton.OnAcceptAction = [this]()
+	{
+
+	};
+
+	mBattleMenu.mMagicButton.OnUpAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
+	};
+	mBattleMenu.mMagicButton.OnDownAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mItemButton);
+	};
+	mBattleMenu.mMagicButton.OnAcceptAction = [this]()
+	{
+
+	};
+
+	mBattleMenu.mItemButton.OnUpAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mMagicButton);
+	};
+	mBattleMenu.mItemButton.OnDownAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mRunButton);
+	};
+	mBattleMenu.mItemButton.OnAcceptAction = [this]()
+	{
+
+	};
+
+	mBattleMenu.mRunButton.OnUpAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mItemButton);
+	};
+	mBattleMenu.mRunButton.OnDownAction = [this]()
+	{
+		mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
+	};
+	mBattleMenu.mFightButton.OnAcceptAction = [this]()
+	{
+
+	};
+
+	mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
 }
 
 void SceneBattle::Setup(SDL_Renderer* renderer)
@@ -173,6 +227,14 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 	BuildTurnOrder();
 	mBattleState = BS_MONSTERS_APPEARED;
+	if (!mBattleTurns[mTurnIndex]->isEnemy)
+	{
+		mBattleState = BS_SELECTING_ACTION;
+	}
+	else
+	{
+		mBattleState = BS_ENEMY_ATTACKING;
+	}
 }
 
 void SceneBattle::Shutdown()
@@ -194,89 +256,48 @@ void SceneBattle::Shutdown()
 
 void SceneBattle::Input()
 {
-	if (InputManager::UpPressed())
+	switch (mBattleState)
 	{
-		switch (mBattleState)
+		case BS_SELECTING_ACTION:
 		{
-			case BS_SELECTING_ACTION:
+			if (InputManager::UpPressed() && mBattleMenu.GetCurrentButton()->OnUpAction)
 			{
-
-				mBattleMenuIndex--;
-				if (mBattleMenuIndex < 0) mBattleMenuIndex = mBattleMenuIndexOptions - 1;
-				break;
+				mBattleMenu.GetCurrentButton()->OnUpAction();
 			}
-			case BS_SELECTING_TARGET:
+			else if (InputManager::DownPressed() && mBattleMenu.GetCurrentButton()->OnDownAction)
 			{
-				mBattleSelectedEnemyIndex--;
-
-				if (mBattleSelectedEnemyIndex < 0) mBattleSelectedEnemyIndex = mBattleEnemies.size() - 1;
-
-				break;
+				mBattleMenu.GetCurrentButton()->OnDownAction();
 			}
-			case BS_SELECTING_ITEM:
+			else if (InputManager::RightPressed() && mBattleMenu.GetCurrentButton()->OnRightAction)
 			{
-
-				break;
+				mBattleMenu.GetCurrentButton()->OnRightAction();
 			}
+			else if (InputManager::LeftPressed() && mBattleMenu.GetCurrentButton()->OnLeftAction)
+			{
+				mBattleMenu.GetCurrentButton()->OnLeftAction();
+			}
+			else if (InputManager::AcceptPressed() && mBattleMenu.GetCurrentButton()->OnAcceptAction)
+			{
+				mBattleMenu.GetCurrentButton()->OnAcceptAction();
+			}
+			else if (InputManager::CancelPressed() && mBattleMenu.GetCurrentButton()->OnCancelAction)
+			{
+				mBattleMenu.GetCurrentButton()->OnCancelAction();
+			}
+			break;
 		}
-	}
-	if (InputManager::DownPressed())
-	{
-		switch (mBattleState)
+		case BS_SELECTING_TARGET:
 		{
-			case BS_SELECTING_ACTION:
-			{
-				mBattleMenuIndex++;
-				if (mBattleMenuIndex >= mBattleMenuIndexOptions) mBattleMenuIndex = 0;
-				break;
-			}
-			case BS_SELECTING_TARGET:
-			{
-				mBattleSelectedEnemyIndex++;
+			mBattleSelectedEnemyIndex--;
 
-				if (mBattleSelectedEnemyIndex >= mBattleEnemies.size()) mBattleSelectedEnemyIndex = 0;
+			if (mBattleSelectedEnemyIndex < 0) mBattleSelectedEnemyIndex = mBattleEnemies.size() - 1;
 
-				break;
-			}
-			case BS_SELECTING_ITEM:
-			{
-
-				break;
-			}
+			break;
 		}
-	}
-
-	if (InputManager::AcceptPressed())
-	{
-		switch (mBattleState)
+		case BS_SELECTING_ITEM:
 		{
-			case BS_SELECTING_ACTION:
-			{
-				if (mBattleMenuIndex == 0)
-				{
-					mBattleState = BS_SELECTING_TARGET;
-				}
-				else if (mBattleMenuIndex == 1)
-				{
 
-				}
-				else if (mBattleMenuIndex == 2)
-				{
-
-				}
-				else if (mBattleMenuIndex == 3)
-				{
-					GameManager::SetSceneToLoad(OVERWORLD, -2, true);
-				}
-				break;
-			}
-			case BS_SELECTING_TARGET:
-			{
-				mBattleState = BS_PLAYER_ATTACKING;
-				break;
-			}
-			case BS_SELECTING_ITEM:
-				break;
+			break;
 		}
 	}
 }
@@ -646,22 +667,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
 void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
 {
-	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 + 100,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		BATTLE_MENU_WIDTH,
-		BATTLE_MENU_HEIGHT);
-
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "Fight");
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 30, "Magic");
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 60, "Item");
-	GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING + 90, "Run");
-
-	GraphicsManager::DrawUISelector(
-		rect.x,
-		rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mBattleMenuIndex,
-		rect.w,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+	mBattleMenu.Render(renderer);
 }
 
 void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)

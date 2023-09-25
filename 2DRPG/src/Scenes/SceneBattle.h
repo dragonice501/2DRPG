@@ -13,6 +13,9 @@
 #include "../Managers/SceneManager.h"
 #include "../Managers/PlayerManager.h"
 
+#include "../UI/MenuBattle.h"
+#include "../UI/UIPanel.h"
+
 #include <SDL.h>
 #include <string>
 #include <vector>
@@ -77,6 +80,8 @@ private:
 
 	int mBattleMenuIndex = 0;
 	int mBattleMenuIndexOptions = 4;
+
+	MenuBattle mBattleMenu;
 
 	int mSelectedCharacterIndex = 0;
 	int mBattleSelectedEnemyIndex = 0;

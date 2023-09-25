@@ -43,6 +43,7 @@ public:
 	void SetupCharacters();
 
 	void AskAboutKeyword(int index);
+	void ClearInteractedActor() { mInteractedActor = nullptr; }
 
 	std::string mFileName;
 

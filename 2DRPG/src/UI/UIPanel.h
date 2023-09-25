@@ -17,12 +17,7 @@ public:
 
 	void Render()
 	{
-		GraphicsManager::DrawUIBox(
-			mPosition.x,
-			mPosition.y,
-			mSize.x,
-			mSize.y
-		);
+		GraphicsManager::DrawUIBox(mPosition.x, mPosition.y, mSize.x, mSize.y);
 
 		for (UIButton* button : mButtons)
 		{

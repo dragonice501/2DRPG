@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\UI\MenuBattle.cpp" />
     <ClCompile Include="src\UI\UIPanel.cpp" />
     <ClCompile Include="src\UI\MenuInteract.cpp" />
     <ClCompile Include="src\UI\Menu.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\UI\MenuBattle.h" />
     <ClInclude Include="src\UI\UIPanel.h" />
     <ClInclude Include="src\UI\MenuInteract.h" />
     <ClInclude Include="src\UI\Menu.h" />

@@ -35,6 +35,8 @@ public:
 
 	virtual const Vec2& GetPosition() const { return mPosition; }
 
+	void DestroySpriteSheet() { SDL_DestroyTexture(mSpriteSheet); }
+
 public:
 	Vec2 mPosition;
 	Sprite mSprite;

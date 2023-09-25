@@ -379,13 +379,7 @@ SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, c
 
 void GraphicsManager::DrawUISelector(const int x, const int y, const int width, const int height)
 {
-    SDL_Rect rect =
-    {
-        x,
-        y,
-        width,
-        height
-    };
+    SDL_Rect rect = { x, y, width, height };
     SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
     SDL_RenderDrawRect(mRenderer, &rect);
 }

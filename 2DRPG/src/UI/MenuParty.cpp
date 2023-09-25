@@ -156,7 +156,7 @@ void MenuParty::Render(SDL_Renderer* renderer)
         Font::fontWidth * TEXT_SIZE * 36 + Font::fontSpacing * TEXT_SIZE * 36 + TEXT_PADDING * 2,
         firstRect.h + optionsRect.h + UI_BOX_BORDER_SIZE * 3);
 
-    for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+    /*for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
     {
         int characterXOffset = (Font::fontWidth * TEXT_SIZE * 20 + Font::fontSpacing * TEXT_SIZE * 20) * mCharacterUIPositions[i].x;
         int characterYOffset = (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 3 * mCharacterUIPositions[i].y;
@@ -186,5 +186,5 @@ void MenuParty::Render(SDL_Renderer* renderer)
             firstRect.x + TEXT_PADDING + characterXOffset,
             firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2 + characterYOffset,
             string.c_str());
-    }
+    }*/
 }

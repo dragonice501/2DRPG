@@ -70,13 +70,6 @@ void Actor::Update(const float dt)
 
 void Actor::Render(SDL_Renderer* renderer)
 {
-    /*GraphicsManager::DrawFillRect(
-        mPosition.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
-        mPosition.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
-        mSprite.srcRect.w * TILE_SPRITE_SCALE,
-        mSprite.srcRect.h * TILE_SPRITE_SCALE,
-        0xFFFFFFFF);*/
-
     SDL_Rect destRect =
     {
         mPosition.x * TILE_SPRITE_SCALE + mSprite.positionOffset.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,

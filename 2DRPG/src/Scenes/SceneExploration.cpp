@@ -18,6 +18,7 @@ SceneExploration::SceneExploration()
     mInteractMenu.mTalkButton.OnCancelAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        ClearInteractedActor();
         mExplorationState = ES_EXPLORING;
     };
 
@@ -39,6 +40,7 @@ SceneExploration::SceneExploration()
     mInteractMenu.mAskButton.OnCancelAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        ClearInteractedActor();
         mExplorationState = ES_EXPLORING;
     };
 
@@ -53,11 +55,13 @@ SceneExploration::SceneExploration()
     mInteractMenu.mLeaveButton.OnAcceptAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        ClearInteractedActor();
         mExplorationState = ES_EXPLORING;
     };
     mInteractMenu.mLeaveButton.OnCancelAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        ClearInteractedActor();
         mExplorationState = ES_EXPLORING;
     };
 
@@ -541,6 +545,11 @@ void SceneExploration::AskAboutKeyword(int index)
 
 void SceneExploration::Shutdown()
 {
+    for (Actor& actor : mActors)
+    {
+        actor.DestroySpriteSheet();
+    }
+    ClearInteractedActor();
     SDL_DestroyTexture(mTileMap);
 }
 
