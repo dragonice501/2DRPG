@@ -23,6 +23,12 @@ public:
 			mSize.x,
 			mSize.y
 		);
+
+		for (UIButton* button : mButtons)
+		{
+			if(button->mIsActive)
+				button->Render();
+		}
 	}
 
 	bool mIsActive = false;

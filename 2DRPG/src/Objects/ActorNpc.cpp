@@ -189,6 +189,8 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
 
 bool ActorNpc::HasNewInformation()
 {
+    if (mInformationMap.size() == 0) return false;
+
     std::vector<std::string> vec = PlayerManager::GetPeopleKeywords();
     for (int i = 0; i < vec.size(); i++)
     {

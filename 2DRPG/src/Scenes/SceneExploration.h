@@ -40,9 +40,9 @@ public:
 
 	void ExitMenu() override { mExplorationState = ES_EXPLORING; }
 
-	SDL_Rect DrawKeywordsMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
-
 	void SetupCharacters();
+
+	void AskAboutKeyword(int index);
 
 	std::string mFileName;
 

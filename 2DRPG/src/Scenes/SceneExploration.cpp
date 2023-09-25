@@ -2,62 +2,333 @@
 
 SceneExploration::SceneExploration()
 {
-    mInteractMenu.mTalkButton.OnSelected = [this]()
-    {
-        mInteractMenu.mMainButtonIndex = 0;
-    };
+    // Interact Menu Main
     mInteractMenu.mTalkButton.OnUpAction = [this]()
     {
         mInteractMenu.SetCurrentButton(& mInteractMenu.mLeaveButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mTalkButton.OnDownAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mTalkButton.OnAcceptAction = [this]()
     {
         mExplorationState = ES_TALKING;
     };
-
-    mInteractMenu.mAskButton.OnSelected = [this]()
+    mInteractMenu.mTalkButton.OnCancelAction = [this]()
     {
-        mInteractMenu.mMainButtonIndex = 1;
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mExplorationState = ES_EXPLORING;
     };
+
     mInteractMenu.mAskButton.OnUpAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mAskButton.OnDownAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mLeaveButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mAskButton.OnAcceptAction = [this]()
     {
-        
+        mInteractMenu.mAskingPanel.mIsActive = true;
+        mInteractMenu.mKeywordsPanel.mIsActive = true;
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mPeopleButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mAskButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mExplorationState = ES_EXPLORING;
     };
 
-    mInteractMenu.mLeaveButton.OnSelected = [this]()
-    {
-        mInteractMenu.mMainButtonIndex = 2;
-    };
     mInteractMenu.mLeaveButton.OnUpAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mLeaveButton.OnDownAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
-        mInteractMenu.GetCurrentButton().OnSelected();
     };
     mInteractMenu.mLeaveButton.OnAcceptAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
         mExplorationState = ES_EXPLORING;
+    };
+    mInteractMenu.mLeaveButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
+        mExplorationState = ES_EXPLORING;
+    };
+
+    // Interact Menu Ask option buttons
+    mInteractMenu.mPeopleButton.OnSelected = [this]()
+    {
+        mInteractMenu.FillKeywordPanel(MenuInteract::PEOPLE);
+    };
+    mInteractMenu.mPeopleButton.OnRightAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mPlacesButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mPeopleButton.OnLeftAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mBestiaryButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mPeopleButton.OnAcceptAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+            mInteractMenu.SetKeywordType(MenuInteract::PEOPLE);
+        }
+
+        mInteractMenu.SetPreviousButton(&mInteractMenu.mPeopleButton);
+    };
+    mInteractMenu.mPeopleButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+
+        mInteractMenu.mAskingPanel.mIsActive = false;
+        mInteractMenu.mKeywordsPanel.mIsActive = false;
+    };
+
+    mInteractMenu.mPlacesButton.OnSelected = [this]()
+    {
+        mInteractMenu.FillKeywordPanel(MenuInteract::PLACES);
+    };
+    mInteractMenu.mPlacesButton.OnRightAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mMysteriesButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mPlacesButton.OnLeftAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mPeopleButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mPlacesButton.OnAcceptAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+            mInteractMenu.SetKeywordType(MenuInteract::PLACES);
+        }
+
+        mInteractMenu.SetPreviousButton(&mInteractMenu.mPlacesButton);
+    };
+    mInteractMenu.mPlacesButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+
+        mInteractMenu.mAskingPanel.mIsActive = false;
+        mInteractMenu.mKeywordsPanel.mIsActive = false;
+    };
+
+    mInteractMenu.mMysteriesButton.OnSelected = [this]()
+    {
+        mInteractMenu.FillKeywordPanel(MenuInteract::MYSTERIES);
+    };
+    mInteractMenu.mMysteriesButton.OnRightAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mBestiaryButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mMysteriesButton.OnLeftAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mPlacesButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mMysteriesButton.OnAcceptAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+            mInteractMenu.SetKeywordType(MenuInteract::MYSTERIES);
+        }
+
+        mInteractMenu.SetPreviousButton(&mInteractMenu.mMysteriesButton);
+    };
+    mInteractMenu.mMysteriesButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+
+        mInteractMenu.mAskingPanel.mIsActive = false;
+        mInteractMenu.mKeywordsPanel.mIsActive = false;
+    };
+
+    mInteractMenu.mBestiaryButton.OnSelected = [this]()
+    {
+        mInteractMenu.FillKeywordPanel(MenuInteract::BESTIARY);
+    };
+    mInteractMenu.mBestiaryButton.OnRightAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mPeopleButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mBestiaryButton.OnLeftAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mMysteriesButton);
+        mInteractMenu.CurrentButtonSelect();
+    };
+    mInteractMenu.mBestiaryButton.OnAcceptAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+            mInteractMenu.SetKeywordType(MenuInteract::BESTIARY);
+        }
+
+        mInteractMenu.SetPreviousButton(&mInteractMenu.mBestiaryButton);
+    };
+    mInteractMenu.mBestiaryButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
+
+        mInteractMenu.mAskingPanel.mIsActive = false;
+        mInteractMenu.mKeywordsPanel.mIsActive = false;
+    };
+
+    // Keyword Buttons
+    mInteractMenu.mFirstButton.OnRightAction = [this]()
+    {
+        if (mInteractMenu.mSecondButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mSecondButton);
+        }
+    };
+    mInteractMenu.mFirstButton.OnDownAction = [this]()
+    {
+        if (mInteractMenu.mThirdButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mThirdButton);
+        }
+    };
+    mInteractMenu.mFirstButton.OnAcceptAction = [this]()
+    {
+        AskAboutKeyword(0);
+    };
+    mInteractMenu.mFirstButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
+    };
+
+    mInteractMenu.mSecondButton.OnLeftAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+        }
+    };
+    mInteractMenu.mSecondButton.OnDownAction = [this]()
+    {
+        if (mInteractMenu.mFourthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFourthButton);
+        }
+    };
+    mInteractMenu.mSecondButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
+    };
+
+    mInteractMenu.mThirdButton.OnUpAction = [this]()
+    {
+        if (mInteractMenu.mFirstButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFirstButton);
+        }
+    };
+    mInteractMenu.mThirdButton.OnRightAction = [this]()
+    {
+        if (mInteractMenu.mFourthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFourthButton);
+        }
+    };
+    mInteractMenu.mThirdButton.OnDownAction = [this]()
+    {
+        if (mInteractMenu.mFifthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFifthButton);
+        }
+    };
+    mInteractMenu.mThirdButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
+    };
+
+    mInteractMenu.mFourthButton.OnUpAction = [this]()
+    {
+        if (mInteractMenu.mSecondButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mSecondButton);
+        }
+    };
+    mInteractMenu.mFourthButton.OnLeftAction = [this]()
+    {
+        if (mInteractMenu.mThirdButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mThirdButton);
+        }
+    };
+    mInteractMenu.mFourthButton.OnDownAction = [this]()
+    {
+        if (mInteractMenu.mSixthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mSixthButton);
+        }
+    };
+    mInteractMenu.mFourthButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
+    };
+
+    mInteractMenu.mFifthButton.OnUpAction = [this]()
+    {
+        if (mInteractMenu.mThirdButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mThirdButton);
+        }
+    };
+    mInteractMenu.mFifthButton.OnRightAction = [this]()
+    {
+        if (mInteractMenu.mSixthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mSixthButton);
+        }
+    };
+    mInteractMenu.mFifthButton.OnDownAction = [this]()
+    {
+        
+    };
+    mInteractMenu.mFifthButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
+    };
+
+    mInteractMenu.mSixthButton.OnUpAction = [this]()
+    {
+        if (mInteractMenu.mFourthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFourthButton);
+        }
+    };
+    mInteractMenu.mSixthButton.OnLeftAction = [this]()
+    {
+        if (mInteractMenu.mFifthButton.mIsActive)
+        {
+            mInteractMenu.SetCurrentButton(&mInteractMenu.mFifthButton);
+        }
+    };
+    mInteractMenu.mSixthButton.OnDownAction = [this]()
+    {
+        
+    };
+    mInteractMenu.mSixthButton.OnCancelAction = [this]()
+    {
+        mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
     };
 
     mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
@@ -217,6 +488,57 @@ void SceneExploration::SetupCharacters()
     }
 }
 
+void SceneExploration::AskAboutKeyword(int index)
+{
+    if (mInteractedActor)
+    {
+        switch (mInteractMenu.GetKeywordType())
+        {
+            case MenuInteract::PEOPLE:
+            {
+                if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetPeopleKeywords()[index]))
+                {
+                    mInteractedActor->SetAnswerKey(PlayerManager::GetPeopleKeywords()[index]);
+                    mInteractedActor->SetDialogueMode(ED_ANSWER);
+                    mExplorationState = ES_TALKING;
+                }
+                break;
+            }
+            case MenuInteract::PLACES:
+            {
+                if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetPlacesKeywords()[index]))
+                {
+                    mInteractedActor->SetAnswerKey(PlayerManager::GetPlacesKeywords()[index]);
+                    mInteractedActor->SetDialogueMode(ED_ANSWER);
+                    mExplorationState = ES_TALKING;
+                }
+                break;
+            }
+            case MenuInteract::MYSTERIES:
+            {
+                if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetMysteryKeywords()[index]))
+                {
+                    mInteractedActor->SetAnswerKey(PlayerManager::GetMysteryKeywords()[index]);
+                    mInteractedActor->SetDialogueMode(ED_ANSWER);
+                    mExplorationState = ES_TALKING;
+                }
+                break;
+            }
+            case MenuInteract::BESTIARY:
+            {
+                if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetBestiaryKeywords()[index]))
+                {
+                    mInteractedActor->SetAnswerKey(PlayerManager::GetBestiaryKeywords()[index]);
+                    mInteractedActor->SetDialogueMode(ED_ANSWER);
+                    mExplorationState = ES_TALKING;
+                }
+                break;
+            }
+        }
+        
+    }
+}
+
 void SceneExploration::Shutdown()
 {
     SDL_DestroyTexture(mTileMap);
@@ -313,37 +635,29 @@ void SceneExploration::Input()
         }
         case ES_INTERACTING:
         {
-            if (InputManager::UpPressed() && mInteractMenu.GetCurrentButton().OnUpAction)
+            if (InputManager::UpPressed() && mInteractMenu.GetCurrentButton()->OnUpAction)
             {
-                mInteractMenu.GetCurrentButton().OnUpAction();
+                mInteractMenu.GetCurrentButton()->OnUpAction();
             }
-            else if (InputManager::DownPressed() && mInteractMenu.GetCurrentButton().OnDownAction)
+            else if (InputManager::DownPressed() && mInteractMenu.GetCurrentButton()->OnDownAction)
             {
-                mInteractMenu.GetCurrentButton().OnDownAction();
+                mInteractMenu.GetCurrentButton()->OnDownAction();
             }
-            else if (InputManager::RightPressed() && mInteractMenu.GetCurrentButton().OnRightAction)
+            else if (InputManager::RightPressed() && mInteractMenu.GetCurrentButton()->OnRightAction)
             {
-                mInteractMenu.GetCurrentButton().OnRightAction();
+                mInteractMenu.GetCurrentButton()->OnRightAction();
             }
-            else if (InputManager::LeftPressed() && mInteractMenu.GetCurrentButton().OnLeftAction)
+            else if (InputManager::LeftPressed() && mInteractMenu.GetCurrentButton()->OnLeftAction)
             {
-                mInteractMenu.GetCurrentButton().OnLeftAction();
+                mInteractMenu.GetCurrentButton()->OnLeftAction();
             }
-            else if (InputManager::AcceptPressed() && mInteractMenu.GetCurrentButton().OnAcceptAction)
+            else if (InputManager::AcceptPressed() && mInteractMenu.GetCurrentButton()->OnAcceptAction)
             {
-                mInteractMenu.GetCurrentButton().OnAcceptAction();
+                mInteractMenu.GetCurrentButton()->OnAcceptAction();
             }
-            else if (InputManager::CancelPressed())
+            else if (InputManager::CancelPressed() && mInteractMenu.GetCurrentButton()->OnCancelAction)
             {
-                if (mInteractMenu.mIsInteractMenu)
-                {
-                    mExplorationState = ES_EXPLORING;
-                }
-                else if (mInteractMenu.GetCurrentButton().OnCancelAction)
-                {
-                    mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
-                    mInteractMenu.GetCurrentButton().OnCancelAction();
-                }
+                mInteractMenu.GetCurrentButton()->OnCancelAction();
             }
             break;
         }
@@ -374,14 +688,14 @@ void SceneExploration::Input()
                                 case EJ_MYSTERY:
                                 {
                                     PlayerManager::LearnNewMysteryKeyword(mInteractedActor->GetKeyword());
+                                    break;
                                 }
                                 case EJ_BESTIARY:
                                 {
-                                    PlayerManager::LearnNewMysteryKeyword(mInteractedActor->GetKeyword());
+                                    PlayerManager::LearnNewBestiaryKeyword(mInteractedActor->GetKeyword());
+                                    break;
                                 }
                             }
-
-                            //PlayerManager::LearnNewKeyword(mInteractedActor->GetKeyword());
                         }
                         else
                         {
@@ -395,60 +709,29 @@ void SceneExploration::Input()
         }
         case ES_ASKING:
         {
-            if (InputManager::UpPressed())
-            {
-                mAskingMenuIndex--;
-                //if (mAskingMenuIndex < 0) mAskingMenuIndex = PlayerManager::GetLearnedKeywords().size() - 1;
-            }
-            else if (InputManager::DownPressed())
-            {
-                mAskingMenuIndex++;
-                //if (mAskingMenuIndex >= PlayerManager::GetLearnedKeywords().size()) mAskingMenuIndex = 0;
-            }
-            if (InputManager::AcceptPressed())
-            {
-                if (mInteractedActor)
-                {
-                    /*if (mInteractedActor->HasAnswerToKeyword(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]))
-                    {
-                        mInteractedActor->SetAnswerKey(PlayerManager::GetLearnedKeywords()[mAskingMenuIndex]);
-                        mInteractedActor->SetDialogueMode(ED_ANSWER);
-                        mExplorationState = ES_TALKING;
-                    }*/
-                }
-            }
-            if (InputManager::CancelPressed())
-            {
-                mExplorationState = ES_INTERACTING;
-            }
             break;
         }
         case ES_MENUING:
         {
-            if (InputManager::StartPressed())
+            if (InputManager::UpPressed() && mPartyMenu.GetCurrentButton()->OnUpAction)
             {
-                mExplorationState = ES_EXPLORING;
+                mPartyMenu.GetCurrentButton()->OnUpAction();
             }
-
-            if (InputManager::UpPressed() && mPartyMenu.GetCurrentButton().OnUpAction)
+            else if (InputManager::DownPressed() && mPartyMenu.GetCurrentButton()->OnDownAction)
             {
-                mPartyMenu.GetCurrentButton().OnUpAction();
+                mPartyMenu.GetCurrentButton()->OnDownAction();
             }
-            else if (InputManager::DownPressed() && mPartyMenu.GetCurrentButton().OnDownAction)
+            else if (InputManager::RightPressed() && mPartyMenu.GetCurrentButton()->OnRightAction)
             {
-                mPartyMenu.GetCurrentButton().OnDownAction();
+                mPartyMenu.GetCurrentButton()->OnRightAction();
             }
-            else if (InputManager::RightPressed() && mPartyMenu.GetCurrentButton().OnRightAction)
+            else if (InputManager::LeftPressed() && mPartyMenu.GetCurrentButton()->OnLeftAction)
             {
-                mPartyMenu.GetCurrentButton().OnRightAction();
+                mPartyMenu.GetCurrentButton()->OnLeftAction();
             }
-            else if (InputManager::LeftPressed() && mPartyMenu.GetCurrentButton().OnLeftAction)
+            else if (InputManager::AcceptPressed() && mPartyMenu.GetCurrentButton()->OnAcceptAction)
             {
-                mPartyMenu.GetCurrentButton().OnLeftAction();
-            }
-            else if (InputManager::AcceptPressed() && mPartyMenu.GetCurrentButton().OnAcceptAction)
-            {
-                mPartyMenu.GetCurrentButton().OnAcceptAction();
+                mPartyMenu.GetCurrentButton()->OnAcceptAction();
             }
             else if (InputManager::CancelPressed())
             {
@@ -456,10 +739,10 @@ void SceneExploration::Input()
                 {
                     mExplorationState = ES_EXPLORING;
                 }
-                else if (mPartyMenu.GetCurrentButton().OnCancelAction)
+                else if (mPartyMenu.GetCurrentButton()->OnCancelAction)
                 {
                     mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
-                    mPartyMenu.GetCurrentButton().OnCancelAction();
+                    mPartyMenu.GetCurrentButton()->OnCancelAction();
                 }
             }
             break;

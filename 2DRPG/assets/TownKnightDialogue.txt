@@ -5,3 +5,15 @@ monsters.
 Break
 They like to come out at night.
 End
+
+Answer Monster
+We've been chasing the monster for a
+week now, but it keeps alluding us in
+the western forest.
+End
+
+Answer King
+I've only seen the king once, when our
+towns' lord was knighted. He's a good
+man and great leader.
+End

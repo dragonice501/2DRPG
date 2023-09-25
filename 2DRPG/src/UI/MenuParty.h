@@ -20,7 +20,7 @@ public:
 		Vec2(1.0f, 1.2f)
 	};
 
-	// Main Menu Buttons
+	UIPanel mMainPanel;
 	UIButton mPartyButton = UIButton("Party");
 	UIButton mStatusButton = UIButton("Status");
 	UIButton mInventoryButton = UIButton("Inventory");

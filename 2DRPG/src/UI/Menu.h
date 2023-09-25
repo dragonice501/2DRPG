@@ -18,11 +18,30 @@ class Menu
 public:
 	virtual ~Menu() {}
 
-	const UIButton& GetCurrentButton() const { return *mCurrentButton; }
-	void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
+	inline UIButton* GetCurrentButton() const { return mCurrentButton; }
+	inline UIButton* GetPreviousButton() const { return mPreviousButton; }
+
+	inline void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
+	inline void SetPreviousButton(UIButton* button) { mPreviousButton = button; }
+
+	inline void CurrentButtonSelect()
+	{
+		if (mCurrentButton->OnSelected)
+		{
+			mCurrentButton->OnSelected();
+		}
+	}
+	inline void PreviousButtonSelect()
+	{
+		if (mPreviousButton->OnSelected)
+		{
+			mPreviousButton->OnSelected();
+		}
+	}
 
 	virtual void Render(static SDL_Renderer* renderer) = 0;
 
 protected:
 	UIButton* mCurrentButton;
+	UIButton* mPreviousButton;
 };
