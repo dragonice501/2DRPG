@@ -40,6 +40,14 @@ public:
 	void BuildTurnOrder();
 	void NextTurn();
 
+	void SelectFirstEnemy();
+	bool SelectEnemy(int index);
+	bool SearchForEnemyUp(int index);
+	bool SearchForEnemyDown(int index);
+	bool SearchForEnemyLeft(int index);
+	bool SearchForEnemyRight(int index);
+	void AcceptEnemyTarget(int index);
+
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
 	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
@@ -67,15 +75,6 @@ private:
 	std::vector<CharacterBattle*> mBattleCharacters;
 	std::vector<EnemyBattle*> mBattleEnemies;
 
-	struct Turn
-	{
-		std::string characterName;
-		bool partyMember;
-		int characterIndex;
-		int characterSpeed;
-	};
-
-	std::vector<Turn> mTurnOrder;
 	int mTurnIndex = 0;
 
 	int mBattleMenuIndex = 0;

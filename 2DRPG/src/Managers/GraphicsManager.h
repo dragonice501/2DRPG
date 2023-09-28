@@ -19,37 +19,37 @@ public:
 
     static void PresentRender();
 
-    inline static SDL_Renderer* Renderer() { return mRenderer; }
+    inline static SDL_Renderer* GetRenderer() { return mRenderer; }
 
     inline static int WindowWidth() { return mWindowWidth; }
     inline static int WindowHeight() { return mWindowHeight; }
     inline static int ScreenWidth() { return mScreenWidth; }
     inline static int ScreenHeight() { return mScreenHeight; }
 
-    inline static SDL_Rect& Camera() { return mCamera; }
+    inline static SDL_Rect& GetCamera() { return mCamera; }
 
     static void AdjustScreenOffset(const Vec2& offset);
     static void ResetScreenOffset();
 
-    static void ScrollZoom(const int& scroll);
+    static void ScrollZoom(const int scroll);
 
-    static bool CircleOffScreen(const int& x, const int& y, const float& radius);
+    static bool CircleOffScreen(const int x, const int y, const float radius);
 
-    static void ClearScreen(const uint32_t& color);
+    static void ClearScreen(const uint32_t color);
     static void RenderFrame();
 
     static void DrawPixel(const int x, const int y, const bool highlighted);
-    static void DrawLine(const int& x0, const int& y0, const int& x1, const int& y1, const uint32_t& color, const bool& lockToScreen = false);
-    static void DrawGrid(const uint32_t& color);
-    static void DrawRect(const int& x, const int& y, const int& width, const int& height, const uint32_t& color);
-    static void DrawFillRect(const int& x, const int& y, const int& width, const int& height, const uint32_t& color);
-    static void DrawCircle(const int& x, const int& y, const int& radius, const float& angle, const uint32_t& color, const bool& lockToScreen = false);
-    static void DrawFillCircle(const int& x, const int& y, const int& radius, const uint32_t& color);
-    static void DrawPolygon(const int& x, const int& y, const std::vector<Vec2>& vertices, const uint32_t& color, const bool& lockToScreen = false);
-    static void DrawFillPolygon(const int& x, const int& y, const std::vector<Vec2>& vertices, const uint32_t& color, const bool& lockToScreen = false);
-    static void DrawTexture(const int& x, const int& y, const int& width, const int& height, const float& rotation, SDL_Texture* texture);
+    static void DrawLine(const int x0, const int y0, const int x1, const int y1, const uint32_t color, const bool lockToScreen = false);
+    static void DrawGrid(const uint32_t color);
+    static void DrawRect(const int x, const int y, const int width, const int height, const uint32_t color);
+    static void DrawFillRect(const int x, const int y, const int width, const int height, const uint32_t color);
+    static void DrawCircle(const int x, const int y, const int radius, const float angle, const uint32_t color, const bool lockToScreen = false);
+    static void DrawFillCircle(const int x, const int y, const int radius, const uint32_t color);
+    static void DrawPolygon(const int x, const int y, const std::vector<Vec2>& vertices, const uint32_t color, const bool lockToScreen = false);
+    static void DrawFillPolygon(const int x, const int y, const std::vector<Vec2>& vertices, const uint32_t color, const bool lockToScreen = false);
+    static void DrawTexture(const int x, const int y, const int width, const int height, const float rotation, SDL_Texture* texture);
 
-    static void DrawChar(const int x, const int y, const char& character, const bool highlight = false, const bool lockToScreen = false);
+    static void DrawChar(const int x, const int y, const char character, const bool highlight = false, const bool lockToScreen = false);
     static void DrawString(const int x, const int y, const char* string, const bool highlight = false, const bool lockToScreen = false);
 
     static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
@@ -59,7 +59,7 @@ public:
     static void DrawUISelector(const int x, const int y, const int width, const int height);
     static void DrawBattleBackground(SDL_Texture* texture);
 
-    static void DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen = false);
+    static void DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen = false);
 
 private:
     static int mWindowWidth;

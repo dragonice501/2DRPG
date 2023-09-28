@@ -72,8 +72,8 @@ void Actor::Render(SDL_Renderer* renderer)
 {
     SDL_Rect destRect =
     {
-        mPosition.x * TILE_SPRITE_SCALE + mSprite.positionOffset.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
-        mPosition.y * TILE_SPRITE_SCALE + mSprite.positionOffset.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
+        mPosition.x * TILE_SPRITE_SCALE + mSprite.positionOffset.x * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().x,
+        mPosition.y * TILE_SPRITE_SCALE + mSprite.positionOffset.y * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().y,
         mSprite.srcRect.w * TILE_SPRITE_SCALE,
         mSprite.srcRect.h * TILE_SPRITE_SCALE
     };

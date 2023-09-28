@@ -817,14 +817,53 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
 
         SDL_Rect destRect =
         {
-            mTiles[i].position.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
-            mTiles[i].position.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
+            mTiles[i].position.x * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().x,
+            mTiles[i].position.y * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().y,
             TILE_SIZE * TILE_SPRITE_SCALE,
             TILE_SIZE * TILE_SPRITE_SCALE
         };
 
         GraphicsManager::DrawSpriteRect(mTileMap, srcRect, destRect);
     }
+
+    /*for (int y = 0; y < mMapHeight; y++)
+    {
+        for (int x = 0; x < mMapWidth; x++)
+        {
+            SDL_Rect& camera = GraphicsManager::Camera();
+            float xMod = camera.x % TILE_SIZE * TILE_SPRITE_SCALE;
+            float yMod = camera.y % TILE_SIZE * TILE_SPRITE_SCALE;
+
+            Vec2 cameraPosition;
+            cameraPosition.x = camera.x - xMod;
+            cameraPosition.y = camera.y - yMod;
+
+            if (
+                x * TILE_SIZE * TILE_SPRITE_SCALE < cameraPosition.x || x * TILE_SIZE * TILE_SPRITE_SCALE >= cameraPosition.x + camera.w ||
+                y * TILE_SIZE * TILE_SPRITE_SCALE < cameraPosition.y || y * TILE_SIZE * TILE_SPRITE_SCALE >= cameraPosition.y + camera.h)
+                continue;
+
+            int index = x + y * mMapWidth;
+
+            SDL_Rect srcRect =
+            {
+                mTiles[index].spriteIndex % SPRITE_SHEET_SIZE * TILE_SIZE,
+                mTiles[index].spriteIndex / SPRITE_SHEET_SIZE * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE
+            };
+
+            SDL_Rect destRect =
+            {
+                mTiles[index].position.x * TILE_SPRITE_SCALE - GraphicsManager::Camera().x,
+                mTiles[index].position.y * TILE_SPRITE_SCALE - GraphicsManager::Camera().y,
+                TILE_SIZE * TILE_SPRITE_SCALE,
+                TILE_SIZE * TILE_SPRITE_SCALE
+            };
+
+            GraphicsManager::DrawSpriteRect(mTileMap, srcRect, destRect);
+        }
+    }*/
 
     for (Actor& actor : mActors)
     {

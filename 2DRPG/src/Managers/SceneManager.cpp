@@ -34,7 +34,7 @@ void SceneManager::LoadScene()
 
 	GameManager::SetSceneToLoad(NONE);
 
-	if (mCurrentScene) mCurrentScene->Setup(GraphicsManager::Renderer());
+	if (mCurrentScene) mCurrentScene->Setup(GraphicsManager::GetRenderer());
 }
 
 void SceneManager::CurrentSceneInput()
@@ -49,7 +49,7 @@ void SceneManager::CurrentSceneUpdate(const float dt)
 
 void SceneManager::CurrentSceneRender()
 {
-	mCurrentScene->Render(GraphicsManager::Renderer(), GraphicsManager::Camera());
+	mCurrentScene->Render(GraphicsManager::GetRenderer(), GraphicsManager::GetCamera());
 }
 
 void SceneManager::CurrentSceneShutdown()

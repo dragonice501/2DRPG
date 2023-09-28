@@ -1,24 +1,9 @@
 #include "./Engine.h"
 
-#include "../Utils/Vec2.h"
-
-#include "../Scenes/Scene.h"
-#include "../Scenes/SceneOverworld.h"
-
 #include "../Managers/GameManager.h"
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
 #include "../Managers/SceneManager.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-
-#include <imgui/imgui.h>
-#include <imgui/imgui_sdl.h>
-#include <imgui/imgui_impl_sdl.h>
-
-#include <fstream>
 
 bool Engine::isRunning;
 
@@ -35,7 +20,7 @@ void Engine::SetIsRunning(const bool running)
 
 bool Engine::Init()
 {
-    isRunning = GraphicsManager::OpenWindow();;
+    isRunning = GraphicsManager::OpenWindow();
 
     return true;
 }
@@ -59,7 +44,7 @@ void Engine::Run()
 
         millisecondsPreviousFrame = SDL_GetTicks();
 
-        // Load Scene if one is ready
+        // Load scene if one is ready
         if (GameManager::SceneReadyToLoad())
         {
             SceneManager::LoadScene();
@@ -73,6 +58,7 @@ void Engine::Run()
         SceneManager::CurrentSceneUpdate(deltaTime);
         SceneManager::CurrentSceneRender();
 
+        // Render
         GraphicsManager::PresentRender();
     }
 }

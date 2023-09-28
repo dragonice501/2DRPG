@@ -68,7 +68,7 @@ void PlayerManager::LoadCharacters()
                     surface = IMG_Load(surfacePath.c_str());
                     if (surface)
                     {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
+                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
                     break;
@@ -79,7 +79,7 @@ void PlayerManager::LoadCharacters()
                     surface = IMG_Load(surfacePath.c_str());
                     if (surface)
                     {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
+                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
                     break;
@@ -90,7 +90,7 @@ void PlayerManager::LoadCharacters()
                     surface = IMG_Load(surfacePath.c_str());
                     if (surface)
                     {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
+                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
                     break;
@@ -101,7 +101,7 @@ void PlayerManager::LoadCharacters()
                     surface = IMG_Load(surfacePath.c_str());
                     if (surface)
                     {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::Renderer(), surface);
+                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
                         mCharacterTextures.push_back(texture);
                     }
                     break;

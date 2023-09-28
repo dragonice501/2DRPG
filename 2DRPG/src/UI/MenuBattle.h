@@ -16,4 +16,6 @@ public:
 	UIButton mRunButton;
 
 	UIPanel mPartyStatsPanel;
+
+	std::vector<UIButton> mSmallEnemyButtons;
 };

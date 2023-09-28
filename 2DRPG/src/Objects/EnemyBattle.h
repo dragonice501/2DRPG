@@ -61,4 +61,6 @@ public:
 			}
 		}
 	}
+
+	int mEnemyPositionIndex;
 };

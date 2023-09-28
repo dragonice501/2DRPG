@@ -23,6 +23,9 @@ MenuBattle::MenuBattle() :
 	mMagicButton.mPosition = { mPartyActionPanel.mPosition.x + TEXT_PADDING, mPartyActionPanel.mPosition.y + TEXT_PADDING + 30 };
 	mItemButton.mPosition = { mPartyActionPanel.mPosition.x + TEXT_PADDING, mPartyActionPanel.mPosition.y + TEXT_PADDING + 60 };
 	mRunButton.mPosition = { mPartyActionPanel.mPosition.x + TEXT_PADDING, mPartyActionPanel.mPosition.y + TEXT_PADDING + 90 };
+
+	for (int i = 0; i < 6; i++)
+		mSmallEnemyButtons.push_back(UIButton());
 }
 
 void MenuBattle::Render(SDL_Renderer* renderer)

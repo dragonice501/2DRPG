@@ -53,8 +53,8 @@ bool GraphicsManager::OpenWindow()
         return false;
     }
 
-    mColorBuffer = new uint32_t[mScreenWidth * mScreenHeight];
-    mColorBufferTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, mScreenWidth, mScreenHeight);
+    //mColorBuffer = new uint32_t[mScreenWidth * mScreenHeight];
+    //mColorBufferTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, mScreenWidth, mScreenHeight);
 
     // Initialize the camera view with the entire screen area
     mCamera.x = 0.0f;
@@ -90,12 +90,12 @@ void GraphicsManager::ResetScreenOffset()
     mScreenOffset = { 0.0f, 0.0f };
 }
 
-void GraphicsManager::ScrollZoom(const int& scroll)
+void GraphicsManager::ScrollZoom(const int scroll)
 {
     mScreenZoom += static_cast<float>(scroll) * 0.25f;
 }
 
-bool GraphicsManager::CircleOffScreen(const int& x, const int& y, const float& radius)
+bool GraphicsManager::CircleOffScreen(const int x, const int y, const float radius)
 {
     return
         x + radius + mScreenOffset.x < 0 ||
@@ -105,7 +105,7 @@ bool GraphicsManager::CircleOffScreen(const int& x, const int& y, const float& r
 
 }
 
-void GraphicsManager::ClearScreen(const uint32_t& color)
+void GraphicsManager::ClearScreen(const uint32_t color)
 {
     for (int i = 0; i < mScreenWidth * mScreenHeight; i++)
     {
@@ -133,7 +133,7 @@ void GraphicsManager::DrawPixel(const int x, const int y, const bool highlighted
     SDL_RenderDrawRect(mRenderer, &rect);
 }
 
-void GraphicsManager::DrawLine(const int& x0, const int& y0, const int& x1, const int& y1, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawLine(const int x0, const int y0, const int x1, const int y1, const uint32_t color, const bool lockToScreen)
 {
     float x = x0;
     float y = y0;
@@ -156,7 +156,7 @@ void GraphicsManager::DrawLine(const int& x0, const int& y0, const int& x1, cons
     }
 }
 
-void GraphicsManager::DrawGrid(const uint32_t& color)
+void GraphicsManager::DrawGrid(const uint32_t color)
 {
     for (int y = 0; y < mScreenHeight; y++)
     {
@@ -168,7 +168,7 @@ void GraphicsManager::DrawGrid(const uint32_t& color)
     }
 }
 
-void GraphicsManager::DrawRect(const int& x, const int& y, const int& width, const int& height, const uint32_t& color)
+void GraphicsManager::DrawRect(const int x, const int y, const int width, const int height, const uint32_t color)
 {
     DrawPixel(x + width / 2, y + height / 2, color);
 
@@ -185,7 +185,7 @@ void GraphicsManager::DrawRect(const int& x, const int& y, const int& width, con
         mColorBuffer[i + (y + height) * mScreenWidth] = color;
 }
 
-void GraphicsManager::DrawFillRect(const int& x, const int& y, const int& width, const int& height, const uint32_t& color)
+void GraphicsManager::DrawFillRect(const int x, const int y, const int width, const int height, const uint32_t color)
 {
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
     SDL_Rect rect = { x, y, width, height };
@@ -194,7 +194,7 @@ void GraphicsManager::DrawFillRect(const int& x, const int& y, const int& width,
     SDL_RenderDrawRect(mRenderer, &rect);
 }
 
-void GraphicsManager::DrawCircle(const int& x, const int& y, const int& radius, const float& angle, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawCircle(const int x, const int y, const int radius, const float angle, const uint32_t color, const bool lockToScreen)
 {
     if (CircleOffScreen(x, y, radius)) return;
 
@@ -222,7 +222,7 @@ void GraphicsManager::DrawCircle(const int& x, const int& y, const int& radius, 
     }
 }
 
-void GraphicsManager::DrawFillCircle(const int& x, const int& y, const int& radius, const uint32_t& color)
+void GraphicsManager::DrawFillCircle(const int x, const int y, const int radius, const uint32_t color)
 {
     if (CircleOffScreen(x, y, radius)) return;
     int pRadius = radius;
@@ -241,7 +241,7 @@ void GraphicsManager::DrawFillCircle(const int& x, const int& y, const int& radi
     }
 }
 
-void GraphicsManager::DrawPolygon(const int& x, const int& y, const std::vector<Vec2>& vertices, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawPolygon(const int x, const int y, const std::vector<Vec2>& vertices, const uint32_t color, const bool lockToScreen)
 {
     Vec2 current = vertices[0];
     Vec2 previous = vertices[vertices.size() - 1];
@@ -256,19 +256,19 @@ void GraphicsManager::DrawPolygon(const int& x, const int& y, const std::vector<
     }
 }
 
-void GraphicsManager::DrawFillPolygon(const int& x, const int& y, const std::vector<Vec2>& vertices, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DrawFillPolygon(const int x, const int y, const std::vector<Vec2>& vertices, const uint32_t color, const bool lockToScreen)
 {
 
 }
 
-void GraphicsManager::DrawTexture(const int& x, const int& y, const int& width, const int& height, const float& rotation, SDL_Texture* texture)
+void GraphicsManager::DrawTexture(const int x, const int y, const int width, const int height, const float rotation, SDL_Texture* texture)
 {
     SDL_Rect dstRect = { x - (width / 2), y - (height / 2), width, height };
     float rotationDeg = rotation * 57.2958;
     SDL_RenderCopyEx(mRenderer, texture, nullptr, &dstRect, rotationDeg, nullptr, SDL_FLIP_NONE);
 }
 
-void GraphicsManager::DrawChar(const int x, const int y, const char& character, const bool highlight, const bool lockToScreen)
+void GraphicsManager::DrawChar(const int x, const int y, const char character, const bool highlight, const bool lockToScreen)
 {
     for (int j = 0; j < Font::fontHeight; j++)
     {
@@ -389,7 +389,7 @@ void GraphicsManager::DrawBattleBackground(SDL_Texture* texture)
     SDL_RenderCopy(mRenderer, texture, NULL, NULL);
 }
 
-void GraphicsManager::DisplayBresenhamCircle(const int& xc, const int& yc, const int& x0, const int& y0, const uint32_t& color, const bool& lockToScreen)
+void GraphicsManager::DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen)
 {
     if (lockToScreen)
     {
