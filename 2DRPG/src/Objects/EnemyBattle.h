@@ -48,14 +48,17 @@ public:
 							int fireAffect;
 							file >> fireAffect;
 							this->fireAffect = static_cast<EElementAffect>(fireAffect);
-
+						}
+						else if (type == "Exp")
+						{
+							file >> attributes.exp;
 							return;
 						}
 					}
 				}
 				else
 				{
-					for (int i = 0; i < 11; i++)
+					for (int i = 0; i < 12; i++)
 						file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				}
 			}

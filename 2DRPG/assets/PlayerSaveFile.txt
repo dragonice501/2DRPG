@@ -9,6 +9,7 @@ Intelligence 4
 Speed 11
 Skill 5
 Luck 3
+Exp 0
 
 Character Elan
 Class 0
@@ -21,6 +22,7 @@ Intelligence 7
 Speed 4
 Skill 2
 Luck 4
+Exp 0
 
 Character Don
 Class 2
@@ -33,6 +35,7 @@ Intelligence 8
 Speed 10
 Skill 3
 Luck 2
+Exp 0
 
 Character Ark
 Class 1
@@ -45,3 +48,4 @@ Intelligence 3
 Speed 2
 Skill 4
 Luck 2
+Exp 0

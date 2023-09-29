@@ -1,5 +1,7 @@
 #include "PlayerManager.h"
 
+#include <cmath>
+
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 std::vector<std::string> PlayerManager::mLearnedKeywords;
@@ -33,7 +35,10 @@ void PlayerManager::LoadCharacters()
                     file >> characterClass;
                     newCharacterAttributes.characterClass = static_cast<ECharacterClass>(characterClass);
                 }
-                else if (type == "Level") file >> newCharacterAttributes.level;
+                else if (type == "Level")
+                {
+                    file >> newCharacterAttributes.level;
+                }
                 else if (type == "Health")
                 {
                     file >> newCharacterAttributes.healthMax;
@@ -49,9 +54,11 @@ void PlayerManager::LoadCharacters()
                 else if (type == "Intelligence") file >> newCharacterAttributes.intelligence;
                 else if (type == "Speed") file >> newCharacterAttributes.speed;
                 else if (type == "Skill") file >> newCharacterAttributes.skill;
-                else if (type == "Luck")
+                else if (type == "Luck") file >> newCharacterAttributes.luck;
+                else if (type == "Exp")
                 {
-                    file >> newCharacterAttributes.luck;
+                    file >> newCharacterAttributes.exp;
+                    newCharacterAttributes.expNextLevel = CalcLevelUpExp(newCharacterAttributes.level);
                     break;
                 }
             }
@@ -118,4 +125,34 @@ void PlayerManager::LoadCharacters()
 
 void PlayerManager::SaveCharacters()
 {
+}
+
+int PlayerManager::CalcLevelUpExp(int level)
+{
+    return (5 * pow(level, 3)) / 4;
+}
+
+bool PlayerManager::CheckLevelUp(int& outIndex)
+{
+    if (outIndex >= mCharacterAttributes.size()) outIndex = 0;
+
+    for (int i = outIndex; i < mCharacterAttributes.size(); i++)
+    {
+        if (mCharacterAttributes[i].exp >= mCharacterAttributes[i].expNextLevel)
+        {
+            outIndex = i;
+            return true;
+        }
+    }
+
+    outIndex = -1;
+    return false;
+}
+
+void PlayerManager::LevelUp(int characterIndex)
+{
+    CharacterAttributes& attributes = mCharacterAttributes[characterIndex];
+    attributes.level++;
+    attributes.exp -= attributes.expNextLevel;
+    attributes.expNextLevel = CalcLevelUpExp(attributes.level);
 }

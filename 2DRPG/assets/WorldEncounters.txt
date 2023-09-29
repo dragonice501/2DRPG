@@ -1,5 +1,2 @@
 Wolf 0
-Goblin 1
-Wolf 4
-Goblin 5
 End

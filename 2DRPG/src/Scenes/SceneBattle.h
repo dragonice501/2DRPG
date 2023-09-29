@@ -94,6 +94,9 @@ private:
 	int mEnemyTargetIndex = 0;
 	int mCurrentPlayerIndex = 0;
 
+	int mBattleExpPool = 0;
+	int mLevelUpIndex = 0;
+
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{
 		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE),

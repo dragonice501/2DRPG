@@ -30,6 +30,10 @@ public:
 	static void LearnNewMysteryKeyword(const std::string& keyword) { mMysteryKeywords.push_back(keyword); }
 	static void LearnNewBestiaryKeyword(const std::string& keyword) { mBestiaryKeywords.push_back(keyword); }
 
+	static int CalcLevelUpExp(int level);
+	static bool CheckLevelUp(int& outIndex);
+	static void LevelUp(int characterIndex);
+
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
@@ -41,4 +45,6 @@ private:
 	static std::vector<std::string> mBestiaryKeywords;
 
 	static int mPartyMoney;
+
+	static int mLevelExpAmounts[];
 };

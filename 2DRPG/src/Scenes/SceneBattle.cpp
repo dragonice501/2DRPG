@@ -570,6 +570,7 @@ void SceneBattle::Update(const float dt)
 			if (mTurnTimeRemaining <= 0)
 			{
 				mTurnTimeRemaining = mTurnTime;
+				mBattleExpPool += mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.exp;
 
 				for (int i = 0; i < mBattleTurns.size(); i++)
 				{
@@ -597,18 +598,64 @@ void SceneBattle::Update(const float dt)
 			if (mBattleEndTimeRemaing <= 0)
 			{
 				mBattleEndTimeRemaing = mBattleEndTime;
-
-				for (int i = 0; i < mBattleCharacters.size(); i++)
-				{
-					PlayerManager::GetCharacterAttributes()[i] = mBattleCharacters[i]->attributes;
-				}
-
-				GameManager::SetSceneToLoad(OVERWORLD, -2, true);
+				
+				mBattleState = BS_EXP_GAINED;
 			}
 			break;
 		}
 		case BS_PARTY_DEFEATED:
 		{
+			break;
+		}
+		case BS_EXP_GAINED:
+		{
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
+			{
+				mBattleEndTimeRemaing = mBattleEndTime;
+
+				for (int i = 0; i < mBattleCharacters.size(); i++)
+				{
+					CharacterAttributes& characterAttributes = PlayerManager::GetCharacterAttributes()[i];
+					characterAttributes = mBattleCharacters[i]->attributes;
+					characterAttributes.exp += mBattleExpPool;
+				}
+
+				if (PlayerManager::CheckLevelUp(mLevelUpIndex))
+				{
+					mBattleState = BS_LEVEL_UP;
+				}
+				else
+				{
+					mBattleState = BS_BATTLE_END;
+				}
+			}
+			break;
+		}
+		case BS_LEVEL_UP:
+		{
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
+			{
+				mBattleEndTimeRemaing = mBattleEndTime;
+
+				PlayerManager::LevelUp(mLevelUpIndex);
+
+				mLevelUpIndex++;
+				if (!PlayerManager::CheckLevelUp(mLevelUpIndex))
+				{
+					mBattleState = BS_BATTLE_END;
+				}
+			}
+			break;
+		}
+		case BS_BATTLE_END:
+		{
+			mTurnTimeRemaining -= dt;
+			if (mTurnTimeRemaining <= 0)
+			{
+				GameManager::SetSceneToLoad(OVERWORLD, -2, true);
+			}
 			break;
 		}
 	}
@@ -907,6 +954,26 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		case BS_PARTY_DEFEATED:
 		{
 
+			break;
+		}
+		case BS_EXP_GAINED:
+		{
+			battleString =
+				std::to_string(mBattleExpPool) +
+				" Exp Gained";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_LEVEL_UP:
+		{
+			battleString = PlayerManager::GetCharacterAttributes()[mLevelUpIndex].characterName + " Level Up";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
+		case BS_BATTLE_END:
+		{
 			break;
 		}
 	}
