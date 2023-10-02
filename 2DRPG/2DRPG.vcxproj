@@ -292,6 +292,7 @@
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Scenes\SceneOverworld.h" />
     <ClInclude Include="src\Scenes\SceneTown.h" />
+    <ClInclude Include="src\UI\UIText.h" />
     <ClInclude Include="src\Utils\Constants.h" />
     <ClInclude Include="src\Utils\Utils.h" />
     <ClInclude Include="src\Utils\Vec2.h" />

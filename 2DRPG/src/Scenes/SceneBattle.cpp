@@ -639,13 +639,23 @@ void SceneBattle::Update(const float dt)
 			{
 				mBattleEndTimeRemaing = mBattleEndTime;
 
-				PlayerManager::LevelUp(mLevelUpIndex);
+				mLevelUpStats = PlayerManager::LevelUp(mLevelUpIndex);
 
 				mLevelUpIndex++;
 				if (!PlayerManager::CheckLevelUp(mLevelUpIndex))
 				{
 					mBattleState = BS_BATTLE_END;
 				}
+			}
+			break;
+		}
+		case BS_STAT_INCREASE:
+		{
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
+			{
+
+				
 			}
 			break;
 		}

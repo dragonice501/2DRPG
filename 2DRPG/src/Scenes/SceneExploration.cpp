@@ -433,6 +433,26 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         }
     }
 
+    // Load menu icons
+    surface = IMG_Load(mBattleIconsFilePath.c_str());
+    if (surface)
+    {
+        mBattleIconsTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    }
+    SDL_FreeSurface(surface);
+
+    std::ifstream battleIconsFile("./assets/BattleIcons.txt");
+    while (battleIconsFile >> type)
+    {
+        if (type == "Cursor")
+        {
+            Sprite newSprite;
+
+            battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
+            mBattleIconsMap.emplace("Cursor", newSprite);
+        }
+    }
+
     // Load enemy encounters
     EnemyEncounter newEncounter;
     fileName = "./assets/" + mFileName + "Encounters.txt";
@@ -639,6 +659,8 @@ void SceneExploration::Input()
             else if (InputManager::StartPressed())
             {
                 mExplorationState = ES_MENUING;
+                mPartyMenu.mMenuState = MenuParty::MAIN;
+                mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
             }
             break;
         }
@@ -805,6 +827,7 @@ void SceneExploration::Update(const float dt)
 
 void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
 {
+    // Render tiles
     for (int i = 0; i < mTiles.size(); i++)
     {
         SDL_Rect srcRect =
@@ -865,11 +888,13 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
     }*/
 
+    // Render Actors
     for (Actor& actor : mActors)
     {
         actor.Render(renderer);
     }
 
+    // Render Party Characters
     for (int i = mCharacters.size() - 1; i >= 0; i--)
     {
         if (i == 0)
@@ -909,7 +934,23 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         case ES_MENUING:
         { 
             mPartyMenu.Render(renderer);
+            DrawCursor(renderer);
             break;
         }
     }
+}
+
+void SceneExploration::DrawCursor(SDL_Renderer* renderer)
+{
+    SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
+
+    SDL_Rect destRect =
+    {
+        mPartyMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 20,
+        mPartyMenu.GetCurrentButton()->mPosition.y,
+        cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+        cursorSpriteRect.h * BATTLE_CURSOR_SCALE
+    };
+
+    GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
 }

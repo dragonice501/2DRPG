@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UIButton.h"
+#include "UIText.h"
 
 #include "../Managers/GraphicsManager.h"
 
@@ -24,6 +25,11 @@ public:
 			if(button->mIsActive)
 				button->Render();
 		}
+
+		for (UIText& text : mText)
+		{
+			text.Render();
+		}
 	}
 
 	bool mIsActive = false;
@@ -31,4 +37,5 @@ public:
 	Vec2 mSize;
 
 	std::vector<UIButton*> mButtons;
+	std::vector<UIText> mText;
 };

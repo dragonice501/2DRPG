@@ -503,5 +503,8 @@
     <ClInclude Include="src\UI\MenuBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\UI\UIText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

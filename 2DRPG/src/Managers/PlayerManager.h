@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <fstream>
+
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -32,7 +33,7 @@ public:
 
 	static int CalcLevelUpExp(int level);
 	static bool CheckLevelUp(int& outIndex);
-	static void LevelUp(int characterIndex);
+	static CharacterAttributes LevelUp(int characterIndex);
 
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
@@ -47,4 +48,6 @@ private:
 	static int mPartyMoney;
 
 	static int mLevelExpAmounts[];
+
+	static uint8_t mLevelGauranteeStats[];
 };

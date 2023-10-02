@@ -96,6 +96,8 @@ private:
 
 	int mBattleExpPool = 0;
 	int mLevelUpIndex = 0;
+	CharacterAttributes mLevelUpStats;
+	int mStatIndex = 0;
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{

@@ -38,6 +38,8 @@ public:
 	virtual void Update(const float dt) override;
 	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
 
+	void DrawCursor(static SDL_Renderer* renderer);
+
 	void ExitMenu() override { mExplorationState = ES_EXPLORING; }
 
 	void SetupCharacters();
@@ -50,6 +52,10 @@ public:
 protected:
 	std::vector<Tile> mTiles;
 	SDL_Texture* mTileMap;
+
+	SDL_Texture* mBattleIconsTexture = nullptr;
+	std::string mBattleIconsFilePath = "./assets/MenuIcons.png";
+	std::map<std::string, Sprite> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<ActorNpc> mActors;

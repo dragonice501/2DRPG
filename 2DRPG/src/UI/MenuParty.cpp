@@ -1,8 +1,55 @@
 #include "MenuParty.h"
 
-MenuParty::MenuParty()
+MenuParty::MenuParty() :
+    mPartyButton("Party"), mStatusButton("Status"), mInventoryButton("Inventory"), mJournalButton("Journal"), mEquipButton("Equip"), mMagicButton("Magic"), mExitButton("Exit")
 {
     mIsMainMenu = true;
+
+    mMoneyPanel.mIsActive = true;
+    int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
+    mMoneyPanel.mPosition =
+    {
+        GraphicsManager::WindowWidth() / 2.0f - GraphicsManager::WindowWidth() / 4.0f,
+        GraphicsManager::WindowHeight() / 2.0f - GraphicsManager::WindowHeight() / 4.0f
+    };
+    mMoneyPanel.mSize =
+    {
+        stringLength + TEXT_PADDING * 2.0f,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
+
+    UIText moneyText = { "10000g" };
+    moneyText.mPosition = { mMoneyPanel.mPosition.x + TEXT_PADDING, mMoneyPanel.mPosition.y + TEXT_PADDING };
+    mMoneyPanel.mText.push_back(moneyText);
+
+    mMainPanel.mIsActive = true;
+    mMainPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x,
+        mMoneyPanel.mPosition.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3
+    };
+    mMainPanel.mSize =
+    {
+        stringLength + TEXT_PADDING * 2.0f,
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+    };
+
+    mMainPanel.mButtons.push_back(&mPartyButton);
+    mMainPanel.mButtons.push_back(&mStatusButton);
+    mMainPanel.mButtons.push_back(&mInventoryButton);
+    mMainPanel.mButtons.push_back(&mJournalButton);
+    mMainPanel.mButtons.push_back(&mEquipButton);
+    mMainPanel.mButtons.push_back(&mMagicButton);
+    mMainPanel.mButtons.push_back(&mExitButton);
+
+    float vertOffset = Font::fontHeight * TEXT_SIZE + TEXT_PADDING;
+    mPartyButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING };
+    mStatusButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset };
+    mInventoryButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 2 };
+    mJournalButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 3 };
+    mEquipButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 4 };
+    mMagicButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 5 };
+    mExitButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 6 };
 
     mPartyButton.OnSelected = [this]()
     {
@@ -145,74 +192,7 @@ void MenuParty::Render(SDL_Renderer* renderer)
     SDL_Rect firstRect;
     std::string string;
 
-    string = std::to_string(PlayerManager::GetPartyMoney()) + 'g';
+    if (mMoneyPanel.mIsActive) mMoneyPanel.Render();
 
-    int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
-
-    firstRect = GraphicsManager::DrawUIBox(
-        GraphicsManager::WindowWidth() / 2 - GraphicsManager::WindowWidth() / 4,
-        GraphicsManager::WindowHeight() / 2 - GraphicsManager::WindowHeight() / 4,
-        stringLength + TEXT_PADDING * 2,
-        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
-
-    GraphicsManager::DrawString(firstRect.x + TEXT_PADDING, firstRect.y + TEXT_PADDING, string.c_str());
-
-    SDL_Rect optionsRect;
-    optionsRect = GraphicsManager::DrawUIBox(
-        firstRect.x,
-        firstRect.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3,
-        stringLength + TEXT_PADDING * 2,
-        TEXT_PADDING * 2 + Font::fontHeight * TEXT_SIZE * 7 + TEXT_PADDING * (7 - 1));
-
-    for (int i = 0; i < mMainMenuButtons.size(); i++)
-    {
-        GraphicsManager::DrawString(
-            optionsRect.x + TEXT_PADDING,
-            optionsRect.y + TEXT_PADDING + TEXT_PADDING * i + Font::fontHeight * TEXT_SIZE * i,
-            mMainMenuButtons[i]->mText.c_str());
-    }
-
-    GraphicsManager::DrawUISelector(
-        optionsRect.x,
-        optionsRect.y + TEXT_PADDING - TEXT_PADDING / 2 + Font::fontHeight * TEXT_SIZE * mMainButtonIndex + TEXT_PADDING * mMainButtonIndex,
-        optionsRect.w,
-        Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-
-    firstRect = GraphicsManager::DrawUIBox(
-        firstRect.x + firstRect.w + UI_BOX_BORDER_SIZE * 3,
-        firstRect.y,
-        Font::fontWidth * TEXT_SIZE * 36 + Font::fontSpacing * TEXT_SIZE * 38 + TEXT_PADDING * 2,
-        firstRect.h + optionsRect.h + UI_BOX_BORDER_SIZE * 3);
-
-    for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
-    {
-        int characterXOffset = (Font::fontWidth * TEXT_SIZE * 20 + Font::fontSpacing * TEXT_SIZE * 20) * mCharacterUIPositions[i].x;
-        int characterYOffset = (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 3 * mCharacterUIPositions[i].y;
-
-        const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
-
-        string = attributes.characterName + "  " + GetClassName(attributes.characterClass);
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + characterYOffset,
-            string.c_str());
-
-        string =
-            "Lv." + std::to_string(attributes.level) + ' ' + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel) + " Exp";
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE + TEXT_PADDING + characterYOffset,
-            string.c_str());
-
-        string =
-            std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP " +
-            std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
-
-        GraphicsManager::DrawString(
-            firstRect.x + TEXT_PADDING + characterXOffset,
-            firstRect.y + TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2 + characterYOffset,
-            string.c_str());
-    }
+    if (mMainPanel.mIsActive) mMainPanel.Render();
 }

@@ -79,6 +79,7 @@ enum EBattleState
 
 	BS_EXP_GAINED,
 	BS_LEVEL_UP,
+	BS_STAT_INCREASE,
 
 	BS_BATTLE_END
 };

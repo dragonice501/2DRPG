@@ -11,6 +11,11 @@ std::vector<std::string> PlayerManager::mPlacesKeywords;
 std::vector<std::string> PlayerManager::mMysteryKeywords;
 std::vector<std::string> PlayerManager::mBestiaryKeywords;
 
+uint8_t PlayerManager::mLevelGauranteeStats[2] =
+{
+    170, 85
+};
+
 int PlayerManager::mPartyMoney = 10000;
 
 void PlayerManager::LoadCharacters()
@@ -149,10 +154,56 @@ bool PlayerManager::CheckLevelUp(int& outIndex)
     return false;
 }
 
-void PlayerManager::LevelUp(int characterIndex)
+CharacterAttributes PlayerManager::LevelUp(int characterIndex)
 {
+    CharacterAttributes levelUpAttributes;
     CharacterAttributes& attributes = mCharacterAttributes[characterIndex];
     attributes.level++;
     attributes.exp -= attributes.expNextLevel;
     attributes.expNextLevel = CalcLevelUpExp(attributes.level);
+
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 7))
+    {
+        attributes.healthMax++;
+        attributes.health = attributes.healthMax;
+        levelUpAttributes.health++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 6))
+    {
+        attributes.magicMax++;
+        attributes.magic = attributes.magicMax;
+        levelUpAttributes.magic++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 5))
+    {
+        attributes.strength++;
+        levelUpAttributes.strength++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 4))
+    {
+        attributes.defense++;
+        levelUpAttributes.defense++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 3))
+    {
+        attributes.intelligence++;
+        levelUpAttributes.intelligence++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 2))
+    {
+        attributes.speed++;
+        levelUpAttributes.speed++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 1))
+    {
+        attributes.skill++;
+        levelUpAttributes.skill++;
+    }
+    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 0))
+    {
+        attributes.luck++;
+        levelUpAttributes.luck++;
+    }
+
+    return levelUpAttributes;
 }
