@@ -335,6 +335,36 @@ SceneExploration::SceneExploration()
         mInteractMenu.SetCurrentButton(mInteractMenu.GetPreviousButton());
     };
 
+    // Party Menu Buttons
+    mPartyMenu.mPartyButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mStatusButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mInventoryButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mJournalButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mEquipButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mMagicButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mExitButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+
     mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
     mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
 }
@@ -656,11 +686,10 @@ void SceneExploration::Input()
                     }
                 }
             }
-            else if (InputManager::StartPressed())
+            
+            if (InputManager::StartPressed())
             {
                 mExplorationState = ES_MENUING;
-                mPartyMenu.mMenuState = MenuParty::MAIN;
-                mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
             }
             break;
         }
@@ -766,13 +795,8 @@ void SceneExploration::Input()
             }
             else if (InputManager::CancelPressed())
             {
-                if (mPartyMenu.mIsMainMenu)
+                if (mPartyMenu.GetCurrentButton()->OnCancelAction)
                 {
-                    mExplorationState = ES_EXPLORING;
-                }
-                else if (mPartyMenu.GetCurrentButton()->OnCancelAction)
-                {
-                    mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
                     mPartyMenu.GetCurrentButton()->OnCancelAction();
                 }
             }
@@ -946,7 +970,7 @@ void SceneExploration::DrawCursor(SDL_Renderer* renderer)
 
     SDL_Rect destRect =
     {
-        mPartyMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 20,
+        mPartyMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5,
         mPartyMenu.GetCurrentButton()->mPosition.y,
         cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
         cursorSpriteRect.h * BATTLE_CURSOR_SCALE

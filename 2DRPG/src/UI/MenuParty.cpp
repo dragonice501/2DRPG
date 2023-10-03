@@ -5,6 +5,7 @@ MenuParty::MenuParty() :
 {
     mIsMainMenu = true;
 
+    // Party Money
     mMoneyPanel.mIsActive = true;
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMoneyPanel.mPosition =
@@ -22,6 +23,7 @@ MenuParty::MenuParty() :
     moneyText.mPosition = { mMoneyPanel.mPosition.x + TEXT_PADDING, mMoneyPanel.mPosition.y + TEXT_PADDING };
     mMoneyPanel.mText.push_back(moneyText);
 
+    // Main Options
     mMainPanel.mIsActive = true;
     mMainPanel.mPosition =
     {
@@ -53,7 +55,7 @@ MenuParty::MenuParty() :
 
     mPartyButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 0;
+        
     };
     mPartyButton.OnUpAction = [this]()
     {
@@ -65,14 +67,14 @@ MenuParty::MenuParty() :
         mCurrentButton = &mStatusButton;
         mCurrentButton->OnSelected();
     };
-    mPartyButton.OnCancelAction = [this]()
+    mPartyButton.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mPartyButton;
+        mCurrentButton = &mFirstCharacterButton;
     };
 
     mStatusButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 1;
+        
     };
     mStatusButton.OnUpAction = [this]()
     {
@@ -91,7 +93,7 @@ MenuParty::MenuParty() :
 
     mInventoryButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 2;
+       
     };
     mInventoryButton.OnUpAction = [this]()
     {
@@ -110,7 +112,7 @@ MenuParty::MenuParty() :
 
     mJournalButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 3;
+        
     };
     mJournalButton.OnUpAction = [this]()
     {
@@ -129,7 +131,7 @@ MenuParty::MenuParty() :
 
     mEquipButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 4;
+        
     };
     mEquipButton.OnUpAction = [this]()
     {
@@ -148,7 +150,7 @@ MenuParty::MenuParty() :
 
     mMagicButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 5;
+        
     };
     mMagicButton.OnUpAction = [this]()
     {
@@ -167,7 +169,7 @@ MenuParty::MenuParty() :
 
     mExitButton.OnSelected = [this]()
     {
-        mMainButtonIndex = 6;
+        
     };
     mExitButton.OnUpAction = [this]()
     {
@@ -184,6 +186,265 @@ MenuParty::MenuParty() :
         mCurrentButton = &mPartyButton;
     };
 
+    // Party Panel
+    mPartyPanel.mIsActive = true;
+    mPartyPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
+        mMoneyPanel.mPosition.y
+    };
+    mPartyPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        mMoneyPanel.mSize.y + mMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
+    };
+
+    CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[0];
+    
+    mFirstCharacterButton.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING,
+        mPartyPanel.mPosition.y + TEXT_PADDING
+    };
+    mFirstCharacterButton.mText = attributes.characterName;
+
+    std::string string;
+    string = "Lv." + std::to_string(attributes.level);
+    UIText text =
+    {
+        string,
+        mFirstCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    text =
+    {
+        string,
+        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
+    text =
+    {
+        string,
+        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
+    text =
+    {
+        string,
+        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    mSecondCharacterButton.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
+        mPartyPanel.mPosition.y + TEXT_PADDING
+    };
+    mSecondCharacterButton.mText = PlayerManager::GetCharacterAttributes()[1].characterName;
+
+    attributes = PlayerManager::GetCharacterAttributes()[1];
+
+    string = "Lv." + std::to_string(attributes.level);
+    text =
+    {
+        string,
+        mSecondCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    text =
+    {
+        string,
+        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
+    text =
+    {
+        string,
+        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
+    text =
+    {
+        string,
+        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    mThirdCharacterButton.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING,
+        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
+    };
+    mThirdCharacterButton.mText = PlayerManager::GetCharacterAttributes()[2].characterName;
+
+    attributes = PlayerManager::GetCharacterAttributes()[2];
+
+    string = "Lv." + std::to_string(attributes.level);
+    text =
+    {
+        string,
+        mThirdCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    text =
+    {
+        string,
+        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
+    text =
+    {
+        string,
+        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
+    text =
+    {
+        string,
+        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    mFourthCharacterButton.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
+        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
+    };
+    mFourthCharacterButton.mText = PlayerManager::GetCharacterAttributes()[3].characterName;
+
+    attributes = PlayerManager::GetCharacterAttributes()[3];
+
+    string = "Lv." + std::to_string(attributes.level);
+    text =
+    {
+        string,
+        mFourthCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    text =
+    {
+        string,
+        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
+    text =
+    {
+        string,
+        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    string =
+        std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
+    text =
+    {
+        string,
+        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+    };
+    mPartyPanel.mText.push_back(text);
+
+    mFirstCharacterButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mThirdCharacterButton;
+    };
+    mFirstCharacterButton.OnRightAction = [this]()
+    {
+        mCurrentButton = &mSecondCharacterButton;
+    };
+    mFirstCharacterButton.OnAcceptAction = [this]()
+    {
+
+    };
+    mFirstCharacterButton.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mPartyButton;
+    };
+
+    mSecondCharacterButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mFourthCharacterButton;
+    };
+    mSecondCharacterButton.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mFirstCharacterButton;
+    };
+    mSecondCharacterButton.OnAcceptAction = [this]()
+    {
+
+    };
+    mSecondCharacterButton.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mPartyButton;
+    };
+
+    mThirdCharacterButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mFirstCharacterButton;
+    };
+    mThirdCharacterButton.OnRightAction = [this]()
+    {
+        mCurrentButton = &mFourthCharacterButton;
+    };
+    mThirdCharacterButton.OnAcceptAction = [this]()
+    {
+
+    };
+    mThirdCharacterButton.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mPartyButton;
+    };
+
+    mFourthCharacterButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mSecondCharacterButton;
+    };
+    mFourthCharacterButton.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mThirdCharacterButton;
+    };
+    mFourthCharacterButton.OnAcceptAction = [this]()
+    {
+
+    };
+    mFourthCharacterButton.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mPartyButton;
+    };
+
+    mPartyPanel.mButtons.push_back(&mFirstCharacterButton);
+    mPartyPanel.mButtons.push_back(&mSecondCharacterButton);
+    mPartyPanel.mButtons.push_back(&mThirdCharacterButton);
+    mPartyPanel.mButtons.push_back(&mFourthCharacterButton);
+    
     mCurrentButton = &mPartyButton;
 }
 
@@ -195,4 +456,6 @@ void MenuParty::Render(SDL_Renderer* renderer)
     if (mMoneyPanel.mIsActive) mMoneyPanel.Render();
 
     if (mMainPanel.mIsActive) mMainPanel.Render();
+
+    if (mPartyPanel.mIsActive) mPartyPanel.Render();
 }
