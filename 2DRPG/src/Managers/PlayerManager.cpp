@@ -4,7 +4,6 @@
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
-std::vector<std::string> PlayerManager::mLearnedKeywords;
 
 std::vector<std::string> PlayerManager::mPeopleKeywords;
 std::vector<std::string> PlayerManager::mPlacesKeywords;
@@ -206,4 +205,15 @@ CharacterAttributes PlayerManager::LevelUp(int characterIndex)
     }
 
     return levelUpAttributes;
+}
+
+void PlayerManager::SwapCharacters(int first, int second)
+{
+    CharacterAttributes tempChar = mCharacterAttributes[first];
+    mCharacterAttributes[first] = mCharacterAttributes[second];
+    mCharacterAttributes[second] = tempChar;
+
+    SDL_Texture* tempTex = mCharacterTextures[first];
+    mCharacterTextures[first] = mCharacterTextures[second];
+    mCharacterTextures[second] = tempTex;
 }

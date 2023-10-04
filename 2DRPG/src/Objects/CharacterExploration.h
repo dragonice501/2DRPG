@@ -6,7 +6,7 @@
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
 
-class CharacterExploration : Actor
+class CharacterExploration : public Actor
 {
 public:
 	CharacterExploration();

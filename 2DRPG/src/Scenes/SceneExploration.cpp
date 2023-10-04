@@ -365,12 +365,79 @@ SceneExploration::SceneExploration()
         mExplorationState = ES_EXPLORING;
     };
 
+    // Party
+    mPartyMenu.mFirstCharacterButton.OnAcceptAction = [this]()
+    {
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 0)
+        {
+            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 0);
+            mPartyMenu.FillPartyAttributes();
+            mPartyMenu.mCharacterSelected = false;
+
+            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 0);
+        }
+        else
+        {
+            mPartyMenu.mFirstCharacterIndex = 0;
+            mPartyMenu.mCharacterSelected = true;
+        }
+    };
+    mPartyMenu.mSecondCharacterButton.OnAcceptAction = [this]()
+    {
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 1)
+        {
+            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 1);
+            mPartyMenu.FillPartyAttributes();
+            mPartyMenu.mCharacterSelected = false;
+
+            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 1);
+        }
+        else
+        {
+            mPartyMenu.mFirstCharacterIndex = 1;
+            mPartyMenu.mCharacterSelected = true;
+        }
+    };
+    mPartyMenu.mThirdCharacterButton.OnAcceptAction = [this]()
+    {
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 2)
+        {
+            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 2);
+            mPartyMenu.FillPartyAttributes();
+            mPartyMenu.mCharacterSelected = false;
+
+            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 2);
+        }
+        else
+        {
+            mPartyMenu.mFirstCharacterIndex = 2;
+            mPartyMenu.mCharacterSelected = true;
+        }
+    };
+    mPartyMenu.mFourthCharacterButton.OnAcceptAction = [this]()
+    {
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 3)
+        {
+            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 3);
+            mPartyMenu.FillPartyAttributes();
+            mPartyMenu.mCharacterSelected = false;
+
+            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 3);
+        }
+        else
+        {
+            mPartyMenu.mFirstCharacterIndex = 3;
+            mPartyMenu.mCharacterSelected = true;
+        }
+    };
+
     mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
     mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
 }
 
 SceneExploration::~SceneExploration()
 {
+
 }
 
 void SceneExploration::Setup(SDL_Renderer* renderer)
@@ -591,6 +658,21 @@ void SceneExploration::AskAboutKeyword(int index)
         }
         
     }
+}
+
+void SceneExploration::SwapCharacters(int first, int second)
+{
+    SDL_Texture* temp = mCharacters[first].mSpriteSheet;
+    mCharacters[first].mSpriteSheet = mCharacters[second].mSpriteSheet;
+    mCharacters[second].mSpriteSheet = temp;
+
+    std::map<std::string, Animation> tempAnims = mCharacters[first].mAnimations;
+    mCharacters[first].mAnimations = mCharacters[second].mAnimations;
+    mCharacters[second].mAnimations = tempAnims;
+
+    std::string tempAnim = mCharacters[first].mCurrentAnimation;
+    mCharacters[first].mCurrentAnimation = mCharacters[second].mCurrentAnimation;
+    mCharacters[second].mCurrentAnimation = tempAnim;
 }
 
 void SceneExploration::Shutdown()
@@ -933,6 +1015,7 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         mCharacters[i].Render(renderer);
     }
 
+    // Render switch
     switch (mExplorationState)
     {
         case ES_EXPLORING:

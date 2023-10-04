@@ -46,6 +46,7 @@ public:
 
 	void AskAboutKeyword(int index);
 	void ClearInteractedActor() { mInteractedActor = nullptr; }
+	void SwapCharacters(int first, int second);
 
 	std::string mFileName;
 
@@ -83,7 +84,7 @@ protected:
 
 	ActorNpc* mInteractedActor = nullptr;
 
-	int mStepsUntilEncounterMax = 5;
+	int mStepsUntilEncounterMax = 99;
 	int mStepsUntilEncounter = mStepsUntilEncounterMax;
 
 	Vec2 mCharacterUIPositions[4] =

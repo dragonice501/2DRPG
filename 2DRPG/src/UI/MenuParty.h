@@ -14,7 +14,11 @@ public:
 
 	void Render(static SDL_Renderer* renderer) override;
 
+	void FillPartyAttributes();
+
 	bool mIsMainMenu = false;
+	bool mCharacterSelected = false;
+	int mFirstCharacterIndex = 0;
 
 public:
 	Vec2 mCharacterUIPositions[4] =

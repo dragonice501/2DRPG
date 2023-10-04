@@ -1,47 +1,47 @@
 Animation IdleUp 4 4 1
-Frame 0 0 32 32
-Frame 0 0 32 32
-Frame 32 0 32 32
-Frame 32 0 32 32
+Frame 0 64 32 32
+Frame 0 64 32 32
+Frame 96 64 32 32
+Frame 96 64 32 32
 
 Animation IdleDown 4 4 1
-Frame 0 32 32 32
-Frame 0 32 32 32
-Frame 32 32 32 32
-Frame 32 32 32 32
+Frame 0 96 32 32
+Frame 0 96 32 32
+Frame 32 96 32 32
+Frame 32 96 32 32
 
 Animation IdleLeft 4 4 1
-Frame 32 64 32 32
-Frame 32 64 32 32
-Frame 64 64 32 32
-Frame 64 64 32 32
+Frame 0 128 32 32
+Frame 0 128 32 32
+Frame 64 128 32 32
+Frame 64 128 32 32
 
 Animation IdleRight 4 4 1
-Frame 32 96 32 32
-Frame 32 96 32 32
-Frame 64 96 32 32
-Frame 64 96 32 32
+Frame 0 160 32 32
+Frame 0 160 32 32
+Frame 64 160 32 32
+Frame 64 160 32 32
 
 Animation MovingUp 4 8 1
-Frame 0 0 32 32
-Frame 32 0 32 32
-Frame 64 0 32 32
-Frame 96 0 32 32
-
-Animation MovingDown 4 8 1
-Frame 0 32 32 32
-Frame 32 32 32 32
-Frame 64 32 32 32
-Frame 96 32 32 32
-
-Animation MovingLeft 4 8 1
 Frame 0 64 32 32
 Frame 32 64 32 32
 Frame 64 64 32 32
 Frame 96 64 32 32
 
-Animation MovingRight 4 8 1
+Animation MovingDown 4 8 1
 Frame 0 96 32 32
 Frame 32 96 32 32
 Frame 64 96 32 32
 Frame 96 96 32 32
+
+Animation MovingLeft 4 8 1
+Frame 0 128 32 32
+Frame 32 128 32 32
+Frame 64 128 32 32
+Frame 96 128 32 32
+
+Animation MovingRight 4 8 1
+Frame 0 160 32 32
+Frame 32 160 32 32
+Frame 64 160 32 32
+Frame 96 160 32 32

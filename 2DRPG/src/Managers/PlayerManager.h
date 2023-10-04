@@ -24,8 +24,6 @@ public:
 	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
 	static const std::vector<std::string>& GetBestiaryKeywords() { return mBestiaryKeywords; }
 
-	static void LearnNewKeyword(const std::string& keyword) { mLearnedKeywords.push_back(keyword); }
-
 	static void LearnNewPeopleKeyword(const std::string& keyword) { mPeopleKeywords.push_back(keyword); }
 	static void LearnNewPlaceKeyword(const std::string& keyword) { mPlacesKeywords.push_back(keyword); }
 	static void LearnNewMysteryKeyword(const std::string& keyword) { mMysteryKeywords.push_back(keyword); }
@@ -35,10 +33,11 @@ public:
 	static bool CheckLevelUp(int& outIndex);
 	static CharacterAttributes LevelUp(int characterIndex);
 
+	static void SwapCharacters(int first, int second);
+
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
-	static std::vector<std::string> mLearnedKeywords;
 
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;
