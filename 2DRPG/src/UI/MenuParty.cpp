@@ -5,7 +5,66 @@ MenuParty::MenuParty() :
 {
     mIsMainMenu = true;
 
-    // Party Money
+    SetupMoneyPanel();
+    SetupMainPanel();
+    SetupPartyPanel();
+    SetupStatusPanel();
+}
+
+void MenuParty::Render(SDL_Renderer* renderer)
+{
+    SDL_Rect firstRect;
+    std::string string;
+
+    if (mMoneyPanel.mIsActive) mMoneyPanel.Render();
+
+    if (mMainPanel.mIsActive) mMainPanel.Render();
+
+    switch (mPanelState)
+    {
+        case MenuParty::PS_PARTY:
+        {
+            mPartyPanel.Render();
+            break;
+        }
+        case MenuParty::PS_STATUS:
+        {
+            mStatusPanel.Render();
+            mStatusLevelText.Render();
+            mStatusHPText.Render();
+            mStatusMPText.Render();
+            mStatusCurrentXPText.Render();
+            mStatusNextLevelText.Render();
+            mStatusStrengthText.Render();
+            mStatusDefenseText.Render();
+            mStatusIntelligenceText.Render();
+            mStatusSpeedText.Render();
+            mStatusSkillText.Render();
+            mStatusLuckText.Render();
+            break;
+        }
+        case MenuParty::PS_INVENTORY:
+        {
+            break;
+        }
+        case MenuParty::PS_JOURNAL:
+        {
+            break;
+        }
+        case MenuParty::PS_EQUIP:
+        {
+            break;
+        }
+        case MenuParty::PS_MAGIC:
+        {
+            break;
+        }
+    }
+}
+
+void MenuParty::SetupMoneyPanel()
+{
+    // Money Panel
     mMoneyPanel.mIsActive = true;
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMoneyPanel.mPosition =
@@ -22,8 +81,12 @@ MenuParty::MenuParty() :
     UIText moneyText = { "10000g" };
     moneyText.mPosition = { mMoneyPanel.mPosition.x + TEXT_PADDING, mMoneyPanel.mPosition.y + TEXT_PADDING };
     mMoneyPanel.mText.push_back(moneyText);
+}
 
+void MenuParty::SetupMainPanel()
+{
     // Main Panel
+    int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMainPanel.mIsActive = true;
     mMainPanel.mPosition =
     {
@@ -55,12 +118,7 @@ MenuParty::MenuParty() :
 
     mPartyButton.OnSelected = [this]()
     {
-        
-    };
-    mPartyButton.OnUpAction = [this]()
-    {
-        mCurrentButton = &mExitButton;
-        mCurrentButton->OnSelected();
+
     };
     mPartyButton.OnDownAction = [this]()
     {
@@ -69,12 +127,13 @@ MenuParty::MenuParty() :
     };
     mPartyButton.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mFirstCharacterButton;
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mPartyButtonOne;
     };
 
     mStatusButton.OnSelected = [this]()
     {
-        
+
     };
     mStatusButton.OnUpAction = [this]()
     {
@@ -86,6 +145,12 @@ MenuParty::MenuParty() :
         mCurrentButton = &mInventoryButton;
         mCurrentButton->OnSelected();
     };
+    mStatusButton.OnAcceptAction = [this]()
+    {
+        SetStatusButtonsText();
+        SetPanelState(PS_STATUS);
+        mCurrentButton = &mStatusButtonOne;
+    };
     mStatusButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
@@ -93,7 +158,7 @@ MenuParty::MenuParty() :
 
     mInventoryButton.OnSelected = [this]()
     {
-       
+
     };
     mInventoryButton.OnUpAction = [this]()
     {
@@ -112,7 +177,7 @@ MenuParty::MenuParty() :
 
     mJournalButton.OnSelected = [this]()
     {
-        
+
     };
     mJournalButton.OnUpAction = [this]()
     {
@@ -131,7 +196,7 @@ MenuParty::MenuParty() :
 
     mEquipButton.OnSelected = [this]()
     {
-        
+
     };
     mEquipButton.OnUpAction = [this]()
     {
@@ -150,7 +215,7 @@ MenuParty::MenuParty() :
 
     mMagicButton.OnSelected = [this]()
     {
-        
+
     };
     mMagicButton.OnUpAction = [this]()
     {
@@ -169,23 +234,21 @@ MenuParty::MenuParty() :
 
     mExitButton.OnSelected = [this]()
     {
-        
+
     };
     mExitButton.OnUpAction = [this]()
     {
         mCurrentButton = &mMagicButton;
         mCurrentButton->OnSelected();
     };
-    mExitButton.OnDownAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-        mCurrentButton->OnSelected();
-    };
     mExitButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
+}
 
+void MenuParty::SetupPartyPanel()
+{
     // Party Panel
     mPartyPanel.mIsActive = true;
     mPartyPanel.mPosition =
@@ -201,92 +264,260 @@ MenuParty::MenuParty() :
 
     FillPartyAttributes();
 
-    mFirstCharacterButton.OnDownAction = [this]()
+    mPartyButtonOne.OnDownAction = [this]()
     {
-        mCurrentButton = &mThirdCharacterButton;
+        mCurrentButton = &mPartyButtonThree;
     };
-    mFirstCharacterButton.OnRightAction = [this]()
+    mPartyButtonOne.OnRightAction = [this]()
     {
-        mCurrentButton = &mSecondCharacterButton;
+        mCurrentButton = &mPartyButtonTwo;
     };
-    mFirstCharacterButton.OnAcceptAction = [this]()
+    mPartyButtonOne.OnAcceptAction = [this]()
     {
-        
+
     };
-    mFirstCharacterButton.OnCancelAction = [this]()
+    mPartyButtonOne.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mSecondCharacterButton.OnDownAction = [this]()
+    mPartyButtonTwo.OnDownAction = [this]()
     {
-        mCurrentButton = &mFourthCharacterButton;
+        mCurrentButton = &mPartyButtonFour;
     };
-    mSecondCharacterButton.OnLeftAction = [this]()
+    mPartyButtonTwo.OnLeftAction = [this]()
     {
-        mCurrentButton = &mFirstCharacterButton;
+        mCurrentButton = &mPartyButtonOne;
     };
-    mSecondCharacterButton.OnAcceptAction = [this]()
+    mPartyButtonTwo.OnAcceptAction = [this]()
     {
-        
+
     };
-    mSecondCharacterButton.OnCancelAction = [this]()
+    mPartyButtonTwo.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mThirdCharacterButton.OnUpAction = [this]()
+    mPartyButtonThree.OnUpAction = [this]()
     {
-        mCurrentButton = &mFirstCharacterButton;
+        mCurrentButton = &mPartyButtonOne;
     };
-    mThirdCharacterButton.OnRightAction = [this]()
+    mPartyButtonThree.OnRightAction = [this]()
     {
-        mCurrentButton = &mFourthCharacterButton;
+        mCurrentButton = &mPartyButtonFour;
     };
-    mThirdCharacterButton.OnAcceptAction = [this]()
+    mPartyButtonThree.OnAcceptAction = [this]()
     {
-        
+
     };
-    mThirdCharacterButton.OnCancelAction = [this]()
+    mPartyButtonThree.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mFourthCharacterButton.OnUpAction = [this]()
+    mPartyButtonFour.OnUpAction = [this]()
     {
-        mCurrentButton = &mSecondCharacterButton;
+        mCurrentButton = &mPartyButtonTwo;
     };
-    mFourthCharacterButton.OnLeftAction = [this]()
+    mPartyButtonFour.OnLeftAction = [this]()
     {
-        mCurrentButton = &mThirdCharacterButton;
+        mCurrentButton = &mPartyButtonThree;
     };
-    mFourthCharacterButton.OnAcceptAction = [this]()
+    mPartyButtonFour.OnAcceptAction = [this]()
     {
-        
+
     };
-    mFourthCharacterButton.OnCancelAction = [this]()
+    mPartyButtonFour.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mPartyPanel.mButtons.push_back(&mFirstCharacterButton);
-    mPartyPanel.mButtons.push_back(&mSecondCharacterButton);
-    mPartyPanel.mButtons.push_back(&mThirdCharacterButton);
-    mPartyPanel.mButtons.push_back(&mFourthCharacterButton);
-    
-    mCurrentButton = &mPartyButton;
+    mPartyPanel.mButtons.push_back(&mPartyButtonOne);
+    mPartyPanel.mButtons.push_back(&mPartyButtonTwo);
+    mPartyPanel.mButtons.push_back(&mPartyButtonThree);
+    mPartyPanel.mButtons.push_back(&mPartyButtonFour);
 }
 
-void MenuParty::Render(SDL_Renderer* renderer)
+void MenuParty::SetupStatusPanel()
 {
-    SDL_Rect firstRect;
-    std::string string;
+    // Status Panel
+    mStatusPanel.mIsActive = false;
+    mStatusPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
+        mMoneyPanel.mPosition.y
+    };
+    mStatusPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        mMoneyPanel.mSize.y + mMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
+    };
 
-    if (mMoneyPanel.mIsActive) mMoneyPanel.Render();
+    mStatusButtonOne.mPosition = mStatusPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusButtonTwo.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mStatusButtonThree.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mStatusButtonFour.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.75f, TEXT_PADDING);
 
-    if (mMainPanel.mIsActive) mMainPanel.Render();
+    mStatusButtonOne.OnRightAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonTwo;
+        SetStatusCharacterAttributes(1);
+    };
+    mStatusButtonOne.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mStatusButton;
+    };
 
-    if (mPartyPanel.mIsActive) mPartyPanel.Render();
+    mStatusButtonTwo.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonOne;
+        SetStatusCharacterAttributes(0);
+    };
+    mStatusButtonTwo.OnRightAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonThree;
+        SetStatusCharacterAttributes(2);
+    };
+    mStatusButtonTwo.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mStatusButton;
+    };
+
+    mStatusButtonThree.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonTwo;
+        SetStatusCharacterAttributes(1);
+    };
+    mStatusButtonThree.OnRightAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonFour;
+        SetStatusCharacterAttributes(3);
+    };
+    mStatusButtonThree.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mStatusButton;
+    };
+
+    mStatusButtonFour.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonThree;
+        SetStatusCharacterAttributes(2);
+    };
+    mStatusButtonFour.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mStatusButton;
+    };
+    mCurrentButton = &mPartyButton;
+
+    mStatusPanel.mButtons.push_back(&mStatusButtonOne);
+    mStatusPanel.mButtons.push_back(&mStatusButtonTwo);
+    mStatusPanel.mButtons.push_back(&mStatusButtonThree);
+    mStatusPanel.mButtons.push_back(&mStatusButtonFour);
+
+    float fontLength;
+
+    Vec2 tempTextPos;
+
+    UIText statusText;
+    statusText.mPosition = mStatusPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING + (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING);
+    statusText.mText = "Lv. ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 2);
+    statusText.mText = "HP ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusHPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "MP ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusMPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 2);
+    statusText.mText = "Current Exp ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusCurrentXPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Next Level ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusNextLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.5f, TEXT_PADDING + (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING);
+    statusText.mText = "Str ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusStrengthText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Def ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusDefenseText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Int ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusIntelligenceText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Spd ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusSpeedText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Skl ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusSkillText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    statusText.mText = "Lck ";
+    mStatusPanel.mText.push_back(statusText);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusLuckText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+
+    SetStatusCharacterAttributes(0);
+}
+
+void MenuParty::SetPanelState(EPanelState state)
+{
+    if (state == PS_PARTY)
+    {
+        mStatusPanel.mIsActive = true;
+        mPanelState = PS_PARTY;
+    }
+    else mPartyPanel.mIsActive = false;
+
+    if (state == PS_STATUS)
+    {
+        mStatusPanel.mIsActive = true;
+        mPanelState = PS_STATUS;
+    }
+    else mStatusPanel.mIsActive = false;
 }
 
 void MenuParty::FillPartyAttributes()
@@ -298,18 +529,18 @@ void MenuParty::FillPartyAttributes()
     UIText text;
 
     // First Character Button
-    mFirstCharacterButton.mPosition =
+    mPartyButtonOne.mPosition =
     {
         mPartyPanel.mPosition.x + TEXT_PADDING,
         mPartyPanel.mPosition.y + TEXT_PADDING
     };
-    mFirstCharacterButton.mText = attributes.characterName;
+    mPartyButtonOne.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
     text =
     {
         string,
-        mFirstCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+        mPartyButtonOne.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -317,7 +548,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -325,7 +556,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -333,25 +564,25 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFirstCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
     };
     mPartyPanel.mText.push_back(text);
 
     // Second Character Button
     attributes = PlayerManager::GetCharacterAttributes()[1];
 
-    mSecondCharacterButton.mPosition =
+    mPartyButtonTwo.mPosition =
     {
         mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
         mPartyPanel.mPosition.y + TEXT_PADDING
     };
-    mSecondCharacterButton.mText = attributes.characterName;
+    mPartyButtonTwo.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
     text =
     {
         string,
-        mSecondCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+        mPartyButtonTwo.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -359,7 +590,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -367,7 +598,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -375,25 +606,25 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mSecondCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
     };
     mPartyPanel.mText.push_back(text);
 
     // Third Character Button
     attributes = PlayerManager::GetCharacterAttributes()[2];
 
-    mThirdCharacterButton.mPosition =
+    mPartyButtonThree.mPosition =
     {
         mPartyPanel.mPosition.x + TEXT_PADDING,
         mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
     };
-    mThirdCharacterButton.mText = attributes.characterName;
+    mPartyButtonThree.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
     text =
     {
         string,
-        mThirdCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+        mPartyButtonThree.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -401,7 +632,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -409,7 +640,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -417,25 +648,25 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mThirdCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
     };
     mPartyPanel.mText.push_back(text);
 
     // Fourth Character Button
     attributes = PlayerManager::GetCharacterAttributes()[3];
 
-    mFourthCharacterButton.mPosition =
+    mPartyButtonFour.mPosition =
     {
         mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
         mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
     };
-    mFourthCharacterButton.mText = attributes.characterName;
+    mPartyButtonFour.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
     text =
     {
         string,
-        mFourthCharacterButton.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
+        mPartyButtonFour.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -443,7 +674,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
+        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -451,7 +682,7 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
+        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
     };
     mPartyPanel.mText.push_back(text);
 
@@ -459,7 +690,51 @@ void MenuParty::FillPartyAttributes()
     text =
     {
         string,
-        mFourthCharacterButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
+        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
     };
     mPartyPanel.mText.push_back(text);
+}
+
+void MenuParty::SetStatusButtonsText()
+{
+    mStatusButtonOne.mText = PlayerManager::GetCharacterAttributes()[0].characterName;
+    mStatusButtonTwo.mText = PlayerManager::GetCharacterAttributes()[1].characterName;
+    mStatusButtonThree.mText = PlayerManager::GetCharacterAttributes()[2].characterName;
+    mStatusButtonFour.mText = PlayerManager::GetCharacterAttributes()[3].characterName;
+}
+
+void MenuParty::SetStatusCharacterAttributes(int index)
+{
+    mStatusLevelText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].level);
+
+    mStatusHPText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].health) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].healthMax);
+
+    mStatusMPText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax);
+
+    mStatusCurrentXPText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].exp);
+
+    mStatusNextLevelText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].expNextLevel);
+
+    mStatusStrengthText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].strength);
+
+    mStatusDefenseText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].defense);
+    
+    mStatusIntelligenceText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].intelligence);
+
+    mStatusSpeedText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].speed);
+
+    mStatusSkillText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].skill);
+
+    mStatusLuckText.mText =
+        std::to_string(PlayerManager::GetCharacterAttributes()[index].luck);
 }

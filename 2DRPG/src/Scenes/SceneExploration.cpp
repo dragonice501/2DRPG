@@ -365,8 +365,8 @@ SceneExploration::SceneExploration()
         mExplorationState = ES_EXPLORING;
     };
 
-    // Party
-    mPartyMenu.mFirstCharacterButton.OnAcceptAction = [this]()
+    // Party Panel
+    mPartyMenu.mPartyButtonOne.OnAcceptAction = [this]()
     {
         if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 0)
         {
@@ -382,7 +382,7 @@ SceneExploration::SceneExploration()
             mPartyMenu.mCharacterSelected = true;
         }
     };
-    mPartyMenu.mSecondCharacterButton.OnAcceptAction = [this]()
+    mPartyMenu.mPartyButtonTwo.OnAcceptAction = [this]()
     {
         if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 1)
         {
@@ -398,7 +398,7 @@ SceneExploration::SceneExploration()
             mPartyMenu.mCharacterSelected = true;
         }
     };
-    mPartyMenu.mThirdCharacterButton.OnAcceptAction = [this]()
+    mPartyMenu.mPartyButtonThree.OnAcceptAction = [this]()
     {
         if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 2)
         {
@@ -414,7 +414,7 @@ SceneExploration::SceneExploration()
             mPartyMenu.mCharacterSelected = true;
         }
     };
-    mPartyMenu.mFourthCharacterButton.OnAcceptAction = [this]()
+    mPartyMenu.mPartyButtonFour.OnAcceptAction = [this]()
     {
         if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 3)
         {

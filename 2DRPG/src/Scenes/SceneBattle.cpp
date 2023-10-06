@@ -384,14 +384,6 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 	BuildTurnOrder();
 	mBattleState = BS_MONSTERS_APPEARED;
-	if (!mBattleTurns[mTurnIndex]->isEnemy)
-	{
-		mBattleState = BS_SELECTING_ACTION;
-	}
-	else
-	{
-		mBattleState = BS_ENEMY_ATTACKING;
-	}
 }
 
 void SceneBattle::Shutdown()
@@ -472,6 +464,7 @@ void SceneBattle::Update(const float dt)
 				if (!mBattleTurns[mTurnIndex]->isEnemy)
 				{
 					mBattleState = BS_SELECTING_ACTION;
+					SetPlayerIndex();
 				}
 				else
 				{
@@ -510,7 +503,6 @@ void SceneBattle::Update(const float dt)
 
 				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.health -= mDamageDealt;
 				CharacterAttributes& enemyAttributes = mBattleEnemies[mBattleSelectedEnemyIndex]->attributes;
-				std::cout << enemyAttributes.characterName << ' ' << enemyAttributes.health << '/' << enemyAttributes.healthMax << std::endl << std::endl;
 
 				if (enemyAttributes.health <= 0)
 				{
@@ -711,6 +703,7 @@ void SceneBattle::NextTurn()
 		{
 			mBattleState = BS_SELECTING_ACTION;
 			mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
+			SetPlayerIndex();
 		}
 		else
 		{
@@ -723,16 +716,22 @@ void SceneBattle::NextTurn()
 		mBattleState = BS_SELECTING_ACTION;
 		mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
 		mBattleSelectedEnemyIndex = 0;
-		for (int i = 0; i < mBattleCharacters.size(); i++)
-		{
-			if (mBattleCharacters[i] == mBattleTurns[mTurnIndex])
-			{
-				mCurrentPlayerIndex = i;
-				break;
-			}
-		}
+		SetPlayerIndex();
 	}
 	else mBattleState = BS_ENEMY_ATTACKING;
+}
+
+void SceneBattle::SetPlayerIndex()
+{
+	mBattleState = BS_SELECTING_ACTION;
+	for (int i = 0; i < mBattleCharacters.size(); i++)
+	{
+		if (mBattleCharacters[i] == mBattleTurns[mTurnIndex])
+		{
+			mCurrentPlayerIndex = i;
+			break;
+		}
+	}
 }
 
 void SceneBattle::SelectFirstEnemy()

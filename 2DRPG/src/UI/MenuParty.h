@@ -9,12 +9,31 @@
 
 class MenuParty : public Menu
 {
+private:
+	enum EPanelState
+	{
+		PS_PARTY,
+		PS_STATUS,
+		PS_INVENTORY,
+		PS_JOURNAL,
+		PS_EQUIP,
+		PS_MAGIC
+	};
+
 public:
 	MenuParty();
 
 	void Render(static SDL_Renderer* renderer) override;
 
+	void SetupMoneyPanel();
+	void SetupMainPanel();
+	void SetupPartyPanel();
+	void SetupStatusPanel();
+
+	void SetPanelState(EPanelState state);
 	void FillPartyAttributes();
+	void SetStatusButtonsText();
+	void SetStatusCharacterAttributes(int index);
 
 	bool mIsMainMenu = false;
 	bool mCharacterSelected = false;
@@ -29,6 +48,8 @@ public:
 		Vec2(1.0f, 1.2f)
 	};
 
+	EPanelState mPanelState = PS_PARTY;
+
 	UIPanel mMoneyPanel;
 
 	UIPanel mMainPanel;
@@ -41,12 +62,29 @@ public:
 	UIButton mExitButton;
 
 	UIPanel mPartyPanel;
-	UIButton mFirstCharacterButton;
-	UIButton mSecondCharacterButton;
-	UIButton mThirdCharacterButton;
-	UIButton mFourthCharacterButton;
+	UIButton mPartyButtonOne;
+	UIButton mPartyButtonTwo;
+	UIButton mPartyButtonThree;
+	UIButton mPartyButtonFour;
 
-private:
+	UIPanel mStatusPanel;
+	UIButton mStatusButtonOne;
+	UIButton mStatusButtonTwo;
+	UIButton mStatusButtonThree;
+	UIButton mStatusButtonFour;
+
+	UIText mStatusLevelText;
+	UIText mStatusHPText;
+	UIText mStatusMPText;
+	UIText mStatusCurrentXPText;
+	UIText mStatusNextLevelText;
+	UIText mStatusStrengthText;
+	UIText mStatusDefenseText;
+	UIText mStatusIntelligenceText;
+	UIText mStatusSpeedText;
+	UIText mStatusSkillText;
+	UIText mStatusLuckText;
+
 	std::vector<UIButton*> mMainMenuButtons = 
 	{
 		&mPartyButton,

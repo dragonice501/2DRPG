@@ -43,7 +43,7 @@ Level 1
 Health 22 
 Magic 12
 Strength 13
-Defnse 12
+Defense 12
 Intelligence 3
 Speed 2
 Skill 4

@@ -40,6 +40,7 @@ public:
 	void BuildTurnOrder();
 	void NextTurn();
 
+	void SetPlayerIndex();
 	void SelectFirstEnemy();
 	bool SelectEnemy(int index);
 	bool SearchForEnemyUp(int index);
