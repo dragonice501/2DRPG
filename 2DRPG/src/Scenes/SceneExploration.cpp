@@ -875,12 +875,9 @@ void SceneExploration::Input()
             {
                 mPartyMenu.GetCurrentButton()->OnAcceptAction();
             }
-            else if (InputManager::CancelPressed())
+            else if (InputManager::CancelPressed() && mPartyMenu.GetCurrentButton()->OnCancelAction)
             {
-                if (mPartyMenu.GetCurrentButton()->OnCancelAction)
-                {
-                    mPartyMenu.GetCurrentButton()->OnCancelAction();
-                }
+                mPartyMenu.GetCurrentButton()->OnCancelAction();
             }
             break;
         }

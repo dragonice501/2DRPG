@@ -29,11 +29,16 @@ public:
 	void SetupMainPanel();
 	void SetupPartyPanel();
 	void SetupStatusPanel();
+	void SetupInventoryPanel();
+	void SetupJournalPanel();
+	void SetupEquipPanel();
 
 	void SetPanelState(EPanelState state);
 	void FillPartyAttributes();
 	void SetStatusButtonsText();
 	void SetStatusCharacterAttributes(int index);
+
+	void SetEquipButtonsText();
 
 	bool mIsMainMenu = false;
 	bool mCharacterSelected = false;
@@ -67,13 +72,15 @@ public:
 	UIButton mPartyButtonThree;
 	UIButton mPartyButtonFour;
 
-	UIPanel mStatusPanel;
+	UIPanel mStatusButtonPanel;
 	UIButton mStatusButtonOne;
 	UIButton mStatusButtonTwo;
 	UIButton mStatusButtonThree;
 	UIButton mStatusButtonFour;
 
+	UIPanel mStatusAttributesPanel;
 	UIText mStatusLevelText;
+	UIText mStatusClassText;
 	UIText mStatusHPText;
 	UIText mStatusMPText;
 	UIText mStatusCurrentXPText;
@@ -84,6 +91,43 @@ public:
 	UIText mStatusSpeedText;
 	UIText mStatusSkillText;
 	UIText mStatusLuckText;
+
+	UIPanel mInventoryButtonsPanel;
+	UIButton mInventoryButtonOne;
+	UIButton mInventoryButtonTwo;
+	UIButton mInventoryButtonThree;
+
+	UIPanel mJournalButtonsPanel;
+	UIButton mJournalButtonOne;
+	UIButton mJournalButtonTwo;
+	UIButton mJournalButtonThree;
+	UIButton mJournalButtonFour;
+
+	UIPanel mJournalKeywordsPanel;
+	UIButton mKeywordsButtonOne;
+	UIButton mKeywordsButtonTwo;
+	UIButton mKeywordsButtonThree;
+	UIButton mKeywordsButtonFour;
+
+	UIPanel mEquipButtonsPanel;
+	UIButton mEquipButtonOne;
+	UIButton mEquipButtonTwo;
+	UIButton mEquipButtonThree;
+	UIButton mEquipButtonFour;
+
+	UIPanel mEquipmentPanel;
+	UIButton mEquipmentWeaponButton;
+	UIButton mEquipmentShieldButton;
+	UIButton mEquipmentHeadButton;
+	UIButton mEquipmentChestButton;
+	UIButton mEquipmentArmsButton;
+	UIButton mEquipmentLegsButton;
+	UIText mEquipmentWeaponText;
+	UIText mEquipmentShieldText;
+	UIText mEquipmentHeadText;
+	UIText mEquipmentChestText;
+	UIText mEquipmentArmsText;
+	UIText mEquipmentLegsText;
 
 	std::vector<UIButton*> mMainMenuButtons = 
 	{

@@ -24,6 +24,11 @@ public:
 	inline void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
 	inline void SetPreviousButton(UIButton* button) { mPreviousButton = button; }
 
+	inline void SelectPreviousButton()
+	{
+		if (mPreviousButton) mCurrentButton = mPreviousButton;
+	}
+
 	inline void CurrentButtonSelect()
 	{
 		if (mCurrentButton->OnSelected)

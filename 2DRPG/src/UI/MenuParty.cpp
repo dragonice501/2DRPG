@@ -1,7 +1,9 @@
 #include "MenuParty.h"
 
 MenuParty::MenuParty() :
-    mPartyButton("Party"), mStatusButton("Status"), mInventoryButton("Inventory"), mJournalButton("Journal"), mEquipButton("Equip"), mMagicButton("Magic"), mExitButton("Exit")
+    mPartyButton("Party"), mStatusButton("Status"), mInventoryButton("Inventory"), mJournalButton("Journal"), mEquipButton("Equip"), mMagicButton("Magic"), mExitButton("Exit"),
+    mJournalButtonOne("People"), mJournalButtonTwo("Place"), mJournalButtonThree("Mystery"), mJournalButtonFour("Bestiary"),
+    mInventoryButtonOne("Items"), mInventoryButtonTwo("Weapons"), mInventoryButtonThree("Armour")
 {
     mIsMainMenu = true;
 
@@ -9,6 +11,11 @@ MenuParty::MenuParty() :
     SetupMainPanel();
     SetupPartyPanel();
     SetupStatusPanel();
+    SetupInventoryPanel();
+    SetupJournalPanel();
+    SetupEquipPanel();
+
+    mCurrentButton = &mPartyButton;
 }
 
 void MenuParty::Render(SDL_Renderer* renderer)
@@ -29,8 +36,11 @@ void MenuParty::Render(SDL_Renderer* renderer)
         }
         case MenuParty::PS_STATUS:
         {
-            mStatusPanel.Render();
+            mStatusButtonPanel.Render();
+            mStatusAttributesPanel.Render();
+
             mStatusLevelText.Render();
+            mStatusClassText.Render();
             mStatusHPText.Render();
             mStatusMPText.Render();
             mStatusCurrentXPText.Render();
@@ -45,14 +55,26 @@ void MenuParty::Render(SDL_Renderer* renderer)
         }
         case MenuParty::PS_INVENTORY:
         {
+            mInventoryButtonsPanel.Render();
             break;
         }
         case MenuParty::PS_JOURNAL:
         {
+            mJournalButtonsPanel.Render();
+            mJournalKeywordsPanel.Render();
             break;
         }
         case MenuParty::PS_EQUIP:
         {
+            mEquipButtonsPanel.Render();
+            mEquipmentPanel.Render();
+
+            mEquipmentWeaponText.Render();
+            mEquipmentShieldText.Render();
+            mEquipmentHeadText.Render();
+            mEquipmentChestText.Render();
+            mEquipmentArmsText.Render();
+            mEquipmentLegsText.Render();
             break;
         }
         case MenuParty::PS_MAGIC:
@@ -64,7 +86,6 @@ void MenuParty::Render(SDL_Renderer* renderer)
 
 void MenuParty::SetupMoneyPanel()
 {
-    // Money Panel
     mMoneyPanel.mIsActive = true;
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMoneyPanel.mPosition =
@@ -85,7 +106,6 @@ void MenuParty::SetupMoneyPanel()
 
 void MenuParty::SetupMainPanel()
 {
-    // Main Panel
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMainPanel.mIsActive = true;
     mMainPanel.mPosition =
@@ -149,6 +169,7 @@ void MenuParty::SetupMainPanel()
     {
         SetStatusButtonsText();
         SetPanelState(PS_STATUS);
+        SetStatusCharacterAttributes(0);
         mCurrentButton = &mStatusButtonOne;
     };
     mStatusButton.OnCancelAction = [this]()
@@ -170,6 +191,11 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mJournalButton;
         mCurrentButton->OnSelected();
     };
+    mInventoryButton.OnAcceptAction = [this]()
+    {
+        SetPanelState(PS_INVENTORY);
+        mCurrentButton = &mInventoryButtonOne;
+    };
     mInventoryButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
@@ -189,6 +215,11 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mEquipButton;
         mCurrentButton->OnSelected();
     };
+    mJournalButton.OnAcceptAction = [this]()
+    {
+        SetPanelState(PS_JOURNAL);
+        mCurrentButton = &mJournalButtonOne;
+    };
     mJournalButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
@@ -207,6 +238,12 @@ void MenuParty::SetupMainPanel()
     {
         mCurrentButton = &mMagicButton;
         mCurrentButton->OnSelected();
+    };
+    mEquipButton.OnAcceptAction = [this]()
+    {
+        SetEquipButtonsText();
+        SetPanelState(PS_EQUIP);
+        mCurrentButton = &mEquipButtonOne;
     };
     mEquipButton.OnCancelAction = [this]()
     {
@@ -249,7 +286,6 @@ void MenuParty::SetupMainPanel()
 
 void MenuParty::SetupPartyPanel()
 {
-    // Party Panel
     mPartyPanel.mIsActive = true;
     mPartyPanel.mPosition =
     {
@@ -340,23 +376,22 @@ void MenuParty::SetupPartyPanel()
 
 void MenuParty::SetupStatusPanel()
 {
-    // Status Panel
-    mStatusPanel.mIsActive = false;
-    mStatusPanel.mPosition =
+    mStatusButtonPanel.mIsActive = false;
+    mStatusButtonPanel.mPosition =
     {
         mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
         mMoneyPanel.mPosition.y
     };
-    mStatusPanel.mSize =
+    mStatusButtonPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
-        mMoneyPanel.mSize.y + mMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
+        Font::fontHeight* TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mStatusButtonOne.mPosition = mStatusPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mStatusButtonTwo.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mStatusButtonThree.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.5f, TEXT_PADDING);
-    mStatusButtonFour.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.75f, TEXT_PADDING);
+    mStatusButtonOne.mPosition = mStatusButtonPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusButtonTwo.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mStatusButtonThree.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mStatusButtonFour.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mStatusButtonOne.OnRightAction = [this]()
     {
@@ -411,91 +446,105 @@ void MenuParty::SetupStatusPanel()
         SetPanelState(PS_PARTY);
         mCurrentButton = &mStatusButton;
     };
-    mCurrentButton = &mPartyButton;
 
-    mStatusPanel.mButtons.push_back(&mStatusButtonOne);
-    mStatusPanel.mButtons.push_back(&mStatusButtonTwo);
-    mStatusPanel.mButtons.push_back(&mStatusButtonThree);
-    mStatusPanel.mButtons.push_back(&mStatusButtonFour);
+    mStatusButtonPanel.mButtons.push_back(&mStatusButtonOne);
+    mStatusButtonPanel.mButtons.push_back(&mStatusButtonTwo);
+    mStatusButtonPanel.mButtons.push_back(&mStatusButtonThree);
+    mStatusButtonPanel.mButtons.push_back(&mStatusButtonFour);
+
+    mStatusAttributesPanel.mPosition =
+    {
+        mStatusButtonPanel.mPosition.x,
+        mMainPanel.mPosition.y
+    };
+    mStatusAttributesPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+    };
 
     float fontLength;
 
-    Vec2 tempTextPos;
-
     UIText statusText;
-    statusText.mPosition = mStatusPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING + (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING);
+    statusText.mPosition = mStatusAttributesPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
     statusText.mText = "Lv. ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 2);
+    mStatusClassText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusClassText.mText = GetClassName(PlayerManager::GetCharacterAttributes()[0].characterClass);
+
+    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
+    mStatusHPText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    statusText.mPosition = mStatusHPText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "HP ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusHPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "MP ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusMPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 2);
+    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING * 2);
     statusText.mText = "Current Exp ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusCurrentXPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Next Level ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusNextLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
-    statusText.mPosition = mStatusPanel.mPosition + Vec2(mStatusPanel.mSize.x * 0.5f, TEXT_PADDING + (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING);
+    statusText.mPosition = mStatusAttributesPanel.mPosition + Vec2(mStatusAttributesPanel.mSize.x * 0.5f, TEXT_PADDING);
     statusText.mText = "Str ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusStrengthText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Def ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusDefenseText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Int ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusIntelligenceText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Spd ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusSpeedText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Skl ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusSkillText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
 
     statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     statusText.mText = "Lck ";
-    mStatusPanel.mText.push_back(statusText);
+    mStatusAttributesPanel.mText.push_back(statusText);
 
     fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
     mStatusLuckText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
@@ -503,21 +552,443 @@ void MenuParty::SetupStatusPanel()
     SetStatusCharacterAttributes(0);
 }
 
+void MenuParty::SetupInventoryPanel()
+{
+    mInventoryButtonsPanel.mIsActive = false;
+    mInventoryButtonsPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
+        mMoneyPanel.mPosition.y
+    };
+    mInventoryButtonsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
+
+    mInventoryButtonOne.mPosition = mInventoryButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mInventoryButtonTwo.mPosition = mInventoryButtonsPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mInventoryButtonThree.mPosition = mInventoryButtonsPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+
+    mInventoryButtonOne.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonTwo;
+    };
+    mInventoryButtonOne.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mInventoryButton;
+    };
+
+    mInventoryButtonTwo.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonOne;
+    };
+    mInventoryButtonTwo.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonThree;
+    };
+    mInventoryButtonTwo.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mInventoryButton;
+    };
+
+    mInventoryButtonThree.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonTwo;
+    };
+    mInventoryButtonThree.OnRightAction = [this]()
+    {
+        
+    };
+    mInventoryButtonThree.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mInventoryButton;
+    };
+
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonOne);
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonTwo);
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonThree);
+}
+
+void MenuParty::SetupJournalPanel()
+{
+    mJournalButtonsPanel.mIsActive = false;
+    mJournalButtonsPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
+        mMoneyPanel.mPosition.y
+    };
+    mJournalButtonsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
+
+    mJournalButtonOne.mPosition = mJournalButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mJournalButtonTwo.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mJournalButtonThree.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mJournalButtonFour.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
+
+    mJournalButtonOne.OnRightAction = [this]()
+    {
+        mCurrentButton = &mJournalButtonTwo;
+    };
+    mJournalButtonOne.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mJournalButton;
+    };
+
+    mJournalButtonTwo.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mJournalButtonOne;
+    };
+    mJournalButtonTwo.OnRightAction = [this]()
+    {
+        mCurrentButton = &mJournalButtonThree;
+    };
+    mJournalButtonTwo.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mJournalButton;
+    };
+
+    mJournalButtonThree.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mJournalButtonTwo;
+    };
+    mJournalButtonThree.OnRightAction = [this]()
+    {
+        mCurrentButton = &mStatusButtonFour;
+    };
+    mJournalButtonThree.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mJournalButton;
+    };
+
+    mJournalButtonFour.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mJournalButtonThree;
+    };
+    mJournalButtonFour.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mJournalButton;
+    };
+
+    mJournalButtonsPanel.mButtons.push_back(&mJournalButtonOne);
+    mJournalButtonsPanel.mButtons.push_back(&mJournalButtonTwo);
+    mJournalButtonsPanel.mButtons.push_back(&mJournalButtonThree);
+    mJournalButtonsPanel.mButtons.push_back(&mJournalButtonFour);
+
+    mJournalKeywordsPanel.mPosition =
+    {
+        mJournalButtonsPanel.mPosition.x,
+        mMainPanel.mPosition.y
+    };
+    mJournalKeywordsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+    };
+
+    mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonOne);
+    mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonTwo);
+    mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonThree);
+    mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonFour);
+}
+
+void MenuParty::SetupEquipPanel()
+{
+    mEquipButtonsPanel.mIsActive = false;
+    mEquipButtonsPanel.mPosition =
+    {
+        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
+        mMoneyPanel.mPosition.y
+    };
+    mEquipButtonsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
+
+    mEquipButtonOne.mPosition = mEquipButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipButtonTwo.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mEquipButtonThree.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mEquipButtonFour.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
+
+    mEquipButtonOne.OnRightAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonTwo;
+        SetStatusCharacterAttributes(1);
+    };
+    mEquipButtonOne.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButton = &mEquipButtonOne;
+    };
+    mEquipButtonOne.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mEquipButton;
+    };
+
+    mEquipButtonTwo.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonOne;
+        SetStatusCharacterAttributes(0);
+    };
+    mEquipButtonTwo.OnRightAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonThree;
+        SetStatusCharacterAttributes(2);
+    };
+    mEquipButtonTwo.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButton = &mEquipButtonTwo;
+    };
+    mEquipButtonTwo.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mEquipButton;
+    };
+
+    mEquipButtonThree.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonTwo;
+        SetStatusCharacterAttributes(1);
+    };
+    mEquipButtonThree.OnRightAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonFour;
+        SetStatusCharacterAttributes(3);
+    };
+    mEquipButtonThree.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButton = &mEquipButtonThree;
+    };
+    mEquipButtonThree.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mEquipButton;
+    };
+
+    mEquipButtonFour.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mEquipButtonThree;
+        SetStatusCharacterAttributes(2);
+    };
+    mEquipButtonFour.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButton = &mEquipButtonFour;
+    };
+    mEquipButtonFour.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mEquipButton;
+    };
+
+    mEquipButtonsPanel.mButtons.push_back(&mEquipButtonOne);
+    mEquipButtonsPanel.mButtons.push_back(&mEquipButtonTwo);
+    mEquipButtonsPanel.mButtons.push_back(&mEquipButtonThree);
+    mEquipButtonsPanel.mButtons.push_back(&mEquipButtonFour);
+
+    mEquipmentPanel.mPosition =
+    {
+        mEquipButtonsPanel.mPosition.x,
+        mMainPanel.mPosition.y
+    };
+    mEquipmentPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+    };
+
+    float fontLength;
+
+    UIText equipmentText;
+    mEquipmentWeaponButton.mPosition = mEquipmentPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipmentWeaponButton.mText = "Wpn  ";
+
+    fontLength = Font::GetStringFontLength(equipmentText.mText.c_str()) * TEXT_SIZE;
+    mStatusLevelText.mPosition = equipmentText.mPosition + Vec2(fontLength, 0.0f);
+
+    fontLength = Font::GetStringFontLength(mEquipmentWeaponButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentWeaponText.mPosition = mEquipmentWeaponButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentWeaponText.mText = "Sword";
+
+    mEquipmentShieldButton.mPosition = mEquipmentWeaponButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentShieldButton.mText = "Shield  ";
+
+    fontLength = Font::GetStringFontLength(mEquipmentShieldButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentShieldText.mPosition = mEquipmentShieldButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentShieldText.mText = "Buckler";
+
+    mEquipmentHeadButton.mPosition = mEquipmentShieldButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentHeadButton.mText = "Head  ";
+
+    fontLength = Font::GetStringFontLength(mEquipmentHeadButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentHeadText.mPosition = mEquipmentHeadButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentHeadText.mText = "Helmet";
+
+    mEquipmentChestButton.mPosition = mEquipmentHeadButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentChestButton.mText = "Chest  ";
+
+    fontLength = Font::GetStringFontLength(mEquipmentChestButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentChestText.mPosition = mEquipmentChestButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentChestText.mText = "Mail";
+
+    mEquipmentArmsButton.mPosition = mEquipmentChestButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentArmsButton.mText = "Arms  ";
+
+    fontLength = Font::GetStringFontLength(mEquipmentArmsButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentArmsText.mPosition = mEquipmentArmsButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentArmsText.mText = "Gauntlet";
+
+    mEquipmentLegsButton.mPosition = mEquipmentArmsButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentLegsButton.mText = "Legs  ";
+
+    fontLength = Font::GetStringFontLength(mEquipmentLegsButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentLegsText.mPosition = mEquipmentLegsButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentLegsText.mText = "Greeves";
+
+    mEquipmentWeaponButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipmentShieldButton;
+    };
+    mEquipmentWeaponButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentShieldButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+    };
+    mEquipmentShieldButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipmentHeadButton;
+    };
+    mEquipmentShieldButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentHeadButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipmentShieldButton;
+    };
+    mEquipmentHeadButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipmentChestButton;
+    };
+    mEquipmentHeadButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentChestButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipmentHeadButton;
+    };
+    mEquipmentChestButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipmentArmsButton;
+    };
+    mEquipmentChestButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentArmsButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipmentChestButton;
+    };
+    mEquipmentArmsButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipmentLegsButton;
+    };
+    mEquipmentArmsButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentLegsButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipmentArmsButton;
+    };
+    mEquipmentLegsButton.OnCancelAction = [this]()
+    {
+        SelectPreviousButton();
+    };
+
+    mEquipmentPanel.mButtons.push_back(&mEquipmentWeaponButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentShieldButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentHeadButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentChestButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentArmsButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentLegsButton);
+}
+
 void MenuParty::SetPanelState(EPanelState state)
 {
     if (state == PS_PARTY)
     {
-        mStatusPanel.mIsActive = true;
+        mStatusButtonPanel.mIsActive = true;
         mPanelState = PS_PARTY;
     }
     else mPartyPanel.mIsActive = false;
 
     if (state == PS_STATUS)
     {
-        mStatusPanel.mIsActive = true;
+        mStatusButtonPanel.mIsActive = true;
+        mStatusAttributesPanel.mIsActive = true;
         mPanelState = PS_STATUS;
     }
-    else mStatusPanel.mIsActive = false;
+    else
+    {
+        mStatusButtonPanel.mIsActive = false;
+        mStatusAttributesPanel.mIsActive = false;
+    }
+
+    if (state == PS_JOURNAL)
+    {
+        mJournalButtonsPanel.mIsActive = true;
+        mJournalKeywordsPanel.mIsActive = true;
+        mPanelState = PS_JOURNAL;
+    }
+    else
+    {
+        mJournalButtonsPanel.mIsActive = false;
+        mJournalKeywordsPanel.mIsActive = false;
+    }
+
+    if (state == PS_INVENTORY)
+    {
+        mInventoryButtonsPanel.mIsActive = true;
+        mPanelState = PS_INVENTORY;
+    }
+    else
+    {
+        mInventoryButtonsPanel.mIsActive = false;
+    }
+
+    if (state == PS_EQUIP)
+    {
+        mInventoryButtonsPanel.mIsActive = true;
+        mPanelState = PS_EQUIP;
+    }
+    else
+    {
+        mInventoryButtonsPanel.mIsActive = false;
+    }
 }
 
 void MenuParty::FillPartyAttributes()
@@ -708,6 +1179,9 @@ void MenuParty::SetStatusCharacterAttributes(int index)
     mStatusLevelText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].level);
 
+    mStatusClassText.mText =
+        GetClassName(PlayerManager::GetCharacterAttributes()[index].characterClass);
+
     mStatusHPText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].health) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].healthMax);
 
@@ -737,4 +1211,12 @@ void MenuParty::SetStatusCharacterAttributes(int index)
 
     mStatusLuckText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].luck);
+}
+
+void MenuParty::SetEquipButtonsText()
+{
+    mEquipButtonOne.mText = PlayerManager::GetCharacterAttributes()[0].characterName;
+    mEquipButtonTwo.mText = PlayerManager::GetCharacterAttributes()[1].characterName;
+    mEquipButtonThree.mText = PlayerManager::GetCharacterAttributes()[2].characterName;
+    mEquipButtonFour.mText = PlayerManager::GetCharacterAttributes()[3].characterName;
 }
