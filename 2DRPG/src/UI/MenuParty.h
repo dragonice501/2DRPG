@@ -38,7 +38,12 @@ public:
 	void SetStatusButtonsText();
 	void SetStatusCharacterAttributes(int index);
 
+	void FillInventoryItemButtons();
+	void FillInventoryWeaponsButtons();
+	void FillInventoryArmourButtons();
+
 	void SetEquipButtonsText();
+	void FillEquipmentText(int partyIndex);
 
 	bool mIsMainMenu = false;
 	bool mCharacterSelected = false;
@@ -96,6 +101,12 @@ public:
 	UIButton mInventoryButtonOne;
 	UIButton mInventoryButtonTwo;
 	UIButton mInventoryButtonThree;
+
+	UIPanel mInventoryPanel;
+	UIButton mInventoryPanelButtonOne;
+	UIButton mInventoryPanelButtonTwo;
+	UIButton mInventoryPanelButtonThree;
+	UIButton mInventoryPanelButtonFour;
 
 	UIPanel mJournalButtonsPanel;
 	UIButton mJournalButtonOne;

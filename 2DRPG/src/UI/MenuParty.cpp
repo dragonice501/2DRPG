@@ -56,6 +56,7 @@ void MenuParty::Render(SDL_Renderer* renderer)
         case MenuParty::PS_INVENTORY:
         {
             mInventoryButtonsPanel.Render();
+            mInventoryPanel.Render();
             break;
         }
         case MenuParty::PS_JOURNAL:
@@ -242,6 +243,7 @@ void MenuParty::SetupMainPanel()
     mEquipButton.OnAcceptAction = [this]()
     {
         SetEquipButtonsText();
+        FillEquipmentText(0);
         SetPanelState(PS_EQUIP);
         mCurrentButton = &mEquipButtonOne;
     };
@@ -573,6 +575,7 @@ void MenuParty::SetupInventoryPanel()
     mInventoryButtonOne.OnRightAction = [this]()
     {
         mCurrentButton = &mInventoryButtonTwo;
+        FillInventoryWeaponsButtons();
     };
     mInventoryButtonOne.OnCancelAction = [this]()
     {
@@ -583,10 +586,12 @@ void MenuParty::SetupInventoryPanel()
     mInventoryButtonTwo.OnLeftAction = [this]()
     {
         mCurrentButton = &mInventoryButtonOne;
+        FillInventoryItemButtons();
     };
     mInventoryButtonTwo.OnRightAction = [this]()
     {
         mCurrentButton = &mInventoryButtonThree;
+        FillInventoryArmourButtons();
     };
     mInventoryButtonTwo.OnCancelAction = [this]()
     {
@@ -597,6 +602,7 @@ void MenuParty::SetupInventoryPanel()
     mInventoryButtonThree.OnLeftAction = [this]()
     {
         mCurrentButton = &mInventoryButtonTwo;
+        FillInventoryWeaponsButtons();
     };
     mInventoryButtonThree.OnRightAction = [this]()
     {
@@ -611,6 +617,57 @@ void MenuParty::SetupInventoryPanel()
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonOne);
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonTwo);
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonThree);
+
+    mInventoryPanel.mPosition =
+    {
+        mInventoryButtonsPanel.mPosition.x,
+        mMainPanel.mPosition.y
+    };
+    mInventoryPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+    };
+
+    mInventoryPanelButtonOne.mPosition = mInventoryPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mInventoryPanelButtonTwo.mPosition = mInventoryPanelButtonOne.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, 0.0f);
+    mInventoryPanelButtonThree.mPosition = mInventoryPanelButtonTwo.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, 0.0f);
+    mInventoryPanelButtonFour.mPosition = mInventoryPanelButtonThree.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, 0.0f);
+
+    mInventoryPanelButtonOne.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonTwo;
+    };
+
+    mInventoryPanelButtonTwo.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonOne;
+        
+    };
+    mInventoryPanelButtonTwo.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonThree;
+        
+    };
+
+    mInventoryPanelButtonThree.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonOne;
+    };
+    mInventoryPanelButtonThree.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonFour;
+    };
+
+    mInventoryPanelButtonFour.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryPanelButtonThree;
+    };
+
+    mInventoryPanel.mButtons.push_back(&mInventoryPanelButtonOne);
+    mInventoryPanel.mButtons.push_back(&mInventoryPanelButtonTwo);
+    mInventoryPanel.mButtons.push_back(&mInventoryPanelButtonThree);
+    mInventoryPanel.mButtons.push_back(&mInventoryPanelButtonFour);
 }
 
 void MenuParty::SetupJournalPanel()
@@ -725,6 +782,7 @@ void MenuParty::SetupEquipPanel()
     {
         mCurrentButton = &mEquipButtonTwo;
         SetStatusCharacterAttributes(1);
+        FillEquipmentText(1);
     };
     mEquipButtonOne.OnAcceptAction = [this]()
     {
@@ -741,11 +799,13 @@ void MenuParty::SetupEquipPanel()
     {
         mCurrentButton = &mEquipButtonOne;
         SetStatusCharacterAttributes(0);
+        FillEquipmentText(0);
     };
     mEquipButtonTwo.OnRightAction = [this]()
     {
         mCurrentButton = &mEquipButtonThree;
         SetStatusCharacterAttributes(2);
+        FillEquipmentText(2);
     };
     mEquipButtonTwo.OnAcceptAction = [this]()
     {
@@ -762,11 +822,13 @@ void MenuParty::SetupEquipPanel()
     {
         mCurrentButton = &mEquipButtonTwo;
         SetStatusCharacterAttributes(1);
+        FillEquipmentText(1);
     };
     mEquipButtonThree.OnRightAction = [this]()
     {
         mCurrentButton = &mEquipButtonFour;
         SetStatusCharacterAttributes(3);
+        FillEquipmentText(3);
     };
     mEquipButtonThree.OnAcceptAction = [this]()
     {
@@ -783,6 +845,7 @@ void MenuParty::SetupEquipPanel()
     {
         mCurrentButton = &mEquipButtonThree;
         SetStatusCharacterAttributes(2);
+        FillEquipmentText(2);
     };
     mEquipButtonFour.OnAcceptAction = [this]()
     {
@@ -812,6 +875,7 @@ void MenuParty::SetupEquipPanel()
     };
 
     float fontLength;
+    float vertSpacing = Font::fontHeight * TEXT_SIZE + TEXT_PADDING;
 
     UIText equipmentText;
     mEquipmentWeaponButton.mPosition = mEquipmentPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
@@ -822,42 +886,42 @@ void MenuParty::SetupEquipPanel()
 
     fontLength = Font::GetStringFontLength(mEquipmentWeaponButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentWeaponText.mPosition = mEquipmentWeaponButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentWeaponText.mText = "Sword";
+    mEquipmentWeaponText.mText = "";
 
-    mEquipmentShieldButton.mPosition = mEquipmentWeaponButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentShieldButton.mPosition = mEquipmentWeaponButton.mPosition + Vec2(0.0f, vertSpacing);
     mEquipmentShieldButton.mText = "Shield  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentShieldButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentShieldText.mPosition = mEquipmentShieldButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentShieldText.mText = "Buckler";
+    mEquipmentShieldText.mText = "";
 
-    mEquipmentHeadButton.mPosition = mEquipmentShieldButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentHeadButton.mPosition = mEquipmentShieldButton.mPosition + Vec2(0.0f, vertSpacing);
     mEquipmentHeadButton.mText = "Head  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentHeadButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentHeadText.mPosition = mEquipmentHeadButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentHeadText.mText = "Helmet";
+    mEquipmentHeadText.mText = "";
 
-    mEquipmentChestButton.mPosition = mEquipmentHeadButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentChestButton.mPosition = mEquipmentHeadButton.mPosition + Vec2(0.0f, vertSpacing);
     mEquipmentChestButton.mText = "Chest  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentChestButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentChestText.mPosition = mEquipmentChestButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentChestText.mText = "Mail";
+    mEquipmentChestText.mText = "";
 
-    mEquipmentArmsButton.mPosition = mEquipmentChestButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentArmsButton.mPosition = mEquipmentChestButton.mPosition + Vec2(0.0f, vertSpacing);
     mEquipmentArmsButton.mText = "Arms  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentArmsButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentArmsText.mPosition = mEquipmentArmsButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentArmsText.mText = "Gauntlet";
+    mEquipmentArmsText.mText = "";
 
-    mEquipmentLegsButton.mPosition = mEquipmentArmsButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentLegsButton.mPosition = mEquipmentArmsButton.mPosition + Vec2(0.0f, vertSpacing);
     mEquipmentLegsButton.mText = "Legs  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentLegsButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentLegsText.mPosition = mEquipmentLegsButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentLegsText.mText = "Greeves";
+    mEquipmentLegsText.mText = "";
 
     mEquipmentWeaponButton.OnDownAction = [this]()
     {
@@ -1213,10 +1277,52 @@ void MenuParty::SetStatusCharacterAttributes(int index)
         std::to_string(PlayerManager::GetCharacterAttributes()[index].luck);
 }
 
+void MenuParty::FillInventoryItemButtons()
+{
+    mInventoryPanelButtonOne.mIsActive = false;
+    mInventoryPanelButtonTwo.mIsActive = false;
+    mInventoryPanelButtonThree.mIsActive = false;
+    mInventoryPanelButtonFour.mIsActive = false;
+}
+
+void MenuParty::FillInventoryWeaponsButtons()
+{
+    mInventoryPanelButtonOne.mIsActive = false;
+    mInventoryPanelButtonTwo.mIsActive = false;
+    mInventoryPanelButtonThree.mIsActive = false;
+    mInventoryPanelButtonFour.mIsActive = false;
+
+    for (int i = 0; i < PlayerManager::GetInventoryWeapons().size(); i++)
+    {
+        mInventoryPanel.mButtons[i]->mIsActive = true;
+        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryWeapons()[i].mName;
+    }
+}
+
+void MenuParty::FillInventoryArmourButtons()
+{
+    mInventoryPanelButtonOne.mIsActive = false;
+    mInventoryPanelButtonTwo.mIsActive = false;
+    mInventoryPanelButtonThree.mIsActive = false;
+    mInventoryPanelButtonFour.mIsActive = false;
+}
+
 void MenuParty::SetEquipButtonsText()
 {
     mEquipButtonOne.mText = PlayerManager::GetCharacterAttributes()[0].characterName;
     mEquipButtonTwo.mText = PlayerManager::GetCharacterAttributes()[1].characterName;
     mEquipButtonThree.mText = PlayerManager::GetCharacterAttributes()[2].characterName;
     mEquipButtonFour.mText = PlayerManager::GetCharacterAttributes()[3].characterName;
+}
+
+void MenuParty::FillEquipmentText(int partyIndex)
+{
+    if (PlayerManager::GetCharacterWeapon(partyIndex) != -1)
+    {
+        mEquipmentWeaponText.mText = PlayerManager::GetInventoryWeapons()[PlayerManager::GetCharacterWeapon(partyIndex)].mName;
+    }
+    else
+    {
+        mEquipmentWeaponText.mText = "";
+    }
 }

@@ -673,6 +673,8 @@ void SceneExploration::SwapCharacters(int first, int second)
     std::string tempAnim = mCharacters[first].mCurrentAnimation;
     mCharacters[first].mCurrentAnimation = mCharacters[second].mCurrentAnimation;
     mCharacters[second].mCurrentAnimation = tempAnim;
+
+    PlayerManager::SwapCharacterInventories(first, second);
 }
 
 void SceneExploration::Shutdown()

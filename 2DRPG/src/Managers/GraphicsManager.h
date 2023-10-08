@@ -19,14 +19,14 @@ public:
 
     static void PresentRender();
 
-    inline static SDL_Renderer* GetRenderer() { return mRenderer; }
+    static SDL_Renderer* GetRenderer() { return mRenderer; }
 
-    inline static int WindowWidth() { return mWindowWidth; }
-    inline static int WindowHeight() { return mWindowHeight; }
-    inline static int ScreenWidth() { return mScreenWidth; }
-    inline static int ScreenHeight() { return mScreenHeight; }
+    static int WindowWidth() { return mWindowWidth; }
+    static int WindowHeight() { return mWindowHeight; }
+    static int ScreenWidth() { return mScreenWidth; }
+    static int ScreenHeight() { return mScreenHeight; }
 
-    inline static SDL_Rect& GetCamera() { return mCamera; }
+    static SDL_Rect& GetCamera() { return mCamera; }
 
     static void AdjustScreenOffset(const Vec2& offset);
     static void ResetScreenOffset();

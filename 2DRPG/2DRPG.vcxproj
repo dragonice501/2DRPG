@@ -166,6 +166,8 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Items\Item.h" />
+    <ClInclude Include="src\Items\Weapon.h" />
     <ClInclude Include="src\UI\MenuBattle.h" />
     <ClInclude Include="src\UI\UIPanel.h" />
     <ClInclude Include="src\UI\MenuInteract.h" />

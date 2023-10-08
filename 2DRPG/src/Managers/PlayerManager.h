@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../Objects/Components.h"
-
+#include "../Items/Weapon.h"
 #include "../Managers/GraphicsManager.h"
 
 #include <vector>
 #include <fstream>
-
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -18,11 +17,15 @@ public:
 
 	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
 	static const std::vector<SDL_Texture*>& GetCharacterTextures() { return mCharacterTextures; }
+	static const int* GetCharacterWeapons() { return mCharacterWeaponIndeces; }
+	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
+
 	static const int GetPartyMoney() { return mPartyMoney; }
 	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
 	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
 	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
 	static const std::vector<std::string>& GetBestiaryKeywords() { return mBestiaryKeywords; }
+	static const std::vector<Weapon>& GetInventoryWeapons() { return mInventoryWeapons; }
 
 	static void LearnNewPeopleKeyword(const std::string& keyword) { mPeopleKeywords.push_back(keyword); }
 	static void LearnNewPlaceKeyword(const std::string& keyword) { mPlacesKeywords.push_back(keyword); }
@@ -34,17 +37,21 @@ public:
 	static CharacterAttributes LevelUp(int characterIndex);
 
 	static void SwapCharacters(int first, int second);
+	static void SwapCharacterInventories(int first, int second);
 
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
+	static int mCharacterWeaponIndeces[4];
+
+	static int mPartyMoney;
 
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;
 	static std::vector<std::string> mMysteryKeywords;
 	static std::vector<std::string> mBestiaryKeywords;
 
-	static int mPartyMoney;
+	static std::vector<Weapon> mInventoryWeapons;
 
 	static int mLevelExpAmounts[];
 

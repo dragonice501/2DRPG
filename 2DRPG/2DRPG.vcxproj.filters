@@ -506,5 +506,11 @@
     <ClInclude Include="src\UI\UIText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Items\Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Items\Weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

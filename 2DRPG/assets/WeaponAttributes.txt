@@ -1,0 +1,11 @@
+Weapon Sword
+Attack 5
+Magic 5
+Buy 500
+Sell 150;
+
+Weapon Saber
+Attack 4
+Magic 6
+Buy 600
+Sell 200

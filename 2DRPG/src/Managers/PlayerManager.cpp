@@ -4,11 +4,14 @@
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
+int PlayerManager::mCharacterWeaponIndeces[4] = { 0, -1, -1, -1 };
 
 std::vector<std::string> PlayerManager::mPeopleKeywords;
 std::vector<std::string> PlayerManager::mPlacesKeywords;
 std::vector<std::string> PlayerManager::mMysteryKeywords;
 std::vector<std::string> PlayerManager::mBestiaryKeywords;
+
+std::vector<Weapon> PlayerManager::mInventoryWeapons = { Weapon("Saber"), Weapon("Sword") };
 
 uint8_t PlayerManager::mLevelGauranteeStats[2] =
 {
@@ -216,4 +219,11 @@ void PlayerManager::SwapCharacters(int first, int second)
     SDL_Texture* tempTex = mCharacterTextures[first];
     mCharacterTextures[first] = mCharacterTextures[second];
     mCharacterTextures[second] = tempTex;
+}
+
+void PlayerManager::SwapCharacterInventories(int first, int second)
+{
+    int tempWeapon = mCharacterWeaponIndeces[first];
+    mCharacterWeaponIndeces[first] = mCharacterWeaponIndeces[second];
+    mCharacterWeaponIndeces[second] = tempWeapon;
 }
