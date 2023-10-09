@@ -24,9 +24,17 @@ public:
 	inline void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
 	inline void SetPreviousButton(UIButton* button) { mPreviousButtonFirst = button; }
 
-	inline void SelectPreviousButton()
+	inline void SelectPreviousButtonFirst()
 	{
 		if (mPreviousButtonFirst) mCurrentButton = mPreviousButtonFirst;
+	}
+	inline void SelectPreviousButtonSecond()
+	{
+		if (mPreviousButtonSecond) mCurrentButton = mPreviousButtonSecond;
+	}
+	inline void SelectPreviousButtonThird()
+	{
+		if (mPreviousButtonThird) mCurrentButton = mPreviousButtonThird;
 	}
 
 	inline void CurrentButtonSelect()
@@ -50,4 +58,5 @@ protected:
 	UIButton* mCurrentButton;
 	UIButton* mPreviousButtonFirst;
 	UIButton* mPreviousButtonSecond;
+	UIButton* mPreviousButtonThird;
 };

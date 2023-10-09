@@ -22,6 +22,12 @@ private:
 		PS_SELECTING_WEAPON
 	};
 
+	enum EEquipState
+	{
+		ES_EQUIPPING,
+		ES_REMOVING
+	};
+
 public:
 	MenuParty();
 
@@ -61,6 +67,7 @@ public:
 	};
 
 	EPanelState mPanelState = PS_PARTY;
+	EEquipState mEquipState = ES_EQUIPPING;
 
 	UIPanel mMoneyPanel;
 
@@ -127,6 +134,12 @@ public:
 	UIButton mEquipButtonTwo;
 	UIButton mEquipButtonThree;
 	UIButton mEquipButtonFour;
+
+	UIPanel mEquipOptionsPanel;
+	UIButton mEquipOptionsButtonEquip;
+	UIButton mEquipOptionsButtonRemove;
+	UIButton mEquipOptionsButtonRemoveAll;
+	UIButton mEquipOptionsButtonOptimize;
 
 	UIPanel mEquipmentPanel;
 	UIButton mEquipmentWeaponButton;

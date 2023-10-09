@@ -3,7 +3,8 @@
 MenuParty::MenuParty() :
     mPartyButton("Party"), mStatusButton("Status"), mInventoryButton("Inventory"), mJournalButton("Journal"), mEquipButton("Equip"), mMagicButton("Magic"), mExitButton("Exit"),
     mJournalButtonOne("People"), mJournalButtonTwo("Place"), mJournalButtonThree("Mystery"), mJournalButtonFour("Bestiary"),
-    mInventoryButtonOne("Items"), mInventoryButtonTwo("Weapons"), mInventoryButtonThree("Armour")
+    mInventoryButtonOne("Items"), mInventoryButtonTwo("Weapons"), mInventoryButtonThree("Armour"),
+    mEquipOptionsButtonEquip("Equip"), mEquipOptionsButtonRemove("Remove"), mEquipOptionsButtonRemoveAll("Remove All"), mEquipOptionsButtonOptimize("Optimize")
 {
     mIsMainMenu = true;
 
@@ -69,6 +70,8 @@ void MenuParty::Render(SDL_Renderer* renderer)
         {
             mEquipButtonsPanel.Render();
             mEquipmentPanel.Render();
+
+            mEquipOptionsPanel.Render();
 
             mEquipmentWeaponText.Render();
             mEquipmentShieldText.Render();
@@ -199,6 +202,7 @@ void MenuParty::SetupMainPanel()
     mInventoryButton.OnAcceptAction = [this]()
     {
         SetPanelState(PS_INVENTORY);
+        FillInventoryItemButtons();
         mCurrentButton = &mInventoryButtonOne;
     };
     mInventoryButton.OnCancelAction = [this]()
@@ -647,7 +651,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(0))
         {
             mPanelState = PS_EQUIP;
-            mCurrentButton = mPreviousButtonSecond;
+            SelectPreviousButtonThird();
             PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 0);
             FillEquipmentText(mSelectedCharacterIndex);
         }
@@ -657,7 +661,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON)
         {
             mPanelState = PS_EQUIP;
-            mCurrentButton = mPreviousButtonSecond;
+            SelectPreviousButtonThird();
         }
     };
 
@@ -674,7 +678,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(1))
         {
             mPanelState = PS_EQUIP;
-            mCurrentButton = mPreviousButtonSecond;
+            SelectPreviousButtonThird();
             PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 1);
             FillEquipmentText(mSelectedCharacterIndex);
         }
@@ -684,7 +688,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON)
         {
             mPanelState = PS_EQUIP;
-            mCurrentButton = mPreviousButtonSecond;
+            SelectPreviousButtonThird();
         }
     };
 
@@ -860,7 +864,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipButtonOne.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mEquipmentWeaponButton;
+        mCurrentButton = &mEquipOptionsButtonEquip;
         mPreviousButtonFirst = &mEquipButtonOne;
         mSelectedCharacterIndex = 0;
     };
@@ -884,7 +888,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipButtonTwo.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mEquipmentWeaponButton;
+        mCurrentButton = &mEquipOptionsButtonEquip;
         mPreviousButtonFirst = &mEquipButtonTwo;
         mSelectedCharacterIndex = 1;
     };
@@ -908,7 +912,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipButtonThree.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mEquipmentWeaponButton;
+        mCurrentButton = &mEquipOptionsButtonEquip;
         mPreviousButtonFirst = &mEquipButtonThree;
         mSelectedCharacterIndex = 2;
     };
@@ -926,7 +930,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipButtonFour.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mEquipmentWeaponButton;
+        mCurrentButton = &mEquipOptionsButtonEquip;
         mPreviousButtonFirst = &mEquipButtonFour;
         mSelectedCharacterIndex = 3;
     };
@@ -941,14 +945,99 @@ void MenuParty::SetupEquipPanel()
     mEquipButtonsPanel.mButtons.push_back(&mEquipButtonThree);
     mEquipButtonsPanel.mButtons.push_back(&mEquipButtonFour);
 
-    mEquipmentPanel.mPosition =
+    mEquipOptionsPanel.mPosition =
     {
         mEquipButtonsPanel.mPosition.x,
         mMainPanel.mPosition.y
     };
+    mEquipOptionsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 10.0f + Font::fontSpacing * 10.0f + TEXT_PADDING * 2.0f,
+        TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 4.0f + TEXT_PADDING * 4.0f
+    };
+
+    mEquipOptionsButtonEquip.mPosition = mEquipOptionsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipOptionsButtonRemove.mPosition = mEquipOptionsButtonEquip.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipOptionsButtonRemoveAll.mPosition = mEquipOptionsButtonRemove.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipOptionsButtonOptimize.mPosition = mEquipOptionsButtonRemoveAll.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mEquipOptionsButtonEquip.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonRemove;
+    };
+    mEquipOptionsButtonEquip.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButtonSecond = &mEquipOptionsButtonEquip;
+        mEquipState = ES_EQUIPPING;
+    };
+    mEquipOptionsButtonEquip.OnCancelAction = [this]()
+    {
+        SelectPreviousButtonFirst();
+    };
+
+    mEquipOptionsButtonRemove.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonEquip;
+    };
+    mEquipOptionsButtonRemove.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonRemoveAll;
+    };
+    mEquipOptionsButtonRemove.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mEquipmentWeaponButton;
+        mPreviousButtonSecond = &mEquipOptionsButtonRemove;
+        mEquipState = ES_REMOVING;
+    };
+    mEquipOptionsButtonRemove.OnCancelAction = [this]()
+    {
+        SelectPreviousButtonFirst();
+    };
+
+    mEquipOptionsButtonRemoveAll.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonRemove;
+    };
+    mEquipOptionsButtonRemoveAll.OnDownAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonOptimize;
+    };
+    mEquipOptionsButtonRemoveAll.OnAcceptAction = [this]()
+    {
+        
+    };
+    mEquipOptionsButtonRemoveAll.OnCancelAction = [this]()
+    {
+        SelectPreviousButtonFirst();
+    };
+
+    mEquipOptionsButtonOptimize.OnUpAction = [this]()
+    {
+        mCurrentButton = &mEquipOptionsButtonRemoveAll;
+    };
+    mEquipOptionsButtonOptimize.OnAcceptAction = [this]()
+    {
+        
+    };
+    mEquipOptionsButtonOptimize.OnCancelAction = [this]()
+    {
+        SelectPreviousButtonFirst();
+    };
+
+    mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonEquip);
+    mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonRemove);
+    mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonRemoveAll);
+    mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonOptimize);
+
+    mEquipmentPanel.mPosition =
+    {
+        mEquipOptionsPanel.mPosition.x + mEquipOptionsPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f,
+        mMainPanel.mPosition.y
+    };
     mEquipmentPanel.mSize =
     {
-        Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
+        Font::fontWidth * TEXT_SIZE * 23.0f + Font::fontSpacing * 23.0f + TEXT_PADDING * 2.0f,
         TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
     };
 
@@ -1004,14 +1093,22 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentWeaponButton.OnAcceptAction = [this]()
     {
-        FillInventoryWeaponsButtons();
-        mPanelState = PS_SELECTING_WEAPON;
-        mCurrentButton = &mInventoryPanelButtonOne;
-        mPreviousButtonSecond = &mEquipmentWeaponButton;
+        if (mEquipState == ES_EQUIPPING)
+        {
+            FillInventoryWeaponsButtons();
+            mPanelState = PS_SELECTING_WEAPON;
+            mCurrentButton = &mInventoryPanelButtonOne;
+            mPreviousButtonThird = &mEquipmentWeaponButton;
+        }
+        else
+        {
+            PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, -1);
+            FillEquipmentText(mSelectedCharacterIndex);
+        }
     };
     mEquipmentWeaponButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentShieldButton.OnUpAction = [this]()
@@ -1024,7 +1121,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentShieldButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentHeadButton.OnUpAction = [this]()
@@ -1037,7 +1134,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentHeadButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentChestButton.OnUpAction = [this]()
@@ -1050,7 +1147,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentChestButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentArmsButton.OnUpAction = [this]()
@@ -1063,7 +1160,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentArmsButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentLegsButton.OnUpAction = [this]()
@@ -1072,7 +1169,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentLegsButton.OnCancelAction = [this]()
     {
-        SelectPreviousButton();
+        SelectPreviousButtonSecond();
     };
 
     mEquipmentPanel.mButtons.push_back(&mEquipmentWeaponButton);
