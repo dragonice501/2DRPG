@@ -17,7 +17,9 @@ private:
 		PS_INVENTORY,
 		PS_JOURNAL,
 		PS_EQUIP,
-		PS_MAGIC
+		PS_MAGIC,
+
+		PS_SELECTING_WEAPON
 	};
 
 public:
@@ -47,7 +49,7 @@ public:
 
 	bool mIsMainMenu = false;
 	bool mCharacterSelected = false;
-	int mFirstCharacterIndex = 0;
+	int mSelectedCharacterIndex = -1;
 
 public:
 	Vec2 mCharacterUIPositions[4] =

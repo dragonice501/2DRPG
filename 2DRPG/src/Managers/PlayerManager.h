@@ -20,6 +20,8 @@ public:
 	static const int* GetCharacterWeapons() { return mCharacterWeaponIndeces; }
 	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
 
+	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
+
 	static const int GetPartyMoney() { return mPartyMoney; }
 	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
 	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
@@ -38,6 +40,8 @@ public:
 
 	static void SwapCharacters(int first, int second);
 	static void SwapCharacterInventories(int first, int second);
+
+	static bool CanEquipWeapon(int weaponIndex);
 
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;

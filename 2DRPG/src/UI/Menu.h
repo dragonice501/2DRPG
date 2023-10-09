@@ -19,14 +19,14 @@ public:
 	virtual ~Menu() {}
 
 	inline UIButton* GetCurrentButton() const { return mCurrentButton; }
-	inline UIButton* GetPreviousButton() const { return mPreviousButton; }
+	inline UIButton* GetPreviousButton() const { return mPreviousButtonFirst; }
 
 	inline void SetCurrentButton(UIButton* button) { mCurrentButton = button; }
-	inline void SetPreviousButton(UIButton* button) { mPreviousButton = button; }
+	inline void SetPreviousButton(UIButton* button) { mPreviousButtonFirst = button; }
 
 	inline void SelectPreviousButton()
 	{
-		if (mPreviousButton) mCurrentButton = mPreviousButton;
+		if (mPreviousButtonFirst) mCurrentButton = mPreviousButtonFirst;
 	}
 
 	inline void CurrentButtonSelect()
@@ -38,9 +38,9 @@ public:
 	}
 	inline void PreviousButtonSelect()
 	{
-		if (mPreviousButton->OnSelected)
+		if (mPreviousButtonFirst->OnSelected)
 		{
-			mPreviousButton->OnSelected();
+			mPreviousButtonFirst->OnSelected();
 		}
 	}
 
@@ -48,5 +48,6 @@ public:
 
 protected:
 	UIButton* mCurrentButton;
-	UIButton* mPreviousButton;
+	UIButton* mPreviousButtonFirst;
+	UIButton* mPreviousButtonSecond;
 };

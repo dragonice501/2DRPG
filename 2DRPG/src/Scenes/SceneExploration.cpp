@@ -368,65 +368,65 @@ SceneExploration::SceneExploration()
     // Party Panel
     mPartyMenu.mPartyButtonOne.OnAcceptAction = [this]()
     {
-        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 0)
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mSelectedCharacterIndex != 0)
         {
-            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 0);
+            PlayerManager::SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 0);
             mPartyMenu.FillPartyAttributes();
             mPartyMenu.mCharacterSelected = false;
 
-            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 0);
+            SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 0);
         }
         else
         {
-            mPartyMenu.mFirstCharacterIndex = 0;
+            mPartyMenu.mSelectedCharacterIndex = 0;
             mPartyMenu.mCharacterSelected = true;
         }
     };
     mPartyMenu.mPartyButtonTwo.OnAcceptAction = [this]()
     {
-        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 1)
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mSelectedCharacterIndex != 1)
         {
-            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 1);
+            PlayerManager::SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 1);
             mPartyMenu.FillPartyAttributes();
             mPartyMenu.mCharacterSelected = false;
 
-            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 1);
+            SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 1);
         }
         else
         {
-            mPartyMenu.mFirstCharacterIndex = 1;
+            mPartyMenu.mSelectedCharacterIndex = 1;
             mPartyMenu.mCharacterSelected = true;
         }
     };
     mPartyMenu.mPartyButtonThree.OnAcceptAction = [this]()
     {
-        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 2)
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mSelectedCharacterIndex != 2)
         {
-            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 2);
+            PlayerManager::SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 2);
             mPartyMenu.FillPartyAttributes();
             mPartyMenu.mCharacterSelected = false;
 
-            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 2);
+            SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 2);
         }
         else
         {
-            mPartyMenu.mFirstCharacterIndex = 2;
+            mPartyMenu.mSelectedCharacterIndex = 2;
             mPartyMenu.mCharacterSelected = true;
         }
     };
     mPartyMenu.mPartyButtonFour.OnAcceptAction = [this]()
     {
-        if (mPartyMenu.mCharacterSelected && mPartyMenu.mFirstCharacterIndex != 3)
+        if (mPartyMenu.mCharacterSelected && mPartyMenu.mSelectedCharacterIndex != 3)
         {
-            PlayerManager::SwapCharacters(mPartyMenu.mFirstCharacterIndex, 3);
+            PlayerManager::SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 3);
             mPartyMenu.FillPartyAttributes();
             mPartyMenu.mCharacterSelected = false;
 
-            SwapCharacters(mPartyMenu.mFirstCharacterIndex, 3);
+            SwapCharacters(mPartyMenu.mSelectedCharacterIndex, 3);
         }
         else
         {
-            mPartyMenu.mFirstCharacterIndex = 3;
+            mPartyMenu.mSelectedCharacterIndex = 3;
             mPartyMenu.mCharacterSelected = true;
         }
     };

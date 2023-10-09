@@ -82,6 +82,10 @@ void MenuParty::Render(SDL_Renderer* renderer)
         {
             break;
         }
+        case MenuParty::PS_SELECTING_WEAPON:
+        {
+            mInventoryPanel.Render();
+        }
     }
 }
 
@@ -630,38 +634,108 @@ void MenuParty::SetupInventoryPanel()
     };
 
     mInventoryPanelButtonOne.mPosition = mInventoryPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mInventoryPanelButtonTwo.mPosition = mInventoryPanelButtonOne.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, 0.0f);
-    mInventoryPanelButtonThree.mPosition = mInventoryPanelButtonTwo.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, 0.0f);
-    mInventoryPanelButtonFour.mPosition = mInventoryPanelButtonThree.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, 0.0f);
+    mInventoryPanelButtonTwo.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mInventoryPanelButtonThree.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mInventoryPanelButtonFour.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mInventoryPanelButtonOne.OnRightAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonTwo;
+        if(mInventoryPanelButtonOne.mIsActive) mCurrentButton = &mInventoryPanelButtonTwo;
+    };
+    mInventoryPanelButtonOne.OnAcceptAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(0))
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+            PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 0);
+            FillEquipmentText(mSelectedCharacterIndex);
+        }
+    };
+    mInventoryPanelButtonOne.OnCancelAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON)
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+        }
     };
 
     mInventoryPanelButtonTwo.OnLeftAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonOne;
-        
+        if (mInventoryPanelButtonOne.mIsActive) mCurrentButton = &mInventoryPanelButtonOne;
     };
     mInventoryPanelButtonTwo.OnRightAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonThree;
-        
+        if (mInventoryPanelButtonThree.mIsActive) mCurrentButton = &mInventoryPanelButtonThree;
+    };
+    mInventoryPanelButtonTwo.OnAcceptAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(1))
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+            PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 1);
+            FillEquipmentText(mSelectedCharacterIndex);
+        }
+    };
+    mInventoryPanelButtonTwo.OnCancelAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON)
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+        }
     };
 
     mInventoryPanelButtonThree.OnLeftAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonOne;
+        if (mInventoryPanelButtonTwo.mIsActive) mCurrentButton = &mInventoryPanelButtonOne;
     };
     mInventoryPanelButtonThree.OnRightAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonFour;
+        if (mInventoryPanelButtonFour.mIsActive) mCurrentButton = &mInventoryPanelButtonFour;
+    };
+    mInventoryPanelButtonThree.OnAcceptAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(2))
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+            PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 2);
+            FillEquipmentText(mSelectedCharacterIndex);
+        }
+    };
+    mInventoryPanelButtonThree.OnCancelAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON)
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+        }
     };
 
     mInventoryPanelButtonFour.OnLeftAction = [this]()
     {
-        mCurrentButton = &mInventoryPanelButtonThree;
+        if (mInventoryPanelButtonFour.mIsActive) mCurrentButton = &mInventoryPanelButtonThree;
+    };
+    mInventoryPanelButtonFour.OnAcceptAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON && PlayerManager::CanEquipWeapon(3))
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+            PlayerManager::SetCharacterWeapon(mSelectedCharacterIndex, 3);
+            FillEquipmentText(mSelectedCharacterIndex);
+        }
+    };
+    mInventoryPanelButtonFour.OnCancelAction = [this]()
+    {
+        if (mPanelState == PS_SELECTING_WEAPON)
+        {
+            mPanelState = PS_EQUIP;
+            mCurrentButton = mPreviousButtonSecond;
+        }
     };
 
     mInventoryPanel.mButtons.push_back(&mInventoryPanelButtonOne);
@@ -787,7 +861,8 @@ void MenuParty::SetupEquipPanel()
     mEquipButtonOne.OnAcceptAction = [this]()
     {
         mCurrentButton = &mEquipmentWeaponButton;
-        mPreviousButton = &mEquipButtonOne;
+        mPreviousButtonFirst = &mEquipButtonOne;
+        mSelectedCharacterIndex = 0;
     };
     mEquipButtonOne.OnCancelAction = [this]()
     {
@@ -810,7 +885,8 @@ void MenuParty::SetupEquipPanel()
     mEquipButtonTwo.OnAcceptAction = [this]()
     {
         mCurrentButton = &mEquipmentWeaponButton;
-        mPreviousButton = &mEquipButtonTwo;
+        mPreviousButtonFirst = &mEquipButtonTwo;
+        mSelectedCharacterIndex = 1;
     };
     mEquipButtonTwo.OnCancelAction = [this]()
     {
@@ -833,7 +909,8 @@ void MenuParty::SetupEquipPanel()
     mEquipButtonThree.OnAcceptAction = [this]()
     {
         mCurrentButton = &mEquipmentWeaponButton;
-        mPreviousButton = &mEquipButtonThree;
+        mPreviousButtonFirst = &mEquipButtonThree;
+        mSelectedCharacterIndex = 2;
     };
     mEquipButtonThree.OnCancelAction = [this]()
     {
@@ -850,7 +927,8 @@ void MenuParty::SetupEquipPanel()
     mEquipButtonFour.OnAcceptAction = [this]()
     {
         mCurrentButton = &mEquipmentWeaponButton;
-        mPreviousButton = &mEquipButtonFour;
+        mPreviousButtonFirst = &mEquipButtonFour;
+        mSelectedCharacterIndex = 3;
     };
     mEquipButtonFour.OnCancelAction = [this]()
     {
@@ -880,9 +958,6 @@ void MenuParty::SetupEquipPanel()
     UIText equipmentText;
     mEquipmentWeaponButton.mPosition = mEquipmentPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
     mEquipmentWeaponButton.mText = "Wpn  ";
-
-    fontLength = Font::GetStringFontLength(equipmentText.mText.c_str()) * TEXT_SIZE;
-    mStatusLevelText.mPosition = equipmentText.mPosition + Vec2(fontLength, 0.0f);
 
     fontLength = Font::GetStringFontLength(mEquipmentWeaponButton.mText.c_str()) * TEXT_SIZE;
     mEquipmentWeaponText.mPosition = mEquipmentWeaponButton.mPosition + Vec2(fontLength, 0.0f);
@@ -926,6 +1001,13 @@ void MenuParty::SetupEquipPanel()
     mEquipmentWeaponButton.OnDownAction = [this]()
     {
         mCurrentButton = &mEquipmentShieldButton;
+    };
+    mEquipmentWeaponButton.OnAcceptAction = [this]()
+    {
+        FillInventoryWeaponsButtons();
+        mPanelState = PS_SELECTING_WEAPON;
+        mCurrentButton = &mInventoryPanelButtonOne;
+        mPreviousButtonSecond = &mEquipmentWeaponButton;
     };
     mEquipmentWeaponButton.OnCancelAction = [this]()
     {

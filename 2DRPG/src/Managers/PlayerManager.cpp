@@ -4,7 +4,7 @@
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
-int PlayerManager::mCharacterWeaponIndeces[4] = { 0, -1, -1, -1 };
+int PlayerManager::mCharacterWeaponIndeces[4] = { -1, -1, -1, -1 };
 
 std::vector<std::string> PlayerManager::mPeopleKeywords;
 std::vector<std::string> PlayerManager::mPlacesKeywords;
@@ -226,4 +226,14 @@ void PlayerManager::SwapCharacterInventories(int first, int second)
     int tempWeapon = mCharacterWeaponIndeces[first];
     mCharacterWeaponIndeces[first] = mCharacterWeaponIndeces[second];
     mCharacterWeaponIndeces[second] = tempWeapon;
+}
+
+bool PlayerManager::CanEquipWeapon(int weaponIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterWeaponIndeces[i] == weaponIndex) return false;
+    }
+
+    return true;
 }
