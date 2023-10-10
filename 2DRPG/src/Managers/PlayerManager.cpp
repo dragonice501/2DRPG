@@ -6,6 +6,8 @@ std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 int PlayerManager::mCharacterWeaponIndeces[4] = { -1, -1, -1, -1 };
 
+int PlayerManager::mPartyGold = 500;
+
 std::vector<std::string> PlayerManager::mPeopleKeywords;
 std::vector<std::string> PlayerManager::mPlacesKeywords;
 std::vector<std::string> PlayerManager::mMysteryKeywords;
@@ -17,8 +19,6 @@ uint8_t PlayerManager::mLevelGauranteeStats[2] =
 {
     170, 85
 };
-
-int PlayerManager::mPartyMoney = 10000;
 
 void PlayerManager::LoadCharacters()
 {

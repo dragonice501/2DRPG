@@ -22,7 +22,7 @@ public:
 
 	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
 
-	static const int GetPartyMoney() { return mPartyMoney; }
+	static const int GetPartyGold() { return mPartyGold; }
 	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
 	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
 	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
@@ -34,6 +34,7 @@ public:
 	static void LearnNewMysteryKeyword(const std::string& keyword) { mMysteryKeywords.push_back(keyword); }
 	static void LearnNewBestiaryKeyword(const std::string& keyword) { mBestiaryKeywords.push_back(keyword); }
 
+	static void AddGold(const int gold) { mPartyGold += gold; }
 	static int CalcLevelUpExp(int level);
 	static bool CheckLevelUp(int& outIndex);
 	static CharacterAttributes LevelUp(int characterIndex);
@@ -48,7 +49,7 @@ private:
 	static std::vector<SDL_Texture*> mCharacterTextures;
 	static int mCharacterWeaponIndeces[4];
 
-	static int mPartyMoney;
+	static int mPartyGold;
 
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;

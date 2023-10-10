@@ -21,6 +21,9 @@ public:
 
 	void Render(static SDL_Renderer* renderer) override;
 
+	void SetupMainPanel();
+	void SetupAskPanel();
+
 	void DrawKeywordsPanel(static SDL_Renderer* renderer, SDL_Rect& rect);
 
 	bool mIsInteractMenu = false;

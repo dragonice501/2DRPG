@@ -34,14 +34,4 @@ void MenuBattle::Render(SDL_Renderer* renderer)
 	{
 		mPartyActionPanel.Render();
 	}
-
-	if (mCurrentButton)
-	{
-		GraphicsManager::DrawUISelector(
-			mCurrentButton->mPosition.x - TEXT_PADDING / 2,
-			mCurrentButton->mPosition.y - TEXT_PADDING / 2,
-			Font::GetStringFontLength(mCurrentButton->mText.c_str()) * TEXT_SIZE + TEXT_PADDING,
-			Font::fontHeight * TEXT_SIZE + TEXT_PADDING
-		);
-	}
 }

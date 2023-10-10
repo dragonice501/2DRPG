@@ -95,6 +95,7 @@ private:
 	int mEnemyTargetIndex = 0;
 	int mCurrentPlayerIndex = 0;
 
+	int mBattleGoldPool = 0;
 	int mBattleExpPool = 0;
 	int mLevelUpIndex = 0;
 	CharacterAttributes mLevelUpStats;

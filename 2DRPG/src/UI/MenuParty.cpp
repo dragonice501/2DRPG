@@ -107,8 +107,12 @@ void MenuParty::SetupMoneyPanel()
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    UIText moneyText = { "10000g" };
-    moneyText.mPosition = { mMoneyPanel.mPosition.x + TEXT_PADDING, mMoneyPanel.mPosition.y + TEXT_PADDING };
+    UIText moneyText = std::to_string(PlayerManager::GetPartyGold()) + 'g';
+    moneyText.mPosition =
+    {
+        mMoneyPanel.mPosition.x + TEXT_PADDING + mMoneyPanel.mSize.x - Font::GetStringFontLength(moneyText.mText.c_str()) * TEXT_SIZE - TEXT_PADDING * 2,
+        mMoneyPanel.mPosition.y + TEXT_PADDING
+    };
     mMoneyPanel.mText.push_back(moneyText);
 }
 
@@ -797,7 +801,7 @@ void MenuParty::SetupJournalPanel()
     };
     mJournalButtonThree.OnRightAction = [this]()
     {
-        mCurrentButton = &mStatusButtonFour;
+        mCurrentButton = &mJournalButtonFour;
     };
     mJournalButtonThree.OnCancelAction = [this]()
     {

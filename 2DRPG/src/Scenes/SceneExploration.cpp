@@ -75,11 +75,6 @@ SceneExploration::SceneExploration()
         mInteractMenu.SetCurrentButton(&mInteractMenu.mPlacesButton);
         mInteractMenu.CurrentButtonSelect();
     };
-    mInteractMenu.mPeopleButton.OnLeftAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mBestiaryButton);
-        mInteractMenu.CurrentButtonSelect();
-    };
     mInteractMenu.mPeopleButton.OnAcceptAction = [this]()
     {
         if (mInteractMenu.mFirstButton.mIsActive)
@@ -165,11 +160,6 @@ SceneExploration::SceneExploration()
     mInteractMenu.mBestiaryButton.OnSelected = [this]()
     {
         mInteractMenu.FillKeywordPanel(MenuInteract::BESTIARY);
-    };
-    mInteractMenu.mBestiaryButton.OnRightAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mPeopleButton);
-        mInteractMenu.CurrentButtonSelect();
     };
     mInteractMenu.mBestiaryButton.OnLeftAction = [this]()
     {
@@ -1024,6 +1014,7 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         case ES_INTERACTING:
         {
             mInteractMenu.Render(renderer);
+            DrawCursor(renderer);
             break;
         }
         case ES_TALKING:
@@ -1050,13 +1041,41 @@ void SceneExploration::DrawCursor(SDL_Renderer* renderer)
 {
     SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
 
-    SDL_Rect destRect =
+    SDL_Rect destRect;
+
+    switch (mExplorationState)
     {
-        mPartyMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5,
-        mPartyMenu.GetCurrentButton()->mPosition.y,
-        cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
-        cursorSpriteRect.h * BATTLE_CURSOR_SCALE
-    };
+        case ES_INTERACTING:
+        {
+            destRect =
+            {
+                static_cast<int>(mInteractMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5),
+                static_cast<int>(mInteractMenu.GetCurrentButton()->mPosition.y),
+                cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+                cursorSpriteRect.h * BATTLE_CURSOR_SCALE
+            };
+            break;
+        }
+        case ES_TALKING:
+        {
+            break;
+        }
+        case ES_ASKING:
+        {
+            break;
+        }
+        case ES_MENUING:
+        {
+            destRect =
+            {
+                static_cast<int>(mPartyMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5),
+                static_cast<int>(mPartyMenu.GetCurrentButton()->mPosition.y),
+                cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+                cursorSpriteRect.h * BATTLE_CURSOR_SCALE
+            };
+            break;
+        }
+    }
 
     GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
 }

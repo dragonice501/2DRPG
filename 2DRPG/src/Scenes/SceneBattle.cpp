@@ -563,6 +563,7 @@ void SceneBattle::Update(const float dt)
 			{
 				mTurnTimeRemaining = mTurnTime;
 				mBattleExpPool += mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.exp;
+				mBattleGoldPool += mBattleEnemies[mBattleSelectedEnemyIndex]->mEnemyGold;
 
 				for (int i = 0; i < mBattleTurns.size(); i++)
 				{
@@ -591,12 +592,24 @@ void SceneBattle::Update(const float dt)
 			{
 				mBattleEndTimeRemaing = mBattleEndTime;
 				
-				mBattleState = BS_EXP_GAINED;
+				mBattleState = BS_GOLD_GAINED;
 			}
 			break;
 		}
 		case BS_PARTY_DEFEATED:
 		{
+			break;
+		}
+		case BS_GOLD_GAINED:
+		{
+			mBattleEndTimeRemaing -= dt;
+			if (mBattleEndTimeRemaing <= 0)
+			{
+				mBattleEndTimeRemaing = mBattleEndTime;
+
+				PlayerManager::AddGold(mBattleGoldPool);
+				mBattleState = BS_EXP_GAINED;
+			};
 			break;
 		}
 		case BS_EXP_GAINED:
@@ -863,7 +876,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 			GraphicsManager::DrawSpriteRect(mEnemiesTexture, enemy->rect, destRect);
 		}
 	}
-
+	// Draw UI
 	SDL_Rect rect;
 	std::string battleString;
 	switch (mBattleState)
@@ -965,6 +978,15 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 
 			break;
 		}
+		case BS_GOLD_GAINED:
+		{
+			battleString =
+				std::to_string(mBattleGoldPool) +
+				" Gold Gained";
+
+			DrawBattleEvent(renderer, rect, battleString);
+			break;
+		}
 		case BS_EXP_GAINED:
 		{
 			battleString =
@@ -1039,7 +1061,7 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 
 	SDL_Rect destRect =
 	{
-		mBattleMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+		mBattleMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5,
 		mBattleMenu.GetCurrentButton()->mPosition.y,
 		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE

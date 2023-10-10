@@ -7,6 +7,30 @@ MenuInteract::MenuInteract() :
 {
 	mIsInteractMenu = true;
 
+    SetupMainPanel();
+    SetupAskPanel();
+}
+
+void MenuInteract::Render(SDL_Renderer* renderer)
+{
+    if (mMainPanel.mIsActive)
+    {
+        mMainPanel.Render();
+    }
+
+    if (mAskingPanel.mIsActive)
+    {
+        mAskingPanel.Render();
+    }
+
+    if (mKeywordsPanel.mIsActive)
+    {
+        mKeywordsPanel.Render();
+    }
+}
+
+void MenuInteract::SetupMainPanel()
+{
     // Main Panel
     mMainPanel.mIsActive = true;
     mMainPanel.mPosition = { GraphicsManager::WindowWidth() / 2 - 150.0f, GraphicsManager::WindowHeight() / 2 - 50.0f };
@@ -18,7 +42,10 @@ MenuInteract::MenuInteract() :
     mTalkButton.mPosition = mMainPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
     mAskButton.mPosition = mTalkButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
     mLeaveButton.mPosition = mAskButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
+}
 
+void MenuInteract::SetupAskPanel()
+{
     // Asking Panel
     mAskingPanel.mIsActive = false;
     mAskingPanel.mPosition =
@@ -64,34 +91,6 @@ MenuInteract::MenuInteract() :
     mSecondButton.mPosition = mFirstButton.mPosition + Vec2(mKeywordsPanel.mSize.x / 2.0f, 0.0f);
     mFourthButton.mPosition = mSecondButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mSixthButton.mPosition = mFourthButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-}
-
-void MenuInteract::Render(SDL_Renderer* renderer)
-{
-    if (mMainPanel.mIsActive)
-    {
-        mMainPanel.Render();
-    }
-
-    if (mAskingPanel.mIsActive)
-    {
-        mAskingPanel.Render();
-    }
-
-    if (mKeywordsPanel.mIsActive)
-    {
-        mKeywordsPanel.Render();
-    }
-
-    if (mCurrentButton)
-    {
-        GraphicsManager::DrawUISelector(
-            mCurrentButton->mPosition.x - TEXT_PADDING / 2,
-            mCurrentButton->mPosition.y - TEXT_PADDING / 2,
-            Font::GetStringFontLength(mCurrentButton->mText.c_str()) * TEXT_SIZE + TEXT_PADDING,
-            Font::fontHeight * TEXT_SIZE + TEXT_PADDING
-        );
-    }
 }
 
 void MenuInteract::DrawKeywordsPanel(SDL_Renderer* renderer, SDL_Rect& rect)

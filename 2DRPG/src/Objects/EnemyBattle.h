@@ -49,9 +49,10 @@ public:
 							file >> fireAffect;
 							this->fireAffect = static_cast<EElementAffect>(fireAffect);
 						}
-						else if (type == "Exp")
+						else if (type == "Exp") file >> attributes.exp;
+						else if (type == "Gold")
 						{
-							file >> attributes.exp;
+							file >> mEnemyGold;
 							return;
 						}
 					}
@@ -66,4 +67,5 @@ public:
 	}
 
 	int mEnemyPositionIndex;
+	int mEnemyGold;
 };

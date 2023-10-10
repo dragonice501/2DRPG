@@ -41,6 +41,8 @@ public:
 	void SetupJournalPanel();
 	void SetupEquipPanel();
 
+	void RepositionMoneyText();
+
 	void SetPanelState(EPanelState state);
 	void FillPartyAttributes();
 	void SetStatusButtonsText();
