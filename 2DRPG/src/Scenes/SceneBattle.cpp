@@ -93,17 +93,9 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 		GameManager::SetSceneToLoad(OVERWORLD, -2, true);
 	};
 
-	mBattleMenu.mSmallEnemyButtons[0].OnUpAction = [this]()
-	{
-		SearchForEnemyUp(0);
-	};
 	mBattleMenu.mSmallEnemyButtons[0].OnDownAction = [this]()
 	{
 		SearchForEnemyDown(0);
-	};
-	mBattleMenu.mSmallEnemyButtons[0].OnLeftAction = [this]()
-	{
-		
 	};
 	mBattleMenu.mSmallEnemyButtons[0].OnRightAction = [this]()
 	{
@@ -145,14 +137,6 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	{
 		SearchForEnemyUp(2);
 	};
-	mBattleMenu.mSmallEnemyButtons[2].OnDownAction = [this]()
-	{
-		SearchForEnemyDown(2);
-	};
-	mBattleMenu.mSmallEnemyButtons[2].OnLeftAction = [this]()
-	{
-		
-	};
 	mBattleMenu.mSmallEnemyButtons[2].OnRightAction = [this]()
 	{
 		if (SearchForEnemyRight(2)) {}
@@ -167,10 +151,6 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 		mBattleMenu.SetCurrentButton(mBattleMenu.GetPreviousButton());
 	};
 
-	mBattleMenu.mSmallEnemyButtons[3].OnUpAction = [this]()
-	{
-		SearchForEnemyUp(3);
-	};
 	mBattleMenu.mSmallEnemyButtons[3].OnDownAction = [this]()
 	{
 		SearchForEnemyDown(3);
@@ -179,10 +159,6 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	{
 		if (SearchForEnemyLeft(3)) return;
 		else SearchForEnemyUp(3);
-	};
-	mBattleMenu.mSmallEnemyButtons[3].OnRightAction = [this]()
-	{
-		
 	};
 	mBattleMenu.mSmallEnemyButtons[3].OnAcceptAction = [this]()
 	{
@@ -206,10 +182,6 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 		if (SearchForEnemyLeft(4)) return;
 		else SearchForEnemyUp(4);
 	};
-	mBattleMenu.mSmallEnemyButtons[4].OnRightAction = [this]()
-	{
-
-	};
 	mBattleMenu.mSmallEnemyButtons[4].OnAcceptAction = [this]()
 	{
 		AcceptEnemyTarget(4);
@@ -223,18 +195,10 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	{
 		SearchForEnemyUp(5);
 	};
-	mBattleMenu.mSmallEnemyButtons[5].OnDownAction = [this]()
-	{
-		SearchForEnemyDown(5);
-	};
 	mBattleMenu.mSmallEnemyButtons[5].OnLeftAction = [this]()
 	{
 		if (SearchForEnemyLeft(5)) return;
 		else SearchForEnemyUp(5);
-	};
-	mBattleMenu.mSmallEnemyButtons[5].OnRightAction = [this]()
-	{
-
 	};
 	mBattleMenu.mSmallEnemyButtons[5].OnAcceptAction = [this]()
 	{
@@ -802,9 +766,9 @@ bool SceneBattle::SearchForEnemyLeft(int index)
 	if (mBattleEnemies.size() == 1) return false;
 
 	int i = index;
-	if (i + 3 <= 5)
+	if (i - 3 >= 0)
 	{
-		if (SelectEnemy(i + 3)) return true;
+		if (SelectEnemy(i - 3)) return true;
 	}
 
 	return false;
@@ -815,7 +779,7 @@ bool SceneBattle::SearchForEnemyRight(int index)
 	if (mBattleEnemies.size() == 1) return false;
 
 	int i = index;
-	if (i - 3 >= 0)
+	if (i + 3 <= 5)
 	{
 		if (SelectEnemy(i + 3)) return true;
 	}
@@ -890,15 +854,13 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		}
 		case BS_SELECTING_ACTION:
 		{
-			DrawActions(renderer, rect);
-			DrawPartyStats(renderer, rect);
+			DrawBattleMenu(renderer, rect);
 			DrawCursor(renderer);
 			break;
 		}
 		case BS_SELECTING_TARGET:
 		{
-			DrawActions(renderer, rect);
-			DrawPartyStats(renderer, rect);
+			DrawBattleMenu(renderer, rect);
 			DrawCursor(renderer);
 			break;
 		}
@@ -1010,49 +972,18 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	}
 }
 
-void SceneBattle::DrawActions(SDL_Renderer* renderer, SDL_Rect& rect)
+void SceneBattle::DrawBattleMenu(SDL_Renderer* renderer, SDL_Rect& rect)
 {
-	mBattleMenu.Render(renderer);
-}
-
-void SceneBattle::DrawPartyStats(SDL_Renderer* renderer, SDL_Rect& rect)
-{
-	rect = GraphicsManager::DrawUIBox(
-		GraphicsManager::WindowWidth() / 2 + BATTLE_MENU_WIDTH + UI_BOX_BORDER_SIZE + 100,
-		GraphicsManager::WindowHeight() - BATTLE_PARTY_UI_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
-		BATTLE_PARTY_UI_WIDTH,
-		BATTLE_PARTY_UI_HEIGHT);
-
-	for (int i = 0; i < mBattleCharacters.size(); i++)
+	for (int i = 4; i < mBattleMenu.mPartyStatsPanel.mText.size(); i++)
 	{
-		const CharacterAttributes& attributes = mBattleCharacters[i]->attributes;
-		GraphicsManager::DrawString(
-			rect.x + TEXT_PADDING,
-			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			attributes.characterName.c_str());
+		std::string& string = mBattleMenu.mPartyStatsPanel.mText[i].mText;
+		const CharacterAttributes& attributes = mBattleCharacters[i - 4]->attributes;
 
-		std::string hpString = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP";
-		std::string mpString = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
-
-		int hpLength = hpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * hpString.length() * TEXT_SIZE;
-		int mpLength = mpString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * mpString.length() * TEXT_SIZE;
-
-		GraphicsManager::DrawString(
-			(rect.x + rect.w) - hpLength - BATTLE_PARTY_UI_BUFFER * TEXT_SIZE - mpLength,
-			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			hpString.c_str());
-
-		GraphicsManager::DrawString(
-			(rect.x + rect.w) - mpLength,
-			rect.y + TEXT_PADDING + BATTLE_TEXT_VERTICAL_PADDING * i,
-			mpString.c_str());
+		string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP" + ' ';
+		string += std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
 	}
 
-	GraphicsManager::DrawUISelector(
-		rect.x,
-		rect.y + TEXT_PADDING - TEXT_PADDING / 2 + 30 * mCurrentPlayerIndex,
-		rect.w,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+	mBattleMenu.Render(renderer);
 }
 
 void SceneBattle::DrawCursor(SDL_Renderer* renderer)
@@ -1063,6 +994,16 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 	{
 		mBattleMenu.GetCurrentButton()->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5,
 		mBattleMenu.GetCurrentButton()->mPosition.y,
+		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
+		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
+	};
+
+	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+
+	destRect =
+	{
+		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex].mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5),
+		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex].mPosition.y),
 		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
 	};

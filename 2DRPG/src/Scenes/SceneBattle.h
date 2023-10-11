@@ -50,7 +50,7 @@ public:
 	void AcceptEnemyTarget(int index);
 
 	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
-	void DrawActions(static SDL_Renderer* renderer, SDL_Rect& rect);
+	void DrawBattleMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
 	void DrawCursor(static SDL_Renderer* renderer);
 	void DrawBattleEvent(static SDL_Renderer* renderer, SDL_Rect& rect, const std::string& eventString);

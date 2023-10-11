@@ -9,6 +9,9 @@ public:
 
 	void Render(static SDL_Renderer* renderer) override;
 
+	void SetupActionsPanel();
+	void SetupPartyPanel();
+
 	UIPanel mPartyActionPanel;
 	UIButton mFightButton;
 	UIButton mMagicButton;
@@ -16,6 +19,14 @@ public:
 	UIButton mRunButton;
 
 	UIPanel mPartyStatsPanel;
+	UIText mPartyNamesOne;
+	UIText mPartyNamesTwo;
+	UIText mPartyNamesThree;
+	UIText mPartyNamesFour;
+	UIText mPartyStatsTextOne;
+	UIText mPartyStatsTextTwo;
+	UIText mPartyStatsTextThree;
+	UIText mPartyStatsTextFour;
 
 	std::vector<UIButton> mSmallEnemyButtons;
 };
