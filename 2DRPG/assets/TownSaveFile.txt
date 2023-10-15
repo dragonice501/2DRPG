@@ -1,18 +1,24 @@
 MapSize 34 30
 
-SceneEntrance
+TileMap TownTileMap
+
+SceneEntrance 0
 Name Overworld 0
 Position 3 12
 Offset 1 0
 
-SceneEntrance
+SceneEntrance 1
 Name Overworld 1
 Position 24 26
 Offset 0 -1
 
+SceneEntrance 2
+Name TownShop 0
+Position 13 14
+Offset 0 1
+
 Npc Dancer 16 15 TownDancerDialogue
-Npc Knight 19 13 TownKnightDialogue
-Npc Mage 14 17 TownMageDialogue
+Npc Knight 18 13 TownKnightDialogue
 
 Tile 0
 Tile 0
@@ -503,7 +509,7 @@ Tile 69
 Tile 100
 Tile 175
 Tile 176
-Tile 177
+Tile 172
 Tile 178
 Tile 179
 Tile 180

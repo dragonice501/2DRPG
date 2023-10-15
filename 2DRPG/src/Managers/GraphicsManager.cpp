@@ -107,10 +107,10 @@ bool GraphicsManager::CircleOffScreen(const int x, const int y, const float radi
 
 void GraphicsManager::ClearScreen(const uint32_t color)
 {
-    for (int i = 0; i < mScreenWidth * mScreenHeight; i++)
+    /*for (int i = 0; i < mScreenWidth * mScreenHeight; i++)
     {
         mColorBuffer[i] = color;
-    }
+    }*/
 
     SDL_RenderClear(mRenderer);
 }

@@ -5,6 +5,7 @@ enum SceneName
 	BATTLE,
 	OVERWORLD,
 	TOWN,
+	TOWN_SHOP,
 	NONE
 };
 
@@ -106,11 +107,26 @@ enum ETownTileType
 	UNWALKABLE
 };
 
+enum EIndoorsTileType
+{
+	ITT_WALKABLE,
+	ITT_UNWALKABLE
+};
+
 // Town Tile Indeces
-static size_t mWalkableIndeces[43] =
+static size_t mTownWalkableIndeces[46] =
 {
 	0,5,6,7,11,12,13,68,69,71,74,100,101,103,130,131,132,133,134,135,142,148,161,
-	162,163,164,165,166,167,168,174,180,197,206,238,389,391,394,421,423,424,425,428
+	162,163,164,165,166,167,168,174,172,177,180,197,206,236,238,389,391,394,421,423,424,425,428
+};
+
+// Indoors Tile Indeces
+static size_t mIndoorsWalkableIndeces[69] =
+{
+	67,73,81,102,103,105,106,45,112,113,128,129,130,131,134,135,137,138,192,193,195,
+	224,225,227,230,231,235,236,238,239,243,244,258,262,263,264,267,268,270,271,272,
+	275,276,288,289,291,294,295,296,297,298,299,300,302,303,304,305,306,307,308,326,
+	327,328,332,334,335,336,340,393
 };
 
 enum ETerrainType
@@ -230,6 +246,7 @@ float Clampf(const float v, const float min, const float max);
 
 ETownTileType GetTownTileType(const int mapSpriteIndex);
 ETerrainType GetTerrainType(const int mapSpriteIndex);
+EIndoorsTileType GetIndoorsTileType(const int mSpriteIndex);
 void PrintTerrainType(const ETerrainType terrain);
 
 #include <string>

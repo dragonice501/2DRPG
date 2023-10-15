@@ -13,13 +13,26 @@ public:
 	{
 		this->mText = text;
 		this->mPosition = position;
+		this->mReference = nullptr;
 	}
 
 	void Render()
 	{
-		GraphicsManager::DrawString(mPosition.x, mPosition.y, mText.c_str());
+		if (mReference)
+		{
+			int* intRef = static_cast<int*>(mReference);
+			if (intRef)
+			{
+				GraphicsManager::DrawString(mPosition.x, mPosition.y, (std::to_string(*intRef) + mText).c_str());
+			}
+		}
+		else
+		{
+			GraphicsManager::DrawString(mPosition.x, mPosition.y, mText.c_str());
+		}
 	}
 
 	std::string mText;
 	Vec2 mPosition;
+	void* mReference;
 };

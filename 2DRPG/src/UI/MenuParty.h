@@ -72,6 +72,7 @@ public:
 	EEquipState mEquipState = ES_EQUIPPING;
 
 	UIPanel mMoneyPanel;
+	UIText mMoneyText;
 
 	UIPanel mMainPanel;
 	UIButton mPartyButton;

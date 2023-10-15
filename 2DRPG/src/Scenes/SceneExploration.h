@@ -52,6 +52,7 @@ public:
 
 protected:
 	std::vector<Tile> mTiles;
+	std::string mTileMapName;
 	SDL_Texture* mTileMap;
 
 	SDL_Texture* mBattleIconsTexture = nullptr;

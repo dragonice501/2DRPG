@@ -4,6 +4,7 @@
 #include "../Scenes/SceneBattle.h"
 #include "../Scenes/SceneOverworld.h"
 #include "../Scenes/SceneTown.h"
+#include "../Scenes/SceneTownShop.h"
 
 #include "../Objects/EnemyEncounter.h"
 

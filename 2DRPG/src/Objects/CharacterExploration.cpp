@@ -238,11 +238,17 @@ bool CharacterExploration::CanMove(
         else if (terrain == RIVER) return false;
         else if (terrain == MOUNTAIN) return false;
     }
-    else
+    else if(GameManager::GetIsTown())
     {
         ETownTileType townTile = tiles[x + y * width].townType;
 
         if (townTile == UNWALKABLE) return false;
+    }
+    else if (GameManager::GetIsIndoors())
+    {
+        EIndoorsTileType indoorsTile = tiles[x + y * width].indoorstype;
+
+        if (indoorsTile == ITT_UNWALKABLE) return false;
     }
 
     return true;

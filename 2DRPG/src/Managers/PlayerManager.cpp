@@ -136,7 +136,7 @@ void PlayerManager::SaveCharacters()
 
 int PlayerManager::CalcLevelUpExp(int level)
 {
-    return (5 * pow(level, 3)) / 4;
+    return (5 * pow(level, 3)) / 4 + 16;
 }
 
 bool PlayerManager::CheckLevelUp(int& outIndex)
@@ -161,7 +161,6 @@ CharacterAttributes PlayerManager::LevelUp(int characterIndex)
     CharacterAttributes levelUpAttributes;
     CharacterAttributes& attributes = mCharacterAttributes[characterIndex];
     attributes.level++;
-    attributes.exp -= attributes.expNextLevel;
     attributes.expNextLevel = CalcLevelUpExp(attributes.level);
 
     if (mLevelGauranteeStats[attributes.level - 2] & (1 << 7))

@@ -14,20 +14,26 @@ void SceneManager::LoadScene()
 	{
 		case BATTLE:
 		{
-			GameManager::SetIsOverworld(false);
+			GameManager::SetSceneType();
 			mCurrentScene = std::make_unique<SceneBattle>(GameManager::GetBattleBackground(), GameManager::GetEnemyEncounters());
 			break;
 		}
 		case OVERWORLD:
 		{
-			GameManager::SetIsOverworld(true);
+			GameManager::SetSceneType(true);
 			mCurrentScene = std::make_unique<SceneOverworld>();
 			break;
 		}
 		case TOWN:
 		{
-			GameManager::SetIsOverworld(false);
+			GameManager::SetSceneType(false, true);
 			mCurrentScene = std::make_unique<SceneTown>();
+			break;
+		}
+		case TOWN_SHOP:
+		{
+			GameManager::SetSceneType(false, false, true);
+			mCurrentScene = std::make_unique<SceneTownShop>();
 			break;
 		}
 	}

@@ -432,15 +432,7 @@ SceneExploration::~SceneExploration()
 
 void SceneExploration::Setup(SDL_Renderer* renderer)
 {
-    // Get level tilemap
-    std::string fileName = "./assets/" + mFileName + "TileMap.png";
-    SDL_Surface* surface = IMG_Load(fileName.c_str());
-    if (surface)
-    {
-        mTileMap = SDL_CreateTextureFromSurface(renderer, surface);
-    }
-    SDL_FreeSurface(surface);
-
+    std::string fileName;
     int i = 0;
     Vec2 spawnPosition;
 
@@ -454,18 +446,25 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         {
             file >> mMapWidth >> mMapHeight;
         }
+        else if (type == "TileMap")
+        {
+            file >> mTileMapName;
+        }
         else if (type == "SceneEntrance")
         {
             std::string sceneName;
             int sceneEntranceIndex;
+            int nextSceneEntrance;
             Vec2 sceneEntrancePosition;
             Vec2 sceneEntranceOffset;
+
+            file >> sceneEntranceIndex;
 
             while (file >> type)
             {
                 if (type == "Name")
                 {
-                    file >> sceneName >> sceneEntranceIndex;
+                    file >> sceneName >> nextSceneEntrance;
                 }
                 else if (type == "Position")
                 {
@@ -483,7 +482,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
                 sceneEntrancePosition * TILE_SIZE,
                 sceneEntranceOffset * TILE_SIZE,
                 sceneName,
-                sceneEntranceIndex
+                sceneEntranceIndex,
+                nextSceneEntrance
             };
 
             mSceneEntrances.push_back(newEntrance);
@@ -519,6 +519,15 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             i++;
         }
     }
+
+    // Get scene tilemap
+    fileName = "./assets/" + mTileMapName + ".png";
+    SDL_Surface* surface = IMG_Load(fileName.c_str());
+    if (surface)
+    {
+        mTileMap = SDL_CreateTextureFromSurface(renderer, surface);
+    }
+    SDL_FreeSurface(surface);
 
     // Load menu icons
     surface = IMG_Load(mBattleIconsFilePath.c_str());
@@ -897,7 +906,8 @@ void SceneExploration::Update(const float dt)
             {
                 if (entrance.position == character.GetPosition())
                 {
-                    GameManager::SetSceneToLoad(entrance.scene, entrance.sceneEntranceIndex);
+                    GameManager::SetSceneToLoad(entrance.scene, entrance.nextSceneEntrance);
+                    return;
                 }
             }
 

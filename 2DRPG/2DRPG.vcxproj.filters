@@ -108,6 +108,9 @@
     <ClCompile Include="src\UI\MenuBattle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scenes\SceneTownShop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Engine.h">
@@ -510,6 +513,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Items\Weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\SceneTownShop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

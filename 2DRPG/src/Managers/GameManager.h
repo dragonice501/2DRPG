@@ -13,6 +13,9 @@ class GameManager
 public:
 
 	inline static bool GetIsOverworld() { return mIsOverworld; }
+	inline static bool GetIsTown() { return mIsTown; }
+	inline static bool GetIsIndoors() { return mIsIndoors; }
+
 	inline static bool GetReturnToOverworld() { return mReturnToOverworld; }
 	inline static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
 	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousOverworldPositions[index]; }
@@ -21,7 +24,7 @@ public:
 	inline static ETerrainType GetBattleBackground() { return mBattleBackgroundType; }
 	inline static std::vector<EnemyEncounter>& GetEnemyEncounters() { return mEnemyEncounters; }
 
-	inline static void SetIsOverworld(const bool isOverworld) { mIsOverworld = isOverworld; }
+	static void SetSceneType(const bool isOverworld = false, const bool isTown = false, const bool isIndoors = false);
 	inline static void SetSceneToLoad(const SceneName scene) { mSceneToLoad = scene; }
 	inline static void ClearPositionsAndDirections() { mPreviousOverworldPositions.clear(); mPreviousDirections.clear(); }
 	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPositions.push_back(position); }
@@ -34,6 +37,9 @@ public:
 
 private:
 	static bool mIsOverworld;
+	static bool mIsTown;
+	static bool mIsIndoors;
+
 	static bool mReturnToOverworld;
 	static int mSceneEntranceIndex;
 	static std::vector<Vec2> mPreviousOverworldPositions;

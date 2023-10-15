@@ -28,7 +28,7 @@ bool Engine::Init()
 void Engine::Run()
 {
     PlayerManager::LoadCharacters();
-    GameManager::SetSceneToLoad(OVERWORLD, -1);
+    GameManager::SetSceneToLoad(TOWN, -1);
 
     while (isRunning)
     {
@@ -50,6 +50,9 @@ void Engine::Run()
             SceneManager::LoadScene();
         }
 
+        // Clear Render
+        GraphicsManager::ClearScreen(0xFF000000);
+
         // Update Input Manager
         InputManager::Update(deltaTime);
 
@@ -58,7 +61,7 @@ void Engine::Run()
         SceneManager::CurrentSceneUpdate(deltaTime);
         SceneManager::CurrentSceneRender();
 
-        // Render
+        // Present Render
         GraphicsManager::PresentRender();
     }
 }

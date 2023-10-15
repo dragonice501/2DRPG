@@ -22,7 +22,7 @@ public:
 
 	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
 
-	static const int GetPartyGold() { return mPartyGold; }
+	static const int& GetPartyGold() { return mPartyGold; }
 	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
 	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
 	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
@@ -44,12 +44,12 @@ public:
 
 	static bool CanEquipWeapon(int weaponIndex);
 
+	static int mPartyGold;
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static std::vector<SDL_Texture*> mCharacterTextures;
 	static int mCharacterWeaponIndeces[4];
 
-	static int mPartyGold;
 
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;

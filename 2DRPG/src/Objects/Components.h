@@ -126,12 +126,13 @@ struct Rigidbody
 
 struct SceneEntrance
 {
-	SceneEntrance(const Vec2& position, const Vec2& spawnOffset, const std::string& sceneName, const int sceneEntranceIndex)
+	SceneEntrance(const Vec2& position, const Vec2& spawnOffset, const std::string& sceneName, const int sceneEntranceIndex, const int nextSceneEntrance)
 	{
 		this->position = position;
 		this->spawnOffset = spawnOffset;
 		this->scene = GetSceneName(sceneName);
 		this->sceneEntranceIndex = sceneEntranceIndex;
+		this->nextSceneEntrance = nextSceneEntrance;
 	}
 
 	const SceneName GetSceneName(const std::string& sceneName)
@@ -139,6 +140,10 @@ struct SceneEntrance
 		if (sceneName == "Town")
 		{
 			return TOWN;
+		}
+		else if (sceneName == "TownShop")
+		{
+			return TOWN_SHOP;
 		}
 		else if (sceneName == "Overworld")
 		{
@@ -150,6 +155,7 @@ struct SceneEntrance
 	Vec2 spawnOffset;
 	SceneName scene;
 	int sceneEntranceIndex;
+	int nextSceneEntrance;
 };
 
 struct Sprite
@@ -173,10 +179,12 @@ struct Tile
 
 		terrainType = GetTerrainType(spriteIndex);
 		townType = GetTownTileType(spriteIndex);
+		indoorstype = GetIndoorsTileType(spriteIndex);
 	}
 
 	size_t spriteIndex;
 	Vec2 position;
 	ETerrainType terrainType;
 	ETownTileType townType;
+	EIndoorsTileType indoorstype;
 };
