@@ -14,53 +14,55 @@ CharacterExploration::~CharacterExploration()
 
 void CharacterExploration::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    Actor::Init(name, spawnPosition, renderer);
+    ActorNpc::Init(name, spawnPosition, renderer);
 
     mPosition = spawnPosition;
 }
 
 void CharacterExploration::LoadAnimations(std::string animationsFileName)
 {
-    Actor::LoadAnimations(animationsFileName);
+    ActorNpc::LoadAnimations(animationsFileName);
 
     mCurrentAnimation = "IdleDown";
     mSprite = { 0, 0, 32, 32, 0, -16 };
 }
 
-void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection)
+void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection, const std::string& startingAnimation)
 {
     std::string name;
     switch (PlayerManager::GetCharacterAttributes()[partyIndex].characterClass)
     {
-    case DANCER:
-    {
-        name = "Dancer";
-        break;
-    }
-    case KNIGHT:
-    {
-        name = "Knight";
-        break;
-    }
-    case MAGE:
-    {
-        name = "Mage";
-        break;
-    }
-    case PALADIN:
-    {
-        name = "Sigurd";
-        break;
-    }
+        case DANCER:
+        {
+            name = "Dancer";
+            break;
+        }
+        case KNIGHT:
+        {
+            name = "Knight";
+            break;
+        }
+        case MAGE:
+        {
+            name = "Mage";
+            break;
+        }
+        case PALADIN:
+        {
+            name = "Sigurd";
+            break;
+        }
     }
 
     SetSpriteSheet(PlayerManager::GetCharacterTextures()[partyIndex]);
     LoadAnimations(name);
     SetPosition(spawnPosition);
+
     if (GameManager::GetReturnToOverworld())
         mRigidbody.lastVelocity = GameManager::GetPreviousDirection(partyIndex);
     else
         mRigidbody.lastVelocity = spawnDirection;
+
     mPartyIndex = partyIndex;
 }
 
@@ -71,13 +73,13 @@ void CharacterExploration::Input()
 
 void CharacterExploration::Update(const float dt)
 {
-    Actor::UpdateAnimation();
+    ActorNpc::UpdateAnimation();
     UpdateAnimation();
 }
 
 void CharacterExploration::Render(SDL_Renderer* renderer)
 {
-    Actor::Render(renderer);
+    ActorNpc::Render(renderer);
 }
 
 void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)

@@ -31,17 +31,8 @@ public:
 
 	virtual void UpdateAnimation();
 
-	inline void SetCurrentAnimation(const std::string& animation) { mCurrentAnimation = animation; }
-
 	virtual const Vec2& GetPosition() const { return mPosition; }
-
-	void DestroySpriteSheet() { SDL_DestroyTexture(mSpriteSheet); }
 
 public:
 	Vec2 mPosition;
-	Sprite mSprite;
-	SDL_Texture* mSpriteSheet;
-
-	std::map<std::string, Animation> mAnimations;
-	std::string mCurrentAnimation;
 };

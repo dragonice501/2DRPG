@@ -6,7 +6,7 @@
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
 
-class CharacterExploration : public Actor
+class CharacterExploration : public ActorNpc
 {
 public:
 	CharacterExploration();
@@ -20,7 +20,7 @@ public:
 	void UpdateAnimation() override;
 	const Vec2& GetPosition() const override { return mPosition; }
 
-	void Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection);
+	void Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection, const std::string& startingAnimation = "IdleDown");
 
 	inline const ECharacterState GetCharacterState() const { return mCharacterState; }
 	inline const SDL_Texture* GetSpriteSheet() const { return mSpriteSheet; }

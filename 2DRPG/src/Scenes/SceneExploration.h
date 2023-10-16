@@ -60,7 +60,7 @@ protected:
 	std::map<std::string, Sprite> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
-	std::vector<ActorNpc> mActors;
+	std::vector<ActorNpc> mNpcs;
 	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 

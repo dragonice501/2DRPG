@@ -5,9 +5,20 @@
 
 class ActorNpc : public Actor
 {
-private:
-
 public:
+	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown") override;
+	void Update(const float dt) override;
+
+	void Render(SDL_Renderer* renderer) override;
+
+	void LoadAnimations(std::string animationsFilePath);
+
+	void UpdateAnimation();
+
+	void DestroySpriteSheet() { SDL_DestroyTexture(mSpriteSheet); }
+
+	inline void SetCurrentAnimation(const std::string& animation) { mCurrentAnimation = animation; }
+
 	EDialogueType GetDialogueState() const { return mCurrentDialogueMode; }
 
 	const std::vector<std::string>& GetCurrentDialogue() const;
@@ -22,6 +33,13 @@ public:
 	void LoadDialogue(const std::string filePathName);
 	bool HasNewInformation();
 	bool HasAnswerToKeyword(const std::string& keyword);
+
+public:
+	Sprite mSprite;
+	SDL_Texture* mSpriteSheet;
+
+	std::map<std::string, Animation> mAnimations;
+	std::string mCurrentAnimation;
 
 	std::map<std::string, std::vector<std::vector<std::string>>> mDialogueMap;
 	std::map<std::string, std::vector<std::vector<std::string>>> mInformationMap;

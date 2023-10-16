@@ -502,7 +502,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             ActorNpc newActor;
             newActor.Init(npcName, position, renderer);
             newActor.LoadDialogue(dialogueFile);
-            mActors.push_back(newActor);
+            mNpcs.push_back(newActor);
         }
         else if (type == "Tile")
         {
@@ -678,9 +678,9 @@ void SceneExploration::SwapCharacters(int first, int second)
 
 void SceneExploration::Shutdown()
 {
-    for (Actor& actor : mActors)
+    for (ActorNpc& npc : mNpcs)
     {
-        actor.DestroySpriteSheet();
+        npc.DestroySpriteSheet();
     }
     ClearInteractedActor();
     SDL_DestroyTexture(mTileMap);
@@ -754,7 +754,7 @@ void SceneExploration::Input()
 
             if (InputManager::AcceptPressed())
             {
-                for (ActorNpc& actor : mActors)
+                for (ActorNpc& actor : mNpcs)
                 {
                     Vec2 interactPosition = mCharacters[0].GetPosition() + mCharacters[0].mRigidbody.lastVelocity;
 
@@ -889,7 +889,7 @@ void SceneExploration::Update(const float dt)
 {
     if (mExplorationState == ES_MENUING) return;
 
-    for (Actor& actor : mActors)
+    for (Actor& actor : mNpcs)
     {
         actor.UpdateAnimation();
         actor.Update(dt);
@@ -897,7 +897,7 @@ void SceneExploration::Update(const float dt)
 
     for (CharacterExploration& character : mCharacters)
     {
-        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, mActors, dt);
+        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, mNpcs, dt);
         character.Update(dt);
 
         if (character.mMovement.stepTaken && character.mPartyIndex == 0)
@@ -994,7 +994,7 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
     }*/
 
     // Render Actors
-    for (Actor& actor : mActors)
+    for (Actor& actor : mNpcs)
     {
         actor.Render(renderer);
     }

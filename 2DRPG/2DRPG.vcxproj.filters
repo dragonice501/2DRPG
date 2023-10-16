@@ -518,5 +518,8 @@
     <ClInclude Include="src\Scenes\SceneTownShop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Objects\ActorInteractable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
