@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\UI\MenuShop.cpp" />
     <ClCompile Include="src\Scenes\SceneTownShop.cpp" />
     <ClCompile Include="src\UI\MenuBattle.cpp" />
     <ClCompile Include="src\UI\UIPanel.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\UI\MenuShop.h" />
     <ClInclude Include="src\Objects\ActorInteractable.h" />
     <ClInclude Include="src\Scenes\SceneTownShop.h" />
     <ClInclude Include="src\Items\Item.h" />

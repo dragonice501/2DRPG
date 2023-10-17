@@ -789,7 +789,7 @@ void SceneExploration::Input()
 
                     if (interactable.GetPosition() == interactPosition)
                     {
-                        std::cout << "Interactable" << std::endl;
+                        mExplorationState = ES_SHOPPING;
                         return;
                     }
                 }

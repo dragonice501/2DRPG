@@ -56,7 +56,8 @@ enum EExplorationState
 	ES_INTERACTING,
 	ES_TALKING,
 	ES_ASKING,
-	ES_MENUING
+	ES_MENUING,
+	ES_SHOPPING
 };
 
 enum EBattleState
