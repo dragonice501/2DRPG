@@ -31,7 +31,7 @@ private:
 public:
 	MenuParty();
 
-	void Render(static SDL_Renderer* renderer) override;
+	void Render() override;
 
 	void SetupMoneyPanel();
 	void SetupMainPanel();

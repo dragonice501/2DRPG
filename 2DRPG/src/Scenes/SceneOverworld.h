@@ -19,5 +19,5 @@ public:
 
 	void Input() override;
 	void Update(const float dt) override;
-	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
+	void Render(static SDL_Rect& camera) override;
 };

@@ -25,7 +25,7 @@ void SceneTownShop::Setup(static SDL_Renderer* renderer)
         }
     }
 
-    SceneTownShop::SetupCharacters();
+    SceneExploration::SetupCharacters();
 }
 
 void SceneTownShop::Shutdown()
@@ -71,18 +71,18 @@ void SceneTownShop::Update(const float dt)
     SceneExploration::Update(dt);
 }
 
-void SceneTownShop::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
+void SceneTownShop::Render(static SDL_Rect& camera)
 {
-    SceneExploration::Render(renderer, camera);
+    SceneExploration::Render(camera);
 
     if (mExplorationState == ES_SHOPPING)
     {
-        mShopMenu.Render(renderer);
-        DrawCursor(renderer);
+        mShopMenu.Render();
+        DrawCursor();
     }
 }
 
-void SceneTownShop::DrawCursor(SDL_Renderer* renderer)
+void SceneTownShop::DrawCursor()
 {
     SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
 
@@ -102,7 +102,7 @@ void SceneTownShop::DrawCursor(SDL_Renderer* renderer)
     }
     else
     {
-        SceneExploration::DrawCursor(renderer);
+        SceneExploration::DrawCursor();
     }
 }
 

@@ -7,7 +7,7 @@ MenuShop::MenuShop()
 	mCurrentButton = &mMainBuyButton;
 }
 
-void MenuShop::Render(SDL_Renderer* renderer)
+void MenuShop::Render()
 {
 	if (mMainPanel.mIsActive)
 	{

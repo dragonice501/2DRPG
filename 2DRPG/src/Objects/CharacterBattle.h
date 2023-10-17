@@ -15,7 +15,7 @@ public:
 
 	void LoadAnimations(std::string name);
 
-	void Render(SDL_Renderer* renderer);
+	void Render();
 
 	size_t battleSpawnPosition;
 	SDL_Rect rect;

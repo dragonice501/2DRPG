@@ -5,7 +5,7 @@
 class ActorInteractable : public Actor
 {
 public:
-	void Render(SDL_Renderer* renderer) override
+	void Render() override
 	{
 		GraphicsManager::DrawFillRect(
 			mPosition.x * TILE_SPRITE_SCALE,

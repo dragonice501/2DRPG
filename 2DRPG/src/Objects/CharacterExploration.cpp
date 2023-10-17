@@ -77,9 +77,9 @@ void CharacterExploration::Update(const float dt)
     UpdateAnimation();
 }
 
-void CharacterExploration::Render(SDL_Renderer* renderer)
+void CharacterExploration::Render()
 {
-    ActorNpc::Render(renderer);
+    ActorNpc::Render();
 }
 
 void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)

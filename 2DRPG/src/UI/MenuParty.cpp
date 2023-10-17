@@ -19,7 +19,7 @@ MenuParty::MenuParty() :
     mCurrentButton = &mPartyButton;
 }
 
-void MenuParty::Render(SDL_Renderer* renderer)
+void MenuParty::Render()
 {
     SDL_Rect firstRect;
     std::string string;

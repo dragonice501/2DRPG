@@ -799,7 +799,7 @@ void SceneBattle::AcceptEnemyTarget(int index)
 	}
 }
 
-void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
+void SceneBattle::Render(SDL_Rect& camera)
 {
 	GraphicsManager::DrawBattleBackground(mBackgroundTexture);
 
@@ -849,19 +849,19 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 		{
 			battleString = "Monsters Appeared";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_SELECTING_ACTION:
 		{
-			DrawBattleMenu(renderer, rect);
-			DrawCursor(renderer);
+			DrawBattleMenu(rect);
+			DrawCursor();
 			break;
 		}
 		case BS_SELECTING_TARGET:
 		{
-			DrawBattleMenu(renderer, rect);
-			DrawCursor(renderer);
+			DrawBattleMenu(rect);
+			DrawCursor();
 			break;
 		}
 		case BS_SELECTING_ITEM:
@@ -875,7 +875,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				" attacks " +
 				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.characterName;
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_PLAYER_ATTACK_RESULT:
@@ -886,7 +886,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				std::to_string(mDamageDealt) +
 				" damage ";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_PLAYER_DIED:
@@ -905,7 +905,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				" attacks " +
 				mBattleCharacters[mEnemyTargetIndex]->attributes.characterName;
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_ENEMY_ATTACK_RESULT:
@@ -916,7 +916,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				std::to_string(mDamageDealt) +
 				" damage ";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_ENEMY_DIED:
@@ -925,14 +925,14 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.characterName +
 				" perished";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_MONSTERS_DEFEATED:
 		{
 			battleString = "Monsters Perished";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_PARTY_DEFEATED:
@@ -946,7 +946,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				std::to_string(mBattleGoldPool) +
 				" Gold Gained";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_EXP_GAINED:
@@ -955,14 +955,14 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 				std::to_string(mBattleExpPool) +
 				" Exp Gained";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_LEVEL_UP:
 		{
 			battleString = PlayerManager::GetCharacterAttributes()[mLevelUpIndex].characterName + " Level Up";
 
-			DrawBattleEvent(renderer, rect, battleString);
+			DrawBattleEvent(rect, battleString);
 			break;
 		}
 		case BS_BATTLE_END:
@@ -972,7 +972,7 @@ void SceneBattle::Render(SDL_Renderer* renderer, SDL_Rect& camera)
 	}
 }
 
-void SceneBattle::DrawBattleMenu(SDL_Renderer* renderer, SDL_Rect& rect)
+void SceneBattle::DrawBattleMenu(SDL_Rect& rect)
 {
 	for (int i = 4; i < mBattleMenu.mPartyStatsPanel.mText.size(); i++)
 	{
@@ -983,10 +983,10 @@ void SceneBattle::DrawBattleMenu(SDL_Renderer* renderer, SDL_Rect& rect)
 		string += std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + "MP";
 	}
 
-	mBattleMenu.Render(renderer);
+	mBattleMenu.Render();
 }
 
-void SceneBattle::DrawCursor(SDL_Renderer* renderer)
+void SceneBattle::DrawCursor()
 {
 	SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
 
@@ -1011,7 +1011,7 @@ void SceneBattle::DrawCursor(SDL_Renderer* renderer)
 	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
 }
 
-void SceneBattle::DrawBattleEvent(SDL_Renderer* renderer, SDL_Rect& rect, const std::string& eventString)
+void SceneBattle::DrawBattleEvent(SDL_Rect& rect, const std::string& eventString)
 {
 	int stringLength = eventString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * eventString.length() * TEXT_SIZE;
 

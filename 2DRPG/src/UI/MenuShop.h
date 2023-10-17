@@ -7,7 +7,7 @@ class MenuShop : public Menu
 public:
 	MenuShop();
 
-	void Render(static SDL_Renderer* renderer) override;
+	void Render() override;
 
 	void SetupMainPanel();
 

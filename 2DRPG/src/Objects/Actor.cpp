@@ -28,7 +28,7 @@ void Actor::Update(const float dt)
     UpdateAnimation();
 }
 
-void Actor::Render(SDL_Renderer* renderer)
+void Actor::Render()
 {
     
 }

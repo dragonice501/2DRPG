@@ -37,9 +37,9 @@ public:
 
 	virtual void Input() override;
 	virtual void Update(const float dt) override;
-	virtual void Render(static SDL_Renderer* renderer, static SDL_Rect& camera) override;
+	virtual void Render(static SDL_Rect& camera) override;
 
-	virtual void DrawCursor(static SDL_Renderer* renderer);
+	virtual void DrawCursor();
 
 	void ExitMenu() override { mExplorationState = ES_EXPLORING; }
 

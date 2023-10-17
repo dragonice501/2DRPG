@@ -19,7 +19,7 @@ public:
 	inline const EKeywordMenu GetKeywordType() const { return mKeywordType; }
 	inline void SetKeywordType(const EKeywordMenu type) { mKeywordType = type; }
 
-	void Render(static SDL_Renderer* renderer) override;
+	void Render() override;
 
 	void SetupMainPanel();
 	void SetupAskPanel();

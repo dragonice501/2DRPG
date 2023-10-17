@@ -7,7 +7,7 @@ class MenuBattle : public Menu
 public:
 	MenuBattle();
 
-	void Render(static SDL_Renderer* renderer) override;
+	void Render() override;
 
 	void SetupActionsPanel();
 	void SetupPartyPanel();

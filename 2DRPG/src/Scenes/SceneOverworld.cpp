@@ -43,7 +43,7 @@ void SceneOverworld::Update(const float dt)
     SceneExploration::Update(dt);
 }
 
-void SceneOverworld::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
+void SceneOverworld::Render(static SDL_Rect& camera)
 { 
-    SceneExploration::Render(renderer, camera);
+    SceneExploration::Render(camera);
 }

@@ -16,7 +16,7 @@ public:
 	void LoadAnimations(std::string animationsFileName) override;
 	void Input() override;
 	void Update(const float dt) override;
-	void Render(SDL_Renderer* renderer) override;
+	void Render() override;
 	void UpdateAnimation() override;
 	const Vec2& GetPosition() const override { return mPosition; }
 

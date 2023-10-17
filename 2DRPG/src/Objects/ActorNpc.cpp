@@ -23,7 +23,7 @@ void ActorNpc::Update(const float dt)
     UpdateAnimation();
 }
 
-void ActorNpc::Render(SDL_Renderer* renderer)
+void ActorNpc::Render()
 {
     SDL_Rect destRect =
     {

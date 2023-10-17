@@ -9,7 +9,7 @@ public:
 	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown") override;
 	void Update(const float dt) override;
 
-	void Render(SDL_Renderer* renderer) override;
+	void Render() override;
 
 	void LoadAnimations(std::string animationsFilePath);
 

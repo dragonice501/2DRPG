@@ -11,7 +11,7 @@ MenuInteract::MenuInteract() :
     SetupAskPanel();
 }
 
-void MenuInteract::Render(SDL_Renderer* renderer)
+void MenuInteract::Render()
 {
     if (mMainPanel.mIsActive)
     {

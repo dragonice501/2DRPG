@@ -41,7 +41,7 @@ void SceneTown::Update(const float dt)
     SceneExploration::Update(dt);
 }
 
-void SceneTown::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
+void SceneTown::Render(static SDL_Rect& camera)
 {
-    SceneExploration::Render(renderer, camera);
+    SceneExploration::Render(camera);
 }

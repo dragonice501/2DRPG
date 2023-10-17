@@ -955,7 +955,7 @@ void SceneExploration::Update(const float dt)
     }
 }
 
-void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& camera)
+void SceneExploration::Render(static SDL_Rect& camera)
 {
     // Render tiles
     for (int i = 0; i < mTiles.size(); i++)
@@ -1021,12 +1021,12 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
     // Render Actors
     for (Actor& actor : mNpcs)
     {
-        actor.Render(renderer);
+        actor.Render();
     }
 
     for (ActorInteractable& interactable : mInteractables)
     {
-        interactable.Render(renderer);
+        interactable.Render();
     }
 
     // Render Party Characters
@@ -1041,7 +1041,7 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
             camera.y = Clampf(camera.y, 0, mMapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);
         }
 
-        mCharacters[i].Render(renderer);
+        mCharacters[i].Render();
     }
 
     // Render switch
@@ -1053,8 +1053,8 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
         case ES_INTERACTING:
         {
-            mInteractMenu.Render(renderer);
-            DrawCursor(renderer);
+            mInteractMenu.Render();
+            DrawCursor();
             break;
         }
         case ES_TALKING:
@@ -1070,14 +1070,14 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
         }
         case ES_MENUING:
         { 
-            mPartyMenu.Render(renderer);
-            DrawCursor(renderer);
+            mPartyMenu.Render();
+            DrawCursor();
             break;
         }
     }
 }
 
-void SceneExploration::DrawCursor(SDL_Renderer* renderer)
+void SceneExploration::DrawCursor()
 {
     SDL_Rect& cursorSpriteRect = mBattleIconsMap.at("Cursor").srcRect;
 

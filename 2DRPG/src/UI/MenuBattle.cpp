@@ -10,7 +10,7 @@ MenuBattle::MenuBattle() :
 		mSmallEnemyButtons.push_back(UIButton());
 }
 
-void MenuBattle::Render(SDL_Renderer* renderer)
+void MenuBattle::Render()
 {
 	if (mPartyActionPanel.mIsActive)
 	{

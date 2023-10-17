@@ -52,7 +52,7 @@ public:
 		}
 	}
 
-	virtual void Render(static SDL_Renderer* renderer) = 0;
+	virtual void Render() = 0;
 
 protected:
 	UIButton* mCurrentButton;

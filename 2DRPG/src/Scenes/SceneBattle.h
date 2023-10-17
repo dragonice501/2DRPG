@@ -49,11 +49,11 @@ public:
 	bool SearchForEnemyRight(int index);
 	void AcceptEnemyTarget(int index);
 
-	void Render(static SDL_Renderer* renderer, static SDL_Rect& camera);
-	void DrawBattleMenu(static SDL_Renderer* renderer, SDL_Rect& rect);
-	void DrawPartyStats(static SDL_Renderer* renderer, SDL_Rect& rect);
-	void DrawCursor(static SDL_Renderer* renderer);
-	void DrawBattleEvent(static SDL_Renderer* renderer, SDL_Rect& rect, const std::string& eventString);
+	void Render(static SDL_Rect& camera);
+	void DrawBattleMenu(SDL_Rect& rect);
+	void DrawPartyStats(SDL_Rect& rect);
+	void DrawCursor();
+	void DrawBattleEvent(SDL_Rect& rect, const std::string& eventString);
 
 private:
 	SDL_Texture* mBackgroundTexture = nullptr;

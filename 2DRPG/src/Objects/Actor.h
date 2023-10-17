@@ -27,7 +27,7 @@ public:
 
 	virtual void Input();
 	virtual void Update(const float dt);
-	virtual void Render(SDL_Renderer* renderer);
+	virtual void Render();
 
 	virtual void UpdateAnimation();
 

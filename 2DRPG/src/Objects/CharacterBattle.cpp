@@ -34,7 +34,7 @@ void CharacterBattle::LoadAnimations(std::string name)
     }
 }
 
-void CharacterBattle::Render(SDL_Renderer* renderer)
+void CharacterBattle::Render()
 {
     
 }

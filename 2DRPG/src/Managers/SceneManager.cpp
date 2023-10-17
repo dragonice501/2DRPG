@@ -55,7 +55,7 @@ void SceneManager::CurrentSceneUpdate(const float dt)
 
 void SceneManager::CurrentSceneRender()
 {
-	mCurrentScene->Render(GraphicsManager::GetRenderer(), GraphicsManager::GetCamera());
+	mCurrentScene->Render(GraphicsManager::GetCamera());
 }
 
 void SceneManager::CurrentSceneShutdown()
