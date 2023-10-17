@@ -136,7 +136,7 @@ void PlayerManager::SaveCharacters()
 
 int PlayerManager::CalcLevelUpExp(int level)
 {
-    return (5 * pow(level, 3)) / 4 + 16;
+    return (5 * pow(level, 3)) / 4 + 24;
 }
 
 bool PlayerManager::CheckLevelUp(int& outIndex)

@@ -187,11 +187,12 @@ void GraphicsManager::DrawRect(const int x, const int y, const int width, const 
 
 void GraphicsManager::DrawFillRect(const int x, const int y, const int width, const int height, const uint32_t color)
 {
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
+    SDL_SetRenderDrawColor(mRenderer, 0, 255, 0, 255);
     SDL_Rect rect = { x, y, width, height };
     SDL_RenderFillRect(mRenderer, &rect);
 
     SDL_RenderDrawRect(mRenderer, &rect);
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
 }
 
 void GraphicsManager::DrawCircle(const int x, const int y, const int radius, const float angle, const uint32_t color, const bool lockToScreen)

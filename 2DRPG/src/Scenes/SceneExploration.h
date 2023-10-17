@@ -6,6 +6,7 @@
 
 #include "../Objects/Actor.h"
 #include "../Objects/ActorNpc.h"
+#include "../Objects/ActorInteractable.h"
 #include "../Objects/CharacterExploration.h"
 #include "../Objects/Components.h"
 #include "../Objects/EnemyEncounter.h"
@@ -61,6 +62,7 @@ protected:
 
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<ActorNpc> mNpcs;
+	std::vector<ActorInteractable> mInteractables;
 	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 

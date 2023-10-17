@@ -7,6 +7,10 @@ Name Town 2
 Position 4 8
 Offset 0 -1
 
+Npc Knight 4 2 TownShopOwnerDialogue
+
+Interactable 4 4
+
 Tile 0
 Tile 4
 Tile 4

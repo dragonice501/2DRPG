@@ -504,6 +504,18 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             newActor.LoadDialogue(dialogueFile);
             mNpcs.push_back(newActor);
         }
+        else if (type == "Interactable")
+        {
+            ActorInteractable newInteractable;
+            int xPos;
+            int yPos;
+
+            file >> xPos >> yPos;
+
+            newInteractable.mPosition = { static_cast<float>(xPos * TILE_SIZE), static_cast<float>(yPos * TILE_SIZE) };
+
+            mInteractables.push_back(newInteractable);
+        }
         else if (type == "Tile")
         {
             int tileType;
@@ -766,6 +778,19 @@ void SceneExploration::Input()
 
                         mInteractMenuIndex = 0;
                         mExplorationState = ES_INTERACTING;
+
+                        return;
+                    }
+                }
+
+                for (ActorInteractable& interactable : mInteractables)
+                {
+                    Vec2 interactPosition = mCharacters[0].GetPosition() + mCharacters[0].mRigidbody.lastVelocity;
+
+                    if (interactable.GetPosition() == interactPosition)
+                    {
+                        std::cout << "Interactable" << std::endl;
+                        return;
                     }
                 }
             }
@@ -997,6 +1022,11 @@ void SceneExploration::Render(static SDL_Renderer* renderer, static SDL_Rect& ca
     for (Actor& actor : mNpcs)
     {
         actor.Render(renderer);
+    }
+
+    for (ActorInteractable& interactable : mInteractables)
+    {
+        interactable.Render(renderer);
     }
 
     // Render Party Characters

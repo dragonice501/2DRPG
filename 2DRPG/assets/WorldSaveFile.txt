@@ -1,6 +1,6 @@
 MapSize 60 34
 
-TileMap OverworldTileMap
+TileMap WorldTileMap
 
 SceneEntrance 0
 Name Town 0
