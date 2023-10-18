@@ -54,7 +54,7 @@ void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition
         }
     }
 
-    SetSpriteSheet(PlayerManager::GetCharacterTextures()[partyIndex]);
+    SetSpriteSheet(AssetManager::GetCharacterTexture(partyIndex));
     LoadAnimations(name);
     SetPosition(spawnPosition);
 

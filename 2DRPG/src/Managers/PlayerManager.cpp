@@ -3,7 +3,7 @@
 #include <cmath>
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
-std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
+//std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 int PlayerManager::mCharacterWeaponIndeces[4] = { -1, -1, -1, -1 };
 
 int PlayerManager::mPartyGold = 500;
@@ -22,8 +22,6 @@ uint8_t PlayerManager::mLevelGauranteeStats[2] =
 
 void PlayerManager::LoadCharacters()
 {
-    SDL_Surface* surface = nullptr;
-
     std::string fileName = "./assets/PlayerSaveFile.txt";
     std::ifstream file(fileName);
     std::string type;
@@ -71,62 +69,14 @@ void PlayerManager::LoadCharacters()
             }
 
             mCharacterAttributes.push_back(newCharacterAttributes);
-
-            SDL_Texture* texture = nullptr;
-            std::string surfacePath;
-            switch (newCharacterAttributes.characterClass)
-            {
-                case DANCER:
-                {
-                    surfacePath = "./assets/Dancer.png";
-                    surface = IMG_Load(surfacePath.c_str());
-                    if (surface)
-                    {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
-                        mCharacterTextures.push_back(texture);
-                    }
-                    break;
-                }
-                case KNIGHT:
-                {
-                    surfacePath = "./assets/Knight.png";
-                    surface = IMG_Load(surfacePath.c_str());
-                    if (surface)
-                    {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
-                        mCharacterTextures.push_back(texture);
-                    }
-                    break;
-                }
-                case MAGE:
-                {
-                    surfacePath = "./assets/Mage.png";
-                    surface = IMG_Load(surfacePath.c_str());
-                    if (surface)
-                    {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
-                        mCharacterTextures.push_back(texture);
-                    }
-                    break;
-                }
-                case PALADIN:
-                {
-                    surfacePath = "./assets/Sigurd.png";
-                    surface = IMG_Load(surfacePath.c_str());
-                    if (surface)
-                    {
-                        texture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
-                        mCharacterTextures.push_back(texture);
-                    }
-                    break;
-                }
-            }
         }
     }
 
-    if (surface)
+    for (int i = 0; i < mCharacterAttributes.size(); i++)
     {
-        SDL_FreeSurface(surface);
+        std::string textureName = GetClassName(mCharacterAttributes[i].characterClass);
+
+        AssetManager::CreateCharacterTexture(i, textureName);
     }
 }
 
@@ -215,9 +165,7 @@ void PlayerManager::SwapCharacters(int first, int second)
     mCharacterAttributes[first] = mCharacterAttributes[second];
     mCharacterAttributes[second] = tempChar;
 
-    SDL_Texture* tempTex = mCharacterTextures[first];
-    mCharacterTextures[first] = mCharacterTextures[second];
-    mCharacterTextures[second] = tempTex;
+    AssetManager::SwapCharacterTexture(first, second);
 }
 
 void PlayerManager::SwapCharacterInventories(int first, int second)

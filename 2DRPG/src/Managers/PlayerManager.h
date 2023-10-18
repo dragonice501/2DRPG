@@ -1,8 +1,11 @@
 #pragma once
 
-#include "../Objects/Components.h"
 #include "../Items/Weapon.h"
+
+#include "../Managers/AssetManager.h"
 #include "../Managers/GraphicsManager.h"
+
+#include "../Objects/Components.h"
 
 #include <vector>
 #include <fstream>
@@ -16,7 +19,6 @@ public:
 	static void SaveCharacters();
 
 	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
-	static const std::vector<SDL_Texture*>& GetCharacterTextures() { return mCharacterTextures; }
 	static const int* GetCharacterWeapons() { return mCharacterWeaponIndeces; }
 	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
 
@@ -47,7 +49,7 @@ public:
 	static int mPartyGold;
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
-	static std::vector<SDL_Texture*> mCharacterTextures;
+	//static std::vector<SDL_Texture*> mCharacterTextures;
 	static int mCharacterWeaponIndeces[4];
 
 

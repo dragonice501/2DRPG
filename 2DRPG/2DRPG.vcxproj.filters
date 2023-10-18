@@ -114,6 +114,9 @@
     <ClCompile Include="src\UI\MenuShop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Managers\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Engine.h">
@@ -525,6 +528,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\MenuShop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Managers\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

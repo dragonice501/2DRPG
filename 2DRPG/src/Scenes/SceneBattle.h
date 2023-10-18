@@ -10,6 +10,7 @@
 
 #include "../Graphics/Font.h"
 
+#include "../Managers/AssetManager.h"
 #include "../Managers/SceneManager.h"
 #include "../Managers/PlayerManager.h"
 
@@ -51,19 +52,14 @@ public:
 
 	void Render(static SDL_Rect& camera);
 	void DrawBattleMenu(SDL_Rect& rect);
-	void DrawPartyStats(SDL_Rect& rect);
 	void DrawCursor();
 	void DrawBattleEvent(SDL_Rect& rect, const std::string& eventString);
 
 private:
-	SDL_Texture* mBackgroundTexture = nullptr;
-	std::string mBackgroundImageFilePath;
+	std::string mBackgroundImageName;
 
-	SDL_Texture* mBattleIconsTexture = nullptr;
-	std::string mBattleIconsFilePath = "./assets/MenuIcons.png";
 	std::map<std::string, Sprite> mBattleIconsMap;
 
-	SDL_Texture* mEnemiesTexture = nullptr;
 	std::map<std::string, Enemy> mEnemyMap;
 	std::vector<Enemy> mEnemies;
 	

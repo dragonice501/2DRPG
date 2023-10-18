@@ -98,7 +98,7 @@ void SceneTownShop::DrawCursor()
             cursorSpriteRect.h * BATTLE_CURSOR_SCALE
         };
 
-        GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+        GraphicsManager::DrawSpriteRect(AssetManager::GetMenuIconsTexture(), cursorSpriteRect, destRect);
     }
     else
     {

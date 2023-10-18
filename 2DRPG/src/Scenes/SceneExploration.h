@@ -4,6 +4,8 @@
 
 #include "../Graphics/Font.h"
 
+#include "../Managers/AssetManager.h"
+
 #include "../Objects/Actor.h"
 #include "../Objects/ActorNpc.h"
 #include "../Objects/ActorInteractable.h"
@@ -29,9 +31,6 @@ public:
 	inline const int GetMapWidth() const { return mMapWidth; }
 	inline const int GetMapHeight() const { return mMapHeight; }
 
-	//inline const std::vector<Tile>& GetTiles() const { return mTiles; }
-	//inline const std::vector<CharacterExploration>& GetCharacters() const { return mCharacters; }
-
 	virtual void Setup(static SDL_Renderer* renderer);
 	virtual void Shutdown() override;
 
@@ -54,10 +53,8 @@ public:
 protected:
 	std::vector<Tile> mTiles;
 	std::string mTileMapName;
-	SDL_Texture* mTileMap;
 
-	SDL_Texture* mBattleIconsTexture = nullptr;
-	std::string mBattleIconsFilePath = "./assets/MenuIcons.png";
+	std::string mBattleIconsFilePath = "MenuIcons";
 	std::map<std::string, Sprite> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;

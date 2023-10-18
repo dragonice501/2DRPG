@@ -375,6 +375,8 @@ SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, c
 
     SDL_RenderDrawRect(mRenderer, &rect);
 
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
+
     return rect;
 }
 

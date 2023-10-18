@@ -8,32 +8,32 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	{
 		case BRIDGE:
 		{
-			mBackgroundImageFilePath = "./assets/BattlePlain.png";
+			mBackgroundImageName = "BattlePlain";
 			break;
 		}
 		case FOREST:
 		{
-			mBackgroundImageFilePath = "./assets/BattleForest.png";
+			mBackgroundImageName = "BattleForest";
 			break;
 		}
 		case PLAIN:
 		{
-			mBackgroundImageFilePath = "./assets/BattlePlain.png";
+			mBackgroundImageName = "BattlePlain";
 			break;
 		}
 		case RIVER:
 		{
-			mBackgroundImageFilePath = "./assets/BattleRiver.png";
+			mBackgroundImageName = "BattleRiver";
 			break;
 		}
 		case ROAD:
 		{
-			mBackgroundImageFilePath = "./assets/BattlePlain.png";
+			mBackgroundImageName = "BattlePlain";
 			break;
 		}
 		case THICKET:
 		{
-			mBackgroundImageFilePath = "./assets/BattleThicket.png";
+			mBackgroundImageName = "BattleThicket";
 			break;
 		}
 	}
@@ -218,21 +218,10 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 void SceneBattle::Setup(SDL_Renderer* renderer)
 {
 	// Load background image
-	SDL_Surface* surface = IMG_Load(mBackgroundImageFilePath.c_str());
-	if (surface)
-	{
-		mBackgroundTexture = SDL_CreateTextureFromSurface(renderer, surface);
-	}
-	SDL_FreeSurface(surface);
+	AssetManager::CreateBattleBackgroundTexture(mBackgroundImageName);
+	AssetManager::CreateEnemiesTexture("Enemies");
 
-	// Load battle icons
-	surface = IMG_Load(mBattleIconsFilePath.c_str());
-	if (surface)
-	{
-		mBattleIconsTexture = SDL_CreateTextureFromSurface(renderer, surface);
-	}
-	SDL_FreeSurface(surface);
-
+	// Load icons map
 	std::ifstream battleIconsFile("./assets/BattleIcons.txt");
 	std::string type;
 	while (battleIconsFile >> type)
@@ -245,15 +234,6 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 			mBattleIconsMap.emplace("Cursor", newSprite);
 		}
 	}
-
-	// Load enemy sprite sheet
-	std::string filePath = "./assets/Enemies.png";
-	surface = IMG_Load(filePath.c_str());
-	if (surface)
-	{
-		mEnemiesTexture = SDL_CreateTextureFromSurface(renderer, surface);
-	}
-	SDL_FreeSurface(surface);
 
 	// Load enemy sprites
 	std::ifstream file("./assets/EnemySprites.txt");
@@ -303,7 +283,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 
 	// Setup player party
-	for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+	for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
 	{
 		CharacterBattle newCharacter;
 		std::string name;
@@ -338,7 +318,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 		CharacterBattle* newBattleCharacter = new CharacterBattle();
 		newBattleCharacter->LoadAnimations(name);
-		newBattleCharacter->mTexture = PlayerManager::GetCharacterTextures()[i];
+		newBattleCharacter->mTexture = AssetManager::GetCharacterTexture(i);
 		newBattleCharacter->battlePosition = mPlayerCharacterPositions[i];
 		newBattleCharacter->mSprite.positionOffset = Vec2(0.0f, 16.0f);
 		newBattleCharacter->attributes = PlayerManager::GetCharacterAttributes()[i];
@@ -362,9 +342,12 @@ void SceneBattle::Shutdown()
 		delete enemy;
 	}
 
-	SDL_DestroyTexture(mBackgroundTexture);
-	SDL_DestroyTexture(mBattleIconsTexture);
-	SDL_DestroyTexture(mEnemiesTexture);
+	AssetManager::DestroyBattleBackgroundTexture();
+	AssetManager::DestroyEnemiesTexture();
+
+	//SDL_DestroyTexture(mBackgroundTexture);
+	//SDL_DestroyTexture(mBattleIconsTexture);
+	//SDL_DestroyTexture(mEnemiesTexture);
 }
 
 void SceneBattle::Input()
@@ -801,7 +784,7 @@ void SceneBattle::AcceptEnemyTarget(int index)
 
 void SceneBattle::Render(SDL_Rect& camera)
 {
-	GraphicsManager::DrawBattleBackground(mBackgroundTexture);
+	GraphicsManager::DrawBattleBackground(AssetManager::GetBattleBackgroundTexture());
 
 	// Draw Party
 	for (CharacterBattle* character : mBattleCharacters)
@@ -837,9 +820,10 @@ void SceneBattle::Render(SDL_Rect& camera)
 				enemy->rect.h * TILE_SPRITE_SCALE
 			};
 
-			GraphicsManager::DrawSpriteRect(mEnemiesTexture, enemy->rect, destRect);
+			GraphicsManager::DrawSpriteRect(AssetManager::GetEnemiesTexture(), enemy->rect, destRect);
 		}
 	}
+
 	// Draw UI
 	SDL_Rect rect;
 	std::string battleString;
@@ -998,7 +982,7 @@ void SceneBattle::DrawCursor()
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
 	};
 
-	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+	GraphicsManager::DrawSpriteRect(AssetManager::GetMenuIconsTexture(), cursorSpriteRect, destRect);
 
 	destRect =
 	{
@@ -1008,7 +992,7 @@ void SceneBattle::DrawCursor()
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
 	};
 
-	GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+	GraphicsManager::DrawSpriteRect(AssetManager::GetMenuIconsTexture(), cursorSpriteRect, destRect);
 }
 
 void SceneBattle::DrawBattleEvent(SDL_Rect& rect, const std::string& eventString)

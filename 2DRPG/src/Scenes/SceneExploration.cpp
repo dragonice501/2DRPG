@@ -533,21 +533,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     }
 
     // Get scene tilemap
-    fileName = "./assets/" + mTileMapName + ".png";
-    SDL_Surface* surface = IMG_Load(fileName.c_str());
-    if (surface)
-    {
-        mTileMap = SDL_CreateTextureFromSurface(renderer, surface);
-    }
-    SDL_FreeSurface(surface);
-
-    // Load menu icons
-    surface = IMG_Load(mBattleIconsFilePath.c_str());
-    if (surface)
-    {
-        mBattleIconsTexture = SDL_CreateTextureFromSurface(renderer, surface);
-    }
-    SDL_FreeSurface(surface);
+    AssetManager::CreateTileMapTexture(mTileMapName);
+    AssetManager::CreateMenuIconsTexture(mBattleIconsFilePath);
 
     std::ifstream battleIconsFile("./assets/BattleIcons.txt");
     while (battleIconsFile >> type)
@@ -587,7 +574,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     if (GameManager::GetReturnToOverworld())
     {
-        for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+        for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
         {
             mSpawnPositions.push_back(GameManager::GetPreviousOverworldPosition(i));
             mSpawnDirections.push_back(GameManager::GetPreviousDirection(i));
@@ -611,7 +598,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
 void SceneExploration::SetupCharacters()
 {
-    for (int i = 0; i < PlayerManager::GetCharacterTextures().size(); i++)
+    for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
     {
         CharacterExploration newCharacter;
         newCharacter.Setup(i, mSpawnPositions[i], mSpawnDirections[i]);
@@ -695,7 +682,8 @@ void SceneExploration::Shutdown()
         npc.DestroySpriteSheet();
     }
     ClearInteractedActor();
-    SDL_DestroyTexture(mTileMap);
+
+    AssetManager::DestroyTileMapTexture();
 }
 
 void SceneExploration::Input()
@@ -976,7 +964,7 @@ void SceneExploration::Render(static SDL_Rect& camera)
             TILE_SIZE * TILE_SPRITE_SCALE
         };
 
-        GraphicsManager::DrawSpriteRect(mTileMap, srcRect, destRect);
+        GraphicsManager::DrawSpriteRect(AssetManager::GetTileMapTexture(), srcRect, destRect);
     }
 
     /*for (int y = 0; y < mMapHeight; y++)
@@ -1117,5 +1105,5 @@ void SceneExploration::DrawCursor()
         }
     }
 
-    GraphicsManager::DrawSpriteRect(mBattleIconsTexture, cursorSpriteRect, destRect);
+    GraphicsManager::DrawSpriteRect(AssetManager::GetMenuIconsTexture(), cursorSpriteRect, destRect);
 }
