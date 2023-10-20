@@ -95,11 +95,15 @@ void MenuInteract::SetupAskPanel()
 
 void MenuInteract::DrawKeywordsPanel(SDL_Renderer* renderer, SDL_Rect& rect)
 {
-    rect = GraphicsManager::DrawUIBox(
-        rect.x + rect.w + UI_BOX_BORDER_SIZE * 3,
+    rect =
+    {
+         rect.x + rect.w + UI_BOX_BORDER_SIZE * 3,
         rect.y,
         300,
-        rect.h);
+        rect.h
+    };
+
+    GraphicsManager::DrawUIBox(rect);
 
     GraphicsManager::DrawString(rect.x + TEXT_PADDING, rect.y + TEXT_PADDING, "People");
     GraphicsManager::DrawString(rect.x + TEXT_PADDING + 100, rect.y + TEXT_PADDING, "Places");

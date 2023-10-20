@@ -3,17 +3,16 @@
 #include <cmath>
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
-//std::vector<SDL_Texture*> PlayerManager::mCharacterTextures;
 int PlayerManager::mCharacterWeaponIndeces[4] = { -1, -1, -1, -1 };
 
-int PlayerManager::mPartyGold = 500;
+int PlayerManager::mPartyGold = 2000;
 
 std::vector<std::string> PlayerManager::mPeopleKeywords;
 std::vector<std::string> PlayerManager::mPlacesKeywords;
 std::vector<std::string> PlayerManager::mMysteryKeywords;
 std::vector<std::string> PlayerManager::mBestiaryKeywords;
 
-std::vector<Weapon> PlayerManager::mInventoryWeapons = { Weapon("Saber"), Weapon("Sword") };
+std::vector<Weapon> PlayerManager::mInventoryWeapons;
 
 uint8_t PlayerManager::mLevelGauranteeStats[2] =
 {

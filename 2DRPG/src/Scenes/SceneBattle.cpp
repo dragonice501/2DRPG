@@ -999,11 +999,15 @@ void SceneBattle::DrawBattleEvent(SDL_Rect& rect, const std::string& eventString
 {
 	int stringLength = eventString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * eventString.length() * TEXT_SIZE;
 
-	rect = GraphicsManager::DrawUIBox(
+	rect =
+	{
 		GraphicsManager::WindowWidth() / 2 - stringLength / 2 - TEXT_PADDING,
 		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
 		stringLength + TEXT_PADDING * 2,
-		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2);
+		Font::fontHeight* TEXT_SIZE + TEXT_PADDING * 2
+	};
+
+	GraphicsManager::DrawUIBox(rect);
 
 	GraphicsManager::DrawString(
 		rect.x + TEXT_PADDING,

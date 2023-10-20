@@ -37,9 +37,12 @@ public:
 	static void LearnNewBestiaryKeyword(const std::string& keyword) { mBestiaryKeywords.push_back(keyword); }
 
 	static void AddGold(const int gold) { mPartyGold += gold; }
+	static void SubtractGold(const int gold) { mPartyGold -= gold; }
 	static int CalcLevelUpExp(int level);
 	static bool CheckLevelUp(int& outIndex);
 	static CharacterAttributes LevelUp(int characterIndex);
+
+	static void AddWeaponToInventory(const Weapon& newWeapon) { mInventoryWeapons.push_back(newWeapon); }
 
 	static void SwapCharacters(int first, int second);
 	static void SwapCharacterInventories(int first, int second);
@@ -49,7 +52,6 @@ public:
 	static int mPartyGold;
 private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
-	//static std::vector<SDL_Texture*> mCharacterTextures;
 	static int mCharacterWeaponIndeces[4];
 
 

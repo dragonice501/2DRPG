@@ -9,3 +9,9 @@ Attack 4
 Magic 6
 Buy 600
 Sell 200
+
+Weapon Hammer
+Attack 7
+Magic 2
+Buy 800
+Sell 300

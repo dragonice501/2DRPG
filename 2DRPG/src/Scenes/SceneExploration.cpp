@@ -532,7 +532,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         }
     }
 
-    // Get scene tilemap
+    // Create Textures
     AssetManager::CreateTileMapTexture(mTileMapName);
     AssetManager::CreateMenuIconsTexture(mBattleIconsFilePath);
 
@@ -684,6 +684,7 @@ void SceneExploration::Shutdown()
     ClearInteractedActor();
 
     AssetManager::DestroyTileMapTexture();
+    AssetManager::DestroyMenuIconsTexture();
 }
 
 void SceneExploration::Input()
@@ -1012,10 +1013,10 @@ void SceneExploration::Render(static SDL_Rect& camera)
         actor.Render();
     }
 
-    for (ActorInteractable& interactable : mInteractables)
+    /*for (ActorInteractable& interactable : mInteractables)
     {
         interactable.Render();
-    }
+    }*/
 
     // Render Party Characters
     for (int i = mCharacters.size() - 1; i >= 0; i--)
@@ -1047,9 +1048,9 @@ void SceneExploration::Render(static SDL_Rect& camera)
         }
         case ES_TALKING:
         {
-            SDL_Rect dialogueRect = GraphicsManager::DrawDialogueBox();
+            GraphicsManager::DrawDialogueBox();
             if(mInteractedActor)
-                GraphicsManager::DrawDialogue(dialogueRect, mInteractedActor->GetCurrentDialogue());
+                GraphicsManager::DrawDialogue(mInteractedActor->GetCurrentDialogue());
             break;
         }
         case ES_ASKING:

@@ -115,14 +115,6 @@ void MenuParty::SetupMoneyPanel()
     mMoneyText.mReference = &PlayerManager::mPartyGold;
     mMoneyText.mText = 'g';
     mMoneyPanel.mText.push_back(mMoneyText);
-
-    /*UIText moneyText = std::to_string(PlayerManager::GetPartyGold()) + 'g';
-    moneyText.mPosition =
-    {
-        mMoneyPanel.mPosition.x + TEXT_PADDING + mMoneyPanel.mSize.x - Font::GetStringFontLength(moneyText.mText.c_str()) * TEXT_SIZE - TEXT_PADDING * 2,
-        mMoneyPanel.mPosition.y + TEXT_PADDING
-    };
-    mMoneyPanel.mText.push_back(moneyText);*/
 }
 
 void MenuParty::SetupMainPanel()

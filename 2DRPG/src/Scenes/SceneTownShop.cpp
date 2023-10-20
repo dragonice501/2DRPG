@@ -35,8 +35,6 @@ void SceneTownShop::Shutdown()
 
 void SceneTownShop::Input()
 {
-    SceneExploration::Input();
-
     if (mExplorationState == ES_SHOPPING)
     {
         if (InputManager::UpPressed() && mShopMenu.GetCurrentButton()->OnUpAction)
@@ -64,6 +62,8 @@ void SceneTownShop::Input()
             mShopMenu.GetCurrentButton()->OnCancelAction();
         }
     }
+    
+    SceneExploration::Input();
 }
 
 void SceneTownShop::Update(const float dt)
@@ -108,18 +108,26 @@ void SceneTownShop::DrawCursor()
 
 void SceneTownShop::SetupShopMenu()
 {
-    mShopMenu.mMainBuyButton.OnAcceptAction = [this]()
+    mShopMenu.mMainBuyButton.OnCancelAction = [this]()
     {
-
+        mShopMenu.SetCurrentButton(&mShopMenu.mMainBuyButton);
+        mExplorationState = ES_EXPLORING;
     };
 
-    mShopMenu.mMainSellButton.OnAcceptAction = [this]()
+    mShopMenu.mMainSellButton.OnCancelAction = [this]()
     {
-
+        mShopMenu.SetCurrentButton(&mShopMenu.mMainBuyButton);
+        mExplorationState = ES_EXPLORING;
     };
 
     mShopMenu.mMainExitButton.OnAcceptAction = [this]()
     {
+        mShopMenu.SetCurrentButton(&mShopMenu.mMainBuyButton);
+        mExplorationState = ES_EXPLORING;
+    };
+    mShopMenu.mMainExitButton.OnCancelAction = [this]()
+    {
+        mShopMenu.SetCurrentButton(&mShopMenu.mMainBuyButton);
         mExplorationState = ES_EXPLORING;
     };
 }
@@ -139,8 +147,7 @@ void SceneTownShop::LoadShopItems()
             {
                 if (type == "End") break;
                 
-                Weapon newWeapon(type);
-                mWeapons.push_back(newWeapon);
+                mShopMenu.mWeapons.push_back(Weapon(type));
             }
         }
     }

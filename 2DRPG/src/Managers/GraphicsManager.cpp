@@ -315,7 +315,7 @@ void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect
     SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);
 }
 
-SDL_Rect GraphicsManager::DrawDialogueBox()
+void GraphicsManager::DrawDialogueBox()
 {
     SDL_Rect rect =
     {
@@ -338,14 +338,20 @@ SDL_Rect GraphicsManager::DrawDialogueBox()
     SDL_RenderFillRect(mRenderer, &rect);
 
     SDL_RenderDrawRect(mRenderer, &rect);
-
-    return rect;
 }
 
-void GraphicsManager::DrawDialogue(const SDL_Rect& rect, const std::vector<std::string>& dialogue)
+void GraphicsManager::DrawDialogue(const std::vector<std::string>& dialogue)
 {
     int xOffset = 0;
     int yOffset = 0;
+
+    SDL_Rect rect =
+    {
+        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2 - DIALOGUE_BOX_BORDER_SIZE,
+        static_cast<int>(mWindowHeight * 0.75f - DIALOGUE_BOX_BORDER_SIZE),
+        DIALOGUE_BOX_WIDTH + DIALOGUE_BOX_BORDER_SIZE * 2,
+        DIALOGUE_BOX_HEIGHT + DIALOGUE_BOX_BORDER_SIZE * 2
+    };
 
     for (int i = 0; i < dialogue.size(); i++)
     {
@@ -357,7 +363,7 @@ void GraphicsManager::DrawDialogue(const SDL_Rect& rect, const std::vector<std::
     }
 }
 
-SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, const int height)
+void GraphicsManager::DrawUIBox(const int x, const int y, const int width, const int height)
 {
     SDL_Rect rect =
     {
@@ -376,8 +382,19 @@ SDL_Rect GraphicsManager::DrawUIBox(const int x, const int y, const int width, c
     SDL_RenderDrawRect(mRenderer, &rect);
 
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
+}
 
-    return rect;
+void GraphicsManager::DrawUIBox(const SDL_Rect& rect)
+{
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
+    SDL_RenderFillRect(mRenderer, &rect);
+
+    SDL_RenderDrawRect(mRenderer, &rect);
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
 }
 
 void GraphicsManager::DrawUISelector(const int x, const int y, const int width, const int height)

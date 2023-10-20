@@ -33,6 +33,4 @@ public:
 	void LoadShopItems();
 
 	MenuShop mShopMenu;
-
-	std::vector<Weapon> mWeapons;
 };

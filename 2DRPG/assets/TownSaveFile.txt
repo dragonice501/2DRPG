@@ -19,6 +19,7 @@ Offset 0 1
 
 Npc Dancer 16 15 TownDancerDialogue
 Npc Knight 18 13 TownKnightDialogue
+Npc Mage 14 17 TownMageDialogue
 
 Tile 0
 Tile 0
