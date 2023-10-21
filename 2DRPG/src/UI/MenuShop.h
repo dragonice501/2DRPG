@@ -43,19 +43,23 @@ public:
 
 	EShoppingState mShoppingState = SS_MAIN;
 
+	// Money Panel
 	UIPanel mMoneyPanel;
 	UIText mMoneyText;
 
+	// Main Panel
 	UIPanel mMainPanel;
 	UIButton mMainBuyButton;
 	UIButton mMainSellButton;
 	UIButton mMainExitButton;
 
+	// Buy Panel
 	UIPanel mBuyMainPanel;
 	UIButton mBuyMainWeaponsButton;
 	UIButton mBuyMainArmourButton;
 	UIButton mBuyMainItemsButton;
 
+	// Weapons Panel
 	UIPanel mWeaponSelectionPanel;
 	UIButton mWeaponSelectionButtonOne;
 	UIButton mWeaponSelectionButtonTwo;
@@ -67,9 +71,11 @@ public:
 	UIText mWeaponPriceTextThree;
 	UIText mWeaponPriceTextFour;
 
+	// Purchase Prompt Panel
 	UIPanel mPurchasePromptPanel;
 	UIText mPurchasePromptText;
 
+	// Weapon Purchase Confirm Panel
 	UIPanel mWeaponConfirmPanel;
 	UIButton mWeaponConfirmButtonYes;
 	UIButton mWeaponConfirmButtonNo;

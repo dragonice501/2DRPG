@@ -69,9 +69,11 @@ public:
 	EPanelState mPanelState = PS_PARTY;
 	EEquipState mEquipState = ES_EQUIPPING;
 
+	// Money Panel
 	UIPanel mMoneyPanel;
 	UIText mMoneyText;
 
+	// Main Panel
 	UIPanel mMainPanel;
 	UIButton mPartyButton;
 	UIButton mStatusButton;
@@ -81,12 +83,34 @@ public:
 	UIButton mMagicButton;
 	UIButton mExitButton;
 
+	// Party Panel
 	UIPanel mPartyPanel;
 	UIButton mPartyButtonOne;
 	UIButton mPartyButtonTwo;
 	UIButton mPartyButtonThree;
 	UIButton mPartyButtonFour;
 
+	UIText mPartyLevelTextOne;
+	UIText mPartyClassTextOne;
+	UIText mPartyHPTextOne;
+	UIText mPartyMPTextOne;
+
+	UIText mPartyLevelTextTwo;
+	UIText mPartyClassTextTwo;
+	UIText mPartyHPTextTwo;
+	UIText mPartyMPTextTwo;
+
+	UIText mPartyLevelTextThree;
+	UIText mPartyClassTextThree;
+	UIText mPartyHPTextThree;
+	UIText mPartyMPTextThree;
+
+	UIText mPartyLevelTextFour;
+	UIText mPartyClassTextFour;
+	UIText mPartyHPTextFour;
+	UIText mPartyMPTextFour;
+
+	// Status Panel
 	UIPanel mStatusButtonPanel;
 	UIButton mStatusButtonOne;
 	UIButton mStatusButtonTwo;
@@ -107,6 +131,20 @@ public:
 	UIText mStatusSkillText;
 	UIText mStatusLuckText;
 
+	UIText mStatusLevelValueText;
+	UIText mStatusClassValueText;
+	UIText mStatusHPValueText;
+	UIText mStatusMPValueText;
+	UIText mStatusCurrentXPValueText;
+	UIText mStatusNextLevelValueText;
+	UIText mStatusStrengthValueText;
+	UIText mStatusDefenseValueText;
+	UIText mStatusIntelligenceValueText;
+	UIText mStatusSpeedValueText;
+	UIText mStatusSkillValueText;
+	UIText mStatusLuckValueText;
+
+	// Inventory Panel
 	UIPanel mInventoryButtonsPanel;
 	UIButton mInventoryButtonOne;
 	UIButton mInventoryButtonTwo;
@@ -118,6 +156,7 @@ public:
 	UIButton mInventoryPanelButtonThree;
 	UIButton mInventoryPanelButtonFour;
 
+	// Journal Panel
 	UIPanel mJournalButtonsPanel;
 	UIButton mJournalButtonOne;
 	UIButton mJournalButtonTwo;
@@ -130,6 +169,7 @@ public:
 	UIButton mKeywordsButtonThree;
 	UIButton mKeywordsButtonFour;
 
+	// Equip Panel
 	UIPanel mEquipButtonsPanel;
 	UIButton mEquipButtonOne;
 	UIButton mEquipButtonTwo;
@@ -149,6 +189,7 @@ public:
 	UIButton mEquipmentChestButton;
 	UIButton mEquipmentArmsButton;
 	UIButton mEquipmentLegsButton;
+	
 	UIText mEquipmentWeaponText;
 	UIText mEquipmentShieldText;
 	UIText mEquipmentHeadText;

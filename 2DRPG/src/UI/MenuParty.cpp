@@ -114,7 +114,7 @@ void MenuParty::SetupMoneyPanel()
     };
     mMoneyText.mReference = &PlayerManager::mPartyGold;
     mMoneyText.mText = 'g';
-    mMoneyPanel.mText.push_back(mMoneyText);
+    mMoneyPanel.mText.push_back(&mMoneyText);
 }
 
 void MenuParty::SetupMainPanel()
@@ -313,8 +313,6 @@ void MenuParty::SetupPartyPanel()
         mMoneyPanel.mSize.y + mMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
     };
 
-    FillPartyAttributes();
-
     mPartyButtonOne.OnDownAction = [this]()
     {
         mCurrentButton = &mPartyButtonThree;
@@ -387,6 +385,76 @@ void MenuParty::SetupPartyPanel()
     mPartyPanel.mButtons.push_back(&mPartyButtonTwo);
     mPartyPanel.mButtons.push_back(&mPartyButtonThree);
     mPartyPanel.mButtons.push_back(&mPartyButtonFour);
+
+    // First Character
+    mPartyButtonOne.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING,
+        mPartyPanel.mPosition.y + TEXT_PADDING
+    };
+
+    mPartyLevelTextOne.mPosition = mPartyButtonOne.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
+    mPartyClassTextOne.mPosition = mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyHPTextOne.mPosition = mPartyClassTextOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyMPTextOne.mPosition = mPartyHPTextOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    
+    mPartyPanel.mText.push_back(&mPartyLevelTextOne);
+    mPartyPanel.mText.push_back(&mPartyClassTextOne);
+    mPartyPanel.mText.push_back(&mPartyHPTextOne);
+    mPartyPanel.mText.push_back(&mPartyMPTextOne);
+
+    // Second Character
+    mPartyButtonTwo.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
+        mPartyPanel.mPosition.y + TEXT_PADDING
+    };
+
+    mPartyLevelTextTwo.mPosition = mPartyButtonTwo.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
+    mPartyClassTextTwo.mPosition = mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyHPTextTwo.mPosition = mPartyClassTextTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyMPTextTwo.mPosition = mPartyHPTextTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mPartyPanel.mText.push_back(&mPartyLevelTextTwo);
+    mPartyPanel.mText.push_back(&mPartyClassTextTwo);
+    mPartyPanel.mText.push_back(&mPartyHPTextTwo);
+    mPartyPanel.mText.push_back(&mPartyMPTextTwo);
+
+    // Third Character
+    mPartyButtonThree.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING,
+        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
+    };
+
+    mPartyLevelTextThree.mPosition = mPartyButtonThree.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
+    mPartyClassTextThree.mPosition = mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyHPTextThree.mPosition = mPartyClassTextThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyMPTextThree.mPosition = mPartyHPTextThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mPartyPanel.mText.push_back(&mPartyLevelTextThree);
+    mPartyPanel.mText.push_back(&mPartyClassTextThree);
+    mPartyPanel.mText.push_back(&mPartyHPTextThree);
+    mPartyPanel.mText.push_back(&mPartyMPTextThree);
+
+    // Four Character
+    mPartyButtonFour.mPosition =
+    {
+        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
+        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
+    };
+
+    mPartyLevelTextFour.mPosition = mPartyButtonFour.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
+    mPartyClassTextFour.mPosition = mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyHPTextFour.mPosition = mPartyClassTextFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mPartyMPTextFour.mPosition = mPartyHPTextFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mPartyPanel.mText.push_back(&mPartyLevelTextFour);
+    mPartyPanel.mText.push_back(&mPartyClassTextFour);
+    mPartyPanel.mText.push_back(&mPartyHPTextFour);
+    mPartyPanel.mText.push_back(&mPartyMPTextFour);
+
+    FillPartyAttributes();
 }
 
 void MenuParty::SetupStatusPanel()
@@ -480,89 +548,111 @@ void MenuParty::SetupStatusPanel()
 
     float fontLength;
 
-    UIText statusText;
-    statusText.mPosition = mStatusAttributesPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    statusText.mText = "Lv. ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    // Level
+    mStatusLevelText.mPosition = mStatusAttributesPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusLevelText.mText = "Lv. ";
+    mStatusAttributesPanel.mText.push_back(&mStatusLevelText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    fontLength = Font::GetStringFontLength(mStatusLevelText.mText.c_str()) * TEXT_SIZE;
+    mStatusLevelValueText.mPosition = mStatusLevelText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusLevelValueText);
 
-    mStatusClassText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    // Class
+    mStatusClassText.mPosition = mStatusLevelText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mStatusClassText.mText = GetClassName(PlayerManager::GetCharacterAttributes()[0].characterClass);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusHPText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    fontLength = Font::GetStringFontLength(mStatusClassText.mText.c_str()) * TEXT_SIZE;
+    mStatusClassValueText.mPosition = mStatusClassText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
-    statusText.mPosition = mStatusHPText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "HP ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+     // HP
+    mStatusHPText.mPosition = mStatusClassText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusHPText.mText = "HP ";
+    mStatusAttributesPanel.mText.push_back(&mStatusHPText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusHPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    fontLength = Font::GetStringFontLength(mStatusHPText.mText.c_str()) * TEXT_SIZE;
+    mStatusHPValueText.mPosition = mStatusHPText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusHPValueText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "MP ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    // MP
+    mStatusMPText.mPosition = mStatusHPText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusMPText.mText = "MP ";
+    mStatusAttributesPanel.mText.push_back(&mStatusMPText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusMPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    fontLength = Font::GetStringFontLength(mStatusMPText.mText.c_str()) * TEXT_SIZE;
+    mStatusMPValueText.mPosition = mStatusMPText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusMPValueText);
+     
+    // EXP
+    mStatusCurrentXPText.mPosition = mStatusMPText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING * 2);
+    mStatusCurrentXPText.mText = "Current Exp ";
+    mStatusAttributesPanel.mText.push_back(&mStatusCurrentXPText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, (Font::fontHeight * TEXT_SIZE) * 2 + TEXT_PADDING * 2);
-    statusText.mText = "Current Exp ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusCurrentXPText.mText.c_str()) * TEXT_SIZE;
+    mStatusCurrentXPValueText.mPosition = mStatusCurrentXPText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusCurrentXPValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusCurrentXPText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Next Level
+    mStatusNextLevelText.mPosition = mStatusCurrentXPText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusNextLevelText.mText = "Next Level ";
+    mStatusAttributesPanel.mText.push_back(&mStatusNextLevelText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Next Level ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusNextLevelText.mText.c_str()) * TEXT_SIZE;
+    mStatusNextLevelValueText.mPosition = mStatusNextLevelText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusNextLevelValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusNextLevelText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Strength
+    mStatusStrengthText.mPosition = mStatusAttributesPanel.mPosition + Vec2(mStatusAttributesPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mStatusStrengthText.mText = "Str ";
+    mStatusAttributesPanel.mText.push_back(&mStatusStrengthText);
 
-    statusText.mPosition = mStatusAttributesPanel.mPosition + Vec2(mStatusAttributesPanel.mSize.x * 0.5f, TEXT_PADDING);
-    statusText.mText = "Str ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusStrengthText.mText.c_str()) * TEXT_SIZE;
+    mStatusStrengthValueText.mPosition = mStatusStrengthText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusStrengthValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusStrengthText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Defense
+    mStatusDefenseText.mPosition = mStatusStrengthText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusDefenseText.mText = "Def ";
+    mStatusAttributesPanel.mText.push_back(&mStatusDefenseText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Def ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusDefenseText.mText.c_str()) * TEXT_SIZE;
+    mStatusDefenseValueText.mPosition = mStatusDefenseText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusDefenseValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusDefenseText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Intelligence
+    mStatusIntelligenceText.mPosition = mStatusDefenseText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusIntelligenceText.mText = "Int ";
+    mStatusAttributesPanel.mText.push_back(&mStatusIntelligenceText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Int ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusIntelligenceText.mText.c_str()) * TEXT_SIZE;
+    mStatusIntelligenceValueText.mPosition = mStatusIntelligenceText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusIntelligenceValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusIntelligenceText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Speed
+    mStatusSpeedText.mPosition = mStatusIntelligenceText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusSpeedText.mText = "Spd ";
+    mStatusAttributesPanel.mText.push_back(&mStatusSpeedText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Spd ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusSpeedText.mText.c_str()) * TEXT_SIZE;
+    mStatusSpeedValueText.mPosition = mStatusSpeedText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusSpeedValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusSpeedText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Skill
+    mStatusSkillText.mPosition = mStatusSpeedText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusSkillText.mText = "Skl ";
+    mStatusAttributesPanel.mText.push_back(&mStatusSkillText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Skl ";
-    mStatusAttributesPanel.mText.push_back(statusText);
+    fontLength = Font::GetStringFontLength(mStatusSkillText.mText.c_str()) * TEXT_SIZE;
+    mStatusSkillValueText.mPosition = mStatusSkillText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusSkillValueText);
 
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusSkillText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    // Luck
+    mStatusLuckText.mPosition = mStatusSkillText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mStatusLuckText.mText = "Lck ";
+    mStatusAttributesPanel.mText.push_back(&mStatusLuckText);
 
-    statusText.mPosition = statusText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
-    statusText.mText = "Lck ";
-    mStatusAttributesPanel.mText.push_back(statusText);
-
-    fontLength = Font::GetStringFontLength(statusText.mText.c_str()) * TEXT_SIZE;
-    mStatusLuckText.mPosition = statusText.mPosition + Vec2(fontLength, 0.0f);
+    fontLength = Font::GetStringFontLength(mStatusLuckText.mText.c_str()) * TEXT_SIZE;
+    mStatusLuckValueText.mPosition = mStatusLuckText.mPosition + Vec2(fontLength, 0.0f);
+    mStatusAttributesPanel.mText.push_back(&mStatusLuckValueText);
 
     SetStatusCharacterAttributes(0);
 }
@@ -1241,177 +1331,75 @@ void MenuParty::SetPanelState(EPanelState state)
 
 void MenuParty::FillPartyAttributes()
 {
-    mPartyPanel.mText.clear();
-
     CharacterAttributes attributes = PlayerManager::GetCharacterAttributes()[0];
     std::string string;
     UIText text;
 
     // First Character Button
-    mPartyButtonOne.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING,
-        mPartyPanel.mPosition.y + TEXT_PADDING
-    };
     mPartyButtonOne.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
-    text =
-    {
-        string,
-        mPartyButtonOne.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyLevelTextOne.mText = string;
 
     string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
-    text =
-    {
-        string,
-        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyClassTextOne.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
-    text =
-    {
-        string,
-        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyHPTextOne.mText = string;
 
     string = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
-    text =
-    {
-        string,
-        mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyMPTextOne.mText = string;
 
     // Second Character Button
     attributes = PlayerManager::GetCharacterAttributes()[1];
 
-    mPartyButtonTwo.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
-        mPartyPanel.mPosition.y + TEXT_PADDING
-    };
     mPartyButtonTwo.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
-    text =
-    {
-        string,
-        mPartyButtonTwo.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyLevelTextTwo.mText = string;
 
     string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
-    text =
-    {
-        string,
-        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyClassTextTwo.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
-    text =
-    {
-        string,
-        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyHPTextTwo.mText = string;
 
     string = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
-    text =
-    {
-        string,
-        mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyMPTextTwo.mText = string;
 
     // Third Character Button
     attributes = PlayerManager::GetCharacterAttributes()[2];
 
-    mPartyButtonThree.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING,
-        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
-    };
     mPartyButtonThree.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
-    text =
-    {
-        string,
-        mPartyButtonThree.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyLevelTextThree.mText = string;
 
     string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
-    text =
-    {
-        string,
-        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyClassTextThree.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
-    text =
-    {
-        string,
-        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyHPTextThree.mText = string;
 
     string = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
-    text =
-    {
-        string,
-        mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyMPTextThree.mText = string;
 
     // Fourth Character Button
     attributes = PlayerManager::GetCharacterAttributes()[3];
 
-    mPartyButtonFour.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
-        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
-    };
     mPartyButtonFour.mText = attributes.characterName;
 
     string = "Lv." + std::to_string(attributes.level);
-    text =
-    {
-        string,
-        mPartyButtonFour.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyLevelTextFour.mText = string;
 
     string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
-    text =
-    {
-        string,
-        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyClassTextFour.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
-    text =
-    {
-        string,
-        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 2 + TEXT_PADDING * 2)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyHPTextFour.mText = string;
 
     string = std::to_string(attributes.magic) + '/' + std::to_string(attributes.magicMax) + " MP";
-    text =
-    {
-        string,
-        mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE * 3 + TEXT_PADDING * 3)
-    };
-    mPartyPanel.mText.push_back(text);
+    mPartyMPTextFour.mText = string;
 }
 
 void MenuParty::SetStatusButtonsText()
@@ -1424,40 +1412,40 @@ void MenuParty::SetStatusButtonsText()
 
 void MenuParty::SetStatusCharacterAttributes(int index)
 {
-    mStatusLevelText.mText =
+    mStatusLevelValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].level);
 
-    mStatusClassText.mText =
+    mStatusClassValueText.mText =
         GetClassName(PlayerManager::GetCharacterAttributes()[index].characterClass);
 
-    mStatusHPText.mText =
+    mStatusHPValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].health) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].healthMax);
 
-    mStatusMPText.mText =
+    mStatusMPValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax);
 
-    mStatusCurrentXPText.mText =
+    mStatusCurrentXPValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].exp);
 
-    mStatusNextLevelText.mText =
+    mStatusNextLevelValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].expNextLevel);
 
-    mStatusStrengthText.mText =
+    mStatusStrengthValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].strength);
 
-    mStatusDefenseText.mText =
+    mStatusDefenseValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].defense);
     
-    mStatusIntelligenceText.mText =
+    mStatusIntelligenceValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].intelligence);
 
-    mStatusSpeedText.mText =
+    mStatusSpeedValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].speed);
 
-    mStatusSkillText.mText =
+    mStatusSkillValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].skill);
 
-    mStatusLuckText.mText =
+    mStatusLuckValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].luck);
 }
 

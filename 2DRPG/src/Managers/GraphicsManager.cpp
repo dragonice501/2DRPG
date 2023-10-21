@@ -372,10 +372,12 @@ void GraphicsManager::DrawUIBox(const int x, const int y, const int width, const
         width + UI_BOX_BORDER_SIZE * 2,
         height + UI_BOX_BORDER_SIZE * 2
     };
+
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_RenderFillRect(mRenderer, &rect);
 
     rect = { x, y, width, height };
+
     SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
     SDL_RenderFillRect(mRenderer, &rect);
 

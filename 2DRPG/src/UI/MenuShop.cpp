@@ -66,7 +66,7 @@ void MenuShop::SetupMoneyPanel()
 	};
 	mMoneyText.mReference = &PlayerManager::mPartyGold;
 	mMoneyText.mText = 'g';
-	mMoneyPanel.mText.push_back(mMoneyText);
+	mMoneyPanel.mText.push_back(&mMoneyText);
 }
 
 void MenuShop::SetupMainPanel()
@@ -178,10 +178,7 @@ void MenuShop::SetupBuyPanel()
 	};
 	mBuyMainArmourButton.OnAcceptAction = [this]()
 	{
-		mPreviousButtonFirst = &mBuyMainArmourButton;
-		mCurrentButton = &mWeaponSelectionButtonOne;
-		mWeaponSelectionPanel.mIsActive = true;
-		FillBuyButtonsArmour();
+		//FillBuyButtonsArmour();
 	};
 
 	mBuyMainItemsButton.OnLeftAction = [this]
@@ -195,10 +192,7 @@ void MenuShop::SetupBuyPanel()
 	};
 	mBuyMainItemsButton.OnAcceptAction = [this]()
 	{
-		mPreviousButtonFirst = &mBuyMainItemsButton;
-		mCurrentButton = &mWeaponSelectionButtonOne;
-		mWeaponSelectionPanel.mIsActive = true;
-		FillBuyButtonsItems();
+		//FillBuyButtonsItems();
 	};
 
 	mBuyMainPanel.mButtons.push_back(&mBuyMainWeaponsButton);
@@ -324,10 +318,10 @@ void MenuShop::SetupWeaponSelectionPanel()
 	mWeaponPriceTextThree.mPosition = mWeaponSelectionButtonThree.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
 	mWeaponPriceTextFour.mPosition = mWeaponSelectionButtonFour.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
 
-	mWeaponSelectionPanel.mText.push_back(mWeaponPriceTextOne);
-	mWeaponSelectionPanel.mText.push_back(mWeaponPriceTextTwo);
-	mWeaponSelectionPanel.mText.push_back(mWeaponPriceTextThree);
-	mWeaponSelectionPanel.mText.push_back(mWeaponPriceTextFour);
+	mWeaponSelectionPanel.mText.push_back(&mWeaponPriceTextOne);
+	mWeaponSelectionPanel.mText.push_back(&mWeaponPriceTextTwo);
+	mWeaponSelectionPanel.mText.push_back(&mWeaponPriceTextThree);
+	mWeaponSelectionPanel.mText.push_back(&mWeaponPriceTextFour);
 }
 
 void MenuShop::SetupPurchasePromptPanel()
@@ -341,7 +335,7 @@ void MenuShop::SetupPurchasePromptPanel()
 	};
 
 	mPurchasePromptText.mPosition = mPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-	mPurchasePromptPanel.mText.push_back(mPurchasePromptText);
+	mPurchasePromptPanel.mText.push_back(&mPurchasePromptText);
 
 	mWeaponConfirmPanel.mIsActive = false;
 	mWeaponConfirmPanel.mPosition = mPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
@@ -371,7 +365,7 @@ void MenuShop::SetupPurchasePromptPanel()
 		}
 		else
 		{
-			mPurchasePromptPanel.mText[0].mText = "You can't afford that.";
+			mPurchasePromptText.mText = "You can't afford that.";
 		}
 	};
 	mWeaponConfirmButtonYes.OnCancelAction = [this]()
@@ -413,7 +407,7 @@ void MenuShop::FillBuyButtonsWeapons()
 	{
 		mWeaponSelectionPanel.mButtons[i]->mIsActive = true;
 		mWeaponSelectionPanel.mButtons[i]->mText = mWeapons[i].mName;
-		mWeaponSelectionPanel.mText[i].mText = std::to_string(mWeapons[i].mBuyCost) + 'g';
+		mWeaponSelectionPanel.mText[i]->mText = std::to_string(mWeapons[i].mBuyCost) + 'g';
 	}
 }
 
@@ -435,7 +429,7 @@ void MenuShop::FillBuyButtonsItems()
 
 void MenuShop::SetPromptText()
 {
-	mPurchasePromptPanel.mText[0].mText =
+	mPurchasePromptText.mText =
 		"Purchase " +
 		mWeapons[mSelectedWeaponIndex].mName +
 		" for " +

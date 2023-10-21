@@ -62,8 +62,10 @@ void SceneTownShop::Input()
             mShopMenu.GetCurrentButton()->OnCancelAction();
         }
     }
-    
-    SceneExploration::Input();
+    else
+    {
+        SceneExploration::Input();
+    }
 }
 
 void SceneTownShop::Update(const float dt)

@@ -960,7 +960,7 @@ void SceneBattle::DrawBattleMenu(SDL_Rect& rect)
 {
 	for (int i = 4; i < mBattleMenu.mPartyStatsPanel.mText.size(); i++)
 	{
-		std::string& string = mBattleMenu.mPartyStatsPanel.mText[i].mText;
+		std::string& string = mBattleMenu.mPartyStatsPanel.mText[i]->mText;
 		const CharacterAttributes& attributes = mBattleCharacters[i - 4]->attributes;
 
 		string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + "HP" + ' ';
@@ -986,8 +986,8 @@ void SceneBattle::DrawCursor()
 
 	destRect =
 	{
-		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex].mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5),
-		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex].mPosition.y),
+		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex]->mPosition.x - cursorSpriteRect.w * BATTLE_CURSOR_SCALE - 5),
+		static_cast<int>(mBattleMenu.mPartyStatsPanel.mText[mCurrentPlayerIndex]->mPosition.y),
 		cursorSpriteRect.w * BATTLE_CURSOR_SCALE,
 		cursorSpriteRect.h * BATTLE_CURSOR_SCALE
 	};
@@ -1002,12 +1002,12 @@ void SceneBattle::DrawBattleEvent(SDL_Rect& rect, const std::string& eventString
 	rect =
 	{
 		GraphicsManager::WindowWidth() / 2 - stringLength / 2 - TEXT_PADDING,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - DIALOGUE_BOX_BORDER_SIZE * 2,
+		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - UI_BOX_BORDER_SIZE * 2,
 		stringLength + TEXT_PADDING * 2,
 		Font::fontHeight* TEXT_SIZE + TEXT_PADDING * 2
 	};
 
-	GraphicsManager::DrawUIBox(rect);
+	GraphicsManager::DrawUIBox(rect.x, rect.y, rect.w, rect.h);
 
 	GraphicsManager::DrawString(
 		rect.x + TEXT_PADDING,

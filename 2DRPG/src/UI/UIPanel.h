@@ -26,9 +26,9 @@ public:
 				button->Render();
 		}
 
-		for (UIText& text : mText)
+		for (UIText* text : mText)
 		{
-			text.Render();
+			text->Render();
 		}
 	}
 
@@ -37,5 +37,5 @@ public:
 	Vec2 mSize;
 
 	std::vector<UIButton*> mButtons;
-	std::vector<UIText> mText;
+	std::vector<UIText*> mText;
 };

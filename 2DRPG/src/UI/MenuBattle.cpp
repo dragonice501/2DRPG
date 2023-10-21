@@ -88,10 +88,10 @@ void MenuBattle::SetupPartyPanel()
 	mPartyNamesThree.mText = PlayerManager::GetCharacterAttributes()[2].characterName;
 	mPartyNamesFour.mText = PlayerManager::GetCharacterAttributes()[3].characterName;
 
-	mPartyStatsPanel.mText.push_back(mPartyNamesOne);
-	mPartyStatsPanel.mText.push_back(mPartyNamesTwo);
-	mPartyStatsPanel.mText.push_back(mPartyNamesThree);
-	mPartyStatsPanel.mText.push_back(mPartyNamesFour);
+	mPartyStatsPanel.mText.push_back(&mPartyNamesOne);
+	mPartyStatsPanel.mText.push_back(&mPartyNamesTwo);
+	mPartyStatsPanel.mText.push_back(&mPartyNamesThree);
+	mPartyStatsPanel.mText.push_back(&mPartyNamesFour);
 
 	std::string string;
 
@@ -127,8 +127,8 @@ void MenuBattle::SetupPartyPanel()
 		mPartyStatsPanel.mPosition +
 		Vec2(mPartyStatsPanel.mSize.x - Font::GetStringFontLength(string.c_str()) * TEXT_SIZE - TEXT_PADDING, TEXT_PADDING + (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 3);
 
-	mPartyStatsPanel.mText.push_back(mPartyStatsTextOne);
-	mPartyStatsPanel.mText.push_back(mPartyStatsTextTwo);
-	mPartyStatsPanel.mText.push_back(mPartyStatsTextThree);
-	mPartyStatsPanel.mText.push_back(mPartyStatsTextFour);
+	mPartyStatsPanel.mText.push_back(&mPartyStatsTextOne);
+	mPartyStatsPanel.mText.push_back(&mPartyStatsTextTwo);
+	mPartyStatsPanel.mText.push_back(&mPartyStatsTextThree);
+	mPartyStatsPanel.mText.push_back(&mPartyStatsTextFour);
 }
