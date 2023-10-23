@@ -22,7 +22,7 @@ public:
 	void LoadWeaponAttributes(const std::string& weaponName)
 	{
 		std::string string;
-		std::string fileName = "./assets/WeaponAttributes.txt";
+		std::string fileName = "./assets/files/WeaponAttributes.txt";
 		std::ifstream file(fileName);
 		while (file >> string)
 		{

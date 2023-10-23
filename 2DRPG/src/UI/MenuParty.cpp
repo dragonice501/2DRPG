@@ -1,10 +1,25 @@
 #include "MenuParty.h"
 
 MenuParty::MenuParty() :
-    mPartyButton("Party"), mStatusButton("Status"), mInventoryButton("Inventory"), mJournalButton("Journal"), mEquipButton("Equip"), mMagicButton("Magic"), mExitButton("Exit"),
-    mJournalButtonOne("People"), mJournalButtonTwo("Place"), mJournalButtonThree("Mystery"), mJournalButtonFour("Bestiary"),
-    mInventoryButtonOne("Items"), mInventoryButtonTwo("Weapons"), mInventoryButtonThree("Armour"),
-    mEquipOptionsButtonEquip("Equip"), mEquipOptionsButtonRemove("Remove"), mEquipOptionsButtonRemoveAll("Remove All"), mEquipOptionsButtonOptimize("Optimize")
+    mPartyButton("Party"),
+    mStatusButton("Status"),
+    mInventoryButton("Inventory"),
+    mJournalButton("Journal"),
+    mEquipButton("Equip"),
+    mMagicButton("Magic"),
+    mSaveButton("Save"),
+    mExitButton("Exit"),
+    mJournalButtonOne("People"),
+    mJournalButtonTwo("Place"),
+    mJournalButtonThree("Mystery"),
+    mJournalButtonFour("Bestiary"),
+    mInventoryButtonOne("Items"),
+    mInventoryButtonTwo("Weapons"),
+    mInventoryButtonThree("Armour"),
+    mEquipOptionsButtonEquip("Equip"),
+    mEquipOptionsButtonRemove("Remove"),
+    mEquipOptionsButtonRemoveAll("Remove All"),
+    mEquipOptionsButtonOptimize("Optimize")
 {
     mIsMainMenu = true;
 
@@ -15,6 +30,7 @@ MenuParty::MenuParty() :
     SetupInventoryPanel();
     SetupJournalPanel();
     SetupEquipPanel();
+    SetupSavePanel();
 
     mCurrentButton = &mPartyButton;
 }
@@ -85,6 +101,13 @@ void MenuParty::Render()
         {
             break;
         }
+        case MenuParty::PS_SAVE:
+        {
+            mPartyPanel.Render();
+            mSavePromptPanel.Render();
+            mSaveButtonsPanel.Render();
+            break;
+        }
         case MenuParty::PS_SELECTING_WEAPON:
         {
             mInventoryPanel.Render();
@@ -129,7 +152,7 @@ void MenuParty::SetupMainPanel()
     mMainPanel.mSize =
     {
         stringLength + TEXT_PADDING * 2.0f,
-        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 8.0f + TEXT_PADDING * 7.0f
     };
 
     mMainPanel.mButtons.push_back(&mPartyButton);
@@ -138,6 +161,7 @@ void MenuParty::SetupMainPanel()
     mMainPanel.mButtons.push_back(&mJournalButton);
     mMainPanel.mButtons.push_back(&mEquipButton);
     mMainPanel.mButtons.push_back(&mMagicButton);
+    mMainPanel.mButtons.push_back(&mSaveButton);
     mMainPanel.mButtons.push_back(&mExitButton);
 
     float vertOffset = Font::fontHeight * TEXT_SIZE + TEXT_PADDING;
@@ -147,7 +171,8 @@ void MenuParty::SetupMainPanel()
     mJournalButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 3 };
     mEquipButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 4 };
     mMagicButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 5 };
-    mExitButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 6 };
+    mSaveButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 6 };
+    mExitButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 7 };
 
     mPartyButton.OnSelected = [this]()
     {
@@ -276,10 +301,32 @@ void MenuParty::SetupMainPanel()
     };
     mMagicButton.OnDownAction = [this]()
     {
-        mCurrentButton = &mExitButton;
+        mCurrentButton = &mSaveButton;
         mCurrentButton->OnSelected();
     };
     mMagicButton.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mPartyButton;
+    };
+
+    mSaveButton.OnSelected = [this]()
+    {
+
+    };
+    mSaveButton.OnUpAction = [this]()
+    {
+        mCurrentButton = &mMagicButton;
+    };
+    mSaveButton.OnDownAction = [this]()
+    {
+        mCurrentButton = &mExitButton;
+    };
+    mSaveButton.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mSaveButtonYes;
+        mPanelState = PS_SAVE;
+    };
+    mSaveButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
@@ -290,7 +337,7 @@ void MenuParty::SetupMainPanel()
     };
     mExitButton.OnUpAction = [this]()
     {
-        mCurrentButton = &mMagicButton;
+        mCurrentButton = &mSaveButton;
         mCurrentButton->OnSelected();
     };
     mExitButton.OnCancelAction = [this]()
@@ -543,7 +590,7 @@ void MenuParty::SetupStatusPanel()
     mStatusAttributesPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
-        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+        mMainPanel.mSize.y
     };
 
     float fontLength;
@@ -560,9 +607,6 @@ void MenuParty::SetupStatusPanel()
     // Class
     mStatusClassText.mPosition = mStatusLevelText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mStatusClassText.mText = GetClassName(PlayerManager::GetCharacterAttributes()[0].characterClass);
-
-    fontLength = Font::GetStringFontLength(mStatusClassText.mText.c_str()) * TEXT_SIZE;
-    mStatusClassValueText.mPosition = mStatusClassText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
      // HP
     mStatusHPText.mPosition = mStatusClassText.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -1133,7 +1177,7 @@ void MenuParty::SetupEquipPanel()
     mEquipmentPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 23.0f + Font::fontSpacing * 23.0f + TEXT_PADDING * 2.0f,
-        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+        mMainPanel.mSize.y
     };
 
     float fontLength;
@@ -1273,6 +1317,78 @@ void MenuParty::SetupEquipPanel()
     mEquipmentPanel.mButtons.push_back(&mEquipmentChestButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentArmsButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentLegsButton);
+}
+
+void MenuParty::SetupSavePanel()
+{
+    mSavePromptPanel.mIsActive = true;
+    mSavePromptPanel.mPosition =
+    {
+        mPartyPanel.mPosition.x,
+        mPartyPanel.mPosition.y + mPartyPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
+    };
+    mSavePromptPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 10.0f + Font::fontSpacing * TEXT_SIZE * 9.0f + TEXT_PADDING * 2.0f,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
+
+    mSavePromptText.mPosition = mSavePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mSavePromptText.mText = "Save Game?";
+
+    mSavePromptPanel.mText.push_back(&mSavePromptText);
+
+    mSaveButtonsPanel.mIsActive = true;
+    mSaveButtonsPanel.mPosition = 
+    {
+       mSavePromptPanel.mPosition.x,
+       mSavePromptPanel.mPosition.y + mSavePromptPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
+    };
+    mSaveButtonsPanel.mSize =
+    {
+        Font::fontWidth * TEXT_SIZE * 5.0f + Font::fontSpacing * TEXT_SIZE * 4.0f + TEXT_PADDING * 5.0f,
+        Font::fontHeight * TEXT_SIZE * 2.0f + TEXT_PADDING * 3.0f
+    };
+
+    mSaveButtonYes.mPosition = mSaveButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mSaveButtonNo.mPosition = mSaveButtonYes.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mSaveButtonYes.mText = "Yes";
+    mSaveButtonNo.mText = "No";
+
+    mSaveButtonYes.OnDownAction = [this]()
+    {
+        mCurrentButton = &mSaveButtonNo;
+    };
+    mSaveButtonYes.OnAcceptAction = [this]()
+    {
+        GameManager::SaveGame();
+        mCurrentButton = &mSaveButton;
+        mPanelState = PS_PARTY;
+    };
+    mSaveButtonYes.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mSaveButton;
+        mPanelState = PS_PARTY;
+    };
+
+    mSaveButtonNo.OnUpAction = [this]()
+    {
+        mCurrentButton = &mSaveButtonYes;
+    };
+    mSaveButtonNo.OnAcceptAction = [this]()
+    {
+        mCurrentButton = &mSaveButton;
+        mPanelState = PS_PARTY;
+    };
+    mSaveButtonNo.OnCancelAction = [this]()
+    {
+        mCurrentButton = &mSaveButton;
+        mPanelState = PS_PARTY;
+    };
+
+    mSaveButtonsPanel.mButtons.push_back(&mSaveButtonYes);
+    mSaveButtonsPanel.mButtons.push_back(&mSaveButtonNo);
 }
 
 void MenuParty::SetPanelState(EPanelState state)
@@ -1415,7 +1531,7 @@ void MenuParty::SetStatusCharacterAttributes(int index)
     mStatusLevelValueText.mText =
         std::to_string(PlayerManager::GetCharacterAttributes()[index].level);
 
-    mStatusClassValueText.mText =
+    mStatusClassText.mText =
         GetClassName(PlayerManager::GetCharacterAttributes()[index].characterClass);
 
     mStatusHPValueText.mText =

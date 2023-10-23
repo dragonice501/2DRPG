@@ -18,6 +18,7 @@ private:
 		PS_JOURNAL,
 		PS_EQUIP,
 		PS_MAGIC,
+		PS_SAVE,
 
 		PS_SELECTING_WEAPON
 	};
@@ -40,6 +41,7 @@ public:
 	void SetupInventoryPanel();
 	void SetupJournalPanel();
 	void SetupEquipPanel();
+	void SetupSavePanel();
 
 	void SetPanelState(EPanelState state);
 	void FillPartyAttributes();
@@ -81,6 +83,7 @@ public:
 	UIButton mJournalButton;
 	UIButton mEquipButton;
 	UIButton mMagicButton;
+	UIButton mSaveButton;
 	UIButton mExitButton;
 
 	// Party Panel
@@ -132,7 +135,6 @@ public:
 	UIText mStatusLuckText;
 
 	UIText mStatusLevelValueText;
-	UIText mStatusClassValueText;
 	UIText mStatusHPValueText;
 	UIText mStatusMPValueText;
 	UIText mStatusCurrentXPValueText;
@@ -196,6 +198,14 @@ public:
 	UIText mEquipmentChestText;
 	UIText mEquipmentArmsText;
 	UIText mEquipmentLegsText;
+
+	// Save Panel
+	UIPanel mSavePromptPanel;
+	UIText mSavePromptText;
+
+	UIPanel mSaveButtonsPanel;
+	UIButton mSaveButtonYes;
+	UIButton mSaveButtonNo;
 
 	std::vector<UIButton*> mMainMenuButtons = 
 	{

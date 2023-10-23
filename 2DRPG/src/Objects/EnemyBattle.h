@@ -13,7 +13,7 @@ public:
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{
 		std::string type;
-		std::string fileName = "./assets/EnemyAttributes.txt";
+		std::string fileName = "./assets/files/EnemyAttributes.txt";
 		std::ifstream file(fileName);
 		while (file >> type)
 		{

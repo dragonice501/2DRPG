@@ -17,6 +17,8 @@
 class SceneManager
 {
 public:
+	static std::unique_ptr<Scene>& GetCurrentScene() { return mCurrentScene; }
+
 	static void LoadScene();
 
 	static void CurrentSceneInput();

@@ -130,7 +130,7 @@ struct SceneEntrance
 	{
 		this->position = position;
 		this->spawnOffset = spawnOffset;
-		this->scene = GetSceneName(sceneName);
+		this->sceneName = sceneName;
 		this->sceneEntranceIndex = sceneEntranceIndex;
 		this->nextSceneEntrance = nextSceneEntrance;
 	}
@@ -153,7 +153,7 @@ struct SceneEntrance
 
 	Vec2 position;
 	Vec2 spawnOffset;
-	SceneName scene;
+	std::string sceneName;
 	int sceneEntranceIndex;
 	int nextSceneEntrance;
 };

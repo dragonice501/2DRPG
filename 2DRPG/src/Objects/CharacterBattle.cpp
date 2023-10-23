@@ -5,7 +5,7 @@ void CharacterBattle::LoadAnimations(std::string name)
     Animation newAnimation;
     std::string animationName;
 
-    std::string filePath = "./assets/" + name + "Animations.txt";
+    std::string filePath = "./assets/files/" + name + "Animations.txt";
     std::ifstream file(filePath);
     std::string type;
     while (file >> type)

@@ -350,6 +350,14 @@ SceneExploration::SceneExploration()
     {
         mExplorationState = ES_EXPLORING;
     };
+    mPartyMenu.mSaveButton.OnCancelAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
+    mPartyMenu.mExitButton.OnAcceptAction = [this]()
+    {
+        mExplorationState = ES_EXPLORING;
+    };
     mPartyMenu.mExitButton.OnCancelAction = [this]()
     {
         mExplorationState = ES_EXPLORING;
@@ -437,7 +445,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     Vec2 spawnPosition;
 
     // Load level tiles, entrances and actors
-    fileName = "./assets/" + mFileName + "SaveFile.txt";
+    fileName = "./assets/files/" + mFileName + "SaveFile.txt";
     std::ifstream file(fileName);
     std::string type;
     while (file >> type)
@@ -536,7 +544,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     AssetManager::CreateTileMapTexture(mTileMapName);
     AssetManager::CreateMenuIconsTexture(mBattleIconsFilePath);
 
-    std::ifstream battleIconsFile("./assets/BattleIcons.txt");
+    std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
     while (battleIconsFile >> type)
     {
         if (type == "Cursor")
@@ -550,7 +558,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     // Load enemy encounters
     EnemyEncounter newEncounter;
-    fileName = "./assets/" + mFileName + "Encounters.txt";
+    fileName = "./assets/files/" + mFileName + "Encounters.txt";
     std::ifstream encountersFile(fileName);
     while (encountersFile >> type)
     {
@@ -787,6 +795,7 @@ void SceneExploration::Input()
             if (InputManager::StartPressed())
             {
                 mExplorationState = ES_MENUING;
+                mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
             }
             break;
         }
@@ -920,7 +929,7 @@ void SceneExploration::Update(const float dt)
             {
                 if (entrance.position == character.GetPosition())
                 {
-                    GameManager::SetSceneToLoad(entrance.scene, entrance.nextSceneEntrance);
+                    GameManager::SetSceneToLoad(entrance.sceneName, entrance.nextSceneEntrance);
                     return;
                 }
             }
@@ -938,7 +947,7 @@ void SceneExploration::Update(const float dt)
 
                 int terrainIndex = static_cast<int>(character.GetPosition().x) / 16 + (static_cast<int>(character.GetPosition().y) / 16) * mMapWidth;
 
-                GameManager::SetSceneToLoad(BATTLE, -1, true, mTiles[terrainIndex].terrainType, mEnemyEncounters);
+                GameManager::SetSceneToLoad("Battle", -1, true, mTiles[terrainIndex].terrainType, mEnemyEncounters);
             }
         }
     }

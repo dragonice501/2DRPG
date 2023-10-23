@@ -2,8 +2,6 @@
 
 #include "SceneExploration.h"
 
-#include "../Managers/SceneManager.h"
-
 class SceneOverworld : public SceneExploration
 {
 public:

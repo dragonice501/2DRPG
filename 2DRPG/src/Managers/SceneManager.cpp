@@ -10,7 +10,28 @@ void SceneManager::LoadScene()
 		mCurrentScene.reset();
 	}
 
-	switch (GameManager::GetSceneToLoad())
+	if (GameManager::GetSceneToLoad() == "Battle")
+	{
+		GameManager::SetSceneType();
+		mCurrentScene = std::make_unique<SceneBattle>(GameManager::GetBattleBackground(), GameManager::GetEnemyEncounters());
+	}
+	else if (GameManager::GetSceneToLoad() == "Overworld")
+	{
+		GameManager::SetSceneType(true);
+		mCurrentScene = std::make_unique<SceneOverworld>();
+	}
+	else if (GameManager::GetSceneToLoad() == "Town")
+	{
+		GameManager::SetSceneType(false, true);
+		mCurrentScene = std::make_unique<SceneTown>();
+	}
+	else if (GameManager::GetSceneToLoad() == "TownShop")
+	{
+		GameManager::SetSceneType(false, false, true);
+		mCurrentScene = std::make_unique<SceneTownShop>();
+	}
+
+	/*switch (GameManager::GetSceneToLoad())
 	{
 		case BATTLE:
 		{
@@ -36,9 +57,10 @@ void SceneManager::LoadScene()
 			mCurrentScene = std::make_unique<SceneTownShop>();
 			break;
 		}
-	}
+	}*/
 
-	GameManager::SetSceneToLoad(NONE);
+	GameManager::SetSceneName(GameManager::GetSceneToLoad());
+	GameManager::SetSceneToLoad("None");
 
 	if (mCurrentScene) mCurrentScene->Setup(GraphicsManager::GetRenderer());
 }

@@ -138,7 +138,7 @@ void SceneTownShop::LoadShopItems()
 {
     std::string fileName;
 
-    fileName = "./assets/" + mFileName + "Items.txt";
+    fileName = "./assets/files/" + mFileName + "Items.txt";
     std::ifstream file(fileName);
     std::string type;
     while (file >> type)

@@ -21,7 +21,7 @@ uint8_t PlayerManager::mLevelGauranteeStats[2] =
 
 void PlayerManager::LoadCharacters()
 {
-    std::string fileName = "./assets/PlayerSaveFile.txt";
+    std::string fileName = "./assets/files/PlayerSaveFile.txt";
     std::ifstream file(fileName);
     std::string type;
     while (file >> type)

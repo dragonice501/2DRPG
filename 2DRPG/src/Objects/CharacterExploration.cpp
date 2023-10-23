@@ -49,7 +49,7 @@ void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition
         }
         case PALADIN:
         {
-            name = "Sigurd";
+            name = "Paladin";
             break;
         }
     }

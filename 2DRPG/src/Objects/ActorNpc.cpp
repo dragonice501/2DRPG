@@ -4,7 +4,7 @@
 
 void ActorNpc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation)
 {
-    std::string filePath = "./assets/" + name + ".png";
+    std::string filePath = "./assets/images/" + name + ".png";
     SDL_Surface* surface = IMG_Load(filePath.c_str());
     if (surface)
     {
@@ -41,7 +41,7 @@ void ActorNpc::LoadAnimations(std::string animationsFilePath)
     Animation newAnimation;
     std::string animationName;
 
-    std::string filePath = "./assets/" + animationsFilePath + "Animations.txt";
+    std::string filePath = "./assets/Files/" + animationsFilePath + "Animations.txt";
     std::ifstream file(filePath);
     std::string type;
     while (file >> type)
@@ -167,7 +167,7 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
     std::string keyWord;
     std::string keywordJournalType;
 
-    std::string  fileName = "./assets/" + filePathName + ".txt";
+    std::string  fileName = "./assets/files/" + filePathName + ".txt";
     std::ifstream file(fileName);
     std::string text;
     while (file >> text)

@@ -90,7 +90,7 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	};
 	mBattleMenu.mRunButton.OnAcceptAction = [this]()
 	{
-		GameManager::SetSceneToLoad(OVERWORLD, -2, true);
+		GameManager::SetSceneToLoad("Overworld", -2, true);
 	};
 
 	mBattleMenu.mSmallEnemyButtons[0].OnDownAction = [this]()
@@ -220,9 +220,10 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	// Load background image
 	AssetManager::CreateBattleBackgroundTexture(mBackgroundImageName);
 	AssetManager::CreateEnemiesTexture("Enemies");
+	AssetManager::CreateMenuIconsTexture("MenuIcons");
 
 	// Load icons map
-	std::ifstream battleIconsFile("./assets/BattleIcons.txt");
+	std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
 	std::string type;
 	while (battleIconsFile >> type)
 	{
@@ -236,7 +237,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 
 	// Load enemy sprites
-	std::ifstream file("./assets/EnemySprites.txt");
+	std::ifstream file("./assets/files/EnemySprites.txt");
 	while (file >> type)
 	{
 		if (type == "Enemy")
@@ -306,7 +307,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 			}
 			case PALADIN:
 			{
-				name = "Sigurd";
+				name = "Paladin";
 				break;
 			}
 		}
@@ -344,10 +345,7 @@ void SceneBattle::Shutdown()
 
 	AssetManager::DestroyBattleBackgroundTexture();
 	AssetManager::DestroyEnemiesTexture();
-
-	//SDL_DestroyTexture(mBackgroundTexture);
-	//SDL_DestroyTexture(mBattleIconsTexture);
-	//SDL_DestroyTexture(mEnemiesTexture);
+	AssetManager::DestroyMenuIconsTexture();
 }
 
 void SceneBattle::Input()
@@ -616,7 +614,7 @@ void SceneBattle::Update(const float dt)
 			mTurnTimeRemaining -= dt;
 			if (mTurnTimeRemaining <= 0)
 			{
-				GameManager::SetSceneToLoad(OVERWORLD, -2, true);
+				GameManager::SetSceneToLoad("Overworld", -2, true);
 			}
 			break;
 		}

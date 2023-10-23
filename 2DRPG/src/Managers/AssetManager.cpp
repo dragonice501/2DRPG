@@ -13,7 +13,7 @@ void AssetManager::CreateTileMapTexture(const std::string textureName)
 {
 	SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
@@ -27,7 +27,7 @@ void AssetManager::CreateMenuIconsTexture(const std::string textureName)
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
@@ -41,7 +41,7 @@ void AssetManager::CreateBattleBackgroundTexture(const std::string textureName)
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
@@ -55,7 +55,7 @@ void AssetManager::CreateEnemiesTexture(const std::string textureName)
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
@@ -69,7 +69,7 @@ void AssetManager::CreateCharacterTexture(int index, const std::string textureNa
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {

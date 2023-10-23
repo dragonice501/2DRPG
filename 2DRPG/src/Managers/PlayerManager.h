@@ -54,7 +54,6 @@ private:
 	static std::vector<CharacterAttributes> mCharacterAttributes;
 	static int mCharacterWeaponIndeces[4];
 
-
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;
 	static std::vector<std::string> mMysteryKeywords;
