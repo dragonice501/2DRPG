@@ -31,34 +31,6 @@ void SceneManager::LoadScene()
 		mCurrentScene = std::make_unique<SceneTownShop>();
 	}
 
-	/*switch (GameManager::GetSceneToLoad())
-	{
-		case BATTLE:
-		{
-			GameManager::SetSceneType();
-			mCurrentScene = std::make_unique<SceneBattle>(GameManager::GetBattleBackground(), GameManager::GetEnemyEncounters());
-			break;
-		}
-		case OVERWORLD:
-		{
-			GameManager::SetSceneType(true);
-			mCurrentScene = std::make_unique<SceneOverworld>();
-			break;
-		}
-		case TOWN:
-		{
-			GameManager::SetSceneType(false, true);
-			mCurrentScene = std::make_unique<SceneTown>();
-			break;
-		}
-		case TOWN_SHOP:
-		{
-			GameManager::SetSceneType(false, false, true);
-			mCurrentScene = std::make_unique<SceneTownShop>();
-			break;
-		}
-	}*/
-
 	GameManager::SetSceneName(GameManager::GetSceneToLoad());
 	GameManager::SetSceneToLoad("None");
 

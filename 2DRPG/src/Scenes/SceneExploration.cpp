@@ -925,6 +925,13 @@ void SceneExploration::Update(const float dt)
 
         if (character.mMovement.stepTaken && character.mPartyIndex == 0)
         {
+            GameManager::ClearPositionsAndDirections();
+            for (CharacterExploration& character : mCharacters)
+            {
+                GameManager::SetPreviousOverworldPosition(character.GetPosition());
+                GameManager::SetPreviousOverworldDirection(character.mRigidbody.lastVelocity);
+            }
+
             for (const SceneEntrance& entrance : mSceneEntrances)
             {
                 if (entrance.position == character.GetPosition())
@@ -938,13 +945,6 @@ void SceneExploration::Update(const float dt)
 
             if (mStepsUntilEncounter <= 0)
             {
-                GameManager::ClearPositionsAndDirections();
-                for (CharacterExploration& character : mCharacters)
-                {
-                    GameManager::SetPreviousOverworldPosition(character.GetPosition());
-                    GameManager::SetPreviousDirection(character.mRigidbody.lastVelocity);
-                }
-
                 int terrainIndex = static_cast<int>(character.GetPosition().x) / 16 + (static_cast<int>(character.GetPosition().y) / 16) * mMapWidth;
 
                 GameManager::SetSceneToLoad("Battle", -1, true, mTiles[terrainIndex].terrainType, mEnemyEncounters);

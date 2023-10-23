@@ -10,8 +10,8 @@ bool GameManager::mIsIndoors = false;
 
 bool GameManager::mReturnToOverworld = false;
 int GameManager::mSceneEntranceIndex = -1;
-std::vector<Vec2> GameManager::mPreviousOverworldPositions;
-std::vector<Vec2> GameManager::mPreviousDirections;
+std::vector<Vec2> GameManager::mPreviousCharacterPositions;
+std::vector<Vec2> GameManager::mPreviousCharacterDirections;
 std::string GameManager::mSceneToLoad = "None";
 
 ETerrainType GameManager::mBattleBackgroundType = UNDEFINED;
@@ -36,26 +36,7 @@ void GameManager::SetSceneToLoad(const std::string& sceneToLoad, const int entra
 
 void GameManager::SaveGame()
 {
-	mSaveData.levelName = "";
-
-	/*if (static_cast<std::unique_ptr<SceneExploration>&>(SceneManager::GetCurrentScene())
-	{
-
-	}*/
-
-	mSaveData.partyGold = PlayerManager::GetPartyGold();
-	mSaveData.partyGold = PlayerManager::GetPartyGold();
-	mSaveData.partyAttributes = PlayerManager::GetCharacterAttributes();
-	mSaveData.mInventoryWeapons = PlayerManager::GetInventoryWeapons();
-
-	mSaveData.peopleKeywords = PlayerManager::GetPeopleKeywords();
-	mSaveData.placesKeywords = PlayerManager::GetPlacesKeywords();
-	mSaveData.mysteryKeywords = PlayerManager::GetPlacesKeywords();
-	mSaveData.bestiaryKeywords = PlayerManager::GetBestiaryKeywords();
-
-	mSaveData.mInventoryWeapons = PlayerManager::GetInventoryWeapons();
-
-	std::string gameSavePath = "./assets/gamesave.txt";
+	std::string gameSavePath = "./assets/files/gamesave.txt";
 	std::ifstream gameSaveInFile;
 	gameSaveInFile.open(gameSavePath);
 	if (gameSaveInFile.is_open())
@@ -65,66 +46,81 @@ void GameManager::SaveGame()
 	}
 
 	std::ofstream gameSaveOutFile;
-	gameSaveInFile.open(gameSavePath);
-	if (gameSaveInFile.is_open())
+	gameSaveOutFile.open(gameSavePath);
+	if (gameSaveOutFile.is_open())
 	{
-		gameSaveOutFile << "LevelName " << mSaveData.levelName << std::endl;
+		gameSaveOutFile << "LevelName " << mSceneName << std::endl << std::endl;
 
-		for (int i = 0; i < mSaveData.lastPositions.size(); i++)
+		gameSaveOutFile << "Gold " << PlayerManager::GetPartyGold() << std::endl << std::endl;;
+
+		for (int i = 0; i < mPreviousCharacterPositions.size(); i++)
 		{
-			gameSaveOutFile << "CharacterPosition " << mSaveData.lastPositions[i].x << ' ' << mSaveData.lastPositions[i].y << std::endl;
+			gameSaveOutFile << "CharacterPosition " << mPreviousCharacterPositions[i].x << ' ' << mPreviousCharacterPositions[i].y << std::endl;
+		}
+		gameSaveOutFile << std::endl;
+
+		for (int i = 0; i < mPreviousCharacterDirections.size(); i++)
+		{
+			gameSaveOutFile << "CharacterDirections " << mPreviousCharacterDirections[i].x << ' ' << mPreviousCharacterDirections[i].y << std::endl;
+		}
+		gameSaveOutFile << std::endl;
+
+		for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
+		{
+			CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
+
+			gameSaveOutFile << "Character " << attributes.characterName << std::endl;
+			gameSaveOutFile << "Class " << attributes.characterClass << std::endl;
+			gameSaveOutFile << "Level " << attributes.level << std::endl;
+			gameSaveOutFile << "Health " << attributes.health << ' ' << attributes.healthMax << std::endl;
+			gameSaveOutFile << "Magic " << attributes.magic << ' ' << attributes.magicMax << std::endl;
+			gameSaveOutFile << "Strength " << attributes.strength << std::endl;
+			gameSaveOutFile << "Defense " << attributes.defense << std::endl;
+			gameSaveOutFile << "Intelligence " << attributes.intelligence << std::endl;
+			gameSaveOutFile << "Speed " << attributes.speed << std::endl;
+			gameSaveOutFile << "Skill " << attributes.skill << std::endl;
+			gameSaveOutFile << "Luck " << attributes.luck << std::endl;
+			gameSaveOutFile << "Exp " << attributes.exp << std::endl << std::endl;
 		}
 
-		gameSaveOutFile << "Gold " << mSaveData.partyGold << std::endl;
-
-		for (int i = 0; i < mSaveData.lastPositions.size(); i++)
+		for (int i = 0; i < 4; i++)
 		{
-			gameSaveOutFile << "Character " << mSaveData.partyAttributes[i].characterName << std::endl;
-			gameSaveOutFile << "Class " << mSaveData.partyAttributes[i].characterClass << std::endl;
-			gameSaveOutFile << "Level " << mSaveData.partyAttributes[i].level << std::endl;
-			gameSaveOutFile << "Health " << mSaveData.partyAttributes[i].health << ' ' << mSaveData.partyAttributes[i].healthMax << std::endl;
-			gameSaveOutFile << "Magic " << mSaveData.partyAttributes[i].magic << ' ' << mSaveData.partyAttributes[i].magicMax << std::endl;
-			gameSaveOutFile << "Strength " << mSaveData.partyAttributes[i].strength << std::endl;
-			gameSaveOutFile << "Defense " << mSaveData.partyAttributes[i].defense << std::endl;
-			gameSaveOutFile << "Intelligence " << mSaveData.partyAttributes[i].intelligence << std::endl;
-			gameSaveOutFile << "Speed " << mSaveData.partyAttributes[i].speed << std::endl;
-			gameSaveOutFile << "Skill " << mSaveData.partyAttributes[i].skill << std::endl;
-			gameSaveOutFile << "Luck " << mSaveData.partyAttributes[i].luck << std::endl;
-			gameSaveOutFile << "Exp " << mSaveData.partyAttributes[i].exp << std::endl;
+			gameSaveOutFile << "CharacterWeapon " << PlayerManager::GetCharacterWeapon(i) << std::endl;
 		}
+		gameSaveOutFile << std::endl;
 
 		gameSaveOutFile << "PeopleKeywords ";
-		for (int i = 0; i < mSaveData.peopleKeywords.size(); i++)
+		for (int i = 0; i < PlayerManager::GetPeopleKeywords().size(); i++)
 		{
-			gameSaveOutFile << mSaveData.peopleKeywords[i] << ' ';
+			gameSaveOutFile << PlayerManager::GetPeopleKeywords()[i] << ' ';
 		}
 		gameSaveOutFile << std::endl;
 
 		gameSaveOutFile << "PlacesKeywords ";
-		for (int i = 0; i < mSaveData.placesKeywords.size(); i++)
+		for (int i = 0; i < PlayerManager::GetPlacesKeywords().size(); i++)
 		{
-			gameSaveOutFile << mSaveData.placesKeywords[i] << ' ';
+			gameSaveOutFile << PlayerManager::GetPlacesKeywords()[i] << ' ';
 		}
 		gameSaveOutFile << std::endl;
 
 		gameSaveOutFile << "MysteryKeywords ";
-		for (int i = 0; i < mSaveData.mysteryKeywords.size(); i++)
+		for (int i = 0; i < PlayerManager::GetMysteryKeywords().size(); i++)
 		{
-			gameSaveOutFile << mSaveData.mysteryKeywords[i] << ' ';
+			gameSaveOutFile << PlayerManager::GetMysteryKeywords()[i] << ' ';
 		}
 		gameSaveOutFile << std::endl;
 
 		gameSaveOutFile << "BestiaryKeywords ";
-		for (int i = 0; i < mSaveData.bestiaryKeywords.size(); i++)
+		for (int i = 0; i < PlayerManager::GetBestiaryKeywords().size(); i++)
 		{
-			gameSaveOutFile << mSaveData.bestiaryKeywords[i] << ' ';
+			gameSaveOutFile << PlayerManager::GetBestiaryKeywords()[i] << ' ';
 		}
 		gameSaveOutFile << std::endl;
 
 		gameSaveOutFile << "InventoryWeapons ";
-		for (int i = 0; i < mSaveData.mInventoryWeapons.size(); i++)
+		for (int i = 0; i < PlayerManager::GetInventoryWeapons().size(); i++)
 		{
-			gameSaveOutFile << mSaveData.mInventoryWeapons[i].mName;
+			gameSaveOutFile << PlayerManager::GetInventoryWeapons()[i].mName << ' ';
 		}
 		gameSaveOutFile << std::endl;
 	}

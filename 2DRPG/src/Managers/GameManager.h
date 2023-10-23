@@ -7,7 +7,6 @@
 
 #include "../Managers/GraphicsManager.h"
 #include "../Managers/PlayerManager.h"
-//#include "../Managers/SceneManager.h"
 
 #include "../Utils/Utils.h"
 
@@ -25,8 +24,8 @@ public:
 	inline static std::string& GetSceneName() { return mSceneName; }
 	inline static bool GetReturnToOverworld() { return mReturnToOverworld; }
 	inline static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
-	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousOverworldPositions[index]; }
-	inline static Vec2 GetPreviousDirection(const int index) { return mPreviousDirections[index]; }
+	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousCharacterPositions[index]; }
+	inline static Vec2 GetPreviousDirection(const int index) { return mPreviousCharacterDirections[index]; }
 	inline static const std::string& GetSceneToLoad() { return mSceneToLoad; }
 	inline static ETerrainType GetBattleBackground() { return mBattleBackgroundType; }
 	inline static std::vector<EnemyEncounter>& GetEnemyEncounters() { return mEnemyEncounters; }
@@ -34,9 +33,9 @@ public:
 	static void SetSceneName(const std::string& name) { mSceneName = name; }
 	static void SetSceneType(const bool isOverworld = false, const bool isTown = false, const bool isIndoors = false);
 	inline static void SetSceneToLoad(const std::string& name) { mSceneToLoad = name; }
-	inline static void ClearPositionsAndDirections() { mPreviousOverworldPositions.clear(); mPreviousDirections.clear(); }
-	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousOverworldPositions.push_back(position); }
-	inline static void SetPreviousDirection(const Vec2& direction) { mPreviousDirections.push_back(direction); }
+	inline static void ClearPositionsAndDirections() { mPreviousCharacterPositions.clear(); mPreviousCharacterDirections.clear(); }
+	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousCharacterPositions.push_back(position); }
+	inline static void SetPreviousOverworldDirection(const Vec2& direction) { mPreviousCharacterDirections.push_back(direction); }
 
 	static inline const bool SceneReadyToLoad() { return mSceneToLoad != "None"; }
 	static void SetSceneToLoad(
@@ -73,8 +72,8 @@ private:
 
 	static bool mReturnToOverworld;
 	static int mSceneEntranceIndex;
-	static std::vector<Vec2> mPreviousOverworldPositions;
-	static std::vector<Vec2> mPreviousDirections;
+	static std::vector<Vec2> mPreviousCharacterPositions;
+	static std::vector<Vec2> mPreviousCharacterDirections;
 	static std::string mSceneToLoad;
 	
 	static ETerrainType mBattleBackgroundType;
