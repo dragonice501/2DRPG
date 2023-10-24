@@ -13,6 +13,7 @@ std::vector<std::string> PlayerManager::mMysteryKeywords;
 std::vector<std::string> PlayerManager::mBestiaryKeywords;
 
 std::vector<Weapon> PlayerManager::mInventoryWeapons;
+std::vector<Armour> PlayerManager::mInventoryArmour;
 
 uint8_t PlayerManager::mLevelGauranteeStats[2] =
 {
@@ -21,55 +22,58 @@ uint8_t PlayerManager::mLevelGauranteeStats[2] =
 
 void PlayerManager::LoadCharacters()
 {
-    /*std::string fileName = "./assets/files/PlayerSaveFile.txt";
-    std::ifstream file(fileName);
-    std::string type;
-    while (file >> type)
+    if (!GameManager::LoadedGame())
     {
-        if (type == "Character")
+        std::string fileName = "./assets/files/PlayerSaveFile.txt";
+        std::ifstream file(fileName);
+        std::string type;
+        while (file >> type)
         {
-            CharacterAttributes newCharacterAttributes;
-            file >> newCharacterAttributes.characterName;
-
-            while (file >> type)
+            if (type == "Character")
             {
-                if (type == "Class")
-                {
-                    int characterClass;
-                    file >> characterClass;
-                    newCharacterAttributes.characterClass = static_cast<ECharacterClass>(characterClass);
-                }
-                else if (type == "Level")
-                {
-                    file >> newCharacterAttributes.level;
-                }
-                else if (type == "Health")
-                {
-                    file >> newCharacterAttributes.healthMax;
-                    newCharacterAttributes.health = newCharacterAttributes.healthMax;
-                }
-                else if (type == "Magic")
-                {
-                    file >> newCharacterAttributes.magicMax;
-                    newCharacterAttributes.magic = newCharacterAttributes.magicMax;
-                }
-                else if (type == "Strength") file >> newCharacterAttributes.strength;
-                else if (type == "Defense") file >> newCharacterAttributes.defense;
-                else if (type == "Intelligence") file >> newCharacterAttributes.intelligence;
-                else if (type == "Speed") file >> newCharacterAttributes.speed;
-                else if (type == "Skill") file >> newCharacterAttributes.skill;
-                else if (type == "Luck") file >> newCharacterAttributes.luck;
-                else if (type == "Exp")
-                {
-                    file >> newCharacterAttributes.exp;
-                    newCharacterAttributes.expNextLevel = CalcLevelUpExp(newCharacterAttributes.level);
-                    break;
-                }
-            }
+                CharacterAttributes newCharacterAttributes;
+                file >> newCharacterAttributes.characterName;
 
-            mCharacterAttributes.push_back(newCharacterAttributes);
+                while (file >> type)
+                {
+                    if (type == "Class")
+                    {
+                        int characterClass;
+                        file >> characterClass;
+                        newCharacterAttributes.characterClass = static_cast<ECharacterClass>(characterClass);
+                    }
+                    else if (type == "Level")
+                    {
+                        file >> newCharacterAttributes.level;
+                    }
+                    else if (type == "Health")
+                    {
+                        file >> newCharacterAttributes.healthMax;
+                        newCharacterAttributes.health = newCharacterAttributes.healthMax;
+                    }
+                    else if (type == "Magic")
+                    {
+                        file >> newCharacterAttributes.magicMax;
+                        newCharacterAttributes.magic = newCharacterAttributes.magicMax;
+                    }
+                    else if (type == "Strength") file >> newCharacterAttributes.strength;
+                    else if (type == "Defense") file >> newCharacterAttributes.defense;
+                    else if (type == "Intelligence") file >> newCharacterAttributes.intelligence;
+                    else if (type == "Speed") file >> newCharacterAttributes.speed;
+                    else if (type == "Skill") file >> newCharacterAttributes.skill;
+                    else if (type == "Luck") file >> newCharacterAttributes.luck;
+                    else if (type == "Exp")
+                    {
+                        file >> newCharacterAttributes.exp;
+                        newCharacterAttributes.expNextLevel = CalcLevelUpExp(newCharacterAttributes.level);
+                        break;
+                    }
+                }
+
+                mCharacterAttributes.push_back(newCharacterAttributes);
+            }
         }
-    }*/
+    }
 
     for (int i = 0; i < mCharacterAttributes.size(); i++)
     {

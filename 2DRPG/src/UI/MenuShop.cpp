@@ -5,8 +5,12 @@ MenuShop::MenuShop()
 	SetupMoneyPanel();
 	SetupMainPanel();
 	SetupBuyPanel();
+
 	SetupWeaponSelectionPanel();
-	SetupPurchasePromptPanel();
+	SetupArmourSelectionPanel();
+
+	SetupWeaponPurchasePromptPanel();
+	SetupArmourPurchasePromptPanel();
 
 	mCurrentButton = &mMainBuyButton;
 }
@@ -32,15 +36,26 @@ void MenuShop::Render()
 	{
 		mWeaponSelectionPanel.Render();
 	}
-
-	if (mPurchasePromptPanel.mIsActive)
+	if (mWeaponPurchasePromptPanel.mIsActive)
 	{
-		mPurchasePromptPanel.Render();
+		mWeaponPurchasePromptPanel.Render();
 	}
-
 	if (mWeaponConfirmPanel.mIsActive)
 	{
 		mWeaponConfirmPanel.Render();
+	}
+
+	if (mArmourSelectionPanel.mIsActive)
+	{
+		mArmourSelectionPanel.Render();
+	}
+	if (mArmourPurchasePromptPanel.mIsActive)
+	{
+		mArmourPurchasePromptPanel.Render();
+	}
+	if (mArmourConfirmPanel.mIsActive)
+	{
+		mArmourConfirmPanel.Render();
 	}
 }
 
@@ -178,7 +193,10 @@ void MenuShop::SetupBuyPanel()
 	};
 	mBuyMainArmourButton.OnAcceptAction = [this]()
 	{
-		//FillBuyButtonsArmour();
+		mPreviousButtonFirst = &mBuyMainArmourButton;
+		mCurrentButton = &mArmourSelectionButtonOne;
+		mArmourSelectionPanel.mIsActive = true;
+		FillBuyButtonsArmour();
 	};
 
 	mBuyMainItemsButton.OnLeftAction = [this]
@@ -238,9 +256,9 @@ void MenuShop::SetupWeaponSelectionPanel()
 		mPreviousButtonSecond = &mWeaponSelectionButtonOne;
 		mSelectedWeaponIndex = 0;
 		mCurrentButton = &mWeaponConfirmButtonYes;
-		mPurchasePromptPanel.mIsActive = true;
+		mWeaponPurchasePromptPanel.mIsActive = true;
 		mWeaponConfirmPanel.mIsActive = true;
-		SetPromptText();
+		SetWeaponPromptText();
 	};
 
 	mWeaponSelectionButtonTwo.OnUpAction = [this]()
@@ -261,9 +279,9 @@ void MenuShop::SetupWeaponSelectionPanel()
 		mPreviousButtonSecond = &mWeaponSelectionButtonTwo;
 		mSelectedWeaponIndex = 1;
 		mCurrentButton = &mWeaponConfirmButtonYes;
-		mPurchasePromptPanel.mIsActive = true;
+		mWeaponPurchasePromptPanel.mIsActive = true;
 		mWeaponConfirmPanel.mIsActive = true;
-		SetPromptText();
+		SetWeaponPromptText();
 	};
 
 	mWeaponSelectionButtonThree.OnUpAction = [this]()
@@ -284,9 +302,9 @@ void MenuShop::SetupWeaponSelectionPanel()
 		mPreviousButtonSecond = &mWeaponSelectionButtonThree;
 		mSelectedWeaponIndex = 2;
 		mCurrentButton = &mWeaponConfirmButtonYes;
-		mPurchasePromptPanel.mIsActive = true;
+		mWeaponPurchasePromptPanel.mIsActive = true;
 		mWeaponConfirmPanel.mIsActive = true;
-		SetPromptText();
+		SetWeaponPromptText();
 	};
 
 	mWeaponSelectionButtonFour.OnUpAction = [this]()
@@ -303,9 +321,9 @@ void MenuShop::SetupWeaponSelectionPanel()
 		mPreviousButtonSecond = &mWeaponSelectionButtonOne;
 		mSelectedWeaponIndex = 3;
 		mCurrentButton = &mWeaponConfirmButtonYes;
-		mPurchasePromptPanel.mIsActive = true;
+		mWeaponPurchasePromptPanel.mIsActive = true;
 		mWeaponConfirmPanel.mIsActive = true;
-		SetPromptText();
+		SetWeaponPromptText();
 	};
 
 	mWeaponSelectionPanel.mButtons.push_back(&mWeaponSelectionButtonOne);
@@ -324,21 +342,145 @@ void MenuShop::SetupWeaponSelectionPanel()
 	mWeaponSelectionPanel.mText.push_back(&mWeaponPriceTextFour);
 }
 
-void MenuShop::SetupPurchasePromptPanel()
+void MenuShop::SetupArmourSelectionPanel()
 {
-	mPurchasePromptPanel.mIsActive = false;
-	mPurchasePromptPanel.mPosition = mWeaponSelectionPanel.mPosition + Vec2(0.0f, mWeaponSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
-	mPurchasePromptPanel.mSize =
+	mArmourSelectionPanel.mIsActive = false;
+	mArmourSelectionPanel.mPosition =
+	{
+		mBuyMainPanel.mPosition.x,
+		mBuyMainPanel.mPosition.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f
+	};
+	mArmourSelectionPanel.mSize =
+	{
+		mBuyMainPanel.mSize.x,
+		TEXT_PADDING + (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 5.0f
+	};
+
+	mArmourSelectionButtonOne.mPosition = mArmourSelectionPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourSelectionButtonTwo.mPosition = mArmourSelectionButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+	mArmourSelectionButtonThree.mPosition = mArmourSelectionButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+	mArmourSelectionButtonFour.mPosition = mArmourSelectionButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+	mArmourSelectionButtonOne.mText = "One";
+	mArmourSelectionButtonTwo.mText = "Two";
+	mArmourSelectionButtonThree.mText = "Three";
+	mArmourSelectionButtonFour.mText = "Four";
+
+	mArmourSelectionButtonOne.OnDownAction = [this]()
+	{
+		if (mArmourSelectionButtonTwo.mIsActive) mCurrentButton = &mArmourSelectionButtonTwo;
+	};
+	mArmourSelectionButtonOne.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonFirst();
+		mArmourSelectionPanel.mIsActive = false;
+	};
+	mArmourSelectionButtonOne.OnAcceptAction = [this]()
+	{
+		mPreviousButtonSecond = &mArmourSelectionButtonOne;
+		mSelectedArmourIndex = 0;
+		mCurrentButton = &mArmourConfirmButtonYes;
+		mArmourPurchasePromptPanel.mIsActive = true;
+		mArmourConfirmPanel.mIsActive = true;
+		SetArmourPromptText();
+	};
+
+	mArmourSelectionButtonTwo.OnUpAction = [this]()
+	{
+		if (mArmourSelectionButtonOne.mIsActive) mCurrentButton = &mArmourSelectionButtonOne;
+	};
+	mArmourSelectionButtonTwo.OnDownAction = [this]()
+	{
+		if (mArmourSelectionButtonThree.mIsActive) mCurrentButton = &mArmourSelectionButtonThree;
+	};
+	mArmourSelectionButtonTwo.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonFirst();
+		mArmourSelectionPanel.mIsActive = false;
+	};
+	mArmourSelectionButtonTwo.OnAcceptAction = [this]()
+	{
+		mPreviousButtonSecond = &mArmourSelectionButtonTwo;
+		mSelectedArmourIndex = 1;
+		mCurrentButton = &mArmourConfirmButtonYes;
+		mArmourPurchasePromptPanel.mIsActive = true;
+		mArmourConfirmPanel.mIsActive = true;
+		SetArmourPromptText();
+	};
+
+	mArmourSelectionButtonThree.OnUpAction = [this]()
+	{
+		if (mArmourSelectionButtonTwo.mIsActive) mCurrentButton = &mArmourSelectionButtonTwo;
+	};
+	mArmourSelectionButtonThree.OnDownAction = [this]()
+	{
+		if (mArmourSelectionButtonFour.mIsActive) mCurrentButton = &mArmourSelectionButtonFour;
+	};
+	mArmourSelectionButtonThree.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonFirst();
+		mArmourSelectionPanel.mIsActive = false;
+	};
+	mArmourSelectionButtonThree.OnAcceptAction = [this]()
+	{
+		mPreviousButtonSecond = &mArmourSelectionButtonThree;
+		mSelectedArmourIndex = 2;
+		mCurrentButton = &mArmourConfirmButtonYes;
+		mArmourPurchasePromptPanel.mIsActive = true;
+		mArmourConfirmPanel.mIsActive = true;
+		SetArmourPromptText();
+	};
+
+	mArmourSelectionButtonFour.OnUpAction = [this]()
+	{
+		if (mArmourSelectionButtonThree.mIsActive) mCurrentButton = &mArmourSelectionButtonThree;
+	};
+	mArmourSelectionButtonFour.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonFirst();
+		mArmourSelectionPanel.mIsActive = false;
+	};
+	mArmourSelectionButtonFour.OnAcceptAction = [this]()
+	{
+		mPreviousButtonSecond = &mArmourSelectionButtonOne;
+		mSelectedArmourIndex = 3;
+		mCurrentButton = &mArmourConfirmButtonYes;
+		mArmourPurchasePromptPanel.mIsActive = true;
+		mArmourConfirmPanel.mIsActive = true;
+		SetArmourPromptText();
+	};
+
+	mArmourSelectionPanel.mButtons.push_back(&mArmourSelectionButtonOne);
+	mArmourSelectionPanel.mButtons.push_back(&mArmourSelectionButtonTwo);
+	mArmourSelectionPanel.mButtons.push_back(&mArmourSelectionButtonThree);
+	mArmourSelectionPanel.mButtons.push_back(&mArmourSelectionButtonFour);
+
+	mArmourPriceTextOne.mPosition = mArmourSelectionButtonOne.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
+	mArmourPriceTextTwo.mPosition = mArmourSelectionButtonTwo.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
+	mArmourPriceTextThree.mPosition = mArmourSelectionButtonThree.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
+	mArmourPriceTextFour.mPosition = mArmourSelectionButtonFour.mPosition + Vec2(Font::fontWidth * TEXT_SIZE * 10.0f, 0.0f);
+
+	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextOne);
+	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextTwo);
+	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextThree);
+	mArmourSelectionPanel.mText.push_back(&mWeaponPriceTextFour);
+}
+
+void MenuShop::SetupWeaponPurchasePromptPanel()
+{
+	mWeaponPurchasePromptPanel.mIsActive = false;
+	mWeaponPurchasePromptPanel.mPosition = mWeaponSelectionPanel.mPosition + Vec2(0.0f, mWeaponSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponPurchasePromptPanel.mSize =
 	{
 		mWeaponSelectionPanel.mSize.x,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
 	};
 
-	mPurchasePromptText.mPosition = mPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-	mPurchasePromptPanel.mText.push_back(&mPurchasePromptText);
+	mWeaponPurchasePromptText.mPosition = mWeaponPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mWeaponPurchasePromptPanel.mText.push_back(&mWeaponPurchasePromptText);
 
 	mWeaponConfirmPanel.mIsActive = false;
-	mWeaponConfirmPanel.mPosition = mPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponConfirmPanel.mPosition = mWeaponPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
 	mWeaponConfirmPanel.mSize =
 	{
 		Font::fontWidth * TEXT_SIZE * 5.0f + TEXT_PADDING * 2.0f,
@@ -360,18 +502,18 @@ void MenuShop::SetupPurchasePromptPanel()
 		if (PurchaseWeapon())
 		{
 			SelectPreviousButtonSecond();
-			mPurchasePromptPanel.mIsActive = false;
+			mWeaponPurchasePromptPanel.mIsActive = false;
 			mWeaponConfirmPanel.mIsActive = false;
 		}
 		else
 		{
-			mPurchasePromptText.mText = "You can't afford that.";
+			mWeaponPurchasePromptText.mText = "You can't afford that.";
 		}
 	};
 	mWeaponConfirmButtonYes.OnCancelAction = [this]()
 	{
 		SelectPreviousButtonSecond();
-		mPurchasePromptPanel.mIsActive = false;
+		mWeaponPurchasePromptPanel.mIsActive = false;
 		mWeaponConfirmPanel.mIsActive = false;
 	};
 
@@ -382,18 +524,90 @@ void MenuShop::SetupPurchasePromptPanel()
 	mWeaponConfirmButtonNo.OnAcceptAction = [this]()
 	{
 		SelectPreviousButtonSecond();
-		mPurchasePromptPanel.mIsActive = false;
+		mWeaponPurchasePromptPanel.mIsActive = false;
 		mWeaponConfirmPanel.mIsActive = false;
 	};
 	mWeaponConfirmButtonNo.OnCancelAction = [this]()
 	{
 		SelectPreviousButtonSecond();
-		mPurchasePromptPanel.mIsActive = false;
+		mWeaponPurchasePromptPanel.mIsActive = false;
 		mWeaponConfirmPanel.mIsActive = false;
 	};
 
 	mWeaponConfirmPanel.mButtons.push_back(&mWeaponConfirmButtonYes);
 	mWeaponConfirmPanel.mButtons.push_back(&mWeaponConfirmButtonNo);
+}
+
+void MenuShop::SetupArmourPurchasePromptPanel()
+{
+	mArmourPurchasePromptPanel.mIsActive = false;
+	mArmourPurchasePromptPanel.mPosition = mArmourSelectionPanel.mPosition + Vec2(0.0f, mArmourSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourPurchasePromptPanel.mSize =
+	{
+		mArmourSelectionPanel.mSize.x,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+	};
+
+	mArmourPurchasePromptText.mPosition = mArmourPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourPurchasePromptPanel.mText.push_back(&mArmourPurchasePromptText);
+
+	mArmourConfirmPanel.mIsActive = false;
+	mArmourConfirmPanel.mPosition = mArmourPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourConfirmPanel.mSize =
+	{
+		Font::fontWidth * TEXT_SIZE * 5.0f + TEXT_PADDING * 2.0f,
+		Font::fontHeight * TEXT_SIZE * 2.0f + TEXT_PADDING * 3.0f
+	};
+
+	mArmourConfirmButtonYes.mPosition = mArmourConfirmPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourConfirmButtonYes.mText = "Yes";
+
+	mArmourConfirmButtonNo.mPosition = mArmourConfirmButtonYes.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+	mArmourConfirmButtonNo.mText = "No";
+
+	mArmourConfirmButtonYes.OnDownAction = [this]()
+	{
+		mCurrentButton = &mArmourConfirmButtonNo;
+	};
+	mArmourConfirmButtonYes.OnAcceptAction = [this]()
+	{
+		if (PurchaseArmour())
+		{
+			SelectPreviousButtonSecond();
+			mArmourPurchasePromptPanel.mIsActive = false;
+			mArmourConfirmPanel.mIsActive = false;
+		}
+		else
+		{
+			mArmourPurchasePromptText.mText = "You can't afford that.";
+		}
+	};
+	mArmourConfirmButtonYes.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonSecond();
+		mArmourPurchasePromptPanel.mIsActive = false;
+		mArmourConfirmPanel.mIsActive = false;
+	};
+
+	mArmourConfirmButtonNo.OnUpAction = [this]()
+	{
+		mCurrentButton = &mArmourConfirmButtonYes;
+	};
+	mArmourConfirmButtonNo.OnAcceptAction = [this]()
+	{
+		SelectPreviousButtonSecond();
+		mArmourPurchasePromptPanel.mIsActive = false;
+		mArmourConfirmPanel.mIsActive = false;
+	};
+	mArmourConfirmButtonNo.OnCancelAction = [this]()
+	{
+		SelectPreviousButtonSecond();
+		mArmourPurchasePromptPanel.mIsActive = false;
+		mArmourConfirmPanel.mIsActive = false;
+	};
+
+	mArmourConfirmPanel.mButtons.push_back(&mArmourConfirmButtonYes);
+	mArmourConfirmPanel.mButtons.push_back(&mArmourConfirmButtonNo);
 }
 
 void MenuShop::FillBuyButtonsWeapons()
@@ -413,10 +627,17 @@ void MenuShop::FillBuyButtonsWeapons()
 
 void MenuShop::FillBuyButtonsArmour()
 {
-	mWeaponSelectionButtonOne.mIsActive = false;
-	mWeaponSelectionButtonTwo.mIsActive = false;
-	mWeaponSelectionButtonThree.mIsActive = false;
-	mWeaponSelectionButtonFour.mIsActive = false;
+	mArmourSelectionButtonOne.mIsActive = false;
+	mArmourSelectionButtonTwo.mIsActive = false;
+	mArmourSelectionButtonThree.mIsActive = false;
+	mArmourSelectionButtonFour.mIsActive = false;
+
+	for (int i = 0; i < mArmour.size(); i++)
+	{
+		mArmourSelectionPanel.mButtons[i]->mIsActive = true;
+		mArmourSelectionPanel.mButtons[i]->mText = mArmour[i].mName;
+		mArmourSelectionPanel.mText[i]->mText = std::to_string(mArmour[i].mBuyCost) + 'g';
+	}
 }
 
 void MenuShop::FillBuyButtonsItems()
@@ -427,13 +648,23 @@ void MenuShop::FillBuyButtonsItems()
 	mWeaponSelectionButtonFour.mIsActive = false;
 }
 
-void MenuShop::SetPromptText()
+void MenuShop::SetWeaponPromptText()
 {
-	mPurchasePromptText.mText =
+	mWeaponPurchasePromptText.mText =
 		"Purchase " +
 		mWeapons[mSelectedWeaponIndex].mName +
 		" for " +
 		std::to_string(mWeapons[mSelectedWeaponIndex].mBuyCost) +
+		"g?";
+}
+
+void MenuShop::SetArmourPromptText()
+{
+	mArmourPurchasePromptText.mText =
+		"Purchase " +
+		mArmour[mSelectedArmourIndex].mName +
+		" for " +
+		std::to_string(mArmour[mSelectedArmourIndex].mBuyCost) +
 		"g?";
 }
 
@@ -443,6 +674,18 @@ bool MenuShop::PurchaseWeapon()
 	{
 		PlayerManager::AddWeaponToInventory(mWeapons[mSelectedWeaponIndex]);
 		PlayerManager::SubtractGold(mWeapons[mSelectedWeaponIndex].mBuyCost);
+		return true;
+	}
+
+	return false;
+}
+
+bool MenuShop::PurchaseArmour()
+{
+	if (PlayerManager::GetPartyGold() >= mArmour[mSelectedArmourIndex].mBuyCost)
+	{
+		PlayerManager::AddArmourToInventory(mArmour[mSelectedArmourIndex]);
+		PlayerManager::SubtractGold(mArmour[mSelectedArmourIndex].mBuyCost);
 		return true;
 	}
 

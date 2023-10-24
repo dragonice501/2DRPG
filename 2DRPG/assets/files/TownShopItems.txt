@@ -3,3 +3,10 @@ Saber
 Sword
 Hammer
 End
+
+Armour
+Helmet
+Vest
+Gauntlets
+Greeves
+End

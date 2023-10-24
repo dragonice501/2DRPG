@@ -3,30 +3,30 @@
 #include <string>
 #include <fstream>
 
-class Weapon
+class Armour
 {
 public:
-	Weapon(const std::string& name = "")
+	Armour(const std::string& name = "")
 	{
-		LoadWeaponAttributes(name);
+		LoadArmourAttributes(name);
 	}
 
 	std::string mName;
 
-	int mAttack;
-	int mMagic;
+	int mDefense;
+	int mMagicDefense;
 
 	int mBuyCost;
 	int mSellPrice;
 
-	void LoadWeaponAttributes(const std::string& weaponName)
+	void LoadArmourAttributes(const std::string& weaponName)
 	{
 		std::string string;
-		std::string fileName = "./assets/files/WeaponAttributes.txt";
+		std::string fileName = "./assets/files/ArmourAttributes.txt";
 		std::ifstream file(fileName);
 		while (file >> string)
 		{
-			if (string == "Weapon")
+			if (string == "Armour")
 			{
 				file >> string;
 				if (string == weaponName)
@@ -43,8 +43,8 @@ public:
 
 					while (file >> string)
 					{
-						if (string == "Attack") file >> mAttack;
-						else if (string == "Magic") file >> mMagic;
+						if (string == "Defense") file >> mDefense;
+						else if (string == "MagicDefense") file >> mMagicDefense;
 						else if (string == "Buy") file >> mBuyCost;
 						else if (string == "Sell")
 						{

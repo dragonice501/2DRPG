@@ -84,8 +84,9 @@ protected:
 
 	ActorNpc* mInteractedActor = nullptr;
 
-	int mStepsUntilEncounterMax = 5;
-	int mStepsUntilEncounter = mStepsUntilEncounterMax;
+	int mEncounterStepsMin = 10;
+	int mEncounterStepsMax = 99;
+	int mStepsUntilEncounter = 10;
 
 	Vec2 mCharacterUIPositions[4] =
 	{

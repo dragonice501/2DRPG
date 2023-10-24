@@ -5,6 +5,8 @@
 #include "../Managers/PlayerManager.h"
 #include "../Managers/SceneManager.h"
 
+#include <random>
+
 bool Engine::isRunning;
 
 Engine::Engine()
@@ -27,7 +29,8 @@ bool Engine::Init()
 
 void Engine::Run()
 {
-    //GameManager::SetSceneToLoad("Town", -1);
+    srand(time(NULL));
+    //GameManager::SetSceneToLoad("TownShop", -1);
     GameManager::LoadGameSave();
     PlayerManager::LoadCharacters();
 

@@ -1,0 +1,23 @@
+Armour Helmet
+Defense 5
+MagicDefense 2
+Buy 200
+Sell 50
+
+Armour Vest
+Defense 8
+MagicDefense 4
+Buy 300
+Sell 75
+
+Armour Gauntlets
+Defense 4
+MagicDefense 2
+Buy 100
+Sell 25
+
+Armour Greeves
+Defense 6
+MagicDefense 3
+Buy 250
+Sell 50

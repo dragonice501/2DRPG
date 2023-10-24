@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../Items/Armour.h"
 #include "../Items/Weapon.h"
 
 #include "../Managers/AssetManager.h"
+#include "../Managers/GameManager.h"
 #include "../Managers/GraphicsManager.h"
 
 #include "../Objects/Components.h"
@@ -30,7 +32,9 @@ public:
 	static const std::vector<std::string>& GetPlacesKeywords() { return mPlacesKeywords; }
 	static const std::vector<std::string>& GetMysteryKeywords() { return mMysteryKeywords; }
 	static const std::vector<std::string>& GetBestiaryKeywords() { return mBestiaryKeywords; }
+
 	static const std::vector<Weapon>& GetInventoryWeapons() { return mInventoryWeapons; }
+	static const std::vector<Armour>& GetInventoryArmour() { return mInventoryArmour; }
 
 	static void LearnNewPeopleKeyword(const std::string& keyword) { mPeopleKeywords.push_back(keyword); }
 	static void LearnNewPlaceKeyword(const std::string& keyword) { mPlacesKeywords.push_back(keyword); }
@@ -44,6 +48,7 @@ public:
 	static CharacterAttributes LevelUp(int characterIndex);
 
 	static void AddWeaponToInventory(const Weapon& newWeapon) { mInventoryWeapons.push_back(newWeapon); }
+	static void AddArmourToInventory(const Armour& newArmour) { mInventoryArmour.push_back(newArmour); }
 
 	static void SwapCharacters(int first, int second);
 	static void SwapCharacterInventories(int first, int second);
@@ -61,6 +66,7 @@ private:
 	static std::vector<std::string> mBestiaryKeywords;
 
 	static std::vector<Weapon> mInventoryWeapons;
+	static std::vector<Armour> mInventoryArmour;
 
 	static int mLevelExpAmounts[];
 

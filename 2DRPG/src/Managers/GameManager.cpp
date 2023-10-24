@@ -192,18 +192,18 @@ void GameManager::SaveGame()
 		{
 			CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
 
-			gameSaveOutFile << attributes.characterName << std::endl;
-			gameSaveOutFile << "Class " << attributes.characterClass << std::endl;
-			gameSaveOutFile << "Level " << attributes.level << std::endl;
-			gameSaveOutFile << "Health " << attributes.health << ' ' << attributes.healthMax << std::endl;
-			gameSaveOutFile << "Magic " << attributes.magic << ' ' << attributes.magicMax << std::endl;
-			gameSaveOutFile << "Strength " << attributes.strength << std::endl;
-			gameSaveOutFile << "Defense " << attributes.defense << std::endl;
-			gameSaveOutFile << "Intelligence " << attributes.intelligence << std::endl;
-			gameSaveOutFile << "Speed " << attributes.speed << std::endl;
-			gameSaveOutFile << "Skill " << attributes.skill << std::endl;
-			gameSaveOutFile << "Luck " << attributes.luck << std::endl;
-			gameSaveOutFile << "Exp " << attributes.exp << std::endl << std::endl;
+			gameSaveOutFile << attributes.characterName << ' '
+			<< attributes.characterClass << ' '
+			<< attributes.level << ' '
+			<< attributes.health << ' ' << attributes.healthMax << ' '
+			<< attributes.magic << ' ' << attributes.magicMax << ' '
+			<< attributes.strength << ' '
+			<< attributes.defense << ' '
+			<< attributes.intelligence << ' '
+			<< attributes.speed << ' '
+			<< attributes.skill << ' '
+			<< attributes.luck << ' '
+			<< attributes.exp << std::endl << std::endl;
 		}
 
 		gameSaveOutFile << "CharacterWeapons" << std::endl;
@@ -211,7 +211,7 @@ void GameManager::SaveGame()
 		{
 			gameSaveOutFile << PlayerManager::GetCharacterWeapon(i) << ' ';
 		}
-		gameSaveOutFile << std::endl;
+		gameSaveOutFile << std::endl << std::endl;
 
 		gameSaveOutFile << "PeopleKeywords ";
 		for (int i = 0; i < PlayerManager::GetPeopleKeywords().size(); i++)
@@ -239,7 +239,7 @@ void GameManager::SaveGame()
 		{
 			gameSaveOutFile << PlayerManager::GetBestiaryKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << "Break" << std::endl << std::endl;;
 
 		gameSaveOutFile << "InventoryWeapons ";
 		for (int i = 0; i < PlayerManager::GetInventoryWeapons().size(); i++)

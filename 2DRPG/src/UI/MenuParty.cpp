@@ -926,7 +926,7 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonTwo.OnRightAction = [this]()
     {
         mCurrentButton = &mJournalButtonThree;
-        FillJournalKeywordsButton(3);
+        FillJournalKeywordsButton(2);
     };
     mJournalButtonTwo.OnCancelAction = [this]()
     {
@@ -976,6 +976,12 @@ void MenuParty::SetupJournalPanel()
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
         TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
     };
+
+    mKeywordsButtonOne.mPosition = mJournalKeywordsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mKeywordsButtonThree.mPosition = mKeywordsButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mKeywordsButtonTwo.mPosition = mKeywordsButtonOne.mPosition + Vec2(mJournalKeywordsPanel.mSize.x * 0.5f, 0.0f);
+    mKeywordsButtonFour.mPosition = mKeywordsButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
     mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonOne);
     mJournalKeywordsPanel.mButtons.push_back(&mKeywordsButtonTwo);
@@ -1600,14 +1606,20 @@ void MenuParty::FillInventoryArmourButtons()
     mInventoryPanelButtonTwo.mIsActive = false;
     mInventoryPanelButtonThree.mIsActive = false;
     mInventoryPanelButtonFour.mIsActive = false;
+
+    for (int i = 0; i < PlayerManager::GetInventoryArmour().size(); i++)
+    {
+        mInventoryPanel.mButtons[i]->mIsActive = true;
+        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryArmour()[i].mName;
+    }
 }
 
 void MenuParty::FillJournalKeywordsButton(int index)
 {
-    mJournalButtonOne.mIsActive = false;
-    mJournalButtonTwo.mIsActive = false;
-    mJournalButtonThree.mIsActive = false;
-    mJournalButtonFour.mIsActive = false;
+    mKeywordsButtonOne.mIsActive = false;
+    mKeywordsButtonTwo.mIsActive = false;
+    mKeywordsButtonThree.mIsActive = false;
+    mKeywordsButtonFour.mIsActive = false;
 
     const std::vector<std::string>* stringVec = nullptr;
     switch (index)

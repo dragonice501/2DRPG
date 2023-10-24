@@ -1,30 +1,34 @@
 LevelName Town
 
-Gold 100
+Gold 10000
 
 CharacterPositions
-176 256
-190.944 256
-206.944 256
-207.964 241.07
+64 192
+80.544 192
+96.544 192
+112.544 192
 
 CharacterDirections
 -16 0
 -16 0
--1.056 15.456
--0.0359039 1.03419
+-16 0
+-1.56409 -14.4359
 
 Characters
 Sigurd 3 1 25 25 15 15 15 5 4 11 5 3 0
+
 Elan 0 1 13 13 19 19 10 2 7 8 2 4 0
+
 Don 2 1 17 17 24 24 15 3 8 10 3 2 0
+
 Sin 1 1 22 22 12 12 13 12 3 2 4 2 0
 
 CharacterWeapons
-1 0 -1 2
+1 0 -1 2 
 
 PeopleKeywords King Break
 PlacesKeywords Break
-MysteryKeywords Monster Break 
+MysteryKeywords Monster Break
 BestiaryKeywords Break
-InventoryWeapons Saber Sword Hammer Break
+
+InventoryWeapons Saber Sword Hammer 

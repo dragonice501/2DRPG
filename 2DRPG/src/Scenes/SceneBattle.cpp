@@ -254,7 +254,6 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 	// Pick and create a random encounter
 	EnemyEncounter encounter;
-	srand(time(NULL));
 	int randomIndex = rand() % mEnemyEncounters.size();
 	for (int i = 0; i < mEnemyEncounters.size(); i++)
 	{

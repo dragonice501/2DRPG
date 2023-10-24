@@ -3,6 +3,7 @@
 #include "Menu.h"
 
 #include "../Items/Weapon.h"
+#include "../Items/Armour.h"
 
 #include "../Managers/PlayerManager.h"
 
@@ -26,20 +27,29 @@ public:
 	void SetupMoneyPanel();
 	void SetupMainPanel();
 	void SetupBuyPanel();
+
 	void SetupWeaponSelectionPanel();
-	void SetupPurchasePromptPanel();
+	void SetupArmourSelectionPanel();
+
+	void SetupWeaponPurchasePromptPanel();
+	void SetupArmourPurchasePromptPanel();
 
 	void FillBuyButtonsWeapons();
 	void FillBuyButtonsArmour();
 	void FillBuyButtonsItems();
 
-	void SetPromptText();
+	void SetWeaponPromptText();
+	void SetArmourPromptText();
+
 	bool PurchaseWeapon();
+	bool PurchaseArmour();
 
 public:
 	std::vector<Weapon> mWeapons;
+	std::vector<Armour> mArmour;
 
 	int mSelectedWeaponIndex = -1;
+	int mSelectedArmourIndex = -1;
 
 	EShoppingState mShoppingState = SS_MAIN;
 
@@ -71,12 +81,33 @@ public:
 	UIText mWeaponPriceTextThree;
 	UIText mWeaponPriceTextFour;
 
-	// Purchase Prompt Panel
-	UIPanel mPurchasePromptPanel;
-	UIText mPurchasePromptText;
+	// Armour Panel
+	UIPanel mArmourSelectionPanel;
+	UIButton mArmourSelectionButtonOne;
+	UIButton mArmourSelectionButtonTwo;
+	UIButton mArmourSelectionButtonThree;
+	UIButton mArmourSelectionButtonFour;
+
+	UIText mArmourPriceTextOne;
+	UIText mArmourPriceTextTwo;
+	UIText mArmourPriceTextThree;
+	UIText mArmourPriceTextFour;
+
+	// Waepon Purchase Prompt Panel
+	UIPanel mWeaponPurchasePromptPanel;
+	UIText mWeaponPurchasePromptText;
 
 	// Weapon Purchase Confirm Panel
 	UIPanel mWeaponConfirmPanel;
 	UIButton mWeaponConfirmButtonYes;
 	UIButton mWeaponConfirmButtonNo;
+
+	// Armour Purchase Prompt Panel
+	UIPanel mArmourPurchasePromptPanel;
+	UIText mArmourPurchasePromptText;
+
+	// Armour Purchase Confirm Panel
+	UIPanel mArmourConfirmPanel;
+	UIButton mArmourConfirmButtonYes;
+	UIButton mArmourConfirmButtonNo;
 };

@@ -160,5 +160,14 @@ void SceneTownShop::LoadShopItems()
                 mShopMenu.mWeapons.push_back(Weapon(type));
             }
         }
+        else if (type == "Armour")
+        {
+            while (file >> type)
+            {
+                if (type == "End") break;
+
+                mShopMenu.mArmour.push_back(Armour(type));
+            }
+        }
     }
 }

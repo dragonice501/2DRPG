@@ -458,6 +458,10 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         {
             file >> mTileMapName;
         }
+        else if (type == "EncounterRate")
+        {
+            file >> mEncounterStepsMin >> mEncounterStepsMax;
+        }
         else if (type == "SceneEntrance")
         {
             std::string sceneName;
@@ -555,6 +559,9 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             mBattleIconsMap.emplace("Cursor", newSprite);
         }
     }
+
+    // Randomize Encounter Steps
+    mStepsUntilEncounter = rand() % (mEncounterStepsMax - mEncounterStepsMin + 1) + mEncounterStepsMin;
 
     // Load enemy encounters
     EnemyEncounter newEncounter;
@@ -941,8 +948,10 @@ void SceneExploration::Update(const float dt)
                 }
             }
 
-            if(GameManager::GetIsOverworld()) mStepsUntilEncounter--;
-
+            if (GameManager::GetIsOverworld())
+            {
+                mStepsUntilEncounter--;
+            }
             if (mStepsUntilEncounter <= 0)
             {
                 int terrainIndex = static_cast<int>(character.GetPosition().x) / 16 + (static_cast<int>(character.GetPosition().y) / 16) * mMapWidth;
