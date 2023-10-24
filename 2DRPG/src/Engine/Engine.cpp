@@ -27,8 +27,9 @@ bool Engine::Init()
 
 void Engine::Run()
 {
+    //GameManager::SetSceneToLoad("Town", -1);
+    GameManager::LoadGameSave();
     PlayerManager::LoadCharacters();
-    GameManager::SetSceneToLoad("Town", -1);
 
     while (isRunning)
     {

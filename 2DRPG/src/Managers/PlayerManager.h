@@ -22,6 +22,7 @@ public:
 	static const int* GetCharacterWeapons() { return mCharacterWeaponIndeces; }
 	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
 
+	static void AddCharacterAttribites(const CharacterAttributes& attributes) { mCharacterAttributes.push_back(attributes); }
 	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
 
 	static const int& GetPartyGold() { return mPartyGold; }

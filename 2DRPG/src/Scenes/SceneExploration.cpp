@@ -584,8 +584,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     {
         for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
         {
-            mSpawnPositions.push_back(GameManager::GetPreviousOverworldPosition(i));
-            mSpawnDirections.push_back(GameManager::GetPreviousDirection(i));
+            mSpawnPositions.push_back(GameManager::GetPreviousCharacterPosition(i));
+            mSpawnDirections.push_back(GameManager::GetPreviousCharacterDirection(i));
         }
     }
     else

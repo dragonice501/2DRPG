@@ -257,6 +257,7 @@ void MenuParty::SetupMainPanel()
     mJournalButton.OnAcceptAction = [this]()
     {
         SetPanelState(PS_JOURNAL);
+        FillJournalKeywordsButton(0);
         mCurrentButton = &mJournalButtonOne;
     };
     mJournalButton.OnCancelAction = [this]()
@@ -909,6 +910,7 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonOne.OnRightAction = [this]()
     {
         mCurrentButton = &mJournalButtonTwo;
+        FillJournalKeywordsButton(1);
     };
     mJournalButtonOne.OnCancelAction = [this]()
     {
@@ -919,10 +921,12 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonTwo.OnLeftAction = [this]()
     {
         mCurrentButton = &mJournalButtonOne;
+        FillJournalKeywordsButton(0);
     };
     mJournalButtonTwo.OnRightAction = [this]()
     {
         mCurrentButton = &mJournalButtonThree;
+        FillJournalKeywordsButton(3);
     };
     mJournalButtonTwo.OnCancelAction = [this]()
     {
@@ -933,10 +937,12 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonThree.OnLeftAction = [this]()
     {
         mCurrentButton = &mJournalButtonTwo;
+        FillJournalKeywordsButton(1);
     };
     mJournalButtonThree.OnRightAction = [this]()
     {
         mCurrentButton = &mJournalButtonFour;
+        FillJournalKeywordsButton(3);
     };
     mJournalButtonThree.OnCancelAction = [this]()
     {
@@ -947,6 +953,7 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonFour.OnLeftAction = [this]()
     {
         mCurrentButton = &mJournalButtonThree;
+        FillJournalKeywordsButton(2);
     };
     mJournalButtonFour.OnCancelAction = [this]()
     {
@@ -1593,6 +1600,50 @@ void MenuParty::FillInventoryArmourButtons()
     mInventoryPanelButtonTwo.mIsActive = false;
     mInventoryPanelButtonThree.mIsActive = false;
     mInventoryPanelButtonFour.mIsActive = false;
+}
+
+void MenuParty::FillJournalKeywordsButton(int index)
+{
+    mJournalButtonOne.mIsActive = false;
+    mJournalButtonTwo.mIsActive = false;
+    mJournalButtonThree.mIsActive = false;
+    mJournalButtonFour.mIsActive = false;
+
+    const std::vector<std::string>* stringVec = nullptr;
+    switch (index)
+    {
+        case 0:
+        {
+            stringVec = &PlayerManager::GetPeopleKeywords();
+            break;
+        }
+        case 1:
+        {
+            stringVec = &PlayerManager::GetPlacesKeywords();
+            break;
+        }
+        case 2:
+        {
+            stringVec = &PlayerManager::GetMysteryKeywords();
+            break;
+        }
+        case 3:
+        {
+            stringVec = &PlayerManager::GetBestiaryKeywords();
+            break;
+        }
+    }
+
+    if (stringVec->size() > 0)
+    {
+        for (int i = 0; i < mJournalKeywordsPanel.mButtons.size(); i++)
+        {
+            if (i > stringVec->size() - 1) break;
+
+            mJournalKeywordsPanel.mButtons[i]->mIsActive = true;
+            mJournalKeywordsPanel.mButtons[i]->mText = stringVec->at(i);
+        }
+    }
 }
 
 void MenuParty::SetEquipButtonsText()

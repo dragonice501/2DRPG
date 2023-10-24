@@ -24,19 +24,21 @@ public:
 	inline static std::string& GetSceneName() { return mSceneName; }
 	inline static bool GetReturnToOverworld() { return mReturnToOverworld; }
 	inline static int GetSceneEntranceIndex() { return mSceneEntranceIndex; }
-	inline static Vec2 GetPreviousOverworldPosition(const int index) { return mPreviousCharacterPositions[index]; }
-	inline static Vec2 GetPreviousDirection(const int index) { return mPreviousCharacterDirections[index]; }
+	inline static Vec2 GetPreviousCharacterPosition(const int index) { return mPreviousCharacterPositions[index]; }
+	inline static Vec2 GetPreviousCharacterDirection(const int index) { return mPreviousCharacterDirections[index]; }
 	inline static const std::string& GetSceneToLoad() { return mSceneToLoad; }
 	inline static ETerrainType GetBattleBackground() { return mBattleBackgroundType; }
 	inline static std::vector<EnemyEncounter>& GetEnemyEncounters() { return mEnemyEncounters; }
 
-	static void SetSceneName(const std::string& name) { mSceneName = name; }
+	inline static void SetSceneName(const std::string& name) { mSceneName = name; }
 	static void SetSceneType(const bool isOverworld = false, const bool isTown = false, const bool isIndoors = false);
 	inline static void SetSceneToLoad(const std::string& name) { mSceneToLoad = name; }
 	inline static void ClearPositionsAndDirections() { mPreviousCharacterPositions.clear(); mPreviousCharacterDirections.clear(); }
 	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousCharacterPositions.push_back(position); }
 	inline static void SetPreviousOverworldDirection(const Vec2& direction) { mPreviousCharacterDirections.push_back(direction); }
 
+	inline static bool LoadedGame() { return mLoadedGame; }
+	static void LoadGameSave();
 	static inline const bool SceneReadyToLoad() { return mSceneToLoad != "None"; }
 	static void SetSceneToLoad(
 		const std::string& sceneToLoad, const int entranceIndex, bool returnToOverworld = false,
@@ -62,6 +64,7 @@ private:
 		std::vector<Weapon> mInventoryWeapons;
 	};
 
+	static bool mLoadedGame;
 	static SaveData mSaveData;
 
 	static std::string mSceneName;

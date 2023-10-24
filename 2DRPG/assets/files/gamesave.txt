@@ -2,75 +2,29 @@ LevelName Town
 
 Gold 100
 
-CharacterPosition 176 256
-CharacterPosition 160 256.512
-CharacterPosition 159.488 272
-CharacterPosition 144 271.488
+CharacterPositions
+176 256
+190.944 256
+206.944 256
+207.964 241.07
 
-CharacterPosition 16 0
-CharacterPosition 16 0
-CharacterPosition 0 16
-CharacterPosition -16 0
+CharacterDirections
+-16 0
+-16 0
+-1.056 15.456
+-0.0359039 1.03419
 
-Character Sigurd
-Class 3
-Level 1
-Health 25 25
-Magic 15 15
-Strength 15
-Defense 5
-Intelligence 4
-Speed 11
-Skill 5
-Luck 3
-Exp 0
+Characters
+Sigurd 3 1 25 25 15 15 15 5 4 11 5 3 0
+Elan 0 1 13 13 19 19 10 2 7 8 2 4 0
+Don 2 1 17 17 24 24 15 3 8 10 3 2 0
+Sin 1 1 22 22 12 12 13 12 3 2 4 2 0
 
-Character Elan
-Class 0
-Level 1
-Health 13 13
-Magic 19 19
-Strength 10
-Defense 2
-Intelligence 7
-Speed 8
-Skill 2
-Luck 4
-Exp 0
+CharacterWeapons
+1 0 -1 2
 
-Character Don
-Class 2
-Level 1
-Health 17 17
-Magic 24 24
-Strength 15
-Defense 3
-Intelligence 8
-Speed 10
-Skill 3
-Luck 2
-Exp 0
-
-Character Ark
-Class 1
-Level 1
-Health 22 22
-Magic 12 12
-Strength 13
-Defense 12
-Intelligence 3
-Speed 2
-Skill 4
-Luck 2
-Exp 0
-
-CharacterWeapon 1
-CharacterWeapon -1
-CharacterWeapon 0
-CharacterWeapon 2
-
-PeopleKeywords King 
-PlacesKeywords 
-MysteryKeywords Monster 
-BestiaryKeywords 
-InventoryWeapons Saber Sword Hammer 
+PeopleKeywords King Break
+PlacesKeywords Break
+MysteryKeywords Monster Break 
+BestiaryKeywords Break
+InventoryWeapons Saber Sword Hammer Break

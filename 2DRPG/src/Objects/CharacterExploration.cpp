@@ -59,7 +59,7 @@ void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition
     SetPosition(spawnPosition);
 
     if (GameManager::GetReturnToOverworld())
-        mRigidbody.lastVelocity = GameManager::GetPreviousDirection(partyIndex);
+        mRigidbody.lastVelocity = GameManager::GetPreviousCharacterDirection(partyIndex);
     else
         mRigidbody.lastVelocity = spawnDirection;
 

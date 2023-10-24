@@ -52,6 +52,8 @@ public:
 	void FillInventoryWeaponsButtons();
 	void FillInventoryArmourButtons();
 
+	void FillJournalKeywordsButton(int index);
+
 	void SetEquipButtonsText();
 	void FillEquipmentText(int partyIndex);
 
