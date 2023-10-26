@@ -63,7 +63,7 @@ void MenuShop::SetupMoneyPanel()
 {
 	mMoneyPanel.mIsActive = true;
 	int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
-	mMoneyPanel.mPosition = { 0.35f, 0.35f };
+	mMoneyPanel.mPosition = { 0.365f, 0.35f };
 	mMoneyPanel.mSize =
 	{
 		stringLength + TEXT_PADDING * 2.0f,
@@ -666,7 +666,29 @@ bool MenuShop::PurchaseArmour()
 {
 	if (PlayerManager::GetPartyGold() >= mArmour[mSelectedArmourIndex].mBuyCost)
 	{
-		PlayerManager::AddArmourToInventory(mArmour[mSelectedArmourIndex]);
+		switch (mArmour[mSelectedArmourIndex].mArmourType)
+		{
+			case Armour::HEAD:
+			{
+				PlayerManager::AddArmourHeadToInventory(mArmour[mSelectedArmourIndex]);
+				break;
+			}
+			case Armour::CHEST:
+			{
+				PlayerManager::AddArmourChestToInventory(mArmour[mSelectedArmourIndex]);
+				break;
+			}
+			case Armour::ARMS:
+			{
+				PlayerManager::AddArmourArmsToInventory(mArmour[mSelectedArmourIndex]);
+				break;
+			}
+			case Armour::LEGS:
+			{
+				PlayerManager::AddArmourLegsToInventory(mArmour[mSelectedArmourIndex]);
+				break;
+			}
+		}
 		PlayerManager::SubtractGold(mArmour[mSelectedArmourIndex].mBuyCost);
 		return true;
 	}

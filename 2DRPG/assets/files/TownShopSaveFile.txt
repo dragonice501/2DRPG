@@ -1,5 +1,7 @@
 MapSize 9 9
 
+MapCentered 1
+
 TileMap IndoorsTileMap
 
 SceneEntrance 0

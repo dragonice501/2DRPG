@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Items\Armour.h" />
+    <ClInclude Include="src\Items\Shield.h" />
     <ClInclude Include="src\Managers\AssetManager.h" />
     <ClInclude Include="src\UI\MenuShop.h" />
     <ClInclude Include="src\Objects\ActorInteractable.h" />

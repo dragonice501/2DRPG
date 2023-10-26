@@ -430,6 +430,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
         {
             file >> mMapWidth >> mMapHeight;
         }
+        else if (type == "MapCentered") file >> mDrawMapCentered;
         else if (type == "TileMap")
         {
             file >> mTileMapName;
@@ -941,6 +942,12 @@ void SceneExploration::Update(const float dt)
 
 void SceneExploration::Render(static SDL_Rect& camera)
 {
+    if (mDrawMapCentered)
+    {
+        camera.x = 0 - GraphicsManager::WindowWidth() * 0.5f + mMapWidth * 0.5 * TILE_SIZE * TILE_SPRITE_SCALE;
+        camera.y = 0 - GraphicsManager::WindowHeight() * 0.5f + mMapHeight * 0.5f * TILE_SIZE * TILE_SPRITE_SCALE;
+    }
+
     // Render tiles
     for (int i = 0; i < mTiles.size(); i++)
     {
@@ -1016,10 +1023,10 @@ void SceneExploration::Render(static SDL_Rect& camera)
     // Render Party Characters
     for (int i = mCharacters.size() - 1; i >= 0; i--)
     {
-        if (i == 0)
+        if (i == 0 && !mDrawMapCentered)
         {
-            camera.x = mCharacters[i].GetPosition().x * TILE_SPRITE_SCALE - (GraphicsManager::WindowWidth() / 2);
-            camera.y = mCharacters[i].GetPosition().y * TILE_SPRITE_SCALE - (GraphicsManager::WindowHeight() / 2);
+            camera.x = mCharacters[i].GetPosition().x * TILE_SPRITE_SCALE - (GraphicsManager::WindowWidth() * 0.5f);
+            camera.y = mCharacters[i].GetPosition().y * TILE_SPRITE_SCALE - (GraphicsManager::WindowHeight() * 0.5f);
 
             camera.x = Clampf(camera.x, 0, mMapWidth * TILE_SIZE * TILE_SPRITE_SCALE - camera.w);
             camera.y = Clampf(camera.y, 0, mMapHeight * TILE_SIZE * TILE_SPRITE_SCALE - camera.h);

@@ -20,7 +20,12 @@ private:
 		PS_MAGIC,
 		PS_SAVE,
 
-		PS_SELECTING_WEAPON
+		PS_SELECTING_WEAPON,
+		PS_SELECTING_SHIELD,
+		PS_SELECTING_ARMOUR_HEAD,
+		PS_SELECTING_ARMOUR_CHEST,
+		PS_SELECTING_ARMOUR_ARMS,
+		PS_SELECTING_ARMOUR_LEGS
 	};
 
 	enum EEquipState
@@ -50,7 +55,12 @@ public:
 
 	void FillInventoryItemButtons();
 	void FillInventoryWeaponsButtons();
+	void FillInventoryShieldsButtons();
 	void FillInventoryArmourButtons();
+	void FillInventoryArmourHeadButtons();
+	void FillInventoryArmourChestButtons();
+	void FillInventoryArmourArmsButtons();
+	void FillInventoryArmourLegsButtons();
 
 	void FillJournalKeywordsButton(int index);
 

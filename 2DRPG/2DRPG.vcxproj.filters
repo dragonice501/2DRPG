@@ -536,5 +536,8 @@
     <ClInclude Include="src\Items\Armour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Items\Shield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

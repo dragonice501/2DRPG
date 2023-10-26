@@ -91,9 +91,54 @@ void GameManager::LoadGameSave()
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				int weaponIndex;
-				gameSaveInFile >> weaponIndex;
-				PlayerManager::SetCharacterWeapon(i, weaponIndex);
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterWeapon(i, index);
+			}
+		}
+		else if (type == "CharacterShields")
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterShield(i, index);
+			}
+		}
+		else if (type == "CharacterArmourHead")
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterArmourHead(i, index);
+			}
+		}
+		else if (type == "CharacterArmourChest")
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterArmourChest(i, index);
+			}
+		}
+		else if (type == "CharacterArmourArms")
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterArmourArms(i, index);
+			}
+		}
+		else if (type == "CharacterArmourLegs")
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int index;
+				gameSaveInFile >> index;
+				PlayerManager::SetCharacterArmourLegs(i, index);
 			}
 		}
 		else if (type == "PeopleKeywords")
@@ -139,6 +184,51 @@ void GameManager::LoadGameSave()
 				if (type == "Break") break;
 
 				PlayerManager::AddWeaponToInventory(Weapon(type));
+			}
+		}
+		else if (type == "InventoryShields")
+		{
+			while (gameSaveInFile >> type)
+			{
+				if (type == "Break") break;
+
+				PlayerManager::AddShieldToInventory(Shield(type));
+			}
+		}
+		else if (type == "InventoryArmourHead")
+		{
+			while (gameSaveInFile >> type)
+			{
+				if (type == "Break") break;
+
+				PlayerManager::AddArmourHeadToInventory(Armour(type));
+			}
+		}
+		else if (type == "InventoryArmourChest")
+		{
+			while (gameSaveInFile >> type)
+			{
+				if (type == "Break") break;
+
+				PlayerManager::AddArmourChestToInventory(Armour(type));
+			}
+			}
+		else if (type == "InventoryArmourArms")
+		{
+			while (gameSaveInFile >> type)
+			{
+				if (type == "Break") break;
+
+				PlayerManager::AddArmourArmsToInventory(Armour(type));
+			}
+		}
+		else if (type == "InventoryArmourLegs")
+		{
+			while (gameSaveInFile >> type)
+			{
+				if (type == "Break") break;
+
+				PlayerManager::AddArmourLegsToInventory(Armour(type));
 			}
 		}
 	}
@@ -213,6 +303,41 @@ void GameManager::SaveGame()
 		}
 		gameSaveOutFile << std::endl << std::endl;
 
+		gameSaveOutFile << "CharacterShield" << std::endl;
+		for (int i = 0; i < 4; i++)
+		{
+			gameSaveOutFile << PlayerManager::GetCharacterShield(i) << ' ';
+		}
+		gameSaveOutFile <<std::endl;
+
+		gameSaveOutFile << "CharacterArmourHead" << std::endl;
+		for (int i = 0; i < 4; i++)
+		{
+			gameSaveOutFile << PlayerManager::GetCharacterArmourHead(i) << ' ';
+		}
+		gameSaveOutFile <<std::endl;
+
+		gameSaveOutFile << "CharacterArmourChest" << std::endl;
+		for (int i = 0; i < 4; i++)
+		{
+			gameSaveOutFile << PlayerManager::GetCharacterArmourChest(i) << ' ';
+		}
+		gameSaveOutFile << std::endl;
+
+		gameSaveOutFile << "CharacterArmourArms" << std::endl;
+		for (int i = 0; i < 4; i++)
+		{
+			gameSaveOutFile << PlayerManager::GetCharacterArmourArms(i) << ' ';
+		}
+		gameSaveOutFile << std::endl;
+
+		gameSaveOutFile << "CharacterArmourLegs" << std::endl;
+		for (int i = 0; i < 4; i++)
+		{
+			gameSaveOutFile << PlayerManager::GetCharacterArmourLegs(i) << ' ';
+		}
+		gameSaveOutFile << std::endl << std::endl;
+
 		gameSaveOutFile << "PeopleKeywords ";
 		for (int i = 0; i < PlayerManager::GetPeopleKeywords().size(); i++)
 		{
@@ -239,14 +364,49 @@ void GameManager::SaveGame()
 		{
 			gameSaveOutFile << PlayerManager::GetBestiaryKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl << std::endl;;
+		gameSaveOutFile << "Break" << std::endl << std::endl;
 
 		gameSaveOutFile << "InventoryWeapons ";
 		for (int i = 0; i < PlayerManager::GetInventoryWeapons().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetInventoryWeapons()[i].mName << ' ';
 		}
-		gameSaveOutFile << std::endl;
+		gameSaveOutFile << "Break" << std::endl;
+
+		gameSaveOutFile << "InventoryShields ";
+		for (int i = 0; i < PlayerManager::GetInventoryShields().size(); i++)
+		{
+			gameSaveOutFile << PlayerManager::GetInventoryShields()[i].mName << ' ';
+		}
+		gameSaveOutFile << "Break" << std::endl;
+
+		gameSaveOutFile << "InventoryArmourHead ";
+		for (int i = 0; i < PlayerManager::GetInventoryArmourHead().size(); i++)
+		{
+			gameSaveOutFile << PlayerManager::GetInventoryArmourHead()[i].mName << ' ';
+		}
+		gameSaveOutFile << "Break" << std::endl;
+
+		gameSaveOutFile << "InventoryArmourChest ";
+		for (int i = 0; i < PlayerManager::GetInventoryArmourChest().size(); i++)
+		{
+			gameSaveOutFile << PlayerManager::GetInventoryArmourChest()[i].mName << ' ';
+		}
+		gameSaveOutFile << "Break" << std::endl;
+
+		gameSaveOutFile << "InventoryArmourArms ";
+		for (int i = 0; i < PlayerManager::GetInventoryArmourArms().size(); i++)
+		{
+			gameSaveOutFile << PlayerManager::GetInventoryArmourArms()[i].mName << ' ';
+		}
+		gameSaveOutFile << "Break" << std::endl;
+
+		gameSaveOutFile << "InventoryArmourLegs ";
+		for (int i = 0; i < PlayerManager::GetInventoryArmourLegs().size(); i++)
+		{
+			gameSaveOutFile << PlayerManager::GetInventoryArmourLegs()[i].mName << ' ';
+		}
+		gameSaveOutFile << "Break" << std::endl << std::endl;
 	}
 	gameSaveInFile.close();
 }

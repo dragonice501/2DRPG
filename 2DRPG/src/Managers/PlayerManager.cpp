@@ -4,6 +4,11 @@
 
 std::vector<CharacterAttributes> PlayerManager::mCharacterAttributes;
 int PlayerManager::mCharacterWeaponIndeces[4] = { -1, -1, -1, -1 };
+int PlayerManager::mCharacterShieldIndeces[4] = { -1, -1, -1, -1 };
+int PlayerManager::mCharacterArmourHeadIndeces[4] = { -1, -1, -1, -1 };
+int PlayerManager::mCharacterArmourChestIndeces[4] = { -1, -1, -1, -1 };
+int PlayerManager::mCharacterArmourArmsIndeces[4] = { -1, -1, -1, -1 };
+int PlayerManager::mCharacterArmourLegsIndeces[4] = { -1, -1, -1, -1 };
 
 int PlayerManager::mPartyGold = 2000;
 
@@ -13,7 +18,11 @@ std::vector<std::string> PlayerManager::mMysteryKeywords;
 std::vector<std::string> PlayerManager::mBestiaryKeywords;
 
 std::vector<Weapon> PlayerManager::mInventoryWeapons;
-std::vector<Armour> PlayerManager::mInventoryArmour;
+std::vector<Shield> PlayerManager::mInventoryShields;
+std::vector<Armour> PlayerManager::mInventoryArmourHead;
+std::vector<Armour> PlayerManager::mInventoryArmourChest;
+std::vector<Armour> PlayerManager::mInventoryArmourArms;
+std::vector<Armour> PlayerManager::mInventoryArmourLegs;
 
 uint8_t PlayerManager::mLevelGauranteeStats[2] =
 {
@@ -162,6 +171,16 @@ CharacterAttributes PlayerManager::LevelUp(int characterIndex)
     return levelUpAttributes;
 }
 
+void PlayerManager::RemoveAllEquipment(const int characterIndex)
+{
+    mCharacterWeaponIndeces[characterIndex] = -1;
+    mCharacterShieldIndeces[characterIndex] = -1;
+    mCharacterArmourHeadIndeces[characterIndex] = -1;
+    mCharacterArmourChestIndeces[characterIndex] = -1;
+    mCharacterArmourArmsIndeces[characterIndex] = -1;
+    mCharacterArmourLegsIndeces[characterIndex] = -1;
+}
+
 void PlayerManager::SwapCharacters(int first, int second)
 {
     CharacterAttributes tempChar = mCharacterAttributes[first];
@@ -183,6 +202,56 @@ bool PlayerManager::CanEquipWeapon(int weaponIndex)
     for (int i = 0; i < 4; i++)
     {
         if (mCharacterWeaponIndeces[i] == weaponIndex) return false;
+    }
+
+    return true;
+}
+
+bool PlayerManager::CanEquipShield(int shieldIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterShieldIndeces[i] == shieldIndex) return false;
+    }
+
+    return true;
+}
+
+bool PlayerManager::CanEquipArmourHead(int armourIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterArmourHeadIndeces[i] == armourIndex) return false;
+    }
+
+    return true;
+}
+
+bool PlayerManager::CanEquipArmourChest(int armourIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterArmourChestIndeces[i] == armourIndex) return false;
+    }
+
+    return true;
+}
+
+bool PlayerManager::CanEquipArmourArms(int armourIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterArmourArmsIndeces[i] == armourIndex) return false;
+    }
+
+    return true;
+}
+
+bool PlayerManager::CanEquipArmourLegs(int armourIndex)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (mCharacterArmourLegsIndeces[i] == armourIndex) return false;
     }
 
     return true;

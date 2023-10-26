@@ -83,6 +83,7 @@ void SceneTownShop::Update(const float dt)
 
 void SceneTownShop::Render(static SDL_Rect& camera)
 {
+
     SceneExploration::Render(camera);
 
     if (mExplorationState == ES_SHOPPING)

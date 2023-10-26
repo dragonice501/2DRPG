@@ -3,38 +3,30 @@
 #include <string>
 #include <fstream>
 
-class Armour
+class Shield
 {
 public:
-	enum EArmourType
+	Shield(const std::string& name = "")
 	{
-		HEAD,
-		CHEST,
-		ARMS,
-		LEGS
-	};
-
-	Armour(const std::string& name = "")
-	{
-		LoadArmourAttributes(name);
+		LoadShieldAttributes(name);
 	}
 
 	std::string mName;
-	EArmourType mArmourType;
 	int mDefense;
 	int mMagicDefense;
+	int mEvasion;
 
 	int mBuyCost;
 	int mSellPrice;
 
-	void LoadArmourAttributes(const std::string& weaponName)
+	void LoadShieldAttributes(const std::string& weaponName)
 	{
 		std::string string;
-		std::string fileName = "./assets/files/ArmourAttributes.txt";
+		std::string fileName = "./assets/files/ShieldAttributes.txt";
 		std::ifstream file(fileName);
 		while (file >> string)
 		{
-			if (string == "Armour")
+			if (string == "Shield")
 			{
 				file >> string;
 				if (string == weaponName)
@@ -52,14 +44,8 @@ public:
 					while (file >> string)
 					{
 						if (string == "Defense") file >> mDefense;
-						else if (string == "Type")
-						{
-							int type;
-							file >> type;
-
-							mArmourType = static_cast<EArmourType>(type);
-						}
 						else if (string == "MagicDefense") file >> mMagicDefense;
+						else if (string == "Evasion") file >> mEvasion;
 						else if (string == "Buy") file >> mBuyCost;
 						else if (string == "Sell")
 						{
@@ -70,7 +56,7 @@ public:
 				}
 				else
 				{
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 5; i++)
 						file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				}
 			}

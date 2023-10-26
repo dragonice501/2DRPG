@@ -51,6 +51,8 @@ public:
 	std::string mFileName;
 
 protected:
+	bool mDrawMapCentered = false;
+
 	std::vector<Tile> mTiles;
 	std::string mTileMapName;
 

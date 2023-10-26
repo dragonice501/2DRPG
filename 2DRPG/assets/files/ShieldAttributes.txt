@@ -1,0 +1,6 @@
+Shield Buckler
+Defense 5
+MagicDefense 5
+Evasion 5
+Buy 300
+Sell 100

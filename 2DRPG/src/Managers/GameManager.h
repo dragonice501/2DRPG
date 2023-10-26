@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Items/Armour.h"
+#include "../Items/Shield.h"
 #include "../Items/Weapon.h"
 
 #include "../Objects/Components.h"

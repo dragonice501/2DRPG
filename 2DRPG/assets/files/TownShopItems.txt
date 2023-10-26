@@ -7,6 +7,6 @@ End
 Armour
 Helmet
 Vest
-Gauntlets
+Gloves
 Greeves
 End
