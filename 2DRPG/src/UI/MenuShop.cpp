@@ -63,22 +63,14 @@ void MenuShop::SetupMoneyPanel()
 {
 	mMoneyPanel.mIsActive = true;
 	int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
-	mMoneyPanel.mPosition =
-	{
-		GraphicsManager::WindowWidth() / 2.0f - GraphicsManager::WindowWidth() / 4.0f,
-		GraphicsManager::WindowHeight() / 2.0f - GraphicsManager::WindowHeight() / 4.0f
-	};
+	mMoneyPanel.mPosition = { 0.35f, 0.35f };
 	mMoneyPanel.mSize =
 	{
 		stringLength + TEXT_PADDING * 2.0f,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
 	};
 
-	mMoneyText.mPosition =
-	{
-		mMoneyPanel.mPosition.x + TEXT_PADDING,
-		mMoneyPanel.mPosition.y + TEXT_PADDING
-	};
+	mMoneyText.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mMoneyText.mReference = &PlayerManager::mPartyGold;
 	mMoneyText.mText = 'g';
 	mMoneyPanel.mText.push_back(&mMoneyText);
@@ -87,14 +79,15 @@ void MenuShop::SetupMoneyPanel()
 void MenuShop::SetupMainPanel()
 {
 	mMainPanel.mIsActive = true;
-	mMainPanel.mPosition = mMoneyPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mMainPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(0.0f, mMoneyPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mMainPanel.mPosition = CalcWindowUVFromPosition(mMainPanel.mPosition);
 	mMainPanel.mSize =
 	{
 		mMoneyPanel.mSize.x,
 		Font::fontHeight * TEXT_SIZE * 3.0f + TEXT_PADDING * 4.0f
 	};
 
-	mMainBuyButton.mPosition = mMainPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mMainBuyButton.mPosition = CalcWindowPositionFromUV(mMainPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mMainSellButton.mPosition = mMainBuyButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 	mMainExitButton.mPosition = mMainSellButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
@@ -134,28 +127,17 @@ void MenuShop::SetupMainPanel()
 void MenuShop::SetupBuyPanel()
 {
 	mBuyMainPanel.mIsActive = false;
-	mBuyMainPanel.mPosition = mMoneyPanel.mPosition + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+	mBuyMainPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+	mBuyMainPanel.mPosition = CalcWindowUVFromPosition(mBuyMainPanel.mPosition);
 	mBuyMainPanel.mSize =
 	{
 		Font::fontWidth * TEXT_SIZE * 30.0f + Font::fontSpacing * TEXT_SIZE * 30.0f + TEXT_PADDING * 2.0f,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
 	};
 
-	mBuyMainWeaponsButton.mPosition =
-	{
-		mBuyMainPanel.mPosition.x + TEXT_PADDING,
-		mBuyMainPanel.mPosition.y + TEXT_PADDING
-	};
-	mBuyMainArmourButton.mPosition =
-	{
-		mBuyMainPanel.mPosition.x + mBuyMainPanel.mSize.x * 0.33f,
-		mBuyMainPanel.mPosition.y + TEXT_PADDING
-	};
-	mBuyMainItemsButton.mPosition =
-	{
-		mBuyMainPanel.mPosition.x + mBuyMainPanel.mSize.x * 0.66f,
-		mBuyMainPanel.mPosition.y + TEXT_PADDING
-	};
+	mBuyMainWeaponsButton.mPosition = CalcWindowPositionFromUV(mBuyMainPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mBuyMainArmourButton.mPosition = CalcWindowPositionFromUV(mBuyMainPanel.mPosition) + Vec2(mBuyMainPanel.mSize.x * 0.33f, TEXT_PADDING);
+	mBuyMainItemsButton.mPosition = CalcWindowPositionFromUV(mBuyMainPanel.mPosition) + Vec2(mBuyMainPanel.mSize.x * 0.66f, TEXT_PADDING);
 
 	mBuyMainWeaponsButton.mText = "Weapons";
 	mBuyMainArmourButton.mText = "Armour";
@@ -221,18 +203,15 @@ void MenuShop::SetupBuyPanel()
 void MenuShop::SetupWeaponSelectionPanel()
 {
 	mWeaponSelectionPanel.mIsActive = false;
-	mWeaponSelectionPanel.mPosition =
-	{
-		mBuyMainPanel.mPosition.x,
-		mBuyMainPanel.mPosition.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f
-	};
+	mWeaponSelectionPanel.mPosition = CalcWindowPositionFromUV(mBuyMainPanel.mPosition) + Vec2(0.0f, mBuyMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponSelectionPanel.mPosition = CalcWindowUVFromPosition(mWeaponSelectionPanel.mPosition);
 	mWeaponSelectionPanel.mSize =
 	{
 		mBuyMainPanel.mSize.x,
 		TEXT_PADDING + (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 5.0f
 	};
 
-	mWeaponSelectionButtonOne.mPosition = mWeaponSelectionPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mWeaponSelectionButtonOne.mPosition = CalcWindowPositionFromUV(mWeaponSelectionPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mWeaponSelectionButtonTwo.mPosition = mWeaponSelectionButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 	mWeaponSelectionButtonThree.mPosition = mWeaponSelectionButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 	mWeaponSelectionButtonFour.mPosition = mWeaponSelectionButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -345,18 +324,15 @@ void MenuShop::SetupWeaponSelectionPanel()
 void MenuShop::SetupArmourSelectionPanel()
 {
 	mArmourSelectionPanel.mIsActive = false;
-	mArmourSelectionPanel.mPosition =
-	{
-		mBuyMainPanel.mPosition.x,
-		mBuyMainPanel.mPosition.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f
-	};
+	mArmourSelectionPanel.mPosition = CalcWindowPositionFromUV(mBuyMainPanel.mPosition) + Vec2(0.0f, mBuyMainPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourSelectionPanel.mPosition = CalcWindowUVFromPosition(mArmourSelectionPanel.mPosition);
 	mArmourSelectionPanel.mSize =
 	{
 		mBuyMainPanel.mSize.x,
 		TEXT_PADDING + (Font::fontHeight * TEXT_SIZE + TEXT_PADDING) * 5.0f
 	};
 
-	mArmourSelectionButtonOne.mPosition = mArmourSelectionPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourSelectionButtonOne.mPosition = CalcWindowPositionFromUV(mArmourSelectionPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mArmourSelectionButtonTwo.mPosition = mArmourSelectionButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 	mArmourSelectionButtonThree.mPosition = mArmourSelectionButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 	mArmourSelectionButtonFour.mPosition = mArmourSelectionButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -463,31 +439,34 @@ void MenuShop::SetupArmourSelectionPanel()
 	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextOne);
 	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextTwo);
 	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextThree);
-	mArmourSelectionPanel.mText.push_back(&mWeaponPriceTextFour);
+	mArmourSelectionPanel.mText.push_back(&mArmourPriceTextFour);
 }
 
 void MenuShop::SetupWeaponPurchasePromptPanel()
 {
 	mWeaponPurchasePromptPanel.mIsActive = false;
-	mWeaponPurchasePromptPanel.mPosition = mWeaponSelectionPanel.mPosition + Vec2(0.0f, mWeaponSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponPurchasePromptPanel.mPosition = CalcWindowPositionFromUV(mWeaponSelectionPanel.mPosition) + Vec2(0.0f, mWeaponSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponPurchasePromptPanel.mPosition = CalcWindowUVFromPosition(mWeaponPurchasePromptPanel.mPosition);
 	mWeaponPurchasePromptPanel.mSize =
 	{
 		mWeaponSelectionPanel.mSize.x,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
 	};
 
-	mWeaponPurchasePromptText.mPosition = mWeaponPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mWeaponPurchasePromptText.mPosition = CalcWindowPositionFromUV(mWeaponPurchasePromptPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mWeaponPurchasePromptPanel.mText.push_back(&mWeaponPurchasePromptText);
 
 	mWeaponConfirmPanel.mIsActive = false;
-	mWeaponConfirmPanel.mPosition = mWeaponPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponConfirmPanel.mPosition =
+		CalcWindowPositionFromUV(mWeaponPurchasePromptPanel.mPosition) + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mWeaponConfirmPanel.mPosition = CalcWindowUVFromPosition(mWeaponConfirmPanel.mPosition);
 	mWeaponConfirmPanel.mSize =
 	{
 		Font::fontWidth * TEXT_SIZE * 5.0f + TEXT_PADDING * 2.0f,
 		Font::fontHeight * TEXT_SIZE * 2.0f + TEXT_PADDING * 3.0f
 	};
 
-	mWeaponConfirmButtonYes.mPosition = mWeaponConfirmPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mWeaponConfirmButtonYes.mPosition = CalcWindowPositionFromUV(mWeaponConfirmPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mWeaponConfirmButtonYes.mText = "Yes";
 
 	mWeaponConfirmButtonNo.mPosition = mWeaponConfirmButtonYes.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -541,25 +520,28 @@ void MenuShop::SetupWeaponPurchasePromptPanel()
 void MenuShop::SetupArmourPurchasePromptPanel()
 {
 	mArmourPurchasePromptPanel.mIsActive = false;
-	mArmourPurchasePromptPanel.mPosition = mArmourSelectionPanel.mPosition + Vec2(0.0f, mArmourSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourPurchasePromptPanel.mPosition = CalcWindowPositionFromUV(mArmourSelectionPanel.mPosition) + Vec2(0.0f, mArmourSelectionPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourPurchasePromptPanel.mPosition = CalcWindowUVFromPosition(mArmourPurchasePromptPanel.mPosition);
 	mArmourPurchasePromptPanel.mSize =
 	{
 		mArmourSelectionPanel.mSize.x,
 		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
 	};
 
-	mArmourPurchasePromptText.mPosition = mArmourPurchasePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourPurchasePromptText.mPosition = CalcWindowPositionFromUV(mArmourPurchasePromptPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mArmourPurchasePromptPanel.mText.push_back(&mArmourPurchasePromptText);
 
 	mArmourConfirmPanel.mIsActive = false;
-	mArmourConfirmPanel.mPosition = mArmourPurchasePromptPanel.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourConfirmPanel.mPosition =
+		CalcWindowPositionFromUV(mArmourPurchasePromptPanel.mPosition) + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f + UI_BOX_BORDER_SIZE * 3.0f);
+	mArmourConfirmPanel.mPosition = CalcWindowUVFromPosition(mArmourConfirmPanel.mPosition);
 	mArmourConfirmPanel.mSize =
 	{
 		Font::fontWidth * TEXT_SIZE * 5.0f + TEXT_PADDING * 2.0f,
 		Font::fontHeight * TEXT_SIZE * 2.0f + TEXT_PADDING * 3.0f
 	};
 
-	mArmourConfirmButtonYes.mPosition = mArmourConfirmPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+	mArmourConfirmButtonYes.mPosition = CalcWindowPositionFromUV(mArmourConfirmPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 	mArmourConfirmButtonYes.mText = "Yes";
 
 	mArmourConfirmButtonNo.mPosition = mArmourConfirmButtonYes.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);

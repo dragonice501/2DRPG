@@ -33,48 +33,67 @@ void MenuInteract::SetupMainPanel()
 {
     // Main Panel
     mMainPanel.mIsActive = true;
-    mMainPanel.mPosition = { GraphicsManager::WindowWidth() / 2 - 150.0f, GraphicsManager::WindowHeight() / 2 - 50.0f };
-    mMainPanel.mSize = { INTERACT_MENU_WIDTH, INTERACT_MENU_HEIGHT };
+    mMainPanel.mPosition = { 0.45f, 0.55f };
+    mMainPanel.mSize = { INTERACT_MENU_WIDTH, Font::fontHeight * TEXT_SIZE * 3.0f + TEXT_PADDING * 4.0f };
+
+    mTalkButton.mPosition = CalcWindowPositionFromUV(mMainPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mAskButton.mPosition = mTalkButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
+    mLeaveButton.mPosition = mAskButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
+
+    mTalkButton.OnDownAction = [this]()
+    {
+        SetCurrentButton(&mAskButton);
+    };
+
+    mAskButton.OnUpAction = [this]()
+    {
+        SetCurrentButton(&mTalkButton);
+    };
+    mAskButton.OnDownAction = [this]()
+    {
+        SetCurrentButton(&mLeaveButton);
+    };
+
+    mLeaveButton.OnUpAction = [this]()
+    {
+        SetCurrentButton(&mAskButton);
+    };
+    
     mMainPanel.mButtons.push_back(&mTalkButton);
     mMainPanel.mButtons.push_back(&mAskButton);
     mMainPanel.mButtons.push_back(&mLeaveButton);
-
-    mTalkButton.mPosition = mMainPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mAskButton.mPosition = mTalkButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
-    mLeaveButton.mPosition = mAskButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_VERTICAL_PADDING * TEXT_SIZE);
 }
 
 void MenuInteract::SetupAskPanel()
 {
     // Asking Panel
     mAskingPanel.mIsActive = false;
-    mAskingPanel.mPosition =
-    {
-        mMainPanel.mPosition.x + mMainPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMainPanel.mPosition.y
-    };
+    mAskingPanel.mPosition = CalcWindowPositionFromUV(mMainPanel.mPosition) + Vec2(mMainPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mAskingPanel.mPosition = CalcWindowUVFromPosition(mAskingPanel.mPosition);
 
     std::string string = mPeopleButton.mText + mPlacesButton.mText + mMysteriesButton.mText + mBestiaryButton.mText;
     float size = Font::GetStringFontLength(string.c_str());
-    mAskingPanel.mSize = { size * TEXT_SIZE + Font::fontWidth * 6 * TEXT_SIZE + TEXT_PADDING, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f };
+    mAskingPanel.mSize =
+    {
+        size * TEXT_SIZE + Font::fontWidth * 6 * TEXT_SIZE + TEXT_PADDING,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+    };
 
     mAskingPanel.mButtons.push_back(&mPeopleButton);
     mAskingPanel.mButtons.push_back(&mPlacesButton);
     mAskingPanel.mButtons.push_back(&mMysteriesButton);
     mAskingPanel.mButtons.push_back(&mBestiaryButton);
 
-    mPeopleButton.mPosition = mAskingPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mPeopleButton.mPosition = CalcWindowPositionFromUV(mAskingPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mPlacesButton.mPosition = mPeopleButton.mPosition + Vec2(Font::GetStringFontLength(mPeopleButton.mText.c_str()) * TEXT_SIZE + Font::fontWidth * TEXT_SIZE * 2, 0.0f);
     mMysteriesButton.mPosition = mPlacesButton.mPosition + Vec2(Font::GetStringFontLength(mPlacesButton.mText.c_str()) * TEXT_SIZE + Font::fontWidth * TEXT_SIZE * 2, 0.0f);
     mBestiaryButton.mPosition = mMysteriesButton.mPosition + Vec2(Font::GetStringFontLength(mMysteriesButton.mText.c_str()) * TEXT_SIZE + Font::fontWidth * TEXT_SIZE * 2, 0.0f);
 
     // Keywords Pannel
     mKeywordsPanel.mIsActive = false;
-    mKeywordsPanel.mPosition =
-    {
-        mAskingPanel.mPosition.x,
-        mAskingPanel.mPosition.y + mAskingPanel.mSize.y + UI_BOX_BORDER_SIZE * 3
-    };
+    mKeywordsPanel.mPosition = CalcWindowPositionFromUV(mAskingPanel.mPosition) + Vec2(0.0f, mAskingPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mKeywordsPanel.mPosition = CalcWindowUVFromPosition(mKeywordsPanel.mPosition);
+
     mKeywordsPanel.mSize = { mAskingPanel.mSize.x, TEXT_PADDING * TEXT_SIZE * 2.0f + Font::fontHeight * TEXT_SIZE * 3.0f };
 
     mKeywordsPanel.mButtons.push_back(&mFirstButton);
@@ -84,7 +103,7 @@ void MenuInteract::SetupAskPanel()
     mKeywordsPanel.mButtons.push_back(&mFifthButton);
     mKeywordsPanel.mButtons.push_back(&mSixthButton);
 
-    mFirstButton.mPosition = mKeywordsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mFirstButton.mPosition = CalcWindowPositionFromUV(mKeywordsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mThirdButton.mPosition = mFirstButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mFifthButton.mPosition = mThirdButton.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 

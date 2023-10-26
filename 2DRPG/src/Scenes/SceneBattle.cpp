@@ -994,20 +994,5 @@ void SceneBattle::DrawCursor()
 
 void SceneBattle::DrawBattleEvent(SDL_Rect& rect, const std::string& eventString)
 {
-	int stringLength = eventString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * eventString.length() * TEXT_SIZE;
-
-	rect =
-	{
-		GraphicsManager::WindowWidth() / 2 - stringLength / 2 - TEXT_PADDING,
-		GraphicsManager::WindowHeight() - BATTLE_MENU_HEIGHT - UI_BOX_BORDER_SIZE * 2,
-		stringLength + TEXT_PADDING * 2,
-		Font::fontHeight* TEXT_SIZE + TEXT_PADDING * 2
-	};
-
-	GraphicsManager::DrawUIBox(rect.x, rect.y, rect.w, rect.h);
-
-	GraphicsManager::DrawString(
-		rect.x + TEXT_PADDING,
-		rect.y + TEXT_PADDING,
-		eventString.c_str());
+	GraphicsManager::DrawBattleEvent(eventString);
 }

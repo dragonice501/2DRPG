@@ -55,10 +55,11 @@ public:
     static void DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect);
     static void DrawDialogueBox();
     static void DrawDialogue(const std::vector<std::string>& dialogue);
-    static void DrawUIBox(const int x, const int y, const int width, const int height);
+    static void DrawUIBox(const float x, const float y, const float width, const float height);
     static void DrawUIBox(const SDL_Rect& rect);
     static void DrawUISelector(const int x, const int y, const int width, const int height);
     static void DrawBattleBackground(SDL_Texture* texture);
+    static void DrawBattleEvent(const std::string eventString);
 
     static void DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen = false);
 

@@ -150,9 +150,9 @@ public:
 
 	// Inventory Panel
 	UIPanel mInventoryButtonsPanel;
-	UIButton mInventoryButtonOne;
-	UIButton mInventoryButtonTwo;
-	UIButton mInventoryButtonThree;
+	UIButton mInventoryButtonWeapons;
+	UIButton mInventoryButtonArmour;
+	UIButton mInventoryButtonItems;
 
 	UIPanel mInventoryPanel;
 	UIButton mInventoryPanelButtonOne;

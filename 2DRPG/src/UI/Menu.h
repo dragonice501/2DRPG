@@ -54,6 +54,15 @@ public:
 
 	virtual void Render() = 0;
 
+	inline Vec2 CalcWindowPositionFromUV(const Vec2& positionUV) const
+	{ 
+		return Vec2(positionUV.x * GraphicsManager::WindowWidth(), positionUV.y * GraphicsManager::WindowHeight());
+	}
+	inline Vec2 CalcWindowUVFromPosition(const Vec2& UV) const
+	{
+		return Vec2(UV.x / GraphicsManager::WindowWidth(), UV.y / GraphicsManager::WindowHeight());
+	}
+
 protected:
 	UIButton* mCurrentButton;
 	UIButton* mPreviousButtonFirst;

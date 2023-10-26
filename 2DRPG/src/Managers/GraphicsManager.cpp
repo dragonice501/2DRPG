@@ -317,20 +317,20 @@ void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect
 
 void GraphicsManager::DrawDialogueBox()
 {
-    SDL_Rect rect =
+    SDL_Rect borderRect =
     {
-        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2 - DIALOGUE_BOX_BORDER_SIZE,
-        static_cast<int>(mWindowHeight * 0.75f - DIALOGUE_BOX_BORDER_SIZE),
+        mWindowWidth * 0.5f - DIALOGUE_BOX_WIDTH * 0.5f - DIALOGUE_BOX_BORDER_SIZE,
+        static_cast<int>(mWindowHeight * 0.65f - DIALOGUE_BOX_BORDER_SIZE),
         DIALOGUE_BOX_WIDTH + DIALOGUE_BOX_BORDER_SIZE * 2,
         DIALOGUE_BOX_HEIGHT + DIALOGUE_BOX_BORDER_SIZE * 2
     };
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(mRenderer, &rect);
+    SDL_RenderFillRect(mRenderer, &borderRect);
 
-    rect =
+    SDL_Rect rect =
     {
-        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2,
-        static_cast<int>(mWindowHeight * 0.75f),
+        mWindowWidth * 0.5f - DIALOGUE_BOX_WIDTH * 0.5f,
+        static_cast<int>(mWindowHeight * 0.65f),
         DIALOGUE_BOX_WIDTH,
         DIALOGUE_BOX_HEIGHT
     };
@@ -347,10 +347,10 @@ void GraphicsManager::DrawDialogue(const std::vector<std::string>& dialogue)
 
     SDL_Rect rect =
     {
-        mWindowWidth / 2 - DIALOGUE_BOX_WIDTH / 2 - DIALOGUE_BOX_BORDER_SIZE,
-        static_cast<int>(mWindowHeight * 0.75f - DIALOGUE_BOX_BORDER_SIZE),
-        DIALOGUE_BOX_WIDTH + DIALOGUE_BOX_BORDER_SIZE * 2,
-        DIALOGUE_BOX_HEIGHT + DIALOGUE_BOX_BORDER_SIZE * 2
+        mWindowWidth * 0.5f - DIALOGUE_BOX_WIDTH * 0.5f,
+        static_cast<int>(mWindowHeight * 0.65f),
+        DIALOGUE_BOX_WIDTH,
+        DIALOGUE_BOX_HEIGHT
     };
 
     for (int i = 0; i < dialogue.size(); i++)
@@ -363,20 +363,26 @@ void GraphicsManager::DrawDialogue(const std::vector<std::string>& dialogue)
     }
 }
 
-void GraphicsManager::DrawUIBox(const int x, const int y, const int width, const int height)
+void GraphicsManager::DrawUIBox(const float x, const float y, const float width, const float height)
 {
-    SDL_Rect rect =
+    SDL_Rect borderRect =
     {
-        x - DIALOGUE_BOX_BORDER_SIZE,
-        y - DIALOGUE_BOX_BORDER_SIZE,
-        width + UI_BOX_BORDER_SIZE * 2,
-        height + UI_BOX_BORDER_SIZE * 2
+        mWindowWidth * x - UI_BOX_BORDER_SIZE,
+        mWindowHeight * y - UI_BOX_BORDER_SIZE,
+        width + UI_BOX_BORDER_SIZE * 2.0f,
+        height + UI_BOX_BORDER_SIZE * 2.0f
     };
 
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(mRenderer, &rect);
+    SDL_RenderFillRect(mRenderer, &borderRect);
 
-    rect = { x, y, width, height };
+    SDL_Rect rect =
+    {
+        mWindowWidth * x,
+        mWindowHeight * y,
+        width,
+        height
+    };
 
     SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
     SDL_RenderFillRect(mRenderer, &rect);
@@ -409,6 +415,42 @@ void GraphicsManager::DrawUISelector(const int x, const int y, const int width, 
 void GraphicsManager::DrawBattleBackground(SDL_Texture* texture)
 {
     SDL_RenderCopy(mRenderer, texture, NULL, NULL);
+}
+
+void GraphicsManager::DrawBattleEvent(const std::string eventString)
+{
+    int stringLength = eventString.length() * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * eventString.length() * TEXT_SIZE;
+
+    SDL_Rect newRect =
+    {
+        GraphicsManager::WindowWidth() * 0.5f - stringLength * 0.5f - TEXT_PADDING,
+        GraphicsManager::WindowHeight() * 0.75f,
+        stringLength + TEXT_PADDING * 2,
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2
+    };
+
+    GraphicsManager::DrawUIBox(newRect.x, newRect.y, newRect.w, newRect.h);
+
+    SDL_Rect borderRect =
+    {
+        newRect.x - UI_BOX_BORDER_SIZE,
+        newRect.y - UI_BOX_BORDER_SIZE,
+        newRect.w + UI_BOX_BORDER_SIZE * 2.0f,
+        newRect.h + UI_BOX_BORDER_SIZE * 2.0f
+    };
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(mRenderer, &borderRect);
+
+    SDL_SetRenderDrawColor(mRenderer, 232, 220, 202, 255);
+    SDL_RenderFillRect(mRenderer, &newRect);
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
+
+    GraphicsManager::DrawString(
+        newRect.x + TEXT_PADDING,
+        newRect.y + TEXT_PADDING,
+        eventString.c_str());
 }
 
 void GraphicsManager::DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen)

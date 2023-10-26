@@ -3,14 +3,6 @@
 SceneExploration::SceneExploration()
 {
     // Interact Menu Main
-    mInteractMenu.mTalkButton.OnUpAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(& mInteractMenu.mLeaveButton);
-    };
-    mInteractMenu.mTalkButton.OnDownAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
-    };
     mInteractMenu.mTalkButton.OnAcceptAction = [this]()
     {
         mExplorationState = ES_TALKING;
@@ -22,14 +14,6 @@ SceneExploration::SceneExploration()
         mExplorationState = ES_EXPLORING;
     };
 
-    mInteractMenu.mAskButton.OnUpAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
-    };
-    mInteractMenu.mAskButton.OnDownAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mLeaveButton);
-    };
     mInteractMenu.mAskButton.OnAcceptAction = [this]()
     {
         mInteractMenu.mAskingPanel.mIsActive = true;
@@ -44,14 +28,6 @@ SceneExploration::SceneExploration()
         mExplorationState = ES_EXPLORING;
     };
 
-    mInteractMenu.mLeaveButton.OnUpAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mAskButton);
-    };
-    mInteractMenu.mLeaveButton.OnDownAction = [this]()
-    {
-        mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
-    };
     mInteractMenu.mLeaveButton.OnAcceptAction = [this]()
     {
         mInteractMenu.SetCurrentButton(&mInteractMenu.mTalkButton);
@@ -562,6 +538,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     // Randomize Encounter Steps
     mStepsUntilEncounter = rand() % (mEncounterStepsMax - mEncounterStepsMin + 1) + mEncounterStepsMin;
+    mStepsUntilEncounter = 1;
 
     // Load enemy encounters
     EnemyEncounter newEncounter;

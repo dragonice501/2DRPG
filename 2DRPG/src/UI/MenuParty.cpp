@@ -13,9 +13,9 @@ MenuParty::MenuParty() :
     mJournalButtonTwo("Place"),
     mJournalButtonThree("Mystery"),
     mJournalButtonFour("Bestiary"),
-    mInventoryButtonOne("Items"),
-    mInventoryButtonTwo("Weapons"),
-    mInventoryButtonThree("Armour"),
+    mInventoryButtonWeapons("Weapons"),
+    mInventoryButtonArmour("Armour"),
+    mInventoryButtonItems("Items"),
     mEquipOptionsButtonEquip("Equip"),
     mEquipOptionsButtonRemove("Remove"),
     mEquipOptionsButtonRemoveAll("Remove All"),
@@ -119,22 +119,14 @@ void MenuParty::SetupMoneyPanel()
 {
     mMoneyPanel.mIsActive = true;
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
-    mMoneyPanel.mPosition =
-    {
-        GraphicsManager::WindowWidth() / 2.0f - GraphicsManager::WindowWidth() / 4.0f,
-        GraphicsManager::WindowHeight() / 2.0f - GraphicsManager::WindowHeight() / 4.0f
-    };
+    mMoneyPanel.mPosition = { 0.35f, 0.35f };
     mMoneyPanel.mSize =
     {
         stringLength + TEXT_PADDING * 2.0f,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mMoneyText.mPosition =
-    {
-        mMoneyPanel.mPosition.x + TEXT_PADDING,
-        mMoneyPanel.mPosition.y + TEXT_PADDING
-    };
+    mMoneyText.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mMoneyText.mReference = &PlayerManager::mPartyGold;
     mMoneyText.mText = 'g';
     mMoneyPanel.mText.push_back(&mMoneyText);
@@ -144,11 +136,8 @@ void MenuParty::SetupMainPanel()
 {
     int stringLength = 9 * Font::fontWidth * TEXT_SIZE + Font::fontSpacing * 9 * TEXT_SIZE;
     mMainPanel.mIsActive = true;
-    mMainPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x,
-        mMoneyPanel.mPosition.y + Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2 + UI_BOX_BORDER_SIZE * 3
-    };
+    mMainPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(0.0f, mMoneyPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mMainPanel.mPosition = CalcWindowUVFromPosition(mMainPanel.mPosition);
     mMainPanel.mSize =
     {
         stringLength + TEXT_PADDING * 2.0f,
@@ -164,24 +153,19 @@ void MenuParty::SetupMainPanel()
     mMainPanel.mButtons.push_back(&mSaveButton);
     mMainPanel.mButtons.push_back(&mExitButton);
 
-    float vertOffset = Font::fontHeight * TEXT_SIZE + TEXT_PADDING;
-    mPartyButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING };
-    mStatusButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset };
-    mInventoryButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 2 };
-    mJournalButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 3 };
-    mEquipButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 4 };
-    mMagicButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 5 };
-    mSaveButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 6 };
-    mExitButton.mPosition = { mMainPanel.mPosition.x + TEXT_PADDING, mMainPanel.mPosition.y + TEXT_PADDING + vertOffset * 7 };
+    Vec2 vertOffset = { 0.0f, static_cast<float>(Font::fontHeight * TEXT_SIZE + TEXT_PADDING) };
+    mPartyButton.mPosition = CalcWindowPositionFromUV(mMainPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusButton.mPosition = mPartyButton.mPosition + vertOffset;
+    mInventoryButton.mPosition = mStatusButton.mPosition + vertOffset;
+    mJournalButton.mPosition = mInventoryButton.mPosition + vertOffset;
+    mEquipButton.mPosition = mJournalButton.mPosition + vertOffset;
+    mMagicButton.mPosition = mEquipButton.mPosition + vertOffset;
+    mSaveButton.mPosition = mMagicButton.mPosition + vertOffset;
+    mExitButton.mPosition = mSaveButton.mPosition + vertOffset;
 
-    mPartyButton.OnSelected = [this]()
-    {
-
-    };
     mPartyButton.OnDownAction = [this]()
     {
         mCurrentButton = &mStatusButton;
-        mCurrentButton->OnSelected();
     };
     mPartyButton.OnAcceptAction = [this]()
     {
@@ -189,19 +173,13 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mPartyButtonOne;
     };
 
-    mStatusButton.OnSelected = [this]()
-    {
-
-    };
     mStatusButton.OnUpAction = [this]()
     {
         mCurrentButton = &mPartyButton;
-        mCurrentButton->OnSelected();
     };
     mStatusButton.OnDownAction = [this]()
     {
         mCurrentButton = &mInventoryButton;
-        mCurrentButton->OnSelected();
     };
     mStatusButton.OnAcceptAction = [this]()
     {
@@ -215,44 +193,32 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mPartyButton;
     };
 
-    mInventoryButton.OnSelected = [this]()
-    {
-
-    };
     mInventoryButton.OnUpAction = [this]()
     {
         mCurrentButton = &mStatusButton;
-        mCurrentButton->OnSelected();
     };
     mInventoryButton.OnDownAction = [this]()
     {
         mCurrentButton = &mJournalButton;
-        mCurrentButton->OnSelected();
     };
     mInventoryButton.OnAcceptAction = [this]()
     {
         SetPanelState(PS_INVENTORY);
-        FillInventoryItemButtons();
-        mCurrentButton = &mInventoryButtonOne;
+        FillInventoryWeaponsButtons();
+        mCurrentButton = &mInventoryButtonWeapons;
     };
     mInventoryButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mJournalButton.OnSelected = [this]()
-    {
-
-    };
     mJournalButton.OnUpAction = [this]()
     {
         mCurrentButton = &mInventoryButton;
-        mCurrentButton->OnSelected();
     };
     mJournalButton.OnDownAction = [this]()
     {
         mCurrentButton = &mEquipButton;
-        mCurrentButton->OnSelected();
     };
     mJournalButton.OnAcceptAction = [this]()
     {
@@ -265,19 +231,13 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mPartyButton;
     };
 
-    mEquipButton.OnSelected = [this]()
-    {
-
-    };
     mEquipButton.OnUpAction = [this]()
     {
         mCurrentButton = &mJournalButton;
-        mCurrentButton->OnSelected();
     };
     mEquipButton.OnDownAction = [this]()
     {
         mCurrentButton = &mMagicButton;
-        mCurrentButton->OnSelected();
     };
     mEquipButton.OnAcceptAction = [this]()
     {
@@ -291,29 +251,19 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mPartyButton;
     };
 
-    mMagicButton.OnSelected = [this]()
-    {
-
-    };
     mMagicButton.OnUpAction = [this]()
     {
         mCurrentButton = &mEquipButton;
-        mCurrentButton->OnSelected();
     };
     mMagicButton.OnDownAction = [this]()
     {
         mCurrentButton = &mSaveButton;
-        mCurrentButton->OnSelected();
     };
     mMagicButton.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
     };
 
-    mSaveButton.OnSelected = [this]()
-    {
-
-    };
     mSaveButton.OnUpAction = [this]()
     {
         mCurrentButton = &mMagicButton;
@@ -332,14 +282,9 @@ void MenuParty::SetupMainPanel()
         mCurrentButton = &mPartyButton;
     };
 
-    mExitButton.OnSelected = [this]()
-    {
-
-    };
     mExitButton.OnUpAction = [this]()
     {
         mCurrentButton = &mSaveButton;
-        mCurrentButton->OnSelected();
     };
     mExitButton.OnCancelAction = [this]()
     {
@@ -350,11 +295,8 @@ void MenuParty::SetupMainPanel()
 void MenuParty::SetupPartyPanel()
 {
     mPartyPanel.mIsActive = true;
-    mPartyPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMoneyPanel.mPosition.y
-    };
+    mPartyPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mPartyPanel.mPosition = CalcWindowUVFromPosition(mPartyPanel.mPosition);
     mPartyPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
@@ -386,10 +328,6 @@ void MenuParty::SetupPartyPanel()
     {
         mCurrentButton = &mPartyButtonOne;
     };
-    mPartyButtonTwo.OnAcceptAction = [this]()
-    {
-
-    };
     mPartyButtonTwo.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
@@ -402,10 +340,6 @@ void MenuParty::SetupPartyPanel()
     mPartyButtonThree.OnRightAction = [this]()
     {
         mCurrentButton = &mPartyButtonFour;
-    };
-    mPartyButtonThree.OnAcceptAction = [this]()
-    {
-
     };
     mPartyButtonThree.OnCancelAction = [this]()
     {
@@ -420,10 +354,6 @@ void MenuParty::SetupPartyPanel()
     {
         mCurrentButton = &mPartyButtonThree;
     };
-    mPartyButtonFour.OnAcceptAction = [this]()
-    {
-
-    };
     mPartyButtonFour.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;
@@ -436,10 +366,7 @@ void MenuParty::SetupPartyPanel()
 
     // First Character
     mPartyButtonOne.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING,
-        mPartyPanel.mPosition.y + TEXT_PADDING
-    };
+        CalcWindowPositionFromUV(mPartyPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
 
     mPartyLevelTextOne.mPosition = mPartyButtonOne.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
     mPartyClassTextOne.mPosition = mPartyButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -453,10 +380,7 @@ void MenuParty::SetupPartyPanel()
 
     // Second Character
     mPartyButtonTwo.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
-        mPartyPanel.mPosition.y + TEXT_PADDING
-    };
+        CalcWindowPositionFromUV(mPartyPanel.mPosition) + Vec2(TEXT_PADDING + mPartyPanel.mSize.x * 0.5f, TEXT_PADDING);
 
     mPartyLevelTextTwo.mPosition = mPartyButtonTwo.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
     mPartyClassTextTwo.mPosition = mPartyButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -470,10 +394,7 @@ void MenuParty::SetupPartyPanel()
 
     // Third Character
     mPartyButtonThree.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING,
-        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
-    };
+        CalcWindowPositionFromUV(mPartyPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING + mPartyPanel.mSize.y * 0.5f);
 
     mPartyLevelTextThree.mPosition = mPartyButtonThree.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
     mPartyClassTextThree.mPosition = mPartyButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -487,10 +408,7 @@ void MenuParty::SetupPartyPanel()
 
     // Four Character
     mPartyButtonFour.mPosition =
-    {
-        mPartyPanel.mPosition.x + TEXT_PADDING + mPartyPanel.mSize.x * 0.5f,
-        mPartyPanel.mPosition.y + TEXT_PADDING + mPartyPanel.mSize.y * 0.5f
-    };
+        CalcWindowPositionFromUV(mPartyPanel.mPosition) + Vec2(TEXT_PADDING + mPartyPanel.mSize.x * 0.5f, TEXT_PADDING + mPartyPanel.mSize.y * 0.5f);
 
     mPartyLevelTextFour.mPosition = mPartyButtonFour.mPosition + Vec2(mPartyPanel.mSize.x * 0.25f, 0.0f);
     mPartyClassTextFour.mPosition = mPartyButtonFour.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -508,21 +426,18 @@ void MenuParty::SetupPartyPanel()
 void MenuParty::SetupStatusPanel()
 {
     mStatusButtonPanel.mIsActive = false;
-    mStatusButtonPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMoneyPanel.mPosition.y
-    };
+    mStatusButtonPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mStatusButtonPanel.mPosition = CalcWindowUVFromPosition(mStatusButtonPanel.mPosition);
     mStatusButtonPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
-        Font::fontHeight* TEXT_SIZE + TEXT_PADDING * 2.0f
+        Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mStatusButtonOne.mPosition = mStatusButtonPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mStatusButtonTwo.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mStatusButtonThree.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.5f, TEXT_PADDING);
-    mStatusButtonFour.mPosition = mStatusButtonPanel.mPosition + Vec2(mStatusButtonPanel.mSize.x * 0.75f, TEXT_PADDING);
+    mStatusButtonOne.mPosition = CalcWindowPositionFromUV(mStatusButtonPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusButtonTwo.mPosition = CalcWindowPositionFromUV(mStatusButtonPanel.mPosition) + Vec2(mStatusButtonPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mStatusButtonThree.mPosition = CalcWindowPositionFromUV(mStatusButtonPanel.mPosition) + Vec2(mStatusButtonPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mStatusButtonFour.mPosition = CalcWindowPositionFromUV(mStatusButtonPanel.mPosition) + Vec2(mStatusButtonPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mStatusButtonOne.OnRightAction = [this]()
     {
@@ -583,11 +498,8 @@ void MenuParty::SetupStatusPanel()
     mStatusButtonPanel.mButtons.push_back(&mStatusButtonThree);
     mStatusButtonPanel.mButtons.push_back(&mStatusButtonFour);
 
-    mStatusAttributesPanel.mPosition =
-    {
-        mStatusButtonPanel.mPosition.x,
-        mMainPanel.mPosition.y
-    };
+    mStatusAttributesPanel.mPosition = CalcWindowPositionFromUV(mStatusButtonPanel.mPosition) + Vec2(0.0f, mStatusButtonPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mStatusAttributesPanel.mPosition = CalcWindowUVFromPosition(mStatusAttributesPanel.mPosition);
     mStatusAttributesPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
@@ -597,7 +509,7 @@ void MenuParty::SetupStatusPanel()
     float fontLength;
 
     // Level
-    mStatusLevelText.mPosition = mStatusAttributesPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mStatusLevelText.mPosition = CalcWindowPositionFromUV(mStatusAttributesPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mStatusLevelText.mText = "Lv. ";
     mStatusAttributesPanel.mText.push_back(&mStatusLevelText);
 
@@ -646,7 +558,7 @@ void MenuParty::SetupStatusPanel()
     mStatusAttributesPanel.mText.push_back(&mStatusNextLevelValueText);
 
     // Strength
-    mStatusStrengthText.mPosition = mStatusAttributesPanel.mPosition + Vec2(mStatusAttributesPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mStatusStrengthText.mPosition = CalcWindowPositionFromUV(mStatusAttributesPanel.mPosition) + Vec2(mStatusAttributesPanel.mSize.x * 0.5f, TEXT_PADDING);
     mStatusStrengthText.mText = "Str ";
     mStatusAttributesPanel.mText.push_back(&mStatusStrengthText);
 
@@ -705,82 +617,72 @@ void MenuParty::SetupStatusPanel()
 void MenuParty::SetupInventoryPanel()
 {
     mInventoryButtonsPanel.mIsActive = false;
-    mInventoryButtonsPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMoneyPanel.mPosition.y
-    };
+    mInventoryButtonsPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mInventoryButtonsPanel.mPosition = CalcWindowUVFromPosition(mInventoryButtonsPanel.mPosition);
     mInventoryButtonsPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mInventoryButtonOne.mPosition = mInventoryButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mInventoryButtonTwo.mPosition = mInventoryButtonsPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mInventoryButtonThree.mPosition = mInventoryButtonsPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mInventoryButtonWeapons.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mInventoryButtonArmour.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mInventoryButtonItems.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
 
-    mInventoryButtonOne.OnRightAction = [this]()
+    mInventoryButtonWeapons.OnRightAction = [this]()
     {
-        mCurrentButton = &mInventoryButtonTwo;
-        FillInventoryWeaponsButtons();
-    };
-    mInventoryButtonOne.OnCancelAction = [this]()
-    {
-        SetPanelState(PS_PARTY);
-        mCurrentButton = &mInventoryButton;
-    };
-
-    mInventoryButtonTwo.OnLeftAction = [this]()
-    {
-        mCurrentButton = &mInventoryButtonOne;
-        FillInventoryItemButtons();
-    };
-    mInventoryButtonTwo.OnRightAction = [this]()
-    {
-        mCurrentButton = &mInventoryButtonThree;
+        mCurrentButton = &mInventoryButtonArmour;
         FillInventoryArmourButtons();
     };
-    mInventoryButtonTwo.OnCancelAction = [this]()
+    mInventoryButtonWeapons.OnCancelAction = [this]()
     {
         SetPanelState(PS_PARTY);
         mCurrentButton = &mInventoryButton;
     };
 
-    mInventoryButtonThree.OnLeftAction = [this]()
+    mInventoryButtonArmour.OnLeftAction = [this]()
     {
-        mCurrentButton = &mInventoryButtonTwo;
+        mCurrentButton = &mInventoryButtonWeapons;
         FillInventoryWeaponsButtons();
     };
-    mInventoryButtonThree.OnRightAction = [this]()
+    mInventoryButtonArmour.OnRightAction = [this]()
     {
-        
+        mCurrentButton = &mInventoryButtonItems;
+        FillInventoryItemButtons();
     };
-    mInventoryButtonThree.OnCancelAction = [this]()
+    mInventoryButtonArmour.OnCancelAction = [this]()
     {
         SetPanelState(PS_PARTY);
         mCurrentButton = &mInventoryButton;
     };
 
-    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonOne);
-    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonTwo);
-    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonThree);
-
-    mInventoryPanel.mPosition =
+    mInventoryButtonItems.OnLeftAction = [this]()
     {
-        mInventoryButtonsPanel.mPosition.x,
-        mMainPanel.mPosition.y
+        mCurrentButton = &mInventoryButtonArmour;
+        FillInventoryArmourButtons();
     };
+    mInventoryButtonItems.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mInventoryButton;
+    };
+
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonWeapons);
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonArmour);
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonItems);
+
+    mInventoryPanel.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(0.0f, mInventoryButtonsPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mInventoryPanel.mPosition = CalcWindowUVFromPosition(mInventoryPanel.mPosition);
     mInventoryPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
-        TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
+        mMainPanel.mSize.y
     };
 
-    mInventoryPanelButtonOne.mPosition = mInventoryPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mInventoryPanelButtonTwo.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mInventoryPanelButtonThree.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
-    mInventoryPanelButtonFour.mPosition = mInventoryPanel.mPosition + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
+    mInventoryPanelButtonOne.mPosition = CalcWindowPositionFromUV(mInventoryPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mInventoryPanelButtonTwo.mPosition = CalcWindowPositionFromUV(mInventoryPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mInventoryPanelButtonThree.mPosition = CalcWindowPositionFromUV(mInventoryPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mInventoryPanelButtonFour.mPosition = CalcWindowPositionFromUV(mInventoryPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mInventoryPanelButtonOne.OnRightAction = [this]()
     {
@@ -891,21 +793,18 @@ void MenuParty::SetupInventoryPanel()
 void MenuParty::SetupJournalPanel()
 {
     mJournalButtonsPanel.mIsActive = false;
-    mJournalButtonsPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMoneyPanel.mPosition.y
-    };
+    mJournalButtonsPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mJournalButtonsPanel.mPosition = CalcWindowUVFromPosition(mJournalButtonsPanel.mPosition);
     mJournalButtonsPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mJournalButtonOne.mPosition = mJournalButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mJournalButtonTwo.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mJournalButtonThree.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
-    mJournalButtonFour.mPosition = mJournalButtonsPanel.mPosition + Vec2(mJournalButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
+    mJournalButtonOne.mPosition = CalcWindowPositionFromUV(mJournalButtonsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mJournalButtonTwo.mPosition = CalcWindowPositionFromUV(mJournalButtonsPanel.mPosition) + Vec2(mJournalButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mJournalButtonThree.mPosition = CalcWindowPositionFromUV(mJournalButtonsPanel.mPosition) + Vec2(mJournalButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mJournalButtonFour.mPosition = CalcWindowPositionFromUV(mJournalButtonsPanel.mPosition) + Vec2(mJournalButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mJournalButtonOne.OnRightAction = [this]()
     {
@@ -966,18 +865,15 @@ void MenuParty::SetupJournalPanel()
     mJournalButtonsPanel.mButtons.push_back(&mJournalButtonThree);
     mJournalButtonsPanel.mButtons.push_back(&mJournalButtonFour);
 
-    mJournalKeywordsPanel.mPosition =
-    {
-        mJournalButtonsPanel.mPosition.x,
-        mMainPanel.mPosition.y
-    };
+    mJournalKeywordsPanel.mPosition = CalcWindowPositionFromUV(mJournalButtonsPanel.mPosition) + Vec2(0.0f, mJournalButtonsPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mJournalKeywordsPanel.mPosition = CalcWindowUVFromPosition(mJournalKeywordsPanel.mPosition);
     mJournalKeywordsPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
         TEXT_PADDING * 2.0f + Font::fontHeight * TEXT_SIZE * 7.0f + TEXT_PADDING * 6.0f
     };
 
-    mKeywordsButtonOne.mPosition = mJournalKeywordsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mKeywordsButtonOne.mPosition = CalcWindowPositionFromUV(mJournalKeywordsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mKeywordsButtonThree.mPosition = mKeywordsButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
     mKeywordsButtonTwo.mPosition = mKeywordsButtonOne.mPosition + Vec2(mJournalKeywordsPanel.mSize.x * 0.5f, 0.0f);
@@ -992,21 +888,18 @@ void MenuParty::SetupJournalPanel()
 void MenuParty::SetupEquipPanel()
 {
     mEquipButtonsPanel.mIsActive = false;
-    mEquipButtonsPanel.mPosition =
-    {
-        mMoneyPanel.mPosition.x + mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3,
-        mMoneyPanel.mPosition.y
-    };
+    mEquipButtonsPanel.mPosition = CalcWindowPositionFromUV(mMoneyPanel.mPosition) + Vec2(mMoneyPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mEquipButtonsPanel.mPosition = CalcWindowUVFromPosition(mEquipButtonsPanel.mPosition);
     mEquipButtonsPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 36.0f + Font::fontSpacing * 38.0f + TEXT_PADDING * 2.0f,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mEquipButtonOne.mPosition = mEquipButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mEquipButtonTwo.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mEquipButtonThree.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
-    mEquipButtonFour.mPosition = mEquipButtonsPanel.mPosition + Vec2(mEquipButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
+    mEquipButtonOne.mPosition = CalcWindowPositionFromUV(mEquipButtonsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipButtonTwo.mPosition = CalcWindowPositionFromUV(mEquipButtonsPanel.mPosition) + Vec2(mEquipButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mEquipButtonThree.mPosition = CalcWindowPositionFromUV(mEquipButtonsPanel.mPosition) + Vec2(mEquipButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mEquipButtonFour.mPosition = CalcWindowPositionFromUV(mEquipButtonsPanel.mPosition) + Vec2(mEquipButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mEquipButtonOne.OnRightAction = [this]()
     {
@@ -1108,7 +1001,7 @@ void MenuParty::SetupEquipPanel()
         TEXT_PADDING + Font::fontHeight * TEXT_SIZE * 4.0f + TEXT_PADDING * 4.0f
     };
 
-    mEquipOptionsButtonEquip.mPosition = mEquipOptionsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipOptionsButtonEquip.mPosition = CalcWindowPositionFromUV(mEquipOptionsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mEquipOptionsButtonRemove.mPosition = mEquipOptionsButtonEquip.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mEquipOptionsButtonRemoveAll.mPosition = mEquipOptionsButtonRemove.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
     mEquipOptionsButtonOptimize.mPosition = mEquipOptionsButtonRemoveAll.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
@@ -1182,11 +1075,8 @@ void MenuParty::SetupEquipPanel()
     mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonRemoveAll);
     mEquipOptionsPanel.mButtons.push_back(&mEquipOptionsButtonOptimize);
 
-    mEquipmentPanel.mPosition =
-    {
-        mEquipOptionsPanel.mPosition.x + mEquipOptionsPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f,
-        mMainPanel.mPosition.y
-    };
+    mEquipmentPanel.mPosition = CalcWindowPositionFromUV(mEquipOptionsPanel.mPosition) + Vec2(mEquipOptionsPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, mMainPanel.mPosition.y);
+    mEquipmentPanel.mPosition = CalcWindowUVFromPosition(mEquipmentPanel.mPosition);
     mEquipmentPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 23.0f + Font::fontSpacing * 23.0f + TEXT_PADDING * 2.0f,
@@ -1197,7 +1087,7 @@ void MenuParty::SetupEquipPanel()
     float vertSpacing = Font::fontHeight * TEXT_SIZE + TEXT_PADDING;
 
     UIText equipmentText;
-    mEquipmentWeaponButton.mPosition = mEquipmentPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mEquipmentWeaponButton.mPosition = CalcWindowPositionFromUV(mEquipmentPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mEquipmentWeaponButton.mText = "Wpn  ";
 
     fontLength = Font::GetStringFontLength(mEquipmentWeaponButton.mText.c_str()) * TEXT_SIZE;
@@ -1335,35 +1225,29 @@ void MenuParty::SetupEquipPanel()
 void MenuParty::SetupSavePanel()
 {
     mSavePromptPanel.mIsActive = true;
-    mSavePromptPanel.mPosition =
-    {
-        mPartyPanel.mPosition.x,
-        mPartyPanel.mPosition.y + mPartyPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
-    };
+    mSavePromptPanel.mPosition = CalcWindowPositionFromUV(mPartyPanel.mPosition) + Vec2(0.0f, mPartyPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mSavePromptPanel.mPosition = CalcWindowUVFromPosition(mSavePromptPanel.mPosition);
     mSavePromptPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 10.0f + Font::fontSpacing * TEXT_SIZE * 9.0f + TEXT_PADDING * 2.0f,
         Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
     };
 
-    mSavePromptText.mPosition = mSavePromptPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mSavePromptText.mPosition = CalcWindowPositionFromUV(mSavePromptPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mSavePromptText.mText = "Save Game?";
 
     mSavePromptPanel.mText.push_back(&mSavePromptText);
 
     mSaveButtonsPanel.mIsActive = true;
-    mSaveButtonsPanel.mPosition = 
-    {
-       mSavePromptPanel.mPosition.x,
-       mSavePromptPanel.mPosition.y + mSavePromptPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f
-    };
+    mSaveButtonsPanel.mPosition = CalcWindowPositionFromUV(mSavePromptPanel.mPosition) + Vec2(0.0f, mSavePromptPanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+    mSaveButtonsPanel.mPosition = CalcWindowUVFromPosition(mSaveButtonsPanel.mPosition);
     mSaveButtonsPanel.mSize =
     {
         Font::fontWidth * TEXT_SIZE * 5.0f + Font::fontSpacing * TEXT_SIZE * 4.0f + TEXT_PADDING * 5.0f,
         Font::fontHeight * TEXT_SIZE * 2.0f + TEXT_PADDING * 3.0f
     };
 
-    mSaveButtonYes.mPosition = mSaveButtonsPanel.mPosition + Vec2(TEXT_PADDING, TEXT_PADDING);
+    mSaveButtonYes.mPosition = CalcWindowPositionFromUV(mSaveButtonsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
     mSaveButtonNo.mPosition = mSaveButtonYes.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
 
     mSaveButtonYes.mText = "Yes";
