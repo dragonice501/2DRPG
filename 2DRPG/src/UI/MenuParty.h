@@ -161,6 +161,7 @@ public:
 	// Inventory Panel
 	UIPanel mInventoryButtonsPanel;
 	UIButton mInventoryButtonWeapons;
+	UIButton mInventoryButtonShields;
 	UIButton mInventoryButtonArmour;
 	UIButton mInventoryButtonItems;
 

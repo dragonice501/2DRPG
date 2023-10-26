@@ -14,6 +14,7 @@ MenuParty::MenuParty() :
     mJournalButtonThree("Mystery"),
     mJournalButtonFour("Bestiary"),
     mInventoryButtonWeapons("Weapons"),
+    mInventoryButtonShields("Shields"),
     mInventoryButtonArmour("Armour"),
     mInventoryButtonItems("Items"),
     mEquipOptionsButtonEquip("Equip"),
@@ -652,13 +653,14 @@ void MenuParty::SetupInventoryPanel()
     };
 
     mInventoryButtonWeapons.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
-    mInventoryButtonArmour.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
-    mInventoryButtonItems.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mInventoryButtonShields.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.25f, TEXT_PADDING);
+    mInventoryButtonArmour.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.5f, TEXT_PADDING);
+    mInventoryButtonItems.mPosition = CalcWindowPositionFromUV(mInventoryButtonsPanel.mPosition) + Vec2(mInventoryButtonsPanel.mSize.x * 0.75f, TEXT_PADDING);
 
     mInventoryButtonWeapons.OnRightAction = [this]()
     {
-        mCurrentButton = &mInventoryButtonArmour;
-        FillInventoryArmourButtons();
+        mCurrentButton = &mInventoryButtonShields;
+        FillInventoryShieldsButtons();
     };
     mInventoryButtonWeapons.OnCancelAction = [this]()
     {
@@ -666,10 +668,26 @@ void MenuParty::SetupInventoryPanel()
         mCurrentButton = &mInventoryButton;
     };
 
-    mInventoryButtonArmour.OnLeftAction = [this]()
+    mInventoryButtonShields.OnLeftAction = [this]()
     {
         mCurrentButton = &mInventoryButtonWeapons;
         FillInventoryWeaponsButtons();
+    };
+    mInventoryButtonShields.OnRightAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonArmour;
+        FillInventoryArmourButtons();
+    };
+    mInventoryButtonShields.OnCancelAction = [this]()
+    {
+        SetPanelState(PS_PARTY);
+        mCurrentButton = &mInventoryButton;
+    };
+
+    mInventoryButtonArmour.OnLeftAction = [this]()
+    {
+        mCurrentButton = &mInventoryButtonShields;
+        FillInventoryShieldsButtons();
     };
     mInventoryButtonArmour.OnRightAction = [this]()
     {
@@ -694,6 +712,7 @@ void MenuParty::SetupInventoryPanel()
     };
 
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonWeapons);
+    mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonShields);
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonArmour);
     mInventoryButtonsPanel.mButtons.push_back(&mInventoryButtonItems);
 
