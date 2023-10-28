@@ -11,6 +11,7 @@ bool GameManager::mIsIndoors = false;
 
 bool GameManager::mReturnToOverworld = false;
 int GameManager::mSceneEntranceIndex = -1;
+Vec2 GameManager::mCurrentCharacterPositions[4];
 std::vector<Vec2> GameManager::mPreviousCharacterPositions;
 std::vector<Vec2> GameManager::mPreviousCharacterDirections;
 std::string GameManager::mSceneToLoad = "None";
@@ -264,9 +265,9 @@ void GameManager::SaveGame()
 		gameSaveOutFile << "Gold " << PlayerManager::GetPartyGold() << std::endl << std::endl;;
 
 		gameSaveOutFile << "CharacterPositions" << std::endl;
-		for (int i = 0; i < mPreviousCharacterPositions.size(); i++)
+		for (int i = 0; i < 4; i++)
 		{
-			gameSaveOutFile << mPreviousCharacterPositions[i].x << ' ' << mPreviousCharacterPositions[i].y << std::endl;
+			gameSaveOutFile << mCurrentCharacterPositions[i].x << ' ' << mCurrentCharacterPositions[i].y << std::endl;
 		}
 		gameSaveOutFile << std::endl;
 

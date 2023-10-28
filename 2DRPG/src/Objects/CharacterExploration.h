@@ -4,6 +4,7 @@
 #include "../Objects/ActorNpc.h"
 
 #include "../Managers/InputManager.h"
+#include "../Managers/GameManager.h"
 #include "../Managers/PlayerManager.h"
 
 class CharacterExploration : public ActorNpc

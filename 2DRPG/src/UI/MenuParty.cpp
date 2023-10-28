@@ -96,6 +96,7 @@ void MenuParty::Render()
             mEquipmentChestText.Render();
             mEquipmentArmsText.Render();
             mEquipmentLegsText.Render();
+
             break;
         }
         case MenuParty::PS_MAGIC:
@@ -1501,6 +1502,29 @@ void MenuParty::SetupEquipPanel()
     mEquipmentPanel.mButtons.push_back(&mEquipmentChestButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentArmsButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentLegsButton);
+
+    mEquipmentSelectionPanel.mPosition = CalcWindowPositionFromUV(mEquipmentPanel.mPosition) + Vec2(mEquipmentPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
+    mEquipmentSelectionPanel.mPosition = CalcWindowUVFromPosition(mEquipmentSelectionPanel.mPosition);
+    mEquipmentSelectionPanel.mSize =
+    {
+        Font::fontWidth* TEXT_SIZE * 23.0f + Font::fontSpacing * 23.0f + TEXT_PADDING * 2.0f,
+        mMainPanel.mSize.y
+    };
+
+    mEquipmentSelectionButtonOne.mPosition = CalcWindowPositionFromUV(mEquipmentSelectionPanel.mPosition) + Vec2(TEXT_PADDING);
+    mEquipmentSelectionButtonTwo.mPosition = mEquipmentSelectionButtonOne.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentSelectionButtonThree.mPosition = mEquipmentSelectionButtonTwo.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+    mEquipmentSelectionButtonFour.mPosition = mEquipmentSelectionButtonThree.mPosition + Vec2(0.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING);
+
+    mEquipmentSelectionButtonOne.mText = "One";
+    mEquipmentSelectionButtonTwo.mText = "Two";
+    mEquipmentSelectionButtonThree.mText = "Three";
+    mEquipmentSelectionButtonFour.mText = "Four";
+
+    mEquipmentSelectionPanel.mButtons.push_back(&mEquipmentSelectionButtonOne);
+    mEquipmentSelectionPanel.mButtons.push_back(&mEquipmentSelectionButtonTwo);
+    mEquipmentSelectionPanel.mButtons.push_back(&mEquipmentSelectionButtonThree);
+    mEquipmentSelectionPanel.mButtons.push_back(&mEquipmentSelectionButtonFour);
 }
 
 void MenuParty::SetupSavePanel()

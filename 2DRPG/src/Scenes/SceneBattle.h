@@ -50,6 +50,8 @@ public:
 	bool SearchForEnemyRight(int index);
 	void AcceptEnemyTarget(int index);
 
+	void SetEnemyAttackTarget();
+
 	void Render(static SDL_Rect& camera);
 	void DrawBattleMenu(SDL_Rect& rect);
 	void DrawCursor();
@@ -99,19 +101,19 @@ private:
 
 	std::vector<Vec2> mPlayerCharacterPositions =
 	{
-		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE),
-		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(16.0f, 16.0f) * TILE_SPRITE_SCALE,
-		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(32.0f, 32.0f) * TILE_SPRITE_SCALE,
-		Vec2(GraphicsManager::WindowWidth() - 96 * TILE_SPRITE_SCALE, 24 * TILE_SPRITE_SCALE) + Vec2(48.0f, 48.0f) * TILE_SPRITE_SCALE
+		Vec2(GraphicsManager::WindowWidth() * 0.7f, GraphicsManager::WindowWidth() * 0.1f),
+		Vec2(GraphicsManager::WindowWidth() * 0.725f, GraphicsManager::WindowWidth() * 0.175f),
+		Vec2(GraphicsManager::WindowWidth() * 0.75f, GraphicsManager::WindowWidth() * 0.25f),
+		Vec2(GraphicsManager::WindowWidth() * 0.775f, GraphicsManager::WindowWidth() * 0.325f)
 	};
 
 	std::vector<Vec2> mSmallEnemyPositions =
 	{
-		Vec2(0.0f, 0.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
-		Vec2(0.0f, 1.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
-		Vec2(0.0f, 2.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
-		Vec2(1.0f, 0.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
-		Vec2(1.0f, 1.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
-		Vec2(1.0f, 2.0f) * TILE_SPRITE_SCALE * 32 + 32 * TILE_SPRITE_SCALE,
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f),
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f) + Vec2(0.0f, GraphicsManager::WindowWidth() * 0.125f),
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f) + Vec2(0.0f, GraphicsManager::WindowWidth() * 0.25f),
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f) + Vec2(GraphicsManager::WindowWidth() * 0.15f, 0.0f),
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f) + Vec2(GraphicsManager::WindowWidth() * 0.15f, GraphicsManager::WindowWidth() * 0.125f),
+		Vec2(GraphicsManager::WindowWidth() * 0.05f, GraphicsManager::WindowWidth() * 0.125f) + Vec2(GraphicsManager::WindowWidth() * 0.15f, GraphicsManager::WindowWidth() * 0.25f)
 	};
 };

@@ -133,6 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\UI\MenuMainMenu.cpp" />
+    <ClCompile Include="src\Scenes\SceneMainMenu.cpp" />
     <ClCompile Include="src\Managers\AssetManager.cpp" />
     <ClCompile Include="src\UI\MenuShop.cpp" />
     <ClCompile Include="src\Scenes\SceneTownShop.cpp" />
@@ -169,6 +171,8 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\UI\MenuMainMenu.h" />
+    <ClInclude Include="src\Scenes\SceneMainMenu.h" />
     <ClInclude Include="src\Items\Armour.h" />
     <ClInclude Include="src\Items\Shield.h" />
     <ClInclude Include="src\Managers\AssetManager.h" />

@@ -30,9 +30,9 @@ bool Engine::Init()
 void Engine::Run()
 {
     srand(time(NULL));
-    //GameManager::SetSceneToLoad("TownShop", -1);
-    GameManager::LoadGameSave();
-    PlayerManager::LoadCharacters();
+    GameManager::SetSceneToLoad("MainMenu", -1);
+    //GameManager::LoadGameSave();
+    //PlayerManager::LoadCharacters();
 
     while (isRunning)
     {

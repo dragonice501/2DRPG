@@ -1,18 +1,18 @@
-LevelName Town
+LevelName Overworld
 
 Gold 1150
 
 CharacterPositions
-192 272
-192 255.454
-193.496 240.924
-206.653 240.045
+560 224
+560 224
+560 224
+560 224
 
 CharacterDirections
-0 16
--15.488 0.511993
--1.02118 0.0174103
--0.0515594 0.000595093
+-16 0
+-16 0
+-16 0
+-16 0
 
 Characters
 Sigurd 3 1 25 25 15 15 15 5 4 11 5 3 0
@@ -24,7 +24,18 @@ Don 2 1 17 17 24 24 15 3 8 10 3 2 0
 Ark 1 1 22 22 12 12 13 12 3 2 4 2 0
 
 CharacterWeapons
--1 -1 -1 -1
+0 2 1 -1 
+
+CharacterShield
+-1 -1 -1 -1 
+CharacterArmourHead
+-1 -1 -1 -1 
+CharacterArmourChest
+-1 -1 -1 -1 
+CharacterArmourArms
+-1 -1 -1 -1 
+CharacterArmourLegs
+-1 -1 -1 -1 
 
 PeopleKeywords King Break
 PlacesKeywords Break

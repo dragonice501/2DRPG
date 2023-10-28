@@ -69,6 +69,7 @@ public:
 	static bool CheckLevelUp(int& outIndex);
 	static CharacterAttributes LevelUp(int characterIndex);
 	static void RemoveAllEquipment(const int characterIndex);
+	static int GetPlayerWeaponDamage(const int index);
 
 	static void SwapCharacters(int first, int second);
 	static void SwapCharacterInventories(int first, int second);

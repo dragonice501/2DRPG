@@ -539,7 +539,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     // Randomize Encounter Steps
     mStepsUntilEncounter = rand() % (mEncounterStepsMax - mEncounterStepsMin + 1) + mEncounterStepsMin;
-    mStepsUntilEncounter = 1;
+    //mStepsUntilEncounter = 1;
 
     // Load enemy encounters
     EnemyEncounter newEncounter;
@@ -595,6 +595,8 @@ void SceneExploration::SetupCharacters()
     {
         CharacterExploration newCharacter;
         newCharacter.Setup(i, mSpawnPositions[i], mSpawnDirections[i]);
+
+        GameManager::SetCurrentCharacterPosition(i, mSpawnPositions[i]);
 
         mCharacters.push_back(newCharacter);
     }

@@ -102,6 +102,8 @@ void CharacterExploration::UpdateMovement(
             mPosition = Vec2::Lerp(mMovement.start, mMovement.destination, mMovement.rate);
             if (mPosition == mMovement.destination)
             {
+                GameManager::SetCurrentCharacterPosition(mPartyIndex, mPosition);
+
                 mMovement.rate = 0.0f;
                 mMovement.start = mPosition;
                 mMovement.destination = Vec2(0.0f);

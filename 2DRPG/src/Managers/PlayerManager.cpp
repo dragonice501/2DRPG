@@ -181,6 +181,12 @@ void PlayerManager::RemoveAllEquipment(const int characterIndex)
     mCharacterArmourLegsIndeces[characterIndex] = -1;
 }
 
+int PlayerManager::GetPlayerWeaponDamage(const int index)
+{
+    if (mCharacterWeaponIndeces[index] != -1) return mInventoryWeapons[mCharacterWeaponIndeces[index]].mAttack;
+    else return 0;
+}
+
 void PlayerManager::SwapCharacters(int first, int second)
 {
     CharacterAttributes tempChar = mCharacterAttributes[first];

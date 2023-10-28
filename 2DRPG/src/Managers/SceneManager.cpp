@@ -15,6 +15,11 @@ void SceneManager::LoadScene()
 		GameManager::SetSceneType();
 		mCurrentScene = std::make_unique<SceneBattle>(GameManager::GetBattleBackground(), GameManager::GetEnemyEncounters());
 	}
+	else if (GameManager::GetSceneToLoad() == "MainMenu")
+	{
+		GameManager::SetSceneType();
+		mCurrentScene = std::make_unique<SceneMainMenu>();
+	}
 	else if (GameManager::GetSceneToLoad() == "Overworld")
 	{
 		GameManager::SetSceneType(true);

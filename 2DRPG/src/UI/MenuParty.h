@@ -212,6 +212,12 @@ public:
 	UIText mEquipmentArmsText;
 	UIText mEquipmentLegsText;
 
+	UIPanel mEquipmentSelectionPanel;
+	UIButton mEquipmentSelectionButtonOne;
+	UIButton mEquipmentSelectionButtonTwo;
+	UIButton mEquipmentSelectionButtonThree;
+	UIButton mEquipmentSelectionButtonFour;
+
 	// Save Panel
 	UIPanel mSavePromptPanel;
 	UIText mSavePromptText;

@@ -36,6 +36,7 @@ public:
 	static void SetSceneType(const bool isOverworld = false, const bool isTown = false, const bool isIndoors = false);
 	inline static void SetSceneToLoad(const std::string& name) { mSceneToLoad = name; }
 	inline static void ClearPositionsAndDirections() { mPreviousCharacterPositions.clear(); mPreviousCharacterDirections.clear(); }
+	inline static void SetCurrentCharacterPosition(const int index, const Vec2& position) { mCurrentCharacterPositions[index] = position; }
 	inline static void SetPreviousOverworldPosition(const Vec2& position) { mPreviousCharacterPositions.push_back(position); }
 	inline static void SetPreviousOverworldDirection(const Vec2& direction) { mPreviousCharacterDirections.push_back(direction); }
 
@@ -77,6 +78,7 @@ private:
 
 	static bool mReturnToOverworld;
 	static int mSceneEntranceIndex;
+	static Vec2 mCurrentCharacterPositions[4];
 	static std::vector<Vec2> mPreviousCharacterPositions;
 	static std::vector<Vec2> mPreviousCharacterDirections;
 	static std::string mSceneToLoad;

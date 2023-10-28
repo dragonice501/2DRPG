@@ -1,6 +1,7 @@
 #include "SceneBattle.h"
 
 #include <algorithm>
+#include <random>
 
 SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter> enemyEncounters)
 {
@@ -210,7 +211,7 @@ SceneBattle::SceneBattle(ETerrainType terrain, const std::vector<EnemyEncounter>
 	};
 
 	for (int i = 0; i < mBattleMenu.mSmallEnemyButtons.size(); i++)
-		mBattleMenu.mSmallEnemyButtons[i].mPosition = mSmallEnemyPositions[i];
+		mBattleMenu.mSmallEnemyButtons[i].mPosition = mSmallEnemyPositions[i] + Vec2(0.0f, 32 * TILE_SPRITE_SCALE);
 
 	mBattleMenu.SetCurrentButton(&mBattleMenu.mFightButton);
 }
@@ -432,7 +433,7 @@ void SceneBattle::Update(const float dt)
 				mBattleState = BS_PLAYER_ATTACK_RESULT;
 
 				mDamageDealt =
-					mBattleTurns[mTurnIndex]->attributes.strength -
+					mBattleTurns[mTurnIndex]->attributes.strength + PlayerManager::GetPlayerWeaponDamage(mSelectedCharacterIndex) -
 					mBattleEnemies[mBattleSelectedEnemyIndex]->attributes.defense;
 				if (mDamageDealt <= 0) mDamageDealt = 1;
 			}
@@ -675,7 +676,15 @@ void SceneBattle::NextTurn()
 		mBattleSelectedEnemyIndex = 0;
 		SetPlayerIndex();
 	}
-	else mBattleState = BS_ENEMY_ATTACKING;
+	else
+	{
+		mBattleState = BS_ENEMY_ATTACKING;
+	}
+
+	if(mBattleState == BS_ENEMY_ATTACKING)
+	{
+		SetEnemyAttackTarget();
+	}
 }
 
 void SceneBattle::SetPlayerIndex()
@@ -779,6 +788,11 @@ void SceneBattle::AcceptEnemyTarget(int index)
 	}
 }
 
+void SceneBattle::SetEnemyAttackTarget()
+{
+	mEnemyTargetIndex = rand() % 4;
+}
+
 void SceneBattle::Render(SDL_Rect& camera)
 {
 	GraphicsManager::DrawBattleBackground(AssetManager::GetBattleBackgroundTexture());
@@ -797,8 +811,8 @@ void SceneBattle::Render(SDL_Rect& camera)
 		{
 			character->battlePosition.x + character->mSprite.positionOffset.x * TILE_SPRITE_SCALE,
 			character->battlePosition.y + character->mSprite.positionOffset.x * TILE_SPRITE_SCALE,
-			32 * TILE_SPRITE_SCALE,
-			32 * TILE_SPRITE_SCALE
+			48 * TILE_SPRITE_SCALE,
+			48 * TILE_SPRITE_SCALE
 		};
 
 		GraphicsManager::DrawSpriteRect(character->mTexture, character->mSprite.srcRect, destRect);
@@ -813,8 +827,8 @@ void SceneBattle::Render(SDL_Rect& camera)
 			{
 				enemy->battlePosition.x,
 				enemy->battlePosition.y,
-				enemy->rect.w * TILE_SPRITE_SCALE,
-				enemy->rect.h * TILE_SPRITE_SCALE
+				enemy->rect.w * TILE_SPRITE_SCALE * 1.5f,
+				enemy->rect.h * TILE_SPRITE_SCALE * 1.5f
 			};
 
 			GraphicsManager::DrawSpriteRect(AssetManager::GetEnemiesTexture(), enemy->rect, destRect);
