@@ -4,6 +4,7 @@
 
 #include "../UI/MenuMainMenu.h"
 
+#include <map>
 
 class SceneMainMenu : public Scene
 {
@@ -17,6 +18,10 @@ public:
 
 	virtual void ExitMenu() override;
 
+	void DrawCursor();
+
 private:
 	MenuMainMenu mMainMenu;
+
+	std::map<std::string, Sprite> mBattleIconsMap;
 };

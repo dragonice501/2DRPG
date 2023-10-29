@@ -2,9 +2,12 @@
 
 #include "GraphicsManager.h"
 
+#include "../Objects/Components.h"
+
 #include <string>
 #include <vector>
 #include <map>
+#include <fstream>
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -18,10 +21,12 @@ public:
 	static SDL_Texture* GetCharacterTexture(int index) { return mCharacterTextures[index]; }
 
 	static void CreateTileMapTexture(const std::string textureName);
-	static void CreateMenuIconsTexture(const std::string textureName);
+	static void CreateMenuIconsTexture();
 	static void CreateBattleBackgroundTexture(const std::string textureName);
 	static void CreateEnemiesTexture(const std::string textureName);
 	static void CreateCharacterTexture(int index, const std::string textureName);
+
+	static void BuildMenuIconMap();
 
 	static void DestroyTileMapTexture() { SDL_DestroyTexture(mTileMapTexture); mTileMapTexture = nullptr; }
 	static void DestroyMenuIconsTexture() { SDL_DestroyTexture(mMenuIconsTexture); mMenuIconsTexture = nullptr; }
@@ -47,4 +52,6 @@ private:
 
 	static std::string mMenuIconsFilePath;
 	static std::string mBattleBackgroundImageFilePath;
+
+	static std::map<std::string, Sprite> mBattleIconsMap;
 };

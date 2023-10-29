@@ -523,7 +523,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     // Create Textures
     AssetManager::CreateTileMapTexture(mTileMapName);
-    AssetManager::CreateMenuIconsTexture(mBattleIconsFilePath);
+    AssetManager::CreateMenuIconsTexture();
 
     std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
     while (battleIconsFile >> type)

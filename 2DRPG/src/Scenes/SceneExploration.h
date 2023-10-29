@@ -56,7 +56,6 @@ protected:
 	std::vector<Tile> mTiles;
 	std::string mTileMapName;
 
-	std::string mBattleIconsFilePath = "MenuIcons";
 	std::map<std::string, Sprite> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;

@@ -60,6 +60,7 @@ public:
     static void DrawUISelector(const int x, const int y, const int width, const int height);
     static void DrawBattleBackground(SDL_Texture* texture);
     static void DrawBattleEvent(const std::string eventString);
+    static void DrawCursor(const Vec2 position);
 
     static void DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen = false);
 

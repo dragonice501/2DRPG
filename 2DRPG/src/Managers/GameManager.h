@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Engine/Engine.h"
+
 #include "../Items/Armour.h"
 #include "../Items/Shield.h"
 #include "../Items/Weapon.h"
@@ -48,6 +50,8 @@ public:
 		ETerrainType battleBackgroundType = UNDEFINED, const std::vector<EnemyEncounter>& enemyEncounters = std::vector<EnemyEncounter>());
 
 	static void SaveGame();
+
+	static void QuitGame() { Engine::Instance().SetIsRunning(false); }
 
 private:
 	struct SaveData

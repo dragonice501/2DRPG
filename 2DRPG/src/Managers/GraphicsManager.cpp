@@ -453,6 +453,10 @@ void GraphicsManager::DrawBattleEvent(const std::string eventString)
         eventString.c_str());
 }
 
+void GraphicsManager::DrawCursor(const Vec2 position)
+{
+}
+
 void GraphicsManager::DisplayBresenhamCircle(const int xc, const int yc, const int x0, const int y0, const uint32_t color, const bool lockToScreen)
 {
     if (lockToScreen)

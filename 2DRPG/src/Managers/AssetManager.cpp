@@ -9,6 +9,8 @@ std::vector<SDL_Texture*> AssetManager::mCharacterTextures;
 std::string AssetManager::mMenuIconsFilePath;
 std::string AssetManager::mBattleBackgroundImageFilePath;
 
+std::map<std::string, Sprite> AssetManager::mBattleIconsMap;
+
 void AssetManager::CreateTileMapTexture(const std::string textureName)
 {
 	SDL_Surface* surface = nullptr;
@@ -23,11 +25,11 @@ void AssetManager::CreateTileMapTexture(const std::string textureName)
     SDL_FreeSurface(surface);
 }
 
-void AssetManager::CreateMenuIconsTexture(const std::string textureName)
+void AssetManager::CreateMenuIconsTexture()
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/images/" + textureName + ".png";
+    std::string surfacePath = "./assets/images/MenuIcons.png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
@@ -77,6 +79,22 @@ void AssetManager::CreateCharacterTexture(int index, const std::string textureNa
     }
 
     SDL_FreeSurface(surface);
+}
+
+void AssetManager::BuildMenuIconMap()
+{
+    std::string type;
+    std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
+    while (battleIconsFile >> type)
+    {
+        if (type == "Cursor")
+        {
+            Sprite newSprite;
+
+            battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
+            mBattleIconsMap.emplace("Cursor", newSprite);
+        }
+    }
 }
 
 void AssetManager::SwapCharacterTexture(int first, int second)

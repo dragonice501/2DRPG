@@ -221,7 +221,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	// Load background image
 	AssetManager::CreateBattleBackgroundTexture(mBackgroundImageName);
 	AssetManager::CreateEnemiesTexture("Enemies");
-	AssetManager::CreateMenuIconsTexture("MenuIcons");
+	AssetManager::CreateMenuIconsTexture();
 
 	// Load icons map
 	std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
