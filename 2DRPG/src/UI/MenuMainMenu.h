@@ -8,7 +8,8 @@ private:
 	enum EMainState
 	{
 		EM_MAIN,
-		EM_NEW_GAME
+		EM_NEW_GAME,
+		EM_SELECTING_NAME
 	};
 
 public:
@@ -18,15 +19,28 @@ public:
 
 	void SetupNewGamePanel();
 	void SetupNewCharacterPanels();
+	void SetupSelectNamePanel();
+	void SetupNewNamePanel();
 	void SetupContinuePanel();
 	void SetupQuitPanel();
+
+	void SetNewNameText();
+	void AddLetterToNewName(const char character);
 
 private:
 	EMainState mMenuState = EM_MAIN;
 
+	// Main Menu
 	UIPanel mNewGamePanel;
 	UIButton mNewGameButton;
+	
+	UIPanel mContinePanel;
+	UIButton mContinueButton;
 
+	UIPanel mQuitPanel;
+	UIButton mQuitButton;
+
+	// New Game
 	UIPanel mNewCharacterPanelOne;
 	UIButton mNewCharacterButtonOne;
 
@@ -51,9 +65,69 @@ private:
 	UIPanel mNewCharacterNamePanelFour;
 	UIButton mNewCharacterNameButtonFour;
 
-	UIPanel mContinePanel;
-	UIButton mContinueButton;
+	UIPanel mNewNamePanel;
+	UIText mNewNamePanelText;
 
-	UIPanel mQuitPanel;
-	UIButton mQuitButton;
+	std::string mNewNameText = "New Name";
+
+	UIPanel mSelectLetterPanel;
+
+	UIButton mSelectLetterEraseButton;
+	UIButton mSelectLetterEndButton;
+
+	UIButton mSelectLetterAButton;
+	UIButton mSelectLetterBButton;
+	UIButton mSelectLetterCButton;
+	UIButton mSelectLetterDButton;
+	UIButton mSelectLetterEButton;
+	UIButton mSelectLetterFButton;
+	UIButton mSelectLetterGButton;
+	UIButton mSelectLetterHButton;
+	UIButton mSelectLetterIButton;
+	UIButton mSelectLetterJButton;
+	UIButton mSelectLetterKButton;
+	UIButton mSelectLetterLButton;
+	UIButton mSelectLetterMButton;
+	
+	UIButton mSelectLetterNButton;
+	UIButton mSelectLetterOButton;
+	UIButton mSelectLetterPButton;
+	UIButton mSelectLetterQButton;
+	UIButton mSelectLetterRButton;
+	UIButton mSelectLetterSButton;
+	UIButton mSelectLetterTButton;
+	UIButton mSelectLetterUButton;
+	UIButton mSelectLetterVButton;
+	UIButton mSelectLetterWButton;
+	UIButton mSelectLetterXButton;
+	UIButton mSelectLetterYButton;
+	UIButton mSelectLetterZButton;
+
+	UIButton mSelectLetteraButton;
+	UIButton mSelectLetterbButton;
+	UIButton mSelectLettercButton;
+	UIButton mSelectLetterdButton;
+	UIButton mSelectLettereButton;
+	UIButton mSelectLetterfButton;
+	UIButton mSelectLettergButton;
+	UIButton mSelectLetterhButton;
+	UIButton mSelectLetteriButton;
+	UIButton mSelectLetterjButton;
+	UIButton mSelectLetterkButton;
+	UIButton mSelectLetterlButton;
+	UIButton mSelectLettermButton;
+
+	UIButton mSelectLetternButton;
+	UIButton mSelectLetteroButton;
+	UIButton mSelectLetterpButton;
+	UIButton mSelectLetterqButton;
+	UIButton mSelectLetterrButton;
+	UIButton mSelectLettersButton;
+	UIButton mSelectLettertButton;
+	UIButton mSelectLetteruButton;
+	UIButton mSelectLettervButton;
+	UIButton mSelectLetterwButton;
+	UIButton mSelectLetterxButton;
+	UIButton mSelectLetteryButton;
+	UIButton mSelectLetterzButton;
 };

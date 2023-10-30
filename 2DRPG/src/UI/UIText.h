@@ -24,6 +24,14 @@ public:
 			if (intRef)
 			{
 				GraphicsManager::DrawString(mPosition.x, mPosition.y, (std::to_string(*intRef) + mText).c_str());
+				return;
+			}
+
+			std::string* stringRef = static_cast<std::string*>(mReference);
+			if (stringRef)
+			{
+				GraphicsManager::DrawString(mPosition.x, mPosition.y, stringRef->c_str());
+				return;
 			}
 		}
 		else
