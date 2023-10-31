@@ -9,7 +9,8 @@ private:
 	{
 		EM_MAIN,
 		EM_NEW_GAME,
-		EM_SELECTING_NAME
+		EM_SELECTING_NAME,
+		EM_SELECTING_CHARACTER
 	};
 
 public:
@@ -19,13 +20,18 @@ public:
 
 	void SetupNewGamePanel();
 	void SetupNewCharacterPanels();
+	void SetupNewCharacterClassSprites();
 	void SetupSelectNamePanel();
 	void SetupNewNamePanel();
 	void SetupContinuePanel();
 	void SetupQuitPanel();
 
+	void IncrementCharacterClass(int partyIndex);
+	void DecrementCharacterClass(int partyIndex);
+
 	void SetNewNameText();
 	void AddLetterToNewName(const char character);
+	void ReturnNewName();
 
 private:
 	EMainState mMenuState = EM_MAIN;
@@ -65,10 +71,52 @@ private:
 	UIPanel mNewCharacterNamePanelFour;
 	UIButton mNewCharacterNameButtonFour;
 
+	UIButton* mCharacterClassButtons[4] =
+	{
+		&mNewCharacterButtonOne,
+		&mNewCharacterButtonTwo,
+		&mNewCharacterButtonThree,
+		&mNewCharacterButtonFour
+	};
+
+	UISprite mNewCharacterClassOne;
+	UISprite mNewCharacterClassTwo;
+	UISprite mNewCharacterClassThree;
+	UISprite mNewCharacterClassFour;
+
+	UISprite* mCharacterClasses[4] =
+	{
+		&mNewCharacterClassOne,
+		&mNewCharacterClassTwo,
+		&mNewCharacterClassThree,
+		&mNewCharacterClassFour
+	};
+
+	std::string mClasses[4] =
+	{
+		"Paladin",
+		"Dancer",
+		"Mage",
+		"Knight"
+	};
+
+	int mNewCharacterClasses[4] = { 0, 1, 2, 3 };
+	int mNewCharacterClassIndex = 0;
+
+	std::string* mNewCharacterNames[4] =
+	{
+		&mNewCharacterNameButtonOne.mText,
+		&mNewCharacterNameButtonTwo.mText,
+		&mNewCharacterNameButtonThree.mText,
+		&mNewCharacterNameButtonFour.mText,
+	};
+	int mCurrentNewNameIndex = -1;
+
 	UIPanel mNewNamePanel;
 	UIText mNewNamePanelText;
 
-	std::string mNewNameText = "New Name";
+	std::string* mNewCharacterName = &mNewNamePanelText.mText;
+	std::string mNewNamePlaceholder;
 
 	UIPanel mSelectLetterPanel;
 

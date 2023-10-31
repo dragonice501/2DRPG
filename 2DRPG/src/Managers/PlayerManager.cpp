@@ -88,7 +88,7 @@ void PlayerManager::LoadCharacters()
     {
         std::string textureName = GetClassName(mCharacterAttributes[i].characterClass);
 
-        AssetManager::CreateCharacterTexture(i, textureName);
+        AssetManager::CreateCharacterTexture(textureName);
     }
 }
 

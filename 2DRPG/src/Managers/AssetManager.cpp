@@ -10,8 +10,9 @@ std::string AssetManager::mMenuIconsFilePath;
 std::string AssetManager::mBattleBackgroundImageFilePath;
 
 std::map<std::string, Sprite> AssetManager::mBattleIconsMap;
+std::map<std::string, SDL_Texture*> AssetManager::mAssetMap;
 
-void AssetManager::CreateTileMapTexture(const std::string textureName)
+void AssetManager::CreateTileMapTexture(const std::string& textureName)
 {
 	SDL_Surface* surface = nullptr;
 
@@ -39,7 +40,7 @@ void AssetManager::CreateMenuIconsTexture()
     SDL_FreeSurface(surface);
 }
 
-void AssetManager::CreateBattleBackgroundTexture(const std::string textureName)
+void AssetManager::CreateBattleBackgroundTexture(const std::string& textureName)
 {
     SDL_Surface* surface = nullptr;
 
@@ -53,7 +54,7 @@ void AssetManager::CreateBattleBackgroundTexture(const std::string textureName)
     SDL_FreeSurface(surface);
 }
 
-void AssetManager::CreateEnemiesTexture(const std::string textureName)
+void AssetManager::CreateEnemiesTexture(const std::string& textureName)
 {
     SDL_Surface* surface = nullptr;
 
@@ -67,15 +68,18 @@ void AssetManager::CreateEnemiesTexture(const std::string textureName)
     SDL_FreeSurface(surface);
 }
 
-void AssetManager::CreateCharacterTexture(int index, const std::string textureName)
+void AssetManager::CreateCharacterTexture(const std::string& textureName)
 {
+    if (mAssetMap.find(textureName) != mAssetMap.end()) return;
+
     SDL_Surface* surface = nullptr;
 
     std::string surfacePath = "./assets/images/" + textureName + ".png";
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
-        mCharacterTextures.push_back(SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
+        //mCharacterTextures.push_back(SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
+        mAssetMap.emplace(textureName, SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
     }
 
     SDL_FreeSurface(surface);

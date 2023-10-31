@@ -19,12 +19,13 @@ public:
 	static SDL_Texture* GetBattleBackgroundTexture() { return mBattleBackgroundTexture; }
 	static SDL_Texture* GetEnemiesTexture() { return mEnemiesTexture; }
 	static SDL_Texture* GetCharacterTexture(int index) { return mCharacterTextures[index]; }
+	static SDL_Texture* GetAsset(const std::string& assetID) { return mAssetMap.find(assetID)->second; }
 
-	static void CreateTileMapTexture(const std::string textureName);
+	static void CreateTileMapTexture(const std::string& textureName);
 	static void CreateMenuIconsTexture();
-	static void CreateBattleBackgroundTexture(const std::string textureName);
-	static void CreateEnemiesTexture(const std::string textureName);
-	static void CreateCharacterTexture(int index, const std::string textureName);
+	static void CreateBattleBackgroundTexture(const std::string& textureName);
+	static void CreateEnemiesTexture(const std::string& textureName);
+	static void CreateCharacterTexture(const std::string& textureName);
 
 	static void BuildMenuIconMap();
 
@@ -54,4 +55,5 @@ private:
 	static std::string mBattleBackgroundImageFilePath;
 
 	static std::map<std::string, Sprite> mBattleIconsMap;
+	static std::map<std::string, SDL_Texture*> mAssetMap;
 };

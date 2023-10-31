@@ -16,11 +16,16 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
     }
 
     AssetManager::CreateMenuIconsTexture();
+    AssetManager::CreateCharacterTexture("Paladin");
+    AssetManager::CreateCharacterTexture("Dancer");
+    AssetManager::CreateCharacterTexture("Mage");
+    AssetManager::CreateCharacterTexture("Knight");
 }
 
 void SceneMainMenu::Shutdown()
 {
     AssetManager::DestroyMenuIconsTexture();
+    AssetManager::DestroyCharacterTextures();
 }
 
 void SceneMainMenu::Input()

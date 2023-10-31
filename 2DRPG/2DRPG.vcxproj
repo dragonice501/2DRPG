@@ -169,6 +169,7 @@
     <ClCompile Include="src\Utils\Utils.cpp" />
     <ClCompile Include="src\Utils\Vec2.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />
+    <ClCompile Include="src\UI\UISprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\UI\MenuMainMenu.h" />
@@ -313,6 +314,7 @@
     <ClInclude Include="src\Utils\Vec2.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\UI\UIButton.h" />
+    <ClInclude Include="src\UI\UISprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

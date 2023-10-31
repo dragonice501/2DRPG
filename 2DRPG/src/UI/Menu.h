@@ -2,6 +2,7 @@
 
 #include "UIButton.h"
 #include "UIPanel.h"
+#include "UISprite.h"
 
 #include "../Managers/GameManager.h"
 #include "../Managers/GraphicsManager.h"

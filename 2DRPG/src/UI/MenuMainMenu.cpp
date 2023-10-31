@@ -4,6 +4,7 @@ MenuMainMenu::MenuMainMenu()
 {
 	SetupNewGamePanel();
 	SetupNewCharacterPanels();
+	SetupNewCharacterClassSprites();
 	SetupSelectNamePanel();
 	SetupNewNamePanel();
 	SetupContinuePanel();
@@ -75,6 +76,11 @@ void MenuMainMenu::Render()
 			{
 				mNewCharacterNamePanelFour.Render();
 			}
+
+			mNewCharacterClassOne.Render();
+			mNewCharacterClassTwo.Render();
+			mNewCharacterClassThree.Render();
+			mNewCharacterClassFour.Render();
 			break;
 		}
 		case MenuMainMenu::EM_SELECTING_NAME:
@@ -88,6 +94,55 @@ void MenuMainMenu::Render()
 			{
 				mNewNamePanel.Render();
 			}
+			break;
+		}
+		case MenuMainMenu::EM_SELECTING_CHARACTER:
+		{
+			if (mNewCharacterPanelOne.mIsActive)
+			{
+				mNewCharacterPanelOne.Render();
+			}
+
+			if (mNewCharacterPanelTwo.mIsActive)
+			{
+				mNewCharacterPanelTwo.Render();
+			}
+
+			if (mNewCharacterPanelThree.mIsActive)
+			{
+				mNewCharacterPanelThree.Render();
+			}
+
+			if (mNewCharacterPanelFour.mIsActive)
+			{
+				mNewCharacterPanelFour.Render();
+			}
+
+			if (mNewCharacterNamePanelOne.mIsActive)
+			{
+				mNewCharacterNamePanelOne.Render();
+			}
+
+			if (mNewCharacterNamePanelTwo.mIsActive)
+			{
+				mNewCharacterNamePanelTwo.Render();
+			}
+
+			if (mNewCharacterNamePanelThree.mIsActive)
+			{
+				mNewCharacterNamePanelThree.Render();
+			}
+
+			if (mNewCharacterNamePanelFour.mIsActive)
+			{
+				mNewCharacterNamePanelFour.Render();
+			}
+
+			mNewCharacterClassOne.Render();
+			mNewCharacterClassTwo.Render();
+			mNewCharacterClassThree.Render();
+			mNewCharacterClassFour.Render();
+			break;
 		}
 	}
 }
@@ -170,40 +225,79 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNamePanelFour.mPosition = CalcWindowUVFromPosition(mNewCharacterNamePanelFour.mPosition);
 	mNewCharacterNamePanelFour.mSize = { mNewCharacterPanelFour.mSize.x, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f };
 
-	mNewCharacterButtonOne.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) + Vec2(0.0f, 64);
-	mNewCharacterButtonOne.mText = "Character One";
+	mNewCharacterButtonOne.mPosition =
+		CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) +
+		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
+	mNewCharacterButtonOne.mText = "Paladin";
 
-	mNewCharacterButtonTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) + Vec2(0.0f, 64);
-	mNewCharacterButtonTwo.mText = "Character Two";
+	mNewCharacterButtonTwo.mPosition =
+		CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) +
+		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
+	mNewCharacterButtonTwo.mText = "Dancer";
 
-	mNewCharacterButtonThree.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) + Vec2(0.0f, 64);
-	mNewCharacterButtonThree.mText = "Character Three";
+	mNewCharacterButtonThree.mPosition =
+		CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) +
+		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
+	mNewCharacterButtonThree.mText = "Mage";
 
-	mNewCharacterButtonFour.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) + Vec2(0.0f, 64);
-	mNewCharacterButtonFour.mText = "Character Four";
+	mNewCharacterButtonFour.mPosition =
+		CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) +
+		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
+	mNewCharacterButtonFour.mText = "Knight";
 
 	mNewCharacterNameButtonOne.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelOne.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonOne.mText = "Name One";
+	mNewCharacterNameButtonOne.mText = "Name";
 
 	mNewCharacterNameButtonTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelTwo.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonTwo.mText = "Name Two";
+	mNewCharacterNameButtonTwo.mText = "Name";
 
 	mNewCharacterNameButtonThree.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelThree.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonThree.mText = "Name Three";
+	mNewCharacterNameButtonThree.mText = "Name";
 
 	mNewCharacterNameButtonFour.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelFour.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonFour.mText = "Name Four";
+	mNewCharacterNameButtonFour.mText = "Name";
 
+	mNewCharacterButtonOne.OnLeftAction = [this]()
+	{
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			DecrementCharacterClass(0);
+		}
+	};
 	mNewCharacterButtonOne.OnRightAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterButtonTwo;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			IncrementCharacterClass(0);
+		}
+		else
+		{
+			mCurrentButton = &mNewCharacterButtonTwo;
+		}
 	};
 	mNewCharacterButtonOne.OnDownAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+
 		mCurrentButton = &mNewCharacterNameButtonOne;
+	};
+	mNewCharacterButtonOne.OnAcceptAction = [this]()
+	{
+		if (mMenuState == EM_NEW_GAME)
+		{
+			mNewCharacterClassIndex = 0;
+			mMenuState = EM_SELECTING_CHARACTER;
+		}
+		else mMenuState = EM_NEW_GAME;
 	};
 	mNewCharacterButtonOne.OnCancelAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			mMenuState = EM_NEW_GAME;
+			return;
+		}
+
 		mMenuState = EM_MAIN;
 		mCurrentButton = &mNewGameButton;
 	};
@@ -222,7 +316,10 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	};
 	mNewCharacterNameButtonOne.OnAcceptAction = [this]()
 	{
-		SetNewNameText();
+		mCurrentNewNameIndex = 0;
+		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
+
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonOne;
@@ -235,14 +332,45 @@ void MenuMainMenu::SetupNewCharacterPanels()
 
 	mNewCharacterButtonTwo.OnLeftAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterButtonOne;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			DecrementCharacterClass(1);
+		}
+	};
+	mNewCharacterButtonTwo.OnRightAction = [this]()
+	{
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			IncrementCharacterClass(1);
+		}
+		else
+		{
+			mCurrentButton = &mNewCharacterButtonOne;
+		}
 	};
 	mNewCharacterButtonTwo.OnDownAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+
 		mCurrentButton = &mNewCharacterNameButtonTwo;
+	};
+	mNewCharacterButtonTwo.OnAcceptAction = [this]()
+	{
+		if (mMenuState == EM_NEW_GAME)
+		{
+			mNewCharacterClassIndex = 1;
+			mMenuState = EM_SELECTING_CHARACTER;
+		}
+		else mMenuState = EM_NEW_GAME;
 	};
 	mNewCharacterButtonTwo.OnCancelAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			mMenuState = EM_NEW_GAME;
+			return;
+		}
+
 		mMenuState = EM_MAIN;
 		mCurrentButton = &mNewGameButton;
 	};
@@ -261,7 +389,10 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	};
 	mNewCharacterNameButtonTwo.OnAcceptAction = [this]()
 	{
-		SetNewNameText();
+		mCurrentNewNameIndex = 1;
+		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
+
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonTwo;
@@ -272,27 +403,53 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mCurrentButton = &mNewGameButton;
 	};
 
-	mNewCharacterButtonThree.OnUpAction = [this]()
+	mNewCharacterButtonThree.OnLeftAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterNameButtonOne;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			DecrementCharacterClass(2);
+		}
 	};
 	mNewCharacterButtonThree.OnRightAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterButtonFour;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			IncrementCharacterClass(2);
+		}
+		else
+		{
+			mCurrentButton = &mNewCharacterButtonFour;
+		}
+	};
+	mNewCharacterButtonThree.OnUpAction = [this]()
+	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+
+		mCurrentButton = &mNewCharacterNameButtonOne;
 	};
 	mNewCharacterButtonThree.OnDownAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+
 		mCurrentButton = &mNewCharacterNameButtonThree;
 	};
-	mNewCharacterNameButtonThree.OnAcceptAction = [this]()
+	mNewCharacterButtonThree.OnAcceptAction = [this]()
 	{
-		SetNewNameText();
-		mMenuState = EM_SELECTING_NAME;
-		mCurrentButton = &mSelectLetterAButton;
-		mPreviousButtonFirst = &mNewCharacterNameButtonThree;
+		if (mMenuState == EM_NEW_GAME)
+		{
+			mNewCharacterClassIndex = 2;
+			mMenuState = EM_SELECTING_CHARACTER;
+		}
+		else mMenuState = EM_NEW_GAME;
 	};
 	mNewCharacterButtonThree.OnCancelAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			mMenuState = EM_NEW_GAME;
+			return;
+		}
+
 		mMenuState = EM_MAIN;
 		mCurrentButton = &mNewGameButton;
 	};
@@ -304,6 +461,16 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNameButtonThree.OnRightAction = [this]()
 	{
 		mCurrentButton = &mNewCharacterNameButtonFour;
+	};	
+	mNewCharacterNameButtonThree.OnAcceptAction = [this]()
+	{
+		mCurrentNewNameIndex = 2;
+		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
+
+		mMenuState = EM_SELECTING_NAME;
+		mCurrentButton = &mSelectLetterAButton;
+		mPreviousButtonFirst = &mNewCharacterNameButtonThree;
 	};
 	mNewCharacterNameButtonThree.OnCancelAction = [this]()
 	{
@@ -311,17 +478,43 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mCurrentButton = &mNewGameButton;
 	};
 
-	mNewCharacterButtonFour.OnUpAction = [this]()
+	mNewCharacterButtonFour.OnRightAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterNameButtonTwo;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			IncrementCharacterClass(3);
+		}
 	};
 	mNewCharacterButtonFour.OnLeftAction = [this]()
 	{
-		mCurrentButton = &mNewCharacterButtonThree;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			DecrementCharacterClass(3);
+		}
+		else
+		{
+			mCurrentButton = &mNewCharacterButtonThree;
+		}
+	};
+	mNewCharacterButtonFour.OnUpAction = [this]()
+	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+		mCurrentButton = &mNewCharacterNameButtonTwo;
 	};
 	mNewCharacterButtonFour.OnDownAction = [this]()
 	{
+		if (mMenuState == EM_SELECTING_CHARACTER) return;
+
 		mCurrentButton = &mNewCharacterNameButtonFour;
+	};
+	mNewCharacterButtonFour.OnAcceptAction = [this]()
+	{
+		if (mMenuState == EM_NEW_GAME)
+		{
+			mNewCharacterClassIndex = 3;
+			mMenuState = EM_SELECTING_CHARACTER;
+		}
+		else mMenuState = EM_NEW_GAME;
 	};
 	mNewCharacterButtonFour.OnCancelAction = [this]()
 	{
@@ -339,7 +532,10 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	};
 	mNewCharacterNameButtonFour.OnAcceptAction = [this]()
 	{
-		SetNewNameText();
+		mCurrentNewNameIndex = 3;
+		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
+
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonFour;
@@ -361,6 +557,33 @@ void MenuMainMenu::SetupNewCharacterPanels()
 
 	mNewCharacterPanelFour.mButtons.push_back(&mNewCharacterButtonFour);
 	mNewCharacterNamePanelFour.mButtons.push_back(&mNewCharacterNameButtonFour);
+}
+
+void MenuMainMenu::SetupNewCharacterClassSprites()
+{
+	mNewCharacterClassOne.mSrcRect = { 0, 0, 32, 32 };
+	mNewCharacterClassOne.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassOne.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
+	mNewCharacterClassOne.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
+	mNewCharacterClassOne.mAssetID = "Paladin";
+
+	mNewCharacterClassTwo.mSrcRect = { 0, 0, 32, 32 };
+	mNewCharacterClassTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassTwo.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
+	mNewCharacterClassTwo.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
+	mNewCharacterClassTwo.mAssetID = "Dancer";
+
+	mNewCharacterClassThree.mSrcRect = { 0, 0, 32, 32 };
+	mNewCharacterClassThree.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassThree.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
+	mNewCharacterClassThree.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
+	mNewCharacterClassThree.mAssetID = "Mage";
+
+	mNewCharacterClassFour.mSrcRect = { 0, 0, 32, 32 };
+	mNewCharacterClassFour.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassFour.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
+	mNewCharacterClassFour.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
+	mNewCharacterClassFour.mAssetID = "Knight";
 }
 
 void MenuMainMenu::SetupSelectNamePanel()
@@ -405,15 +628,15 @@ void MenuMainMenu::SetupSelectNamePanel()
 	};
 	mSelectLetterEraseButton.OnAcceptAction = [this]()
 	{
-		if (mNewNameText.size() == 0) return;
+		if (mNewCharacterName->size() == 0) return;
 
-		mNewNameText.resize(mNewNameText.size() - 1);
-		mNewNamePanelText.mText = mNewNameText;
+		mNewCharacterName->resize(mNewCharacterName->size() - 1);
 	};
 	mSelectLetterEraseButton.OnCancelAction = [this]()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 	
 	mSelectLetterEndButton.OnLeftAction = [this]()
@@ -427,11 +650,14 @@ void MenuMainMenu::SetupSelectNamePanel()
 	mSelectLetterEndButton.OnAcceptAction = [this]()
 	{
 		mMenuState = EM_NEW_GAME;
+		*mNewCharacterNames[mCurrentNewNameIndex] = *mNewCharacterName;
+		SelectPreviousButtonFirst();
 	};
 	mSelectLetterEndButton.OnCancelAction = [this]()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	// Row One
@@ -611,6 +837,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterBButton.OnLeftAction = [this]()
@@ -633,6 +860,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterCButton.OnLeftAction = [this]()
@@ -655,6 +883,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterDButton.OnLeftAction = [this]()
@@ -677,6 +906,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterEButton.OnLeftAction = [this]()
@@ -699,6 +929,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterFButton.OnLeftAction = [this]()
@@ -721,6 +952,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterGButton.OnLeftAction = [this]()
@@ -743,6 +975,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterHButton.OnLeftAction = [this]()
@@ -765,6 +998,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterIButton.OnLeftAction = [this]()
@@ -787,6 +1021,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterJButton.OnLeftAction = [this]()
@@ -809,6 +1044,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterKButton.OnLeftAction = [this]()
@@ -831,6 +1067,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterLButton.OnLeftAction = [this]()
@@ -853,6 +1090,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterMButton.OnLeftAction = [this]()
@@ -871,6 +1109,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	// Second Row
@@ -894,6 +1133,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterOButton.OnLeftAction = [this]()
@@ -920,6 +1160,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterPButton.OnLeftAction = [this]()
@@ -946,6 +1187,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterQButton.OnLeftAction = [this]()
@@ -972,6 +1214,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterRButton.OnLeftAction = [this]()
@@ -998,6 +1241,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterSButton.OnLeftAction = [this]()
@@ -1024,6 +1268,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterTButton.OnLeftAction = [this]()
@@ -1050,6 +1295,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterUButton.OnLeftAction = [this]()
@@ -1076,6 +1322,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterVButton.OnLeftAction = [this]()
@@ -1102,6 +1349,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterWButton.OnLeftAction = [this]()
@@ -1128,6 +1376,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterXButton.OnLeftAction = [this]()
@@ -1154,6 +1403,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterYButton.OnLeftAction = [this]()
@@ -1180,6 +1430,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterZButton.OnLeftAction = [this]()
@@ -1202,6 +1453,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	// Third Row
@@ -1225,6 +1477,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterbButton.OnLeftAction = [this]()
@@ -1251,6 +1504,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettercButton.OnLeftAction = [this]()
@@ -1277,6 +1531,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterdButton.OnLeftAction = [this]()
@@ -1303,6 +1558,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettereButton.OnLeftAction = [this]()
@@ -1329,6 +1585,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterfButton.OnLeftAction = [this]()
@@ -1355,6 +1612,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettergButton.OnLeftAction = [this]()
@@ -1381,6 +1639,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterhButton.OnLeftAction = [this]()
@@ -1407,6 +1666,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetteriButton.OnLeftAction = [this]()
@@ -1433,6 +1693,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterjButton.OnLeftAction = [this]()
@@ -1459,6 +1720,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterkButton.OnLeftAction = [this]()
@@ -1485,6 +1747,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterlButton.OnLeftAction = [this]()
@@ -1511,6 +1774,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettermButton.OnLeftAction = [this]()
@@ -1533,6 +1797,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	// Fourth Row
@@ -1556,6 +1821,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetteroButton.OnLeftAction = [this]()
@@ -1582,6 +1848,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterpButton.OnLeftAction = [this]()
@@ -1608,6 +1875,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterqButton.OnLeftAction = [this]()
@@ -1634,6 +1902,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterrButton.OnLeftAction = [this]()
@@ -1660,6 +1929,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettersButton.OnLeftAction = [this]()
@@ -1686,6 +1956,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettertButton.OnLeftAction = [this]()
@@ -1712,6 +1983,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetteruButton.OnLeftAction = [this]()
@@ -1738,6 +2010,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLettervButton.OnLeftAction = [this]()
@@ -1764,6 +2037,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterwButton.OnLeftAction = [this]()
@@ -1790,6 +2064,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterxButton.OnLeftAction = [this]()
@@ -1816,6 +2091,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetteryButton.OnLeftAction = [this]()
@@ -1842,6 +2118,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterzButton.OnLeftAction = [this]()
@@ -1864,6 +2141,7 @@ void MenuMainMenu::SetupSelectNamePanel()
 	{
 		mMenuState = EM_NEW_GAME;
 		SelectPreviousButtonFirst();
+		ReturnNewName();
 	};
 
 	mSelectLetterPanel.mButtons.push_back(&mSelectLetterAButton);
@@ -1939,7 +2217,6 @@ void MenuMainMenu::SetupNewNamePanel()
 	};
 
 	mNewNamePanelText.mPosition = CalcWindowPositionFromUV(mNewNamePanel.mPosition) + Vec2(TEXT_PADDING);
-	mNewNamePanelText.mText = mNewNameText;
 
 	mNewNamePanel.mText.push_back(&mNewNamePanelText);
 }
@@ -1995,16 +2272,44 @@ void MenuMainMenu::SetupQuitPanel()
 	mQuitPanel.mButtons.push_back(&mQuitButton);
 }
 
+void MenuMainMenu::IncrementCharacterClass(int partyIndex)
+{
+	mNewCharacterClasses[partyIndex]++;
+	if (mNewCharacterClasses[partyIndex] >= 4)
+	{
+		mNewCharacterClasses[partyIndex] = 0;
+	}
+
+	mCharacterClasses[partyIndex]->mAssetID = mClasses[mNewCharacterClasses[partyIndex]];
+	mCharacterClassButtons[partyIndex]->mText = mClasses[mNewCharacterClasses[partyIndex]];
+}
+
+void MenuMainMenu::DecrementCharacterClass(int partyIndex)
+{
+	mNewCharacterClasses[partyIndex]--;
+	if (mNewCharacterClasses[partyIndex] < 0)
+	{
+		mNewCharacterClasses[partyIndex] = 3;
+	}
+
+	mCharacterClasses[partyIndex]->mAssetID = mClasses[mNewCharacterClasses[partyIndex]];
+	mCharacterClassButtons[partyIndex]->mText = mClasses[mNewCharacterClasses[partyIndex]];
+}
+
 void MenuMainMenu::SetNewNameText()
 {
-	mNewNameText = "";
-	mNewNamePanelText.mText = mNewNameText;
+	*mNewCharacterName = "";
+	*mNewCharacterNames[mCurrentNewNameIndex] = *mNewCharacterName;
 }
 
 void MenuMainMenu::AddLetterToNewName(const char character)
 {
-	if (mNewNameText.size() >= 8) return;
+	if (mNewCharacterName->size() >= 8) return;
 
-	mNewNameText += character;
-	mNewNamePanelText.mText = mNewNameText;
+	*mNewCharacterName += character;
+}
+
+void MenuMainMenu::ReturnNewName()
+{
+	*mNewCharacterNames[mCurrentNewNameIndex] = mNewNamePlaceholder;
 }
