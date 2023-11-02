@@ -22,10 +22,10 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
     else if (GameManager::NewGame())
     {
         mSpawnPositions.clear();
-        mSpawnPositions.push_back(Vec2(0.0f, 0.0f) * TILE_SIZE);
-        mSpawnPositions.push_back(Vec2(1.0f, 0.0f) * TILE_SIZE);
-        mSpawnPositions.push_back(Vec2(1.0f, 1.0f) * TILE_SIZE);
-        mSpawnPositions.push_back(Vec2(0.0f, 1.0f) * TILE_SIZE);
+        mSpawnPositions.push_back(Vec2(39.0f, 32.0f) * TILE_SIZE);
+        mSpawnPositions.push_back(Vec2(40.0f, 32.0f) * TILE_SIZE);
+        mSpawnPositions.push_back(Vec2(40.0f, 33.0f) * TILE_SIZE);
+        mSpawnPositions.push_back(Vec2(39.0f, 33.0f) * TILE_SIZE);
 
         for (int i = 0; i < 4; i++)
         {

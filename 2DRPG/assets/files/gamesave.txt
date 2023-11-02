@@ -3,16 +3,16 @@ LevelName Town
 Gold 1150
 
 CharacterPositions
-176 256
+144 256
 160 256
-160 272
-176 272
+176 256
+192 256
 
 CharacterDirections
-16 0
 -16 0
 -16 0
-0 16
+0 -16
+0 -16
 
 Characters
 Sigurd 3 1 25 25 15 15 15 5 4 11 5 3 0

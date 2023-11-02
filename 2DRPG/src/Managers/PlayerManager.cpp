@@ -31,6 +31,7 @@ uint8_t PlayerManager::mLevelGauranteeStats[2] =
 
 void PlayerManager::LoadCharacters()
 {
+    int index = 0;
     if (!GameManager::LoadedGame())
     {
         std::string fileName = "./assets/files/PlayerSaveFile.txt";
@@ -79,7 +80,8 @@ void PlayerManager::LoadCharacters()
                     }
                 }
 
-                mCharacterAttributes.push_back(newCharacterAttributes);
+                mCharacterAttributes[index] = newCharacterAttributes;
+                index++;
             }
         }
     }

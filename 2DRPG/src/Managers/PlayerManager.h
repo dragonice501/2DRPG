@@ -33,7 +33,7 @@ public:
 	static const int GetCharacterArmourArms(const int index) { return mCharacterArmourArmsIndeces[index]; }
 	static const int GetCharacterArmourLegs(const int index) { return mCharacterArmourLegsIndeces[index]; }
 
-	static void AddCharacterAttribites(const CharacterAttributes& attributes) { mCharacterAttributes.push_back(attributes); }
+	static void SetCharacterAttribites(const int partyIndex, const CharacterAttributes& attributes) { mCharacterAttributes[partyIndex] = attributes; }
 	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
 	static void SetCharacterShield(const int characterIndex, const int shieldIndex) { mCharacterShieldIndeces[characterIndex] = shieldIndex; }
 	static void SetCharacterArmourHead(const int characterIndex, const int headIndex) { mCharacterArmourHeadIndeces[characterIndex] = headIndex; }

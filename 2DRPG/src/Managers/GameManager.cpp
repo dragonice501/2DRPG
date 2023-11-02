@@ -33,6 +33,7 @@ void GameManager::SetSceneType(const bool isOverworld, const bool isTown, const 
 void GameManager::LoadGameSave()
 {
 	mLoadedGame = true;
+	int partyIndex = 0;
 
 	std::string type;
 	std::string gameSavePath = "./assets/files/gamesave.txt";
@@ -89,7 +90,8 @@ void GameManager::LoadGameSave()
 				gameSaveInFile >> attributes.luck;
 				gameSaveInFile >> attributes.exp;
 
-				PlayerManager::AddCharacterAttribites(attributes);
+				PlayerManager::SetCharacterAttribites(partyIndex, attributes);
+				partyIndex++;
 			}
 		}
 		else if (type == "CharacterWeapons")

@@ -2333,7 +2333,7 @@ void MenuMainMenu::SetupContinuePanel()
 	mContinueButton.OnAcceptAction = [this]()
 	{
 		GameManager::LoadGameSave();
-		PlayerManager::LoadCharacters();
+		//PlayerManager::LoadCharacters();
 	};
 
 	mContinePanel.mButtons.push_back(&mContinueButton);

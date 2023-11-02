@@ -4,14 +4,7 @@
 
 void ActorNpc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation)
 {
-    /*std::string filePath = "./assets/images/" + name + ".png";
-    SDL_Surface* surface = IMG_Load(filePath.c_str());
-    if (surface)
-    {
-        mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
-    }
-    SDL_FreeSurface(surface);*/
-
+    mAssetID = name;
     mPosition = spawnPosition;
     mSprite.positionOffset = { 0.0f, -16.0f };
     LoadAnimations(name);
