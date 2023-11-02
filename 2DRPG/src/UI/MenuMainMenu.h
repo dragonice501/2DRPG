@@ -96,13 +96,13 @@ private:
 
 	std::string mClasses[4] =
 	{
-		"Paladin",
 		"Dancer",
 		"Mage",
-		"Knight"
+		"Knight",
+		"Paladin"
 	};
 
-	int mNewCharacterClasses[4] = { 0, 1, 2, 3 };
+	int mNewCharacterClasses[4] = { 3, 0, 2, 1 };
 	int mNewCharacterClassIndex = 0;
 
 	std::string* mNewCharacterNames[4] =

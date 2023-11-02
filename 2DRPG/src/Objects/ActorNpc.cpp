@@ -4,13 +4,13 @@
 
 void ActorNpc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation)
 {
-    std::string filePath = "./assets/images/" + name + ".png";
+    /*std::string filePath = "./assets/images/" + name + ".png";
     SDL_Surface* surface = IMG_Load(filePath.c_str());
     if (surface)
     {
         mSpriteSheet = SDL_CreateTextureFromSurface(renderer, surface);
     }
-    SDL_FreeSurface(surface);
+    SDL_FreeSurface(surface);*/
 
     mPosition = spawnPosition;
     mSprite.positionOffset = { 0.0f, -16.0f };
@@ -33,7 +33,7 @@ void ActorNpc::Render()
         mSprite.srcRect.h * TILE_SPRITE_SCALE
     };
 
-    GraphicsManager::DrawSpriteRect(mSpriteSheet, mSprite.srcRect, destRect);
+    GraphicsManager::DrawSpriteRect(AssetManager::GetAsset(mAssetID), mSprite.srcRect, destRect);
 }
 
 void ActorNpc::LoadAnimations(std::string animationsFilePath)

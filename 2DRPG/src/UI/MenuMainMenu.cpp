@@ -250,22 +250,22 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterButtonOne.mPosition =
 		CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) +
 		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
-	mNewCharacterButtonOne.mText = "Paladin";
+	mNewCharacterButtonOne.mText = mClasses[mNewCharacterClasses[0]];
 
 	mNewCharacterButtonTwo.mPosition =
 		CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) +
 		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
-	mNewCharacterButtonTwo.mText = "Dancer";
+	mNewCharacterButtonTwo.mText = mClasses[mNewCharacterClasses[1]];
 
 	mNewCharacterButtonThree.mPosition =
 		CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) +
 		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
-	mNewCharacterButtonThree.mText = "Mage";
+	mNewCharacterButtonThree.mText = mClasses[mNewCharacterClasses[2]];
 
 	mNewCharacterButtonFour.mPosition =
 		CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) +
 		Vec2(TEXT_PADDING, mNewCharacterPanelOne.mSize.y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING);
-	mNewCharacterButtonFour.mText = "Knight";
+	mNewCharacterButtonFour.mText = mClasses[mNewCharacterClasses[3]];
 
 	mNewCharacterNameButtonOne.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelOne.mPosition) + Vec2(TEXT_PADDING);
 	mNewCharacterNameButtonOne.mText = "Name";
@@ -570,25 +570,25 @@ void MenuMainMenu::SetupNewCharacterClassSprites()
 	mNewCharacterClassOne.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) + Vec2(TEXT_PADDING, 0.0f);
 	mNewCharacterClassOne.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassOne.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
-	mNewCharacterClassOne.mAssetID = "Paladin";
+	mNewCharacterClassOne.mAssetID = mClasses[mNewCharacterClasses[0]];
 
 	mNewCharacterClassTwo.mSrcRect = { 0, 0, 32, 32 };
 	mNewCharacterClassTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) + Vec2(TEXT_PADDING, 0.0f);
 	mNewCharacterClassTwo.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassTwo.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
-	mNewCharacterClassTwo.mAssetID = "Dancer";
+	mNewCharacterClassTwo.mAssetID = mClasses[mNewCharacterClasses[1]];
 
 	mNewCharacterClassThree.mSrcRect = { 0, 0, 32, 32 };
 	mNewCharacterClassThree.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) + Vec2(TEXT_PADDING, 0.0f);
 	mNewCharacterClassThree.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassThree.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
-	mNewCharacterClassThree.mAssetID = "Mage";
+	mNewCharacterClassThree.mAssetID = mClasses[mNewCharacterClasses[2]];
 
 	mNewCharacterClassFour.mSrcRect = { 0, 0, 32, 32 };
 	mNewCharacterClassFour.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) + Vec2(TEXT_PADDING, 0.0f);
 	mNewCharacterClassFour.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassFour.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
-	mNewCharacterClassFour.mAssetID = "Knight";
+	mNewCharacterClassFour.mAssetID = mClasses[mNewCharacterClasses[3]];
 }
 
 void MenuMainMenu::SetupSelectNamePanel()
@@ -2262,6 +2262,18 @@ void MenuMainMenu::SetupFinishPanel()
 			GameManager::SetNewGameClass(i, mNewCharacterClasses[i]);
 			GameManager::SetNewGameNames(i, *mNewCharacterNames[i]);
 		}
+
+		/*GameManager::SetNewGameClass(0, mNewCharacterClasses[0]);
+		GameManager::SetNewGameNames(0, *mNewCharacterNames[0]);
+
+		GameManager::SetNewGameClass(1, mNewCharacterClasses[1]);
+		GameManager::SetNewGameNames(1, *mNewCharacterNames[1]);
+
+		GameManager::SetNewGameClass(3, mNewCharacterClasses[3]);
+		GameManager::SetNewGameNames(3, *mNewCharacterNames[3]);
+
+		GameManager::SetNewGameClass(2, mNewCharacterClasses[2]);
+		GameManager::SetNewGameNames(2, *mNewCharacterNames[2]);*/
 	};
 
 	mFinishPanel.mButtons.push_back(&mFinishButton);

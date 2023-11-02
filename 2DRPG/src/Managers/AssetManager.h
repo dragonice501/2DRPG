@@ -45,8 +45,10 @@ public:
 	{
 		for (auto i : mAssetMap)
 		{
-			SDL_DestroyTexture(i.second);
+			SDL_DestroyTexture(i.second);	
 		}
+
+		mAssetMap.clear();
 	}
 
 	static void SwapCharacterTexture(int first, int second);

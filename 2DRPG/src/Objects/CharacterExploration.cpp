@@ -14,9 +14,6 @@ CharacterExploration::~CharacterExploration()
 
 void CharacterExploration::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation)
 {
-    ActorNpc::Init(name, spawnPosition, renderer);
-
-    mPosition = spawnPosition;
 }
 
 void CharacterExploration::LoadAnimations(std::string animationsFileName)
@@ -54,7 +51,7 @@ void CharacterExploration::Setup(const int partyIndex, const Vec2& spawnPosition
         }
     }
 
-    SetSpriteSheet(AssetManager::GetAsset(name));
+    mAssetID = name;
     LoadAnimations(name);
     SetPosition(spawnPosition);
 

@@ -36,6 +36,7 @@ public:
 
 public:
 	Sprite mSprite;
+	std::string mAssetID;
 	SDL_Texture* mSpriteSheet;
 
 	std::map<std::string, Animation> mAnimations;
