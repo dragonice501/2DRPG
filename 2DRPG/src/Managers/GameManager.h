@@ -49,6 +49,13 @@ public:
 		const std::string& sceneToLoad, const int entranceIndex, bool returnToOverworld = false,
 		ETerrainType battleBackgroundType = UNDEFINED, const std::vector<EnemyEncounter>& enemyEncounters = std::vector<EnemyEncounter>());
 
+	inline static bool NewGame() { return mNewGame; }
+	inline static void SetNewGame(const bool newGame) { mNewGame = newGame; }
+	inline static void SetNewGameClass(const int partyIndex, const int classType) { mNewGameClasses[partyIndex] = classType; }
+	inline static void SetNewGameNames(const int partyIndex, const std::string& name) { mNewGameNames[partyIndex] = name; }
+	inline static int GetNewGameClass(int partyIndex) { return mNewGameClasses[partyIndex]; }
+	inline static std::string GetNewGameName(int partyIndex) { return mNewGameNames[partyIndex]; }
+
 	static void SaveGame();
 
 	static void QuitGame() { Engine::Instance().SetIsRunning(false); }
@@ -70,6 +77,10 @@ private:
 
 		std::vector<Weapon> mInventoryWeapons;
 	};
+
+	static bool mNewGame;
+	static int mNewGameClasses[4];
+	static std::string mNewGameNames[4];
 
 	static bool mLoadedGame;
 	static SaveData mSaveData;

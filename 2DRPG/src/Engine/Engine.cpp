@@ -31,6 +31,7 @@ void Engine::Run()
 {
     srand(time(NULL));
     GameManager::SetSceneToLoad("MainMenu", -1);
+    PlayerManager::SetupCharacters();
 
     while (isRunning)
     {

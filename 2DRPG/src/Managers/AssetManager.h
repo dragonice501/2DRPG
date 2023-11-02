@@ -41,6 +41,13 @@ public:
 			mCharacterTextures[i] = nullptr;
 		}
 	}
+	static void DestroyAssetMap()
+	{
+		for (auto i : mAssetMap)
+		{
+			SDL_DestroyTexture(i.second);
+		}
+	}
 
 	static void SwapCharacterTexture(int first, int second);
 

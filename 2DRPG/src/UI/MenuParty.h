@@ -39,6 +39,8 @@ public:
 
 	void Render() override;
 
+	void LoadMenu();
+
 	void SetupMoneyPanel();
 	void SetupMainPanel();
 	void SetupPartyPanel();

@@ -21,6 +21,9 @@ public:
 	static void LoadCharacters();
 	static void SaveCharacters();
 
+	static void LoadNewGameDefaultCharacters();
+	static void LoadClassStartingAttributes(int partyIndex, const std::string& className);
+
 	static std::vector<CharacterAttributes>& GetCharacterAttributes() { return mCharacterAttributes; }
 	static const int* GetCharacterWeapons() { return mCharacterWeaponIndeces; }
 	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
@@ -62,6 +65,8 @@ public:
 	static void AddArmourChestToInventory(const Armour& newArmour) { mInventoryArmourChest.push_back(newArmour); }
 	static void AddArmourArmsToInventory(const Armour& newArmour) { mInventoryArmourArms.push_back(newArmour); }
 	static void AddArmourLegsToInventory(const Armour& newArmour) { mInventoryArmourLegs.push_back(newArmour); }
+
+	static void SetupCharacters();
 
 	static void AddGold(const int gold) { mPartyGold += gold; }
 	static void SubtractGold(const int gold) { mPartyGold -= gold; }

@@ -7,6 +7,8 @@ MenuMainMenu::MenuMainMenu()
 	SetupNewCharacterClassSprites();
 	SetupSelectNamePanel();
 	SetupNewNamePanel();
+	SetupFinishPanel();
+
 	SetupContinuePanel();
 	SetupQuitPanel();
 
@@ -77,6 +79,16 @@ void MenuMainMenu::Render()
 				mNewCharacterNamePanelFour.Render();
 			}
 
+			if (mFinishPanel.mIsActive)
+			{
+				mFinishPanel.Render();
+			}
+
+			if (mBackPanel.mIsActive)
+			{
+				mBackPanel.Render();
+			}
+
 			mNewCharacterClassOne.Render();
 			mNewCharacterClassTwo.Render();
 			mNewCharacterClassThree.Render();
@@ -136,6 +148,16 @@ void MenuMainMenu::Render()
 			if (mNewCharacterNamePanelFour.mIsActive)
 			{
 				mNewCharacterNamePanelFour.Render();
+			}
+
+			if (mFinishPanel.mIsActive)
+			{
+				mFinishPanel.Render();
+			}
+
+			if (mBackPanel.mIsActive)
+			{
+				mBackPanel.Render();
 			}
 
 			mNewCharacterClassOne.Render();
@@ -297,9 +319,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 			mMenuState = EM_NEW_GAME;
 			return;
 		}
-
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterNameButtonOne.OnUpAction = [this]()
@@ -324,11 +343,7 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonOne;
 	};
-	mNewCharacterNameButtonOne.OnCancelAction = [this]()
-	{
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
-	};
+
 
 	mNewCharacterButtonTwo.OnLeftAction = [this]()
 	{
@@ -336,16 +351,16 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		{
 			DecrementCharacterClass(1);
 		}
+		else
+		{
+			mCurrentButton = &mNewCharacterButtonOne;
+		}
 	};
 	mNewCharacterButtonTwo.OnRightAction = [this]()
 	{
 		if (mMenuState == EM_SELECTING_CHARACTER)
 		{
 			IncrementCharacterClass(1);
-		}
-		else
-		{
-			mCurrentButton = &mNewCharacterButtonOne;
 		}
 	};
 	mNewCharacterButtonTwo.OnDownAction = [this]()
@@ -370,9 +385,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 			mMenuState = EM_NEW_GAME;
 			return;
 		}
-
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterNameButtonTwo.OnUpAction = [this]()
@@ -396,11 +408,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonTwo;
-	};
-	mNewCharacterNameButtonTwo.OnCancelAction = [this]()
-	{
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterButtonThree.OnLeftAction = [this]()
@@ -449,9 +456,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 			mMenuState = EM_NEW_GAME;
 			return;
 		}
-
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterNameButtonThree.OnUpAction = [this]()
@@ -462,6 +466,10 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	{
 		mCurrentButton = &mNewCharacterNameButtonFour;
 	};	
+	mNewCharacterNameButtonThree.OnDownAction = [this]()
+	{
+		mCurrentButton = &mBackButton;
+	};
 	mNewCharacterNameButtonThree.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 2;
@@ -471,11 +479,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonThree;
-	};
-	mNewCharacterNameButtonThree.OnCancelAction = [this]()
-	{
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterButtonFour.OnRightAction = [this]()
@@ -518,8 +521,11 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	};
 	mNewCharacterButtonFour.OnCancelAction = [this]()
 	{
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
+		if (mMenuState == EM_SELECTING_CHARACTER)
+		{
+			mMenuState = EM_NEW_GAME;
+			return;
+		}
 	};
 
 	mNewCharacterNameButtonFour.OnUpAction = [this]()
@@ -530,6 +536,10 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	{
 		mCurrentButton = &mNewCharacterNameButtonThree;
 	};
+	mNewCharacterNameButtonFour.OnDownAction = [this]()
+	{
+		mCurrentButton = &mFinishButton;
+	};
 	mNewCharacterNameButtonFour.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 3;
@@ -539,11 +549,6 @@ void MenuMainMenu::SetupNewCharacterPanels()
 		mMenuState = EM_SELECTING_NAME;
 		mCurrentButton = &mSelectLetterAButton;
 		mPreviousButtonFirst = &mNewCharacterNameButtonFour;
-	};
-	mNewCharacterNameButtonFour.OnCancelAction = [this]()
-	{
-		mMenuState = EM_MAIN;
-		mCurrentButton = &mNewGameButton;
 	};
 
 	mNewCharacterPanelOne.mButtons.push_back(&mNewCharacterButtonOne);
@@ -2219,6 +2224,79 @@ void MenuMainMenu::SetupNewNamePanel()
 	mNewNamePanelText.mPosition = CalcWindowPositionFromUV(mNewNamePanel.mPosition) + Vec2(TEXT_PADDING);
 
 	mNewNamePanel.mText.push_back(&mNewNamePanelText);
+}
+
+void MenuMainMenu::SetupFinishPanel()
+{
+	mFinishPanel.mIsActive = true;
+	mFinishPanel.mPosition =
+	{
+		CalcWindowPositionFromUV(mNewCharacterNamePanelFour.mPosition).x,
+		GraphicsManager::WindowHeight() * 0.8f
+	};
+	mFinishPanel.mPosition = CalcWindowUVFromPosition(mFinishPanel.mPosition);
+	mFinishPanel.mSize =
+	{
+		TEXT_PADDING * 2.0f + Font::fontWidth * TEXT_SIZE * 9.0f + Font::fontSpacing * TEXT_SIZE * 8.0f,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+	};
+
+	mFinishButton.mPosition = CalcWindowPositionFromUV(mFinishPanel.mPosition) + Vec2(TEXT_PADDING);
+	mFinishButton.mText = "Finish";
+
+	mFinishButton.OnLeftAction = [this]()
+	{
+		mCurrentButton = &mBackButton;
+	};
+	mFinishButton.OnUpAction = [this]()
+	{
+		mCurrentButton = &mNewCharacterNameButtonFour;
+	};
+	mFinishButton.OnAcceptAction = [this]()
+	{
+		GameManager::SetSceneToLoad("Overworld");
+		GameManager::SetNewGame(true);
+
+		for (int i = 0; i < 4; i++)
+		{
+			GameManager::SetNewGameClass(i, mNewCharacterClasses[i]);
+			GameManager::SetNewGameNames(i, *mNewCharacterNames[i]);
+		}
+	};
+
+	mFinishPanel.mButtons.push_back(&mFinishButton);
+
+	mBackPanel.mIsActive = true;
+	mBackPanel.mPosition =
+	{
+		CalcWindowPositionFromUV(mNewCharacterNamePanelThree.mPosition).x,
+		GraphicsManager::WindowHeight() * 0.8f
+	};
+	mBackPanel.mPosition = CalcWindowUVFromPosition(mBackPanel.mPosition);
+	mBackPanel.mSize =
+	{
+		TEXT_PADDING * 2.0f + Font::fontWidth * TEXT_SIZE * 9.0f + Font::fontSpacing * TEXT_SIZE * 8.0f,
+		Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f
+	};
+
+	mBackButton.mPosition = CalcWindowPositionFromUV(mBackPanel.mPosition) + Vec2(TEXT_PADDING);
+	mBackButton.mText = "Back";
+
+	mBackButton.OnRightAction = [this]()
+	{
+		mCurrentButton = &mFinishButton;
+	};
+	mBackButton.OnUpAction = [this]()
+	{
+		mCurrentButton = &mNewCharacterNameButtonThree;
+	};
+	mBackButton.OnAcceptAction = [this]()
+	{
+		mMenuState = EM_MAIN;
+		mCurrentButton = &mNewGameButton;
+	};
+
+	mBackPanel.mButtons.push_back(&mBackButton);
 }
 
 void MenuMainMenu::SetupContinuePanel()

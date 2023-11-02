@@ -1,5 +1,9 @@
 #include "GameManager.h"
 
+bool GameManager::mNewGame = false;
+int GameManager::mNewGameClasses[4];
+std::string GameManager::mNewGameNames[4];
+
 bool GameManager::mLoadedGame = false;
 GameManager::SaveData GameManager::mSaveData;
 

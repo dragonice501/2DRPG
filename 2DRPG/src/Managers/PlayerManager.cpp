@@ -96,6 +96,106 @@ void PlayerManager::SaveCharacters()
 {
 }
 
+void PlayerManager::SetupCharacters()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        mCharacterAttributes.push_back(CharacterAttributes());
+    }
+}
+
+void PlayerManager::LoadNewGameDefaultCharacters()
+{
+    std::string className;
+    for (int i = 0; i < 4; i++)
+    {
+        mCharacterAttributes[i].characterClass = static_cast<ECharacterClass>(GameManager::GetNewGameClass(i));
+
+        switch (mCharacterAttributes[i].characterClass)
+        {
+            case DANCER:
+            {
+                className = "Dancer";
+                break;
+            }
+            case KNIGHT:
+            {
+                className = "Knight";
+                break;
+            }
+            case MAGE:
+            {
+                className = "Mage";
+                break;
+            }
+            case PALADIN:
+            {
+                className = "Paladin";
+                break;
+            }
+        }
+
+        LoadClassStartingAttributes(i, className);
+
+        mCharacterAttributes[i].characterClass = static_cast<ECharacterClass>(GameManager::GetNewGameClass(i));
+        mCharacterAttributes[i].characterName = GameManager::GetNewGameName(i);
+    }
+}
+
+void PlayerManager::LoadClassStartingAttributes(int partyIndex, const std::string& className)
+{
+    std::string fileName = "./assets/files/ClassStartingStats.txt";
+    std::ifstream file(fileName);
+    std::string type;
+    while (file >> type)
+    {
+        if (type == "Class")
+        {
+            file >> type;
+            if (type == className)
+            {
+                CharacterAttributes newCharacterAttributes;
+
+                while (file >> type)
+                {
+                    if (type == "Level")
+                    {
+                        file >> newCharacterAttributes.level;
+                    }
+                    else if (type == "Health")
+                    {
+                        file >> newCharacterAttributes.healthMax;
+                        newCharacterAttributes.health = newCharacterAttributes.healthMax;
+                    }
+                    else if (type == "Magic")
+                    {
+                        file >> newCharacterAttributes.magicMax;
+                        newCharacterAttributes.magic = newCharacterAttributes.magicMax;
+                    }
+                    else if (type == "Strength") file >> newCharacterAttributes.strength;
+                    else if (type == "Defense") file >> newCharacterAttributes.defense;
+                    else if (type == "Intelligence") file >> newCharacterAttributes.intelligence;
+                    else if (type == "Speed") file >> newCharacterAttributes.speed;
+                    else if (type == "Skill") file >> newCharacterAttributes.skill;
+                    else if (type == "Luck")
+                    {
+                        file >> newCharacterAttributes.luck;
+                        break;
+                    }
+                }
+
+                mCharacterAttributes[partyIndex] = newCharacterAttributes;
+                break;
+            }
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+    }
+}
+
 int PlayerManager::CalcLevelUpExp(int level)
 {
     return (5 * pow(level, 3)) / 4 + 24;

@@ -1,0 +1,43 @@
+Class Dancer
+Level 1
+Health 13
+Magic 19 
+Strength 10
+Defense 2
+Intelligence 7
+Speed 8
+Skill 2
+Luck 4
+
+Class Knight
+Level 1
+Health 22 
+Magic 12
+Strength 13
+Defense 12
+Intelligence 3
+Speed 2
+Skill 4
+Luck 2
+
+Class Mage
+Level 1
+Health 17
+Magic 24
+Strength 15
+Defense 3
+Intelligence 8
+Speed 10
+Skill 3
+Luck 2
+
+Class Paladin
+Level 1
+Health 25 
+Magic 15
+Strength 15
+Defense 5
+Intelligence 4
+Speed 11
+Skill 5
+Luck 3

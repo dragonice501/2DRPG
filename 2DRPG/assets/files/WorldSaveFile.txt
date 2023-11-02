@@ -2,6 +2,9 @@ MapSize 60 34
 
 TileMap WorldTileMap
 
+NewGamePositions
+
+
 EncounterRate 10 20
 
 SceneEntrance 0

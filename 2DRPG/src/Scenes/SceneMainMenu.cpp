@@ -25,7 +25,7 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
 void SceneMainMenu::Shutdown()
 {
     AssetManager::DestroyMenuIconsTexture();
-    AssetManager::DestroyCharacterTextures();
+    AssetManager::DestroyAssetMap();
 }
 
 void SceneMainMenu::Input()

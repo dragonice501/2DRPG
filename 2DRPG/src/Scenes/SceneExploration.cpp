@@ -416,6 +416,14 @@ SceneExploration::~SceneExploration()
 
 void SceneExploration::Setup(SDL_Renderer* renderer)
 {
+    // Load Default Character Attributes if New Game
+    if (GameManager::NewGame())
+    {
+        PlayerManager::LoadNewGameDefaultCharacters();
+    }
+
+    mPartyMenu.LoadMenu();
+
     std::string fileName;
     int i = 0;
     Vec2 spawnPosition;
@@ -524,6 +532,10 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     // Create Textures
     AssetManager::CreateTileMapTexture(mTileMapName);
     AssetManager::CreateMenuIconsTexture();
+    AssetManager::CreateCharacterTexture("Paladin");
+    AssetManager::CreateCharacterTexture("Dancer");
+    AssetManager::CreateCharacterTexture("Mage");
+    AssetManager::CreateCharacterTexture("Knight");
 
     std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
     while (battleIconsFile >> type)

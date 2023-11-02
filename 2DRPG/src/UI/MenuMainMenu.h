@@ -23,6 +23,8 @@ public:
 	void SetupNewCharacterClassSprites();
 	void SetupSelectNamePanel();
 	void SetupNewNamePanel();
+	void SetupFinishPanel();
+
 	void SetupContinuePanel();
 	void SetupQuitPanel();
 
@@ -111,6 +113,12 @@ private:
 		&mNewCharacterNameButtonFour.mText,
 	};
 	int mCurrentNewNameIndex = -1;
+
+	UIPanel mFinishPanel;
+	UIButton mFinishButton;
+
+	UIPanel mBackPanel;
+	UIButton mBackButton;
 
 	UIPanel mNewNamePanel;
 	UIText mNewNamePanelText;

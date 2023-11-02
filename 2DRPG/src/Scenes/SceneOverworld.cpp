@@ -19,7 +19,7 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
             mSpawnDirections.push_back(GameManager::GetPreviousCharacterDirection(i));
         }
     }
-    else if (GameManager::GetSceneEntranceIndex() == -1)
+    else if (GameManager::NewGame())
     {
         mSpawnPositions.clear();
         mSpawnPositions.push_back(Vec2(16.0f, 17.0f) * TILE_SIZE);
@@ -33,6 +33,7 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
         }
     }
 
+    GameManager::SetNewGame(false);
     SceneExploration::SetupCharacters();
 }
 

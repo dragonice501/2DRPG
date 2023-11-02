@@ -22,6 +22,7 @@ MenuParty::MenuParty() :
     mEquipOptionsButtonRemoveAll("Remove All"),
     mEquipOptionsButtonOptimize("Optimize")
 {
+    /*
     mIsMainMenu = true;
 
     SetupMoneyPanel();
@@ -33,7 +34,7 @@ MenuParty::MenuParty() :
     SetupEquipPanel();
     SetupSavePanel();
 
-    mCurrentButton = &mPartyButton;
+    mCurrentButton = &mPartyButton;*/
 }
 
 void MenuParty::Render()
@@ -141,6 +142,22 @@ void MenuParty::Render()
             break;
         }
     }
+}
+
+void MenuParty::LoadMenu()
+{
+    mIsMainMenu = true;
+
+    SetupMoneyPanel();
+    SetupMainPanel();
+    SetupPartyPanel();
+    SetupStatusPanel();
+    SetupInventoryPanel();
+    SetupJournalPanel();
+    SetupEquipPanel();
+    SetupSavePanel();
+
+    mCurrentButton = &mPartyButton;
 }
 
 void MenuParty::SetupMoneyPanel()
