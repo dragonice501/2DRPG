@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+#include "../Objects/Components.h"
 #include "../UI/MenuMainMenu.h"
 
 #include <map>
@@ -22,6 +23,8 @@ public:
 
 private:
 	MenuMainMenu mMainMenu;
+
+	Sprite mBackgroundSprite;
 
 	std::map<std::string, Sprite> mBattleIconsMap;
 };

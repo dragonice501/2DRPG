@@ -85,6 +85,22 @@ void AssetManager::CreateCharacterTexture(const std::string& textureName)
     SDL_FreeSurface(surface);
 }
 
+void AssetManager::CreateAsset(const std::string& assetID, const std::string& assetPath)
+{
+    if (mAssetMap.find(assetID) != mAssetMap.end()) return;
+
+    SDL_Surface* surface = nullptr;
+
+    std::string surfacePath = assetPath;
+    surface = IMG_Load(surfacePath.c_str());
+    if (surface)
+    {
+        mAssetMap.emplace(assetID, SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
+    }
+
+    SDL_FreeSurface(surface);
+}
+
 void AssetManager::BuildMenuIconMap()
 {
     std::string type;

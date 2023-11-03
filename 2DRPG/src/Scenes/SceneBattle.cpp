@@ -319,7 +319,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 		CharacterBattle* newBattleCharacter = new CharacterBattle();
 		newBattleCharacter->LoadAnimations(name);
-		newBattleCharacter->mTexture = AssetManager::GetCharacterTexture(i);
+		newBattleCharacter->mAssetID = name;
 		newBattleCharacter->battlePosition = mPlayerCharacterPositions[i];
 		newBattleCharacter->mSprite.positionOffset = Vec2(0.0f, 16.0f);
 		newBattleCharacter->attributes = PlayerManager::GetCharacterAttributes()[i];
@@ -346,6 +346,7 @@ void SceneBattle::Shutdown()
 	AssetManager::DestroyBattleBackgroundTexture();
 	AssetManager::DestroyEnemiesTexture();
 	AssetManager::DestroyMenuIconsTexture();
+	AssetManager::DestroyAssetMap();
 }
 
 void SceneBattle::Input()
@@ -815,7 +816,7 @@ void SceneBattle::Render(SDL_Rect& camera)
 			48 * TILE_SPRITE_SCALE
 		};
 
-		GraphicsManager::DrawSpriteRect(character->mTexture, character->mSprite.srcRect, destRect);
+		GraphicsManager::DrawSpriteRect(AssetManager::GetAsset(character->mAssetID), character->mSprite.srcRect, destRect);
 	}
 
 	// Draw Enemies

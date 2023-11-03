@@ -310,6 +310,11 @@ void GraphicsManager::DrawString(const int x, const int y, const char* string, c
     mHighlightedOffset = 0;
 }
 
+void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet)
+{
+    SDL_RenderCopy(mRenderer, spriteSheet, NULL, NULL);
+}
+
 void GraphicsManager::DrawSpriteRect(SDL_Texture* spriteSheet, SDL_Rect& srcRect, SDL_Rect& destRect)
 {
     SDL_RenderCopy(mRenderer, spriteSheet, &srcRect, &destRect);

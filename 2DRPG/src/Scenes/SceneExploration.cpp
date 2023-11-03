@@ -692,6 +692,7 @@ void SceneExploration::Shutdown()
 
     AssetManager::DestroyTileMapTexture();
     AssetManager::DestroyMenuIconsTexture();
+    AssetManager::DestroyAssetMap();
 }
 
 void SceneExploration::Input()

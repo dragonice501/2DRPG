@@ -164,8 +164,10 @@ struct Sprite
 	{
 		this->srcRect = { srcX, srcY, width, height };
 		this->positionOffset = Vec2(xOffset, yOffset);
+		this->mAssetID = "";
 	}
 
+	std::string mAssetID;
 	SDL_Rect srcRect;
 	Vec2 positionOffset;
 };

@@ -20,6 +20,7 @@ public:
 	size_t battleSpawnPosition;
 	SDL_Rect rect;
 
+	std::string mAssetID;
 	SDL_Texture* mTexture;
 
 	std::map<std::string, Animation> mAnimations;

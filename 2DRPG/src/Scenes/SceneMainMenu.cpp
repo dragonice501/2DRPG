@@ -15,11 +15,14 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
         }
     }
 
+    mBackgroundSprite.mAssetID = "MainMenuBackground";
+
     AssetManager::CreateMenuIconsTexture();
     AssetManager::CreateCharacterTexture("Paladin");
     AssetManager::CreateCharacterTexture("Dancer");
     AssetManager::CreateCharacterTexture("Mage");
     AssetManager::CreateCharacterTexture("Knight");
+    AssetManager::CreateAsset("MainMenuBackground", "./assets/images/MainMenu.png");
 }
 
 void SceneMainMenu::Shutdown()
@@ -62,6 +65,7 @@ void SceneMainMenu::Update(const float dt)
 
 void SceneMainMenu::Render(SDL_Rect& camera)
 {
+    GraphicsManager::DrawSpriteRect(AssetManager::GetAsset(mBackgroundSprite.mAssetID));
 	mMainMenu.Render();
 
     DrawCursor();
