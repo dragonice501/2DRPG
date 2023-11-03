@@ -312,6 +312,8 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 			}
 		}
 
+		AssetManager::CreateAsset(name, "./assets/images/" + name + ".png");
+
 		newCharacter.LoadAnimations(name);
 		newCharacter.mSprite.positionOffset = Vec2(0.0f, 16.0f);
 

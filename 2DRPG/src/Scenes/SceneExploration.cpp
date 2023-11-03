@@ -304,38 +304,42 @@ SceneExploration::SceneExploration()
     // Party Menu Buttons
     mPartyMenu.mPartyButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mStatusButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mInventoryButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mJournalButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mEquipButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mMagicButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
     mPartyMenu.mSaveButton.OnCancelAction = [this]()
     {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
-    mPartyMenu.mExitButton.OnAcceptAction = [this]()
+    mPartyMenu.mQuitButton.OnCancelAction = [this]()
     {
-        mExplorationState = ES_EXPLORING;
-    };
-    mPartyMenu.mExitButton.OnCancelAction = [this]()
-    {
+        mPartyMenu.SetCurrentButton(&mPartyMenu.mPartyButton);
         mExplorationState = ES_EXPLORING;
     };
 

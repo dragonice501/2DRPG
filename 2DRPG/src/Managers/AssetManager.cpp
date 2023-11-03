@@ -78,7 +78,6 @@ void AssetManager::CreateCharacterTexture(const std::string& textureName)
     surface = IMG_Load(surfacePath.c_str());
     if (surface)
     {
-        //mCharacterTextures.push_back(SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
         mAssetMap.emplace(textureName, SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
     }
 

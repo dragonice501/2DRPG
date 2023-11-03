@@ -98,7 +98,7 @@ public:
 	UIButton mEquipButton;
 	UIButton mMagicButton;
 	UIButton mSaveButton;
-	UIButton mExitButton;
+	UIButton mQuitButton;
 
 	// Party Panel
 	UIPanel mPartyPanel;
@@ -236,6 +236,6 @@ public:
 		&mJournalButton,
 		&mEquipButton,
 		&mMagicButton,
-		&mExitButton
+		&mQuitButton
 	};
 };

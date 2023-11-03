@@ -8,7 +8,7 @@ MenuParty::MenuParty() :
     mEquipButton("Equip"),
     mMagicButton("Magic"),
     mSaveButton("Save"),
-    mExitButton("Exit"),
+    mQuitButton("Quit"),
     mJournalButtonOne("People"),
     mJournalButtonTwo("Place"),
     mJournalButtonThree("Mystery"),
@@ -196,7 +196,7 @@ void MenuParty::SetupMainPanel()
     mMainPanel.mButtons.push_back(&mEquipButton);
     mMainPanel.mButtons.push_back(&mMagicButton);
     mMainPanel.mButtons.push_back(&mSaveButton);
-    mMainPanel.mButtons.push_back(&mExitButton);
+    mMainPanel.mButtons.push_back(&mQuitButton);
 
     Vec2 vertOffset = { 0.0f, static_cast<float>(Font::fontHeight * TEXT_SIZE + TEXT_PADDING) };
     mPartyButton.mPosition = CalcWindowPositionFromUV(mMainPanel.mPosition) + Vec2(TEXT_PADDING, TEXT_PADDING);
@@ -206,7 +206,7 @@ void MenuParty::SetupMainPanel()
     mEquipButton.mPosition = mJournalButton.mPosition + vertOffset;
     mMagicButton.mPosition = mEquipButton.mPosition + vertOffset;
     mSaveButton.mPosition = mMagicButton.mPosition + vertOffset;
-    mExitButton.mPosition = mSaveButton.mPosition + vertOffset;
+    mQuitButton.mPosition = mSaveButton.mPosition + vertOffset;
 
     mPartyButton.OnDownAction = [this]()
     {
@@ -233,10 +233,6 @@ void MenuParty::SetupMainPanel()
         SetStatusCharacterAttributes(0);
         mCurrentButton = &mStatusButtonOne;
     };
-    mStatusButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-    };
 
     mInventoryButton.OnUpAction = [this]()
     {
@@ -252,10 +248,6 @@ void MenuParty::SetupMainPanel()
         FillInventoryWeaponsButtons();
         mCurrentButton = &mInventoryButtonWeapons;
     };
-    mInventoryButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-    };
 
     mJournalButton.OnUpAction = [this]()
     {
@@ -270,10 +262,6 @@ void MenuParty::SetupMainPanel()
         SetPanelState(PS_JOURNAL);
         FillJournalKeywordsButton(0);
         mCurrentButton = &mJournalButtonOne;
-    };
-    mJournalButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
     };
 
     mEquipButton.OnUpAction = [this]()
@@ -291,10 +279,6 @@ void MenuParty::SetupMainPanel()
         SetPanelState(PS_EQUIP);
         mCurrentButton = &mEquipButtonOne;
     };
-    mEquipButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-    };
 
     mMagicButton.OnUpAction = [this]()
     {
@@ -304,10 +288,6 @@ void MenuParty::SetupMainPanel()
     {
         mCurrentButton = &mSaveButton;
     };
-    mMagicButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-    };
 
     mSaveButton.OnUpAction = [this]()
     {
@@ -315,25 +295,21 @@ void MenuParty::SetupMainPanel()
     };
     mSaveButton.OnDownAction = [this]()
     {
-        mCurrentButton = &mExitButton;
+        mCurrentButton = &mQuitButton;
     };
     mSaveButton.OnAcceptAction = [this]()
     {
         mCurrentButton = &mSaveButtonYes;
         mPanelState = PS_SAVE;
     };
-    mSaveButton.OnCancelAction = [this]()
-    {
-        mCurrentButton = &mPartyButton;
-    };
 
-    mExitButton.OnUpAction = [this]()
+    mQuitButton.OnUpAction = [this]()
     {
         mCurrentButton = &mSaveButton;
     };
-    mExitButton.OnCancelAction = [this]()
+    mQuitButton.OnAcceptAction = [this]()
     {
-        mCurrentButton = &mPartyButton;
+        GameManager::SetSceneToLoad("MainMenu", -1);
     };
 }
 

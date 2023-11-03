@@ -336,7 +336,7 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNameButtonOne.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 0;
-		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		*mNewCharacterName = "";
 		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
 
 		mMenuState = EM_SELECTING_NAME;
@@ -402,7 +402,7 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNameButtonTwo.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 1;
-		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		*mNewCharacterName = "";
 		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
 
 		mMenuState = EM_SELECTING_NAME;
@@ -473,7 +473,7 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNameButtonThree.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 2;
-		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		*mNewCharacterName = "";
 		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
 
 		mMenuState = EM_SELECTING_NAME;
@@ -543,7 +543,7 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterNameButtonFour.OnAcceptAction = [this]()
 	{
 		mCurrentNewNameIndex = 3;
-		*mNewCharacterName = *mNewCharacterNames[mCurrentNewNameIndex];
+		*mNewCharacterName = "";
 		mNewNamePlaceholder = *mNewCharacterNames[mCurrentNewNameIndex];
 
 		mMenuState = EM_SELECTING_NAME;
@@ -2212,7 +2212,7 @@ void MenuMainMenu::SetupNewNamePanel()
 	mNewNamePanel.mPosition =
 	{
 		GraphicsManager::WindowWidth() * 0.5f - Font::fontWidth * TEXT_SIZE * 5.0f,
-		CalcWindowPositionFromUV(mSelectLetterPanel.mPosition).y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING - UI_BOX_BORDER_SIZE * 3.0f
+		CalcWindowPositionFromUV(mSelectLetterPanel.mPosition).y - Font::fontHeight * TEXT_SIZE - TEXT_PADDING * 2.0f - UI_BOX_BORDER_SIZE * 3.0f
 	};
 	mNewNamePanel.mPosition = CalcWindowUVFromPosition(mNewNamePanel.mPosition);
 	mNewNamePanel.mSize =
@@ -2262,18 +2262,6 @@ void MenuMainMenu::SetupFinishPanel()
 			GameManager::SetNewGameClass(i, mNewCharacterClasses[i]);
 			GameManager::SetNewGameNames(i, *mNewCharacterNames[i]);
 		}
-
-		/*GameManager::SetNewGameClass(0, mNewCharacterClasses[0]);
-		GameManager::SetNewGameNames(0, *mNewCharacterNames[0]);
-
-		GameManager::SetNewGameClass(1, mNewCharacterClasses[1]);
-		GameManager::SetNewGameNames(1, *mNewCharacterNames[1]);
-
-		GameManager::SetNewGameClass(3, mNewCharacterClasses[3]);
-		GameManager::SetNewGameNames(3, *mNewCharacterNames[3]);
-
-		GameManager::SetNewGameClass(2, mNewCharacterClasses[2]);
-		GameManager::SetNewGameNames(2, *mNewCharacterNames[2]);*/
 	};
 
 	mFinishPanel.mButtons.push_back(&mFinishButton);
@@ -2333,7 +2321,6 @@ void MenuMainMenu::SetupContinuePanel()
 	mContinueButton.OnAcceptAction = [this]()
 	{
 		GameManager::LoadGameSave();
-		//PlayerManager::LoadCharacters();
 	};
 
 	mContinePanel.mButtons.push_back(&mContinueButton);

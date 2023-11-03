@@ -163,6 +163,7 @@ void PlayerManager::LoadClassStartingAttributes(int partyIndex, const std::strin
                     if (type == "Level")
                     {
                         file >> newCharacterAttributes.level;
+                        newCharacterAttributes.expNextLevel = CalcLevelUpExp(newCharacterAttributes.level);
                     }
                     else if (type == "Health")
                     {
