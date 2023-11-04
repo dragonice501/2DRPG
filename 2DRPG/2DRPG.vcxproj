@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Managers\AudioManager.cpp" />
     <ClCompile Include="src\UI\MenuMainMenu.cpp" />
     <ClCompile Include="src\Scenes\SceneMainMenu.cpp" />
     <ClCompile Include="src\Managers\AssetManager.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\UI\UISprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Managers\AudioManager.h" />
     <ClInclude Include="src\UI\MenuMainMenu.h" />
     <ClInclude Include="src\Scenes\SceneMainMenu.h" />
     <ClInclude Include="src\Items\Armour.h" />

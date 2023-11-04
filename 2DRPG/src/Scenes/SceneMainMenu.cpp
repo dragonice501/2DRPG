@@ -17,6 +17,8 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
 
     mBackgroundSprite.mAssetID = "MainMenuBackground";
 
+    AudioManager::LoadSound("C:/Users/narga/Desktop/Visual Studio Stuff/2DRPG/2DRPG/assets/audio/blip.wav");
+
     AssetManager::CreateMenuIconsTexture();
     AssetManager::CreateCharacterTexture("Paladin");
     AssetManager::CreateCharacterTexture("Dancer");
@@ -36,18 +38,22 @@ void SceneMainMenu::Input()
     if (InputManager::UpPressed() && mMainMenu.GetCurrentButton()->OnUpAction)
     {
         mMainMenu.GetCurrentButton()->OnUpAction();
+        AudioManager::PlaySound();
     }
     else if (InputManager::DownPressed() && mMainMenu.GetCurrentButton()->OnDownAction)
     {
         mMainMenu.GetCurrentButton()->OnDownAction();
+        AudioManager::PlaySound();
     }
     else if (InputManager::RightPressed() && mMainMenu.GetCurrentButton()->OnRightAction)
     {
         mMainMenu.GetCurrentButton()->OnRightAction();
+        AudioManager::PlaySound();
     }
     else if (InputManager::LeftPressed() && mMainMenu.GetCurrentButton()->OnLeftAction)
     {
         mMainMenu.GetCurrentButton()->OnLeftAction();
+        AudioManager::PlaySound();
     }
     else if (InputManager::AcceptPressed() && mMainMenu.GetCurrentButton()->OnAcceptAction)
     {

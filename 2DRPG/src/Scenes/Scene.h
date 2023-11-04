@@ -6,6 +6,7 @@
 #include "../Utils/Constants.h"
 #include "../Utils/Vec2.h"
 
+#include "../Managers/AudioManager.h"
 #include "../Managers/InputManager.h"
 #include "../Managers/GraphicsManager.h"
 #include "../Managers/GameManager.h"

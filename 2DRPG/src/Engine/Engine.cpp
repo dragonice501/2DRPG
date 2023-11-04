@@ -1,5 +1,6 @@
 #include "./Engine.h"
 
+#include "../Managers/AudioManager.h"
 #include "../Managers/GameManager.h"
 #include "../Managers/InputManager.h"
 #include "../Managers/PlayerManager.h"
@@ -23,8 +24,9 @@ void Engine::SetIsRunning(const bool running)
 bool Engine::Init()
 {
     isRunning = GraphicsManager::OpenWindow();
+    //isRunning = AudioManager::Init();
 
-    return true;
+    return isRunning;
 }
 
 void Engine::Run()
