@@ -2,7 +2,7 @@ Class Dancer
 Level 1
 Health 13
 Magic 19 
-Strength 10
+Strength 11
 Defense 2
 Intelligence 7
 Speed 8

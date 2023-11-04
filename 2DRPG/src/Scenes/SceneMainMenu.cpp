@@ -2,6 +2,9 @@
 
 void SceneMainMenu::Setup(SDL_Renderer* renderer)
 {
+    GameManager::CheckGameSaveExists();
+    mMainMenu.LoadMainMenu();
+
     std::string type;
     std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
     while (battleIconsFile >> type)
@@ -17,7 +20,8 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
 
     mBackgroundSprite.mAssetID = "MainMenuBackground";
 
-    AudioManager::LoadSound("C:/Users/narga/Desktop/Visual Studio Stuff/2DRPG/2DRPG/assets/audio/blip.wav");
+    AudioManager::GetMusic("MainMenu.mp3");
+    AudioManager::FadeInMusic("MainMenu.mp3", 1000);
 
     AssetManager::CreateMenuIconsTexture();
     AssetManager::CreateCharacterTexture("Paladin");
@@ -29,6 +33,7 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
 
 void SceneMainMenu::Shutdown()
 {
+    AudioManager::FadeOutMusic(1000);
     AssetManager::DestroyMenuIconsTexture();
     AssetManager::DestroyAssetMap();
 }
@@ -38,22 +43,22 @@ void SceneMainMenu::Input()
     if (InputManager::UpPressed() && mMainMenu.GetCurrentButton()->OnUpAction)
     {
         mMainMenu.GetCurrentButton()->OnUpAction();
-        AudioManager::PlaySound();
+        AudioManager::PlaySFX("blip.wav");
     }
     else if (InputManager::DownPressed() && mMainMenu.GetCurrentButton()->OnDownAction)
     {
         mMainMenu.GetCurrentButton()->OnDownAction();
-        AudioManager::PlaySound();
+        AudioManager::PlaySFX("blip.wav");
     }
     else if (InputManager::RightPressed() && mMainMenu.GetCurrentButton()->OnRightAction)
     {
         mMainMenu.GetCurrentButton()->OnRightAction();
-        AudioManager::PlaySound();
+        AudioManager::PlaySFX("blip.wav");
     }
     else if (InputManager::LeftPressed() && mMainMenu.GetCurrentButton()->OnLeftAction)
     {
         mMainMenu.GetCurrentButton()->OnLeftAction();
-        AudioManager::PlaySound();
+        AudioManager::PlaySFX("blip.wav");
     }
     else if (InputManager::AcceptPressed() && mMainMenu.GetCurrentButton()->OnAcceptAction)
     {

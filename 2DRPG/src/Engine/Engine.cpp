@@ -24,7 +24,7 @@ void Engine::SetIsRunning(const bool running)
 bool Engine::Init()
 {
     isRunning = GraphicsManager::OpenWindow();
-    //isRunning = AudioManager::Init();
+    isRunning = AudioManager::Init();
 
     return isRunning;
 }
@@ -73,5 +73,6 @@ void Engine::Run()
 
 void Engine::Destroy()
 {
+    AudioManager::Destroy();
     GraphicsManager::CloseWindow();
 }

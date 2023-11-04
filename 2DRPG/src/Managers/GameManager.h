@@ -57,6 +57,8 @@ public:
 	inline static std::string GetNewGameName(int partyIndex) { return mNewGameNames[partyIndex]; }
 
 	static void SaveGame();
+	static void CheckGameSaveExists();
+	static inline bool GameSaveExists() { return mGameSaveExists; }
 
 	static void QuitGame() { Engine::Instance().SetIsRunning(false); }
 
@@ -81,6 +83,8 @@ private:
 	static bool mNewGame;
 	static int mNewGameClasses[4];
 	static std::string mNewGameNames[4];
+
+	static bool mGameSaveExists;
 
 	static bool mLoadedGame;
 	static SaveData mSaveData;

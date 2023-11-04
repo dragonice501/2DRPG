@@ -18,15 +18,14 @@ public:
 
 	virtual void Render() override;
 
-	void SetupNewGamePanel();
+	void LoadMainMenu();
+
+	void SetupMainPanels();
 	void SetupNewCharacterPanels();
 	void SetupNewCharacterClassSprites();
 	void SetupSelectNamePanel();
 	void SetupNewNamePanel();
 	void SetupFinishPanel();
-
-	void SetupContinuePanel();
-	void SetupQuitPanel();
 
 	void IncrementCharacterClass(int partyIndex);
 	void DecrementCharacterClass(int partyIndex);

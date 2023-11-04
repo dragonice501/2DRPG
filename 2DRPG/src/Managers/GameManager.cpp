@@ -4,6 +4,8 @@ bool GameManager::mNewGame = false;
 int GameManager::mNewGameClasses[4];
 std::string GameManager::mNewGameNames[4];
 
+bool GameManager::mGameSaveExists = false;
+
 bool GameManager::mLoadedGame = false;
 GameManager::SaveData GameManager::mSaveData;
 
@@ -416,4 +418,12 @@ void GameManager::SaveGame()
 		gameSaveOutFile << "Break" << std::endl << std::endl;
 	}
 	gameSaveInFile.close();
+}
+
+void GameManager::CheckGameSaveExists()
+{
+	std::string gameSavePath = "./assets/files/gamesave.txt";
+	std::ifstream gameSaveInFile;
+	gameSaveInFile.open(gameSavePath);
+	mGameSaveExists = gameSaveInFile.is_open();
 }

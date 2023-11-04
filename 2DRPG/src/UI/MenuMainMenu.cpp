@@ -2,17 +2,7 @@
 
 MenuMainMenu::MenuMainMenu()
 {
-	SetupNewGamePanel();
-	SetupNewCharacterPanels();
-	SetupNewCharacterClassSprites();
-	SetupSelectNamePanel();
-	SetupNewNamePanel();
-	SetupFinishPanel();
-
-	SetupContinuePanel();
-	SetupQuitPanel();
-
-	mCurrentButton = &mNewGameButton;
+	
 }
 
 void MenuMainMenu::Render()
@@ -169,7 +159,19 @@ void MenuMainMenu::Render()
 	}
 }
 
-void MenuMainMenu::SetupNewGamePanel()
+void MenuMainMenu::LoadMainMenu()
+{
+	SetupMainPanels();
+	SetupNewCharacterPanels();
+	SetupNewCharacterClassSprites();
+	SetupSelectNamePanel();
+	SetupNewNamePanel();
+	SetupFinishPanel();
+
+	mCurrentButton = &mNewGameButton;
+}
+
+void MenuMainMenu::SetupMainPanels()
 {
 	int textSize = Font::GetStringFontLength("New Game");
 	mNewGamePanel.mIsActive = true;
@@ -182,7 +184,10 @@ void MenuMainMenu::SetupNewGamePanel()
 
 	mNewGameButton.OnDownAction = [this]()
 	{
-		mCurrentButton = &mContinueButton;
+		if (GameManager::GameSaveExists())
+			mCurrentButton = &mContinueButton;
+		else
+			mCurrentButton = &mQuitButton;
 	};
 	mNewGameButton.OnAcceptAction = [this]()
 	{
@@ -191,6 +196,65 @@ void MenuMainMenu::SetupNewGamePanel()
 	};
 
 	mNewGamePanel.mButtons.push_back(&mNewGameButton);
+
+	textSize = Font::GetStringFontLength("Continue");
+
+	if(GameManager::GameSaveExists())
+	{
+		mContinePanel.mIsActive = true;
+		mContinePanel.mPosition = CalcWindowPositionFromUV(mNewGamePanel.mPosition) + Vec2(0.0f, mNewGamePanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+		mContinePanel.mPosition = CalcWindowUVFromPosition(mContinePanel.mPosition);
+	}
+	mContinePanel.mSize = Vec2(textSize * TEXT_SIZE + TEXT_PADDING * 2.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f);
+
+	mContinueButton.mPosition = CalcWindowPositionFromUV(mContinePanel.mPosition) + Vec2(TEXT_PADDING);
+	mContinueButton.mText = "Continue";
+
+	mContinueButton.OnUpAction = [this]()
+	{
+		mCurrentButton = &mNewGameButton;
+	};
+	mContinueButton.OnDownAction = [this]()
+	{
+		mCurrentButton = &mQuitButton;
+	};
+	mContinueButton.OnAcceptAction = [this]()
+	{
+		GameManager::LoadGameSave();
+	};
+
+	mContinePanel.mButtons.push_back(&mContinueButton);
+
+	textSize = Font::GetStringFontLength("Continue");
+	mQuitPanel.mIsActive = true;
+	if (GameManager::GameSaveExists())
+	{
+		mQuitPanel.mPosition = CalcWindowPositionFromUV(mContinePanel.mPosition) + Vec2(0.0f, mContinePanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+		mQuitPanel.mPosition = CalcWindowUVFromPosition(mQuitPanel.mPosition);
+	}
+	else
+	{
+		mQuitPanel.mPosition = CalcWindowPositionFromUV(mNewGamePanel.mPosition) + Vec2(0.0f, mNewGamePanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
+		mQuitPanel.mPosition = CalcWindowUVFromPosition(mQuitPanel.mPosition);
+	}
+	mQuitPanel.mSize = Vec2(textSize * TEXT_SIZE + TEXT_PADDING * 2.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f);
+
+	mQuitButton.mPosition = CalcWindowPositionFromUV(mQuitPanel.mPosition) + Vec2(TEXT_PADDING);
+	mQuitButton.mText = "  Quit";
+
+	mQuitButton.OnUpAction = [this]()
+	{
+		if (GameManager::GameSaveExists())
+			mCurrentButton = &mContinueButton;
+		else
+			mCurrentButton = &mNewGameButton;
+	};
+	mQuitButton.OnAcceptAction = [this]()
+	{
+		GameManager::QuitGame();
+	};
+
+	mQuitPanel.mButtons.push_back(&mQuitButton);
 }
 
 void MenuMainMenu::SetupNewCharacterPanels()
@@ -567,25 +631,25 @@ void MenuMainMenu::SetupNewCharacterPanels()
 void MenuMainMenu::SetupNewCharacterClassSprites()
 {
 	mNewCharacterClassOne.mSrcRect = { 0, 0, 32, 32 };
-	mNewCharacterClassOne.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassOne.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelOne.mPosition) + Vec2(TEXT_PADDING * 3.0f);
 	mNewCharacterClassOne.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassOne.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
 	mNewCharacterClassOne.mAssetID = mClasses[mNewCharacterClasses[0]];
 
 	mNewCharacterClassTwo.mSrcRect = { 0, 0, 32, 32 };
-	mNewCharacterClassTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelTwo.mPosition) + Vec2(TEXT_PADDING * 3.0f);
 	mNewCharacterClassTwo.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassTwo.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
 	mNewCharacterClassTwo.mAssetID = mClasses[mNewCharacterClasses[1]];
 
 	mNewCharacterClassThree.mSrcRect = { 0, 0, 32, 32 };
-	mNewCharacterClassThree.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassThree.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelThree.mPosition) + Vec2(TEXT_PADDING * 3.0f);
 	mNewCharacterClassThree.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassThree.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
 	mNewCharacterClassThree.mAssetID = mClasses[mNewCharacterClasses[2]];
 
 	mNewCharacterClassFour.mSrcRect = { 0, 0, 32, 32 };
-	mNewCharacterClassFour.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) + Vec2(TEXT_PADDING, 0.0f);
+	mNewCharacterClassFour.mPosition = CalcWindowPositionFromUV(mNewCharacterPanelFour.mPosition) + Vec2(TEXT_PADDING * 3.0f);
 	mNewCharacterClassFour.mOffset = { 0.0f, -16 * TILE_SPRITE_SCALE };
 	mNewCharacterClassFour.mSize = { 32 * TILE_SPRITE_SCALE, 32 * TILE_SPRITE_SCALE };
 	mNewCharacterClassFour.mAssetID = mClasses[mNewCharacterClasses[3]];
@@ -2297,56 +2361,6 @@ void MenuMainMenu::SetupFinishPanel()
 	};
 
 	mBackPanel.mButtons.push_back(&mBackButton);
-}
-
-void MenuMainMenu::SetupContinuePanel()
-{
-	int textSize = Font::GetStringFontLength("Continue");
-	mContinePanel.mIsActive = true;
-	mContinePanel.mPosition = CalcWindowPositionFromUV(mNewGamePanel.mPosition) + Vec2(0.0f, mNewGamePanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
-	mContinePanel.mPosition = CalcWindowUVFromPosition(mContinePanel.mPosition);
-	mContinePanel.mSize = Vec2(textSize * TEXT_SIZE + TEXT_PADDING * 2.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f);
-
-	mContinueButton.mPosition = CalcWindowPositionFromUV(mContinePanel.mPosition) + Vec2(TEXT_PADDING);
-	mContinueButton.mText = "Continue";
-
-	mContinueButton.OnUpAction = [this]()
-	{
-		mCurrentButton = &mNewGameButton;
-	};
-	mContinueButton.OnDownAction = [this]()
-	{
-		mCurrentButton = &mQuitButton;
-	};
-	mContinueButton.OnAcceptAction = [this]()
-	{
-		GameManager::LoadGameSave();
-	};
-
-	mContinePanel.mButtons.push_back(&mContinueButton);
-}
-
-void MenuMainMenu::SetupQuitPanel()
-{
-	int textSize = Font::GetStringFontLength("Continue");
-	mQuitPanel.mIsActive = true;
-	mQuitPanel.mPosition = CalcWindowPositionFromUV(mContinePanel.mPosition) + Vec2(0.0f, mContinePanel.mSize.y + UI_BOX_BORDER_SIZE * 3.0f);
-	mQuitPanel.mPosition = CalcWindowUVFromPosition(mQuitPanel.mPosition);
-	mQuitPanel.mSize = Vec2(textSize * TEXT_SIZE + TEXT_PADDING * 2.0f, Font::fontHeight * TEXT_SIZE + TEXT_PADDING * 2.0f);
-
-	mQuitButton.mPosition = CalcWindowPositionFromUV(mQuitPanel.mPosition) + Vec2(TEXT_PADDING);
-	mQuitButton.mText = "  Quit";
-
-	mQuitButton.OnUpAction = [this]()
-	{
-		mCurrentButton = &mContinueButton;
-	};
-	mQuitButton.OnAcceptAction = [this]()
-	{
-		GameManager::QuitGame();
-	};
-
-	mQuitPanel.mButtons.push_back(&mQuitButton);
 }
 
 void MenuMainMenu::IncrementCharacterClass(int partyIndex)
