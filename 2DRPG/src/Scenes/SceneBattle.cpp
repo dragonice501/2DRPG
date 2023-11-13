@@ -224,7 +224,9 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	AssetManager::CreateMenuIconsTexture();
 
 	// Load icons map
-	std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
+	std::string basePath = SDL_GetBasePath();
+	std::string filePath = "assets\\files\\BattleIcons.txt";
+	std::ifstream battleIconsFile(basePath + filePath);
 	std::string type;
 	while (battleIconsFile >> type)
 	{
@@ -238,7 +240,8 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	}
 
 	// Load enemy sprites
-	std::ifstream file("./assets/files/EnemySprites.txt");
+	filePath = "assets\\files\\EnemySprites.txt";
+	std::ifstream file(basePath + filePath);
 	while (file >> type)
 	{
 		if (type == "Enemy")
@@ -312,7 +315,8 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 			}
 		}
 
-		AssetManager::CreateAsset(name, "./assets/images/" + name + ".png");
+
+		AssetManager::CreateAsset(name, name);
 
 		newCharacter.LoadAnimations(name);
 		newCharacter.mSprite.positionOffset = Vec2(0.0f, 16.0f);
@@ -331,6 +335,9 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 
 	BuildTurnOrder();
 	mBattleState = BS_MONSTERS_APPEARED;
+
+	AudioManager::GetMusic("Decisive Battle.wav");
+	AudioManager::FadeInMusic("Decisive Battle.wav", 1000);
 }
 
 void SceneBattle::Shutdown()
@@ -349,6 +356,8 @@ void SceneBattle::Shutdown()
 	AssetManager::DestroyEnemiesTexture();
 	AssetManager::DestroyMenuIconsTexture();
 	AssetManager::DestroyAssetMap();
+
+	AudioManager::FadeOutMusic(500);
 }
 
 void SceneBattle::Input()
@@ -360,18 +369,22 @@ void SceneBattle::Input()
 			if (InputManager::UpPressed() && mBattleMenu.GetCurrentButton()->OnUpAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnUpAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			else if (InputManager::DownPressed() && mBattleMenu.GetCurrentButton()->OnDownAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnDownAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			else if (InputManager::RightPressed() && mBattleMenu.GetCurrentButton()->OnRightAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnRightAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			else if (InputManager::LeftPressed() && mBattleMenu.GetCurrentButton()->OnLeftAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnLeftAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			else if (InputManager::AcceptPressed() && mBattleMenu.GetCurrentButton()->OnAcceptAction)
 			{
@@ -393,7 +406,6 @@ void SceneBattle::Input()
 		}
 		case BS_SELECTING_ITEM:
 		{
-
 			break;
 		}
 	}

@@ -38,8 +38,9 @@ void GameManager::LoadGameSave()
 	int partyIndex = 0;
 
 	std::string type;
-	std::string gameSavePath = "./assets/files/gamesave.txt";
-	std::ifstream gameSaveInFile(gameSavePath);
+	std::string basePath = SDL_GetBasePath();
+	std::string gameSavePath = "assets\\saves\\GameSave.txt";
+	std::ifstream gameSaveInFile(basePath + gameSavePath);
 	while (gameSaveInFile >> type)
 	{
 		if (type == "LevelName") gameSaveInFile >> mSceneToLoad;
@@ -255,9 +256,10 @@ void GameManager::SetSceneToLoad(const std::string& sceneToLoad, const int entra
 
 void GameManager::SaveGame()
 {
-	std::string gameSavePath = "./assets/files/gamesave.txt";
+	std::string basePath = SDL_GetBasePath();
+	std::string gameSavePath = "assets\\saves\\GameSave.txt";
 	std::ifstream gameSaveInFile;
-	gameSaveInFile.open(gameSavePath);
+	gameSaveInFile.open(basePath + gameSavePath);
 	if (gameSaveInFile.is_open())
 	{
 		gameSaveInFile.close();
@@ -422,8 +424,9 @@ void GameManager::SaveGame()
 
 void GameManager::CheckGameSaveExists()
 {
-	std::string gameSavePath = "./assets/files/gamesave.txt";
+	std::string basePath = SDL_GetBasePath();
+	std::string gameSavePath = "assets\\saves\\GameSave.txt";
 	std::ifstream gameSaveInFile;
-	gameSaveInFile.open(gameSavePath);
+	gameSaveInFile.open(basePath + gameSavePath);
 	mGameSaveExists = gameSaveInFile.is_open();
 }

@@ -6,7 +6,9 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
     mMainMenu.LoadMainMenu();
 
     std::string type;
-    std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
+    std::string basePath = SDL_GetBasePath();
+    std::string filePath = "assets/files/BattleIcons.txt";
+    std::ifstream battleIconsFile(basePath + filePath);
     while (battleIconsFile >> type)
     {
         if (type == "Cursor")
@@ -28,7 +30,7 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
     AssetManager::CreateCharacterTexture("Dancer");
     AssetManager::CreateCharacterTexture("Mage");
     AssetManager::CreateCharacterTexture("Knight");
-    AssetManager::CreateAsset("MainMenuBackground", "./assets/images/MainMenu.png");
+    AssetManager::CreateAsset("MainMenuBackground", "MainMenu");
 }
 
 void SceneMainMenu::Shutdown()

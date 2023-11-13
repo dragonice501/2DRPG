@@ -32,6 +32,9 @@ void SceneTown::Setup(static SDL_Renderer* renderer)
     }
 
     SceneExploration::SetupCharacters();
+
+    AudioManager::GetMusic("The Final of the Fantasy.wav");
+    AudioManager::FadeInMusic("The Final of the Fantasy.wav", 1000);
 }
 
 void SceneTown::Shutdown()

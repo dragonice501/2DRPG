@@ -34,8 +34,9 @@ void PlayerManager::LoadCharacters()
     int index = 0;
     if (!GameManager::LoadedGame())
     {
-        std::string fileName = "./assets/files/PlayerSaveFile.txt";
-        std::ifstream file(fileName);
+        std::string basePath = SDL_GetBasePath();
+        std::string filePath = "assets\\files\\PlayerSaveFile.txt";
+        std::ifstream file(basePath + filePath);
         std::string type;
         while (file >> type)
         {
@@ -146,8 +147,9 @@ void PlayerManager::LoadNewGameDefaultCharacters()
 
 void PlayerManager::LoadClassStartingAttributes(int partyIndex, const std::string& className)
 {
-    std::string fileName = "./assets/files/ClassStartingStats.txt";
-    std::ifstream file(fileName);
+    std::string basePath = SDL_GetBasePath();
+    std::string fileName = "assets\\files\\ClassStartingStats.txt";
+    std::ifstream file(basePath + fileName);
     std::string type;
     while (file >> type)
     {

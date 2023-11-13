@@ -1,7 +1,5 @@
 #include "AudioManager.h"
 
-std::string AudioManager::basePath = "C:/Users/narga/Desktop/Visual Studio Stuff/2DRPG/2DRPG/assets/audio/";
-
 SDL_AudioSpec AudioManager::wavSpec;
 Uint32 AudioManager::wavLength;
 Uint8* AudioManager::wavBuffer;

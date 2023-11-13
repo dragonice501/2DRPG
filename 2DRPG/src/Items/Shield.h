@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <SDL.h>
 
 class Shield
 {
@@ -22,8 +23,9 @@ public:
 	void LoadShieldAttributes(const std::string& weaponName)
 	{
 		std::string string;
-		std::string fileName = "./assets/files/ShieldAttributes.txt";
-		std::ifstream file(fileName);
+		std::string basePath = SDL_GetBasePath();
+		std::string filePath = "assets\\files\\ShieldAttributes.txt";
+		std::ifstream file(basePath + filePath);
 		while (file >> string)
 		{
 			if (string == "Shield")

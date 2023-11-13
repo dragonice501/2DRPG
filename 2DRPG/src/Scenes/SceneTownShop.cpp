@@ -34,6 +34,9 @@ void SceneTownShop::Setup(static SDL_Renderer* renderer)
     }
 
     SceneExploration::SetupCharacters();
+
+    AudioManager::GetMusic("Take some rest and eat some food!.wav");
+    AudioManager::FadeInMusic("Take some rest and eat some food!.wav", 1000);
 }
 
 void SceneTownShop::Shutdown()
@@ -48,18 +51,22 @@ void SceneTownShop::Input()
         if (InputManager::UpPressed() && mShopMenu.GetCurrentButton()->OnUpAction)
         {
             mShopMenu.GetCurrentButton()->OnUpAction();
+            AudioManager::PlaySFX("blip.wav");
         }
         else if (InputManager::DownPressed() && mShopMenu.GetCurrentButton()->OnDownAction)
         {
             mShopMenu.GetCurrentButton()->OnDownAction();
+            AudioManager::PlaySFX("blip.wav");
         }
         else if (InputManager::RightPressed() && mShopMenu.GetCurrentButton()->OnRightAction)
         {
             mShopMenu.GetCurrentButton()->OnRightAction();
+            AudioManager::PlaySFX("blip.wav");
         }
         else if (InputManager::LeftPressed() && mShopMenu.GetCurrentButton()->OnLeftAction)
         {
             mShopMenu.GetCurrentButton()->OnLeftAction();
+            AudioManager::PlaySFX("blip.wav");
         }
         else if (InputManager::AcceptPressed() && mShopMenu.GetCurrentButton()->OnAcceptAction)
         {

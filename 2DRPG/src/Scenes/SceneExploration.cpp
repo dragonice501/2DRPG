@@ -433,8 +433,9 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     Vec2 spawnPosition;
 
     // Load level tiles, entrances and actors
-    fileName = "./assets/files/" + mFileName + "SaveFile.txt";
-    std::ifstream file(fileName);
+    std::string basePath = SDL_GetBasePath();
+    std::string filePath = "assets\\files\\" + mFileName + "SaveFile.txt";
+    std::ifstream file(basePath + filePath);
     std::string type;
     while (file >> type)
     {
@@ -541,7 +542,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     AssetManager::CreateCharacterTexture("Mage");
     AssetManager::CreateCharacterTexture("Knight");
 
-    std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
+    std::string iconsPath = "assets\\files\\BattleIcons.txt";
+    std::ifstream battleIconsFile(basePath + iconsPath);
     while (battleIconsFile >> type)
     {
         if (type == "Cursor")
@@ -559,8 +561,8 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
     // Load enemy encounters
     EnemyEncounter newEncounter;
-    fileName = "./assets/files/" + mFileName + "Encounters.txt";
-    std::ifstream encountersFile(fileName);
+    fileName = "assets\\files\\" + mFileName + "Encounters.txt";
+    std::ifstream encountersFile(basePath + fileName);
     while (encountersFile >> type)
     {
         if (type == "End")
@@ -697,6 +699,8 @@ void SceneExploration::Shutdown()
     AssetManager::DestroyTileMapTexture();
     AssetManager::DestroyMenuIconsTexture();
     AssetManager::DestroyAssetMap();
+
+    AudioManager::FadeOutMusic(500);
 }
 
 void SceneExploration::Input()

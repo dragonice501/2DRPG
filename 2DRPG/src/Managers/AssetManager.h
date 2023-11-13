@@ -26,7 +26,7 @@ public:
 	static void CreateBattleBackgroundTexture(const std::string& textureName);
 	static void CreateEnemiesTexture(const std::string& textureName);
 	static void CreateCharacterTexture(const std::string& textureName);
-	static void CreateAsset(const std::string& assetID, const std::string& assetPath);
+	static void CreateAsset(const std::string& assetID, const std::string& textureName);
 
 	static void BuildMenuIconMap();
 

@@ -42,7 +42,6 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
 
 void SceneOverworld::Shutdown()
 {
-    AudioManager::FadeOutMusic(500);
     SceneExploration::Shutdown();
 }
 

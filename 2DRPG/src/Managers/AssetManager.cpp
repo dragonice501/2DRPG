@@ -16,8 +16,10 @@ void AssetManager::CreateTileMapTexture(const std::string& textureName)
 {
 	SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/images/" + textureName + ".png";
-    surface = IMG_Load(surfacePath.c_str());
+    std::string basePath = SDL_GetBasePath();
+    std::string surfacePath = "assets\\images\\" + textureName + ".png";
+    std::string fullPath = basePath + surfacePath;
+    surface = IMG_Load(fullPath.c_str());
     if (surface)
     {
         mTileMapTexture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
@@ -30,8 +32,10 @@ void AssetManager::CreateMenuIconsTexture()
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/images/MenuIcons.png";
-    surface = IMG_Load(surfacePath.c_str());
+    std::string basePath = SDL_GetBasePath();
+    std::string surfacePath = "assets\\images\\MenuIcons.png";
+    std::string fullPath = basePath + surfacePath;
+    surface = IMG_Load(fullPath.c_str());
     if (surface)
     {
         mMenuIconsTexture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
@@ -44,8 +48,10 @@ void AssetManager::CreateBattleBackgroundTexture(const std::string& textureName)
 {
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/images/" + textureName + ".png";
-    surface = IMG_Load(surfacePath.c_str());
+    std::string basePath = SDL_GetBasePath();
+    std::string surfacePath = "assets\\images\\" + textureName + ".png";
+    std::string fullPath = basePath + surfacePath;
+    surface = IMG_Load(fullPath.c_str());
     if (surface)
     {
         mBattleBackgroundTexture = SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface);
@@ -74,8 +80,10 @@ void AssetManager::CreateCharacterTexture(const std::string& textureName)
 
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = "./assets/images/" + textureName + ".png";
-    surface = IMG_Load(surfacePath.c_str());
+    std::string basePath = SDL_GetBasePath();
+    std::string surfacePath = "assets\\images\\" + textureName + ".png";
+    std::string fullPath = basePath + surfacePath;
+    surface = IMG_Load(fullPath.c_str());
     if (surface)
     {
         mAssetMap.emplace(textureName, SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
@@ -84,14 +92,16 @@ void AssetManager::CreateCharacterTexture(const std::string& textureName)
     SDL_FreeSurface(surface);
 }
 
-void AssetManager::CreateAsset(const std::string& assetID, const std::string& assetPath)
+void AssetManager::CreateAsset(const std::string& assetID, const std::string& textureName)
 {
     if (mAssetMap.find(assetID) != mAssetMap.end()) return;
 
     SDL_Surface* surface = nullptr;
 
-    std::string surfacePath = assetPath;
-    surface = IMG_Load(surfacePath.c_str());
+    std::string basePath = SDL_GetBasePath();
+    std::string surfacePath = "\\assets\\images\\" + textureName + ".png";
+    std::string fullPath = basePath + surfacePath;
+    surface = IMG_Load(fullPath.c_str());
     if (surface)
     {
         mAssetMap.emplace(assetID, SDL_CreateTextureFromSurface(GraphicsManager::GetRenderer(), surface));
@@ -103,7 +113,9 @@ void AssetManager::CreateAsset(const std::string& assetID, const std::string& as
 void AssetManager::BuildMenuIconMap()
 {
     std::string type;
-    std::ifstream battleIconsFile("./assets/files/BattleIcons.txt");
+    std::string basePath = SDL_GetBasePath();
+    std::string filePath = "assets\\files\\BattleIcons.txt";
+    std::ifstream battleIconsFile(basePath + filePath);
     while (battleIconsFile >> type)
     {
         if (type == "Cursor")

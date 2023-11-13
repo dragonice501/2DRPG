@@ -16,7 +16,8 @@ public:
 
 	static Mix_Music* GetMusic(std::string fileName)
 	{
-		std::string path = basePath + fileName;
+		std::string audioPath = "assets\\audio\\";
+		std::string path = SDL_GetBasePath() + audioPath + fileName;
 
 		if (mMusic[path] == nullptr)
 		{
@@ -28,7 +29,8 @@ public:
 
 	static Mix_Chunk* GetSFX(std::string& fileName)
 	{
-		std::string path = basePath + fileName;
+		std::string audioPath = "assets\\audio\\";
+		std::string path = SDL_GetBasePath() + audioPath + fileName;
 
 		if (mSFX[path] == nullptr)
 		{
@@ -63,8 +65,6 @@ public:
 	static inline void FadeOutMusic(int fadeoutTimeMilliseconds) { if(Mix_PlayingMusic()) Mix_FadeOutMusic(fadeoutTimeMilliseconds); }
 
 	static inline void PlaySFX(std::string fileName, int loops = 0, int channel = 0) { Mix_PlayChannel(channel, GetSFX(fileName), loops); }
-
-	static std::string basePath;
 
 	static SDL_AudioSpec wavSpec;
 	static Uint32 wavLength;

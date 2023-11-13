@@ -1,51 +1,51 @@
-LevelName Town
+LevelName Overworld
 
-Gold 2000
+Gold 574
 
 CharacterPositions
-288 256
-302.4 256
-318.4 256
-334.4 256
+528 240
+528 223.488
+527.488 208
+511.488 208
 
 CharacterDirections
--16 0
--16 0
--1.60001 -14.4
-0 -16.512
+0 16
+16 0
+16 0
+0 -16
 
 Characters
-Name 3 1 25 25 15 15 15 5 4 11 5 3 0
+Name 3 3 26 26 16 16 16 6 5 12 6 4 54
 
-Name 0 1 13 13 19 19 11 2 7 8 2 4 0
+Name 0 3 14 14 20 20 12 3 8 9 3 5 54
 
-Name 1 1 22 22 12 12 13 12 3 2 4 2 0
+Name 1 3 23 23 13 13 14 13 4 3 5 3 54
 
-Name 2 1 17 17 24 24 15 3 8 10 3 2 0
+Name 2 3 18 18 25 25 16 4 9 11 4 3 54
 
 CharacterWeapons
--1 -1 -1 -1 
+0 -1 -1 -1 
 
 CharacterShield
 -1 -1 -1 -1 
 CharacterArmourHead
--1 -1 -1 -1 
+0 -1 -1 -1 
 CharacterArmourChest
--1 -1 -1 -1 
+0 -1 -1 -1 
 CharacterArmourArms
--1 -1 -1 -1 
+0 -1 -1 -1 
 CharacterArmourLegs
--1 -1 -1 -1 
+0 -1 -1 -1 
 
 PeopleKeywords Break
 PlacesKeywords Break
 MysteryKeywords Break
 BestiaryKeywords Break
 
-InventoryWeapons Break
+InventoryWeapons Saber Break
 InventoryShields Break
-InventoryArmourHead Break
-InventoryArmourChest Break
-InventoryArmourArms Break
-InventoryArmourLegs Break
+InventoryArmourHead Helmet Break
+InventoryArmourChest Vest Break
+InventoryArmourArms Gloves Break
+InventoryArmourLegs Greeves Break
 
