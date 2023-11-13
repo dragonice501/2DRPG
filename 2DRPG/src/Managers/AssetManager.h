@@ -52,8 +52,6 @@ public:
 		mAssetMap.clear();
 	}
 
-	static void SwapCharacterTexture(int first, int second);
-
 private:
 	static SDL_Texture* mTileMapTexture;
 	static SDL_Texture* mMenuIconsTexture;

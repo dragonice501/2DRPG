@@ -671,9 +671,9 @@ void SceneExploration::AskAboutKeyword(int index)
 
 void SceneExploration::SwapCharacters(int first, int second)
 {
-    SDL_Texture* temp = mCharacters[first].mSpriteSheet;
-    mCharacters[first].mSpriteSheet = mCharacters[second].mSpriteSheet;
-    mCharacters[second].mSpriteSheet = temp;
+    std::string tempID = mCharacters[first].mAssetID;
+    mCharacters[first].mAssetID = mCharacters[second].mAssetID;
+    mCharacters[second].mAssetID = tempID;
 
     std::map<std::string, Animation> tempAnims = mCharacters[first].mAnimations;
     mCharacters[first].mAnimations = mCharacters[second].mAnimations;
@@ -780,6 +780,11 @@ void SceneExploration::Input()
                         mInteractMenuIndex = 0;
                         mExplorationState = ES_INTERACTING;
 
+                        for (int i = 0; i < mCharacters.size(); i++)
+                        {
+                            mCharacters[0].ResetMovement();
+                        }
+
                         return;
                     }
                 }
@@ -808,18 +813,22 @@ void SceneExploration::Input()
             if (InputManager::UpPressed() && mInteractMenu.GetCurrentButton()->OnUpAction)
             {
                 mInteractMenu.GetCurrentButton()->OnUpAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::DownPressed() && mInteractMenu.GetCurrentButton()->OnDownAction)
             {
                 mInteractMenu.GetCurrentButton()->OnDownAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::RightPressed() && mInteractMenu.GetCurrentButton()->OnRightAction)
             {
                 mInteractMenu.GetCurrentButton()->OnRightAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::LeftPressed() && mInteractMenu.GetCurrentButton()->OnLeftAction)
             {
                 mInteractMenu.GetCurrentButton()->OnLeftAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::AcceptPressed() && mInteractMenu.GetCurrentButton()->OnAcceptAction)
             {
@@ -886,18 +895,22 @@ void SceneExploration::Input()
             if (InputManager::UpPressed() && mPartyMenu.GetCurrentButton()->OnUpAction)
             {
                 mPartyMenu.GetCurrentButton()->OnUpAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::DownPressed() && mPartyMenu.GetCurrentButton()->OnDownAction)
             {
                 mPartyMenu.GetCurrentButton()->OnDownAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::RightPressed() && mPartyMenu.GetCurrentButton()->OnRightAction)
             {
                 mPartyMenu.GetCurrentButton()->OnRightAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::LeftPressed() && mPartyMenu.GetCurrentButton()->OnLeftAction)
             {
                 mPartyMenu.GetCurrentButton()->OnLeftAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::AcceptPressed() && mPartyMenu.GetCurrentButton()->OnAcceptAction)
             {
@@ -924,7 +937,8 @@ void SceneExploration::Update(const float dt)
 
     for (CharacterExploration& character : mCharacters)
     {
-        character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, mNpcs, dt);
+        if(mExplorationState != ES_INTERACTING)
+            character.UpdateMovement(mMapWidth, mMapHeight, mTiles, mCharacters, mNpcs, dt);
         character.Update(dt);
 
         if (character.mMovement.stepTaken && character.mPartyIndex == 0)

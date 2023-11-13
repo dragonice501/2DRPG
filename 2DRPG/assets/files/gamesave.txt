@@ -1,0 +1,51 @@
+LevelName Town
+
+Gold 2000
+
+CharacterPositions
+288 256
+302.4 256
+318.4 256
+334.4 256
+
+CharacterDirections
+-16 0
+-16 0
+-1.60001 -14.4
+0 -16.512
+
+Characters
+Name 3 1 25 25 15 15 15 5 4 11 5 3 0
+
+Name 0 1 13 13 19 19 11 2 7 8 2 4 0
+
+Name 1 1 22 22 12 12 13 12 3 2 4 2 0
+
+Name 2 1 17 17 24 24 15 3 8 10 3 2 0
+
+CharacterWeapons
+-1 -1 -1 -1 
+
+CharacterShield
+-1 -1 -1 -1 
+CharacterArmourHead
+-1 -1 -1 -1 
+CharacterArmourChest
+-1 -1 -1 -1 
+CharacterArmourArms
+-1 -1 -1 -1 
+CharacterArmourLegs
+-1 -1 -1 -1 
+
+PeopleKeywords Break
+PlacesKeywords Break
+MysteryKeywords Break
+BestiaryKeywords Break
+
+InventoryWeapons Break
+InventoryShields Break
+InventoryArmourHead Break
+InventoryArmourChest Break
+InventoryArmourArms Break
+InventoryArmourLegs Break
+

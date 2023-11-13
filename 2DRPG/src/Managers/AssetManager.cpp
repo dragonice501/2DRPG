@@ -115,10 +115,3 @@ void AssetManager::BuildMenuIconMap()
         }
     }
 }
-
-void AssetManager::SwapCharacterTexture(int first, int second)
-{
-    SDL_Texture* tempTex = mCharacterTextures[first];
-    mCharacterTextures[first] = mCharacterTextures[second];
-    mCharacterTextures[second] = tempTex;
-}

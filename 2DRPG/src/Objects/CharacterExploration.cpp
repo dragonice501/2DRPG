@@ -294,6 +294,15 @@ void CharacterExploration::SetMovement(const std::vector<CharacterExploration>& 
     }
 }
 
+void CharacterExploration::ResetMovement()
+{
+    mMovementState = MS_IDLE;
+    mMovement.upHeld = false;
+    mMovement.downHeld = false;
+    mMovement.leftHeld = false;
+    mMovement.rightHeld = false;
+}
+
 void CharacterExploration::UpdateAnimation()
 {
     if (mMovementState == MS_MOVING)

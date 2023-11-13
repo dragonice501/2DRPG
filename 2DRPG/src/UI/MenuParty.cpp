@@ -332,10 +332,6 @@ void MenuParty::SetupPartyPanel()
     {
         mCurrentButton = &mPartyButtonTwo;
     };
-    mPartyButtonOne.OnAcceptAction = [this]()
-    {
-
-    };
     mPartyButtonOne.OnCancelAction = [this]()
     {
         mCurrentButton = &mPartyButton;

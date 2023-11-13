@@ -35,10 +35,14 @@ void SceneOverworld::Setup(static SDL_Renderer* renderer)
 
     GameManager::SetNewGame(false);
     SceneExploration::SetupCharacters();
+
+    AudioManager::GetMusic("Overworld.mp3");
+    AudioManager::FadeInMusic("Overworld.mp3", 1000);
 }
 
 void SceneOverworld::Shutdown()
 {
+    AudioManager::FadeOutMusic(500);
     SceneExploration::Shutdown();
 }
 

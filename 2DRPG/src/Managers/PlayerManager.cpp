@@ -295,8 +295,6 @@ void PlayerManager::SwapCharacters(int first, int second)
     CharacterAttributes tempChar = mCharacterAttributes[first];
     mCharacterAttributes[first] = mCharacterAttributes[second];
     mCharacterAttributes[second] = tempChar;
-
-    AssetManager::SwapCharacterTexture(first, second);
 }
 
 void PlayerManager::SwapCharacterInventories(int first, int second)

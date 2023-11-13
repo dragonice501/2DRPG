@@ -33,7 +33,7 @@ void SceneMainMenu::Setup(SDL_Renderer* renderer)
 
 void SceneMainMenu::Shutdown()
 {
-    AudioManager::FadeOutMusic(1000);
+    AudioManager::FadeOutMusic(500);
     AssetManager::DestroyMenuIconsTexture();
     AssetManager::DestroyAssetMap();
 }

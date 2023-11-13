@@ -43,12 +43,13 @@ public:
 		const Vec2& desiredPosition, int width, int height,
 		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors);
 	void SetMovement(const std::vector<CharacterExploration>& characters);
+	void ResetMovement();
 	
 	Movement mMovement;
 	Rigidbody mRigidbody;
 	int mPartyIndex;
+	EMovementState mMovementState = MS_IDLE;
 
 private:
-	EMovementState mMovementState = MS_IDLE;
 	ECharacterState mCharacterState = CS_MOVING;
 };
