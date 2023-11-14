@@ -837,10 +837,12 @@ void SceneExploration::Input()
             else if (InputManager::AcceptPressed() && mInteractMenu.GetCurrentButton()->OnAcceptAction)
             {
                 mInteractMenu.GetCurrentButton()->OnAcceptAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::CancelPressed() && mInteractMenu.GetCurrentButton()->OnCancelAction)
             {
                 mInteractMenu.GetCurrentButton()->OnCancelAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             break;
         }
@@ -919,10 +921,12 @@ void SceneExploration::Input()
             else if (InputManager::AcceptPressed() && mPartyMenu.GetCurrentButton()->OnAcceptAction)
             {
                 mPartyMenu.GetCurrentButton()->OnAcceptAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             else if (InputManager::CancelPressed() && mPartyMenu.GetCurrentButton()->OnCancelAction)
             {
                 mPartyMenu.GetCurrentButton()->OnCancelAction();
+                AudioManager::PlaySFX("blip.wav");
             }
             break;
         }

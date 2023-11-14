@@ -389,10 +389,12 @@ void SceneBattle::Input()
 			else if (InputManager::AcceptPressed() && mBattleMenu.GetCurrentButton()->OnAcceptAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnAcceptAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			else if (InputManager::CancelPressed() && mBattleMenu.GetCurrentButton()->OnCancelAction)
 			{
 				mBattleMenu.GetCurrentButton()->OnCancelAction();
+				AudioManager::PlaySFX("blip.wav");
 			}
 			break;
 		}

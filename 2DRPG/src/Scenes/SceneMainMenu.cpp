@@ -65,10 +65,12 @@ void SceneMainMenu::Input()
     else if (InputManager::AcceptPressed() && mMainMenu.GetCurrentButton()->OnAcceptAction)
     {
         mMainMenu.GetCurrentButton()->OnAcceptAction();
+        AudioManager::PlaySFX("blip.wav");
     }
     else if (InputManager::CancelPressed() && mMainMenu.GetCurrentButton()->OnCancelAction)
     {
         mMainMenu.GetCurrentButton()->OnCancelAction();
+        AudioManager::PlaySFX("blip.wav");
     }
 }
 
