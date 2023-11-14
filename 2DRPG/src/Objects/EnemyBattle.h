@@ -13,8 +13,9 @@ public:
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{
 		std::string type;
-		std::string fileName = "./assets/files/EnemyAttributes.txt";
-		std::ifstream file(fileName);
+		std::string basePath = SDL_GetBasePath();
+		std::string filePath = "assets\\files\\EnemyAttributes.txt";
+		std::ifstream file(basePath + filePath);
 		while (file >> type)
 		{
 			if (type == "Name")
@@ -49,7 +50,10 @@ public:
 							file >> fireAffect;
 							this->fireAffect = static_cast<EElementAffect>(fireAffect);
 						}
-						else if (type == "Exp") file >> attributes.exp;
+						else if (type == "Exp")
+						{
+							file >> attributes.exp;
+						}
 						else if (type == "Gold")
 						{
 							file >> mEnemyGold;

@@ -656,13 +656,6 @@ void SceneBattle::BuildTurnOrder()
 	{
 		return lhs->attributes.speed > rhs->attributes.speed;
 	});
-
-	for (ActorBattle* actor : mBattleTurns)
-	{
-		std::cout << actor->attributes.characterName << ' ' << actor->attributes.speed << std::endl;
-	}
-
-	std::cout << std::endl;
 }
 
 void SceneBattle::NextTurn()

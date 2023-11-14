@@ -1648,7 +1648,10 @@ void MenuParty::FillPartyAttributes()
     string = "Lv." + std::to_string(attributes.level);
     mPartyLevelTextOne.mText = string;
 
-    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    string =
+        GetClassName(attributes.characterClass) + "  " +
+        std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
     mPartyClassTextOne.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1665,7 +1668,10 @@ void MenuParty::FillPartyAttributes()
     string = "Lv." + std::to_string(attributes.level);
     mPartyLevelTextTwo.mText = string;
 
-    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    string =
+        GetClassName(attributes.characterClass) + "  " +
+        std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
     mPartyClassTextTwo.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1682,7 +1688,10 @@ void MenuParty::FillPartyAttributes()
     string = "Lv." + std::to_string(attributes.level);
     mPartyLevelTextThree.mText = string;
 
-    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    string =
+        GetClassName(attributes.characterClass) + "  " +
+        std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
     mPartyClassTextThree.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1699,7 +1708,10 @@ void MenuParty::FillPartyAttributes()
     string = "Lv." + std::to_string(attributes.level);
     mPartyLevelTextFour.mText = string;
 
-    string = GetClassName(attributes.characterClass) + "  " + std::to_string(attributes.exp) + '/' + std::to_string(attributes.expNextLevel);
+    string =
+        GetClassName(attributes.characterClass) + "  " +
+        std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
     mPartyClassTextFour.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1719,41 +1731,43 @@ void MenuParty::SetStatusButtonsText()
 
 void MenuParty::SetStatusCharacterAttributes(int index)
 {
+    const CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[index];
+
     mStatusLevelValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].level);
+        std::to_string(attributes.level);
 
     mStatusClassText.mText =
-        GetClassName(PlayerManager::GetCharacterAttributes()[index].characterClass);
+        GetClassName(attributes.characterClass);
 
     mStatusHPValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].health) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].healthMax);
+        std::to_string(attributes.health) + " / " + std::to_string(attributes.healthMax);
 
     mStatusMPValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax) + " / " + std::to_string(PlayerManager::GetCharacterAttributes()[index].magicMax);
+        std::to_string(attributes.magicMax) + " / " + std::to_string(attributes.magicMax);
 
     mStatusCurrentXPValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].exp);
+        std::to_string(attributes.exp);
 
     mStatusNextLevelValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].expNextLevel);
+        std::to_string(attributes.expNextLevel - attributes.exp);
 
     mStatusStrengthValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].strength);
+        std::to_string(attributes.strength);
 
     mStatusDefenseValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].defense);
+        std::to_string(attributes.defense);
     
     mStatusIntelligenceValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].intelligence);
+        std::to_string(attributes.intelligence);
 
     mStatusSpeedValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].speed);
+        std::to_string(attributes.speed);
 
     mStatusSkillValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].skill);
+        std::to_string(attributes.skill);
 
     mStatusLuckValueText.mText =
-        std::to_string(PlayerManager::GetCharacterAttributes()[index].luck);
+        std::to_string(attributes.luck);
 }
 
 void MenuParty::FillInventoryItemButtons()

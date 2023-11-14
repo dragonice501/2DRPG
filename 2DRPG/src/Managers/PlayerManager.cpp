@@ -203,7 +203,9 @@ void PlayerManager::LoadClassStartingAttributes(int partyIndex, const std::strin
 
 int PlayerManager::CalcLevelUpExp(int level)
 {
-    return (5 * pow(level, 3)) / 4 + 24;
+    if (level == 0) return 0;
+
+    return (5 * pow(level, 3)) / 4 + 6;
 }
 
 bool PlayerManager::CheckLevelUp(int& outIndex)

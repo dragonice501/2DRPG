@@ -9,8 +9,8 @@ Speed 4
 Skill 3
 Luck 2
 FireAffect 3
-Exp 10
-Gold 5
+Exp 5
+Gold 6
 
 Name Wolf
 Level 1
@@ -23,5 +23,5 @@ Speed 10
 Skill 3
 Luck 2
 FireAffect 3
-Exp 8
-Gold 3
+Exp 3
+Gold 4

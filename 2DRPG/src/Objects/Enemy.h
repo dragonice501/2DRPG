@@ -17,8 +17,9 @@ struct Enemy
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{
 		std::string type;
-		std::string fileName = "./assets/EnemyAttributes.txt";
-		std::ifstream file(fileName);
+		std::string basePath = SDL_GetBasePath();
+		std::string filePath = "assets\\files\\EnemyAttributes.txt";
+		std::ifstream file(basePath + filePath);
 		while (file >> type)
 		{
 			if (type == "Name")
