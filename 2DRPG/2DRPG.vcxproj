@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObjects\EnemyBattle.cpp" />
     <ClCompile Include="src\GameObjects\Tile.cpp" />
     <ClCompile Include="src\Managers\AudioManager.cpp" />
     <ClCompile Include="src\GameObjects\GameObject.cpp" />
@@ -151,13 +152,12 @@
     <ClCompile Include="src\UI\MenuInteract.cpp" />
     <ClCompile Include="src\UI\Menu.cpp" />
     <ClCompile Include="src\UI\MenuParty.cpp" />
-    <ClCompile Include="src\GameObjects\ActorNpc.cpp" />
+    <ClCompile Include="src\GameObjects\Npc.cpp" />
     <ClCompile Include="src\GameObjects\CharacterBattle.cpp" />
     <ClCompile Include="src\Managers\PlayerManager.cpp" />
     <ClCompile Include="src\Managers\GameManager.cpp" />
     <ClCompile Include="src\Managers\GraphicsManager.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
-    <ClCompile Include="src\GameObjects\Actor.cpp" />
     <ClCompile Include="src\GameObjects\Enemy.cpp" />
     <ClCompile Include="src\Scenes\SceneBattle.cpp" />
     <ClCompile Include="src\Scenes\SceneExploration.cpp" />
@@ -189,7 +189,6 @@
     <ClInclude Include="src\Items\Shield.h" />
     <ClInclude Include="src\Managers\AssetManager.h" />
     <ClInclude Include="src\UI\MenuShop.h" />
-    <ClInclude Include="src\GameObjects\ActorInteractable.h" />
     <ClInclude Include="src\Scenes\SceneTownShop.h" />
     <ClInclude Include="src\Items\Item.h" />
     <ClInclude Include="src\Items\Weapon.h" />
@@ -198,7 +197,7 @@
     <ClInclude Include="src\UI\MenuInteract.h" />
     <ClInclude Include="src\UI\Menu.h" />
     <ClInclude Include="src\UI\MenuParty.h" />
-    <ClInclude Include="src\GameObjects\ActorNpc.h" />
+    <ClInclude Include="src\GameObjects\Npc.h" />
     <ClInclude Include="src\GameObjects\ActorBattle.h" />
     <ClInclude Include="src\GameObjects\CharacterBattle.h" />
     <ClInclude Include="src\Managers\PlayerManager.h" />
@@ -206,7 +205,6 @@
     <ClInclude Include="src\Managers\GameManager.h" />
     <ClInclude Include="src\Managers\GraphicsManager.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
-    <ClInclude Include="src\GameObjects\Actor.h" />
     <ClInclude Include="src\GameObjects\Enemy.h" />
     <ClInclude Include="src\GameObjects\EnemyBattle.h" />
     <ClInclude Include="src\GameObjects\EnemyEncounter.h" />

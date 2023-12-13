@@ -122,7 +122,7 @@ void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, c
 
 void CharacterExploration::UpdateMovement(
     const int mapWidth, const int mapHeight, 
-    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors,
+    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<Npc>& actors,
     const float dt)
 {
     mMovement.stepTaken = false;
@@ -244,7 +244,7 @@ bool CharacterExploration::MovementInsideMap(const Vec2& position, const int wid
 
 bool CharacterExploration::CanMove(
     const Vec2& desiredPosition, int width, int height,
-    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors)
+    const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<Npc>& actors)
 {
     int x = desiredPosition.x / TILE_SIZE;
     int y = desiredPosition.y / TILE_SIZE;
@@ -258,7 +258,7 @@ bool CharacterExploration::CanMove(
     }
     else
     {
-        for (Actor actor : actors)
+        for (Npc actor : actors)
         {
             if (actor.GetPosition() == desiredPosition)
             {

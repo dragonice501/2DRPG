@@ -1,8 +1,8 @@
-#include "ActorNpc.h"
+#include "Npc.h"
 
 #include "../Utils/Utils.h"
 
-void ActorNpc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation)
+void Npc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation)
 {
     mAssetID = name;
     mPosition = spawnPosition;
@@ -11,12 +11,16 @@ void ActorNpc::Init(const std::string& name, const Vec2& spawnPosition, SDL_Rend
     mCurrentAnimation = startingAnimation;
 }
 
-void ActorNpc::Update(const float dt)
+void Npc::Input()
+{
+}
+
+void Npc::Update(const float dt)
 {
     UpdateAnimation();
 }
 
-void ActorNpc::Render()
+void Npc::Render()
 {
     SDL_Rect destRect =
     {
@@ -29,7 +33,7 @@ void ActorNpc::Render()
     GraphicsManager::DrawSpriteRect(AssetManager::GetAsset(mAssetID), mSprite.srcRect, destRect);
 }
 
-void ActorNpc::LoadAnimations(std::string animationsFilePath)
+void Npc::LoadAnimations(std::string animationsFilePath)
 {
     Animation newAnimation;
     std::string animationName;
@@ -63,7 +67,7 @@ void ActorNpc::LoadAnimations(std::string animationsFilePath)
     }
 }
 
-void ActorNpc::UpdateAnimation()
+void Npc::UpdateAnimation()
 {
     Animation& anim = mAnimations[mCurrentAnimation];
     anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
@@ -74,7 +78,7 @@ void ActorNpc::UpdateAnimation()
     mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
 }
 
-const std::vector<std::string>& ActorNpc::GetCurrentDialogue() const
+const std::vector<std::string>& Npc::GetCurrentDialogue() const
 {
     switch (mCurrentDialogueMode)
     {
@@ -93,7 +97,7 @@ const std::vector<std::string>& ActorNpc::GetCurrentDialogue() const
     }
 }
 
-const EJournalType ActorNpc::GetKeywordType()
+const EJournalType Npc::GetKeywordType()
 {
     std::string string = mInformationMap.begin()->first;
 
@@ -108,7 +112,7 @@ const EJournalType ActorNpc::GetKeywordType()
     return EJ_NONE;
 }
 
-bool ActorNpc::CycleThroughDialogue()
+bool Npc::CycleThroughDialogue()
 {
     mCurrentDialogueIndex++;
     switch (mCurrentDialogueMode)
@@ -149,7 +153,7 @@ bool ActorNpc::CycleThroughDialogue()
     return true;
 }
 
-void ActorNpc::LoadDialogue(const std::string filePathName)
+void Npc::LoadDialogue(const std::string filePathName)
 {
     EDialogueType dialogueType = ED_NONE;
     std::string diaglogue;
@@ -259,7 +263,7 @@ void ActorNpc::LoadDialogue(const std::string filePathName)
     }
 }
 
-bool ActorNpc::HasNewInformation()
+bool Npc::HasNewInformation()
 {
     if (mInformationMap.size() == 0) return false;
 
@@ -314,7 +318,7 @@ bool ActorNpc::HasNewInformation()
     return true;
 }
 
-bool ActorNpc::HasAnswerToKeyword(const std::string& keyword)
+bool Npc::HasAnswerToKeyword(const std::string& keyword)
 {
     if (mAnswersMap.size() == 0) return false;
 

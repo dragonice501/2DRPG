@@ -4,9 +4,7 @@
 
 #include "../Components/Components.h"
 
-#include "../GameObjects/Actor.h"
-#include "../GameObjects/ActorNpc.h"
-#include "../GameObjects/ActorInteractable.h"
+#include "../GameObjects/Npc.h"
 #include "../GameObjects/CharacterExploration.h"
 #include "../GameObjects/EnemyEncounter.h"
 #include "../GameObjects/Tile.h"
@@ -61,8 +59,7 @@ protected:
 	std::map<std::string, SpriteComponent> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
-	std::vector<ActorNpc> mNpcs;
-	std::vector<ActorInteractable> mInteractables;
+	std::vector<Npc> mNpcs;
 	std::vector<CharacterExploration> mCharacters;
 	std::vector<EnemyEncounter> mEnemyEncounters;
 
@@ -85,7 +82,7 @@ protected:
 	MenuParty mPartyMenu;
 	MenuInteract mInteractMenu;
 
-	ActorNpc* mInteractedActor = nullptr;
+	Npc* mInteractedActor = nullptr;
 
 	int mEncounterStepsMin = 10;
 	int mEncounterStepsMax = 99;

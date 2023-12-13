@@ -1,13 +1,15 @@
 #pragma once
 
+#include "GameObject.h"
 #include "ActorBattle.h"
+
 #include "../Components/Components.h"
 
 #include <SDL.h>
 #include <string>
 #include <fstream>
 
-class CharacterBattle : public ActorBattle
+class CharacterBattle : public GameObject, public ActorBattle
 {
 public:
 	CharacterBattle() {}
@@ -15,10 +17,10 @@ public:
 
 	void LoadAnimations(std::string name);
 
-	void Render();
+	void Input() override;
+	void Update(float dt) override;
+	void Render() override;
 
-	size_t battleSpawnPosition;
-	SDL_Rect rect;
 
 	std::string mAssetID;
 	SDL_Texture* mTexture;

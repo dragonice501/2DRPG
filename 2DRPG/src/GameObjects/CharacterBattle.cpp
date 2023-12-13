@@ -34,6 +34,14 @@ void CharacterBattle::LoadAnimations(std::string name)
     }
 }
 
+void CharacterBattle::Input()
+{
+}
+
+void CharacterBattle::Update(float dt)
+{
+}
+
 void CharacterBattle::Render()
 {
     

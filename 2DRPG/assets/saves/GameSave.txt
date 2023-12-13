@@ -1,0 +1,51 @@
+LevelName Town
+
+Gold 2012
+
+CharacterPositions
+240 272
+256 272
+271.456 272
+286.4 272
+
+CharacterDirections
+-16 0
+-16 0
+-16 0
+-16 0
+
+Characters
+Name 3 2 26 26 15 15 16 5 5 11 6 3 9
+
+Name 0 2 14 14 19 19 12 2 8 8 3 4 9
+
+Name 1 2 23 23 12 12 14 12 4 2 5 2 9
+
+Name 2 2 18 18 24 24 16 3 9 10 4 2 9
+
+CharacterWeapons
+-1 -1 -1 -1 
+
+CharacterShield
+-1 -1 -1 -1 
+CharacterArmourHead
+-1 -1 -1 -1 
+CharacterArmourChest
+-1 -1 -1 -1 
+CharacterArmourArms
+-1 -1 -1 -1 
+CharacterArmourLegs
+-1 -1 -1 -1 
+
+PeopleKeywords King Break
+PlacesKeywords Break
+MysteryKeywords Break
+BestiaryKeywords Break
+
+InventoryWeapons Break
+InventoryShields Break
+InventoryArmourHead Break
+InventoryArmourChest Break
+InventoryArmourArms Break
+InventoryArmourLegs Break
+

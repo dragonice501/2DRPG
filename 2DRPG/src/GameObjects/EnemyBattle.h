@@ -1,14 +1,22 @@
 #pragma once
 
-#include "CharacterBattle.h"
+#include "GameObject.h"
+#include "ActorBattle.h"
 
+#include "../Components/Components.h"
+
+#include <fstream>
 #include <string>
 
-class EnemyBattle : public ActorBattle
+class EnemyBattle : public GameObject, public ActorBattle
 {
 public:
 	EnemyBattle() {}
 	~EnemyBattle() {}
+
+	void Input() override;
+	void Update(float dt) override;
+	void Render() override;
 
 	void LoadEnemyAttributtes(const std::string& enemyName)
 	{

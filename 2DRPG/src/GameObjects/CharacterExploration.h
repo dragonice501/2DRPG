@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-#include "ActorNpc.h"
+#include "Npc.h"
 
 #include "../Components/Components.h"
 
@@ -42,14 +42,14 @@ public:
 
 	void UpdateMovement(
 		const int mapWidth, const int mapHeight,
-		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors,
+		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<Npc>& actors,
 		const float dt);
 	bool MovementPressed();
 	Vec2 GetDesiredPosition(const std::vector<CharacterExploration>& characters);
 	bool MovementInsideMap(const Vec2& position, const int width, const int height);
 	bool CanMove(
 		const Vec2& desiredPosition, int width, int height,
-		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<ActorNpc>& actors);
+		const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters, const std::vector<Npc>& actors);
 	void SetMovement(const std::vector<CharacterExploration>& characters);
 	void ResetMovement();
 	

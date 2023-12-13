@@ -1,14 +1,16 @@
 #pragma once
-#include "Actor.h"
+
+#include "GameObject.h"
 
 #include "../Managers/PlayerManager.h"
 
-class ActorNpc : public Actor
+class Npc : public GameObject
 {
 public:
-	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown") override;
-	void Update(const float dt) override;
+	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startingAnimation = "IdleDown");
 
+	void Input() override;
+	void Update(float dt) override;
 	void Render() override;
 
 	void LoadAnimations(std::string animationsFilePath);
@@ -16,6 +18,8 @@ public:
 	void UpdateAnimation();
 
 	void DestroySpriteSheet() { SDL_DestroyTexture(mSpriteSheet); }
+
+	const Vec2& GetPosition() const { return mPosition; }
 
 	inline void SetCurrentAnimation(const std::string& animation) { mCurrentAnimation = animation; }
 
@@ -38,6 +42,8 @@ public:
 	SpriteComponent mSprite;
 	std::string mAssetID;
 	SDL_Texture* mSpriteSheet;
+
+	Vec2 mPosition;
 
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation;

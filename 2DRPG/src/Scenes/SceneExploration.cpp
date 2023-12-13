@@ -501,22 +501,10 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
 
             Vec2 position = { static_cast<float>(npcXPos * TILE_SIZE), static_cast<float>(npcYPos * TILE_SIZE) };
 
-            ActorNpc newActor;
+            Npc newActor;
             newActor.Init(npcName, position, renderer);
             newActor.LoadDialogue(dialogueFile);
             mNpcs.push_back(newActor);
-        }
-        else if (type == "Interactable")
-        {
-            ActorInteractable newInteractable;
-            int xPos;
-            int yPos;
-
-            file >> xPos >> yPos;
-
-            newInteractable.mPosition = { static_cast<float>(xPos * TILE_SIZE), static_cast<float>(yPos * TILE_SIZE) };
-
-            mInteractables.push_back(newInteractable);
         }
         else if (type == "Tile")
         {
@@ -689,7 +677,7 @@ void SceneExploration::SwapCharacters(int first, int second)
 
 void SceneExploration::Shutdown()
 {
-    for (ActorNpc& npc : mNpcs)
+    for (Npc& npc : mNpcs)
     {
         npc.DestroySpriteSheet();
     }
@@ -770,7 +758,7 @@ void SceneExploration::Input()
 
             if (InputManager::AcceptPressed())
             {
-                for (ActorNpc& actor : mNpcs)
+                for (Npc& actor : mNpcs)
                 {
                     Vec2 interactPosition = mCharacters[0].GetPosition() + mCharacters[0].mRigidbody.lastVelocity;
 
@@ -788,17 +776,6 @@ void SceneExploration::Input()
                             mCharacters[0].ResetMovement();
                         }
 
-                        return;
-                    }
-                }
-
-                for (ActorInteractable& interactable : mInteractables)
-                {
-                    Vec2 interactPosition = mCharacters[0].GetPosition() + mCharacters[0].mRigidbody.lastVelocity;
-
-                    if (interactable.GetPosition() == interactPosition)
-                    {
-                        mExplorationState = ES_SHOPPING;
                         return;
                     }
                 }
@@ -936,7 +913,7 @@ void SceneExploration::Update(const float dt)
 {
     if (mExplorationState == ES_MENUING) return;
 
-    for (Actor& actor : mNpcs)
+    for (Npc& actor : mNpcs)
     {
         actor.UpdateAnimation();
         actor.Update(dt);
@@ -1051,7 +1028,7 @@ void SceneExploration::Render(static SDL_Rect& camera)
     }*/
 
     // Render Actors
-    for (Actor& actor : mNpcs)
+    for (Npc& actor : mNpcs)
     {
         actor.Render();
     }

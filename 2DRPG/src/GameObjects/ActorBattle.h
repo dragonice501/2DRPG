@@ -9,9 +9,6 @@
 class ActorBattle
 {
 public:
-	ActorBattle() {}
-	virtual ~ActorBattle() {}
-
 	const bool IsAlive() const { return attributes.health > 0; }
 
 	Vec2 battlePosition;
