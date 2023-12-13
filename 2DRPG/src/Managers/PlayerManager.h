@@ -8,7 +8,7 @@
 #include "../Managers/GameManager.h"
 #include "../Managers/GraphicsManager.h"
 
-#include "../Objects/Components.h"
+#include "../Components/Components.h"
 
 #include <vector>
 #include <fstream>

@@ -2,16 +2,18 @@
 
 #include "Scene.h"
 
+#include "../Components/Components.h"
+
+#include "../GameObjects/Actor.h"
+#include "../GameObjects/ActorNpc.h"
+#include "../GameObjects/ActorInteractable.h"
+#include "../GameObjects/CharacterExploration.h"
+#include "../GameObjects/EnemyEncounter.h"
+#include "../GameObjects/Tile.h"
+
 #include "../Graphics/Font.h"
 
 #include "../Managers/AssetManager.h"
-
-#include "../Objects/Actor.h"
-#include "../Objects/ActorNpc.h"
-#include "../Objects/ActorInteractable.h"
-#include "../Objects/CharacterExploration.h"
-#include "../Objects/Components.h"
-#include "../Objects/EnemyEncounter.h"
 
 #include "../UI/UIButton.h"
 #include "../UI/MenuParty.h"
@@ -56,7 +58,7 @@ protected:
 	std::vector<Tile> mTiles;
 	std::string mTileMapName;
 
-	std::map<std::string, Sprite> mBattleIconsMap;
+	std::map<std::string, SpriteComponent> mBattleIconsMap;
 
 	std::vector<SceneEntrance> mSceneEntrances;
 	std::vector<ActorNpc> mNpcs;

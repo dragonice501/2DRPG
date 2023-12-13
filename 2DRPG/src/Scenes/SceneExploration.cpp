@@ -523,11 +523,10 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
             int tileType;
             file >> tileType;
 
-            Tile newTile =
-            {
-                static_cast<size_t>(tileType),
-                Vec2((i % mMapWidth) * TILE_SIZE, (i / mMapWidth) * TILE_SIZE)
-            };
+            Tile newTile = Tile(
+                Vec2((i % mMapWidth) * TILE_SIZE, (i / mMapWidth) * TILE_SIZE),
+                static_cast<size_t>(tileType)
+            );
 
             mTiles.push_back(newTile);
             i++;
@@ -548,7 +547,7 @@ void SceneExploration::Setup(SDL_Renderer* renderer)
     {
         if (type == "Cursor")
         {
-            Sprite newSprite;
+            SpriteComponent newSprite;
 
             battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
             mBattleIconsMap.emplace("Cursor", newSprite);
@@ -975,7 +974,7 @@ void SceneExploration::Update(const float dt)
             {
                 int terrainIndex = static_cast<int>(character.GetPosition().x) / 16 + (static_cast<int>(character.GetPosition().y) / 16) * mMapWidth;
 
-                GameManager::SetSceneToLoad("Battle", -1, true, mTiles[terrainIndex].terrainType, mEnemyEncounters);
+                GameManager::SetSceneToLoad("Battle", -1, true, mTiles[terrainIndex].TerrainTileType(), mEnemyEncounters);
             }
         }
     }
@@ -992,23 +991,24 @@ void SceneExploration::Render(static SDL_Rect& camera)
     // Render tiles
     for (int i = 0; i < mTiles.size(); i++)
     {
-        SDL_Rect srcRect =
+        mTiles[i].Render();
+        /*SDL_Rect srcRect =
         {
-            mTiles[i].spriteIndex % SPRITE_SHEET_SIZE * TILE_SIZE,
-            mTiles[i].spriteIndex / SPRITE_SHEET_SIZE * TILE_SIZE,
+            mTiles[i].GetSpriteIndex() % SPRITE_SHEET_SIZE* TILE_SIZE,
+            mTiles[i].GetSpriteIndex() / SPRITE_SHEET_SIZE * TILE_SIZE,
             TILE_SIZE,
             TILE_SIZE
         };
 
         SDL_Rect destRect =
         {
-            mTiles[i].position.x * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().x,
-            mTiles[i].position.y * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().y,
+            mTiles[i].GetTransformComponent().x* TILE_SPRITE_SCALE - GraphicsManager::GetCamera().x,
+            mTiles[i].GetTransformComponent().y* TILE_SPRITE_SCALE - GraphicsManager::GetCamera().y,
             TILE_SIZE * TILE_SPRITE_SCALE,
             TILE_SIZE * TILE_SPRITE_SCALE
         };
 
-        GraphicsManager::DrawSpriteRect(AssetManager::GetTileMapTexture(), srcRect, destRect);
+        GraphicsManager::DrawSpriteRect(AssetManager::GetTileMapTexture(), srcRect, destRect);*/
     }
 
     /*for (int y = 0; y < mMapHeight; y++)

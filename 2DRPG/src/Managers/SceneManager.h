@@ -7,7 +7,7 @@
 #include "../Scenes/SceneTown.h"
 #include "../Scenes/SceneTownShop.h"
 
-#include "../Objects/EnemyEncounter.h"
+#include "../GameObjects/EnemyEncounter.h"
 
 #include "../Managers/GraphicsManager.h"
 

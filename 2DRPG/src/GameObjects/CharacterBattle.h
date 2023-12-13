@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ActorBattle.h"
-#include "../Objects/Components.h"
+#include "../Components/Components.h"
 
 #include <SDL.h>
 #include <string>
@@ -25,5 +25,5 @@ public:
 
 	std::map<std::string, Animation> mAnimations;
 	std::string mCurrentAnimation = "IdleLeft";
-	Sprite mSprite;
+	SpriteComponent mSprite;
 };

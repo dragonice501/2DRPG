@@ -2,7 +2,7 @@
 
 #include "SceneExploration.h"
 
-#include "../Objects/CharacterExploration.h"
+#include "../GameObjects/CharacterExploration.h"
 #include "../Managers/SceneManager.h"
 
 #include <vector>

@@ -35,7 +35,7 @@ public:
 	bool HasAnswerToKeyword(const std::string& keyword);
 
 public:
-	Sprite mSprite;
+	SpriteComponent mSprite;
 	std::string mAssetID;
 	SDL_Texture* mSpriteSheet;
 

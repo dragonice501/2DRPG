@@ -2,7 +2,7 @@
 
 #include "GraphicsManager.h"
 
-#include "../Objects/Components.h"
+#include "../Components/Components.h"
 
 #include <string>
 #include <vector>
@@ -62,6 +62,6 @@ private:
 	static std::string mMenuIconsFilePath;
 	static std::string mBattleBackgroundImageFilePath;
 
-	static std::map<std::string, Sprite> mBattleIconsMap;
+	static std::map<std::string, SpriteComponent> mBattleIconsMap;
 	static std::map<std::string, SDL_Texture*> mAssetMap;
 };

@@ -158,9 +158,9 @@ struct SceneEntrance
 	int nextSceneEntrance;
 };
 
-struct Sprite
+struct SpriteComponent
 {
-	Sprite(int srcX = 0, int srcY = 0, int width = 0, int height = 0, int xOffset = 0, int yOffset = 0)
+	SpriteComponent(int srcX = 0, int srcY = 0, int width = 0, int height = 0, int xOffset = 0, int yOffset = 0)
 	{
 		this->srcRect = { srcX, srcY, width, height };
 		this->positionOffset = Vec2(xOffset, yOffset);
@@ -172,21 +172,27 @@ struct Sprite
 	Vec2 positionOffset;
 };
 
-struct Tile
+//struct FloorTile
+//{
+//	FloorTile(const size_t spriteIndex, const Vec2 position)
+//	{
+//		this->spriteIndex = spriteIndex;
+//		this->position = position;
+//
+//		terrainType = GetTerrainType(spriteIndex);
+//		townType = GetTownTileType(spriteIndex);
+//		indoorstype = GetIndoorsTileType(spriteIndex);
+//	}
+//
+//	size_t spriteIndex;
+//	Vec2 position;
+//	ETerrainType terrainType;
+//	ETownTileType townType;
+//	EIndoorsTileType indoorstype;
+//};
+
+struct TransformComponent
 {
-	Tile(const size_t spriteIndex, const Vec2 position)
-	{
-		this->spriteIndex = spriteIndex;
-		this->position = position;
-
-		terrainType = GetTerrainType(spriteIndex);
-		townType = GetTownTileType(spriteIndex);
-		indoorstype = GetIndoorsTileType(spriteIndex);
-	}
-
-	size_t spriteIndex;
-	Vec2 position;
-	ETerrainType terrainType;
-	ETownTileType townType;
-	EIndoorsTileType indoorstype;
+	float x;
+	float y;
 };

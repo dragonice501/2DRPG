@@ -232,7 +232,7 @@ void SceneBattle::Setup(SDL_Renderer* renderer)
 	{
 		if (type == "Cursor")
 		{
-			Sprite newSprite;
+			SpriteComponent newSprite;
 
 			battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
 			mBattleIconsMap.emplace("Cursor", newSprite);

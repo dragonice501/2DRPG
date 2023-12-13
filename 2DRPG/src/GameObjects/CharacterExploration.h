@@ -1,25 +1,33 @@
 #pragma once
 
-#include "Actor.h"
-#include "../Objects/ActorNpc.h"
+#include "GameObject.h"
+
+#include "ActorNpc.h"
+
+#include "../Components/Components.h"
+
+#include "Tile.h"
 
 #include "../Managers/InputManager.h"
 #include "../Managers/GameManager.h"
 #include "../Managers/PlayerManager.h"
 
-class CharacterExploration : public ActorNpc
+class CharacterExploration : public GameObject
 {
 public:
 	CharacterExploration();
 	~CharacterExploration();
 
-	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation = "IdleDown") override;
-	void LoadAnimations(std::string animationsFileName) override;
+	void Init(const std::string& name, const Vec2& spawnPosition, SDL_Renderer* renderer, std::string startinAnimation = "IdleDown");
+	void LoadAnimations(std::string animationsFileName);
+	
+	void UpdateAnimation();
+
 	void Input() override;
 	void Update(const float dt) override;
 	void Render() override;
-	void UpdateAnimation() override;
-	const Vec2& GetPosition() const override { return mPosition; }
+
+	const Vec2& GetPosition() const { return mPosition; }
 
 	void Setup(const int partyIndex, const Vec2& spawnPosition, const Vec2& spawnDirection, const std::string& startingAnimation = "IdleDown");
 
@@ -49,6 +57,15 @@ public:
 	Rigidbody mRigidbody;
 	int mPartyIndex;
 	EMovementState mMovementState = MS_IDLE;
+
+	Vec2 mPosition;
+	SpriteComponent mSprite;
+
+	SDL_Texture* mSpriteSheet;
+	std::string mAssetID;
+
+	std::map<std::string, Animation> mAnimations;
+	std::string mCurrentAnimation;
 
 private:
 	ECharacterState mCharacterState = CS_MOVING;

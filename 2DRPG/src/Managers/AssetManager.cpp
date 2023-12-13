@@ -9,7 +9,7 @@ std::vector<SDL_Texture*> AssetManager::mCharacterTextures;
 std::string AssetManager::mMenuIconsFilePath;
 std::string AssetManager::mBattleBackgroundImageFilePath;
 
-std::map<std::string, Sprite> AssetManager::mBattleIconsMap;
+std::map<std::string, SpriteComponent> AssetManager::mBattleIconsMap;
 std::map<std::string, SDL_Texture*> AssetManager::mAssetMap;
 
 void AssetManager::CreateTileMapTexture(const std::string& textureName)
@@ -120,7 +120,7 @@ void AssetManager::BuildMenuIconMap()
     {
         if (type == "Cursor")
         {
-            Sprite newSprite;
+            SpriteComponent newSprite;
 
             battleIconsFile >> newSprite.srcRect.x >> newSprite.srcRect.y >> newSprite.srcRect.w >> newSprite.srcRect.h;
             mBattleIconsMap.emplace("Cursor", newSprite);

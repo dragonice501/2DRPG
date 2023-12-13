@@ -51,10 +51,10 @@
     <ClCompile Include="src\Managers\SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\CharacterExploration.cpp">
+    <ClCompile Include="src\GameObjects\CharacterExploration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\Actor.cpp">
+    <ClCompile Include="src\GameObjects\Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\SceneExploration.cpp">
@@ -81,13 +81,13 @@
     <ClCompile Include="src\Managers\PlayerManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\CharacterBattle.cpp">
+    <ClCompile Include="src\GameObjects\CharacterBattle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\ActorNpc.cpp">
+    <ClCompile Include="src\GameObjects\ActorNpc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\Enemy.cpp">
+    <ClCompile Include="src\GameObjects\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\UIButton.cpp">
@@ -127,6 +127,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjects\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjects\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -452,13 +458,13 @@
     <ClInclude Include="src\Scenes\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\CharacterExploration.h">
+    <ClInclude Include="src\GameObjects\CharacterExploration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Components.h">
+    <ClInclude Include="src\Components\Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Actor.h">
+    <ClInclude Include="src\GameObjects\Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\SceneExploration.h">
@@ -485,25 +491,25 @@
     <ClInclude Include="src\Scenes\SceneBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\EnemyEncounter.h">
+    <ClInclude Include="src\GameObjects\EnemyEncounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\PlayerManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\CharacterBattle.h">
+    <ClInclude Include="src\GameObjects\CharacterBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\EnemyBattle.h">
+    <ClInclude Include="src\GameObjects\EnemyBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ActorBattle.h">
+    <ClInclude Include="src\GameObjects\ActorBattle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ActorNpc.h">
+    <ClInclude Include="src\GameObjects\ActorNpc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Enemy.h">
+    <ClInclude Include="src\GameObjects\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\UIButton.h">
@@ -536,7 +542,7 @@
     <ClInclude Include="src\Scenes\SceneTownShop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ActorInteractable.h">
+    <ClInclude Include="src\GameObjects\ActorInteractable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\MenuShop.h">
@@ -561,6 +567,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

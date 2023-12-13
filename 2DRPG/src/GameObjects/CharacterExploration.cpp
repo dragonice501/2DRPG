@@ -18,7 +18,36 @@ void CharacterExploration::Init(const std::string& name, const Vec2& spawnPositi
 
 void CharacterExploration::LoadAnimations(std::string animationsFileName)
 {
-    ActorNpc::LoadAnimations(animationsFileName);
+    Animation newAnimation;
+    std::string animationName;
+
+    std::string filePath = "./assets/Files/" + animationsFileName + "Animations.txt";
+    std::ifstream file(filePath);
+    std::string type;
+    while (file >> type)
+    {
+        if (type == "Animation")
+        {
+            int animationFrames, animationFrameRate;
+            bool shouldLoop;
+
+            file >> animationName >> animationFrames >> animationFrameRate >> shouldLoop;
+
+            newAnimation = { animationFrames, animationFrameRate, shouldLoop };
+
+            mAnimations.emplace(animationName, newAnimation);
+        }
+        else if (type == "Frame")
+        {
+            int frameX, frameY, frameWidth, frameHeight;
+
+            file >> frameX >> frameY >> frameWidth >> frameHeight;
+
+            AnimationFrame newFrame = { Vec2(frameX, frameY), frameWidth, frameHeight };
+
+            mAnimations[animationName].frames.push_back(newFrame);
+        }
+    }
 
     mCurrentAnimation = "IdleDown";
     mSprite = { 0, 0, 32, 32, 0, -16 };
@@ -70,13 +99,20 @@ void CharacterExploration::Input()
 
 void CharacterExploration::Update(const float dt)
 {
-    ActorNpc::UpdateAnimation();
     UpdateAnimation();
 }
 
 void CharacterExploration::Render()
 {
-    ActorNpc::Render();
+    SDL_Rect destRect =
+    {
+        mPosition.x * TILE_SPRITE_SCALE + mSprite.positionOffset.x * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().x,
+        mPosition.y * TILE_SPRITE_SCALE + mSprite.positionOffset.y * TILE_SPRITE_SCALE - GraphicsManager::GetCamera().y,
+        mSprite.srcRect.w * TILE_SPRITE_SCALE,
+        mSprite.srcRect.h * TILE_SPRITE_SCALE
+    };
+
+    GraphicsManager::DrawSpriteRect(AssetManager::GetAsset(mAssetID), mSprite.srcRect, destRect);
 }
 
 void CharacterExploration::CheckInput(const int mapWidth, const int mapHeight, const std::vector<Tile>& tiles, const std::vector<CharacterExploration>& characters)
@@ -233,7 +269,7 @@ bool CharacterExploration::CanMove(
 
     if (GameManager::GetIsOverworld())
     {
-        ETerrainType terrain = tiles[x + y * width].terrainType;
+        ETerrainType terrain = tiles[x + y * width].TerrainTileType();
 
         if (terrain == CLIFF) return false;
         else if (terrain == RIVER) return false;
@@ -241,13 +277,13 @@ bool CharacterExploration::CanMove(
     }
     else if(GameManager::GetIsTown())
     {
-        ETownTileType townTile = tiles[x + y * width].townType;
+        ETownTileType townTile = tiles[x + y * width].TownTileType();
 
         if (townTile == UNWALKABLE) return false;
     }
     else if (GameManager::GetIsIndoors())
     {
-        EIndoorsTileType indoorsTile = tiles[x + y * width].indoorstype;
+        EIndoorsTileType indoorsTile = tiles[x + y * width].IndoorsTileType();
 
         if (indoorsTile == ITT_UNWALKABLE) return false;
     }
@@ -305,6 +341,14 @@ void CharacterExploration::ResetMovement()
 
 void CharacterExploration::UpdateAnimation()
 {
+    Animation& anim = mAnimations[mCurrentAnimation];
+    anim.currentFrame = ((SDL_GetTicks() - anim.startTime) * anim.frameRateSpeed / 1000) % anim.numFrames;
+
+    mSprite.srcRect.x = anim.frames[anim.currentFrame].position.x;
+    mSprite.srcRect.y = anim.frames[anim.currentFrame].position.y;
+    mSprite.srcRect.w = anim.frames[anim.currentFrame].width;
+    mSprite.srcRect.h = anim.frames[anim.currentFrame].height;
+
     if (mMovementState == MS_MOVING)
     {
         if (mRigidbody.velocity.y < 0)

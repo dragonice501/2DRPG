@@ -40,6 +40,8 @@ public:
 		return mSFX[path];
 	}
 
+	static int SetVolume(int volume = 128) { return Mix_Volume(-1, volume); }
+
 	static void PlayMusic(std::string fileName, int loops = -1)
 	{
 		Mix_PlayMusic(GetMusic(fileName), loops);

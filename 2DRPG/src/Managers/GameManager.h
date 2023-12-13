@@ -6,8 +6,8 @@
 #include "../Items/Shield.h"
 #include "../Items/Weapon.h"
 
-#include "../Objects/Components.h"
-#include "../Objects/EnemyEncounter.h"
+#include "../Components/Components.h"
+#include "../GameObjects/EnemyEncounter.h"
 
 #include "../Managers/GraphicsManager.h"
 #include "../Managers/PlayerManager.h"

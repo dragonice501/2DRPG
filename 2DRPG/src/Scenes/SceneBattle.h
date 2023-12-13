@@ -2,11 +2,11 @@
 
 #include "Scene.h"
 #include "../Utils/Utils.h"
-#include "../Objects/Enemy.h"
-#include "../Objects/EnemyEncounter.h"
-#include "../Objects/ActorBattle.h"
-#include "../Objects/CharacterBattle.h"
-#include "../Objects/EnemyBattle.h"
+#include "../GameObjects/Enemy.h"
+#include "../GameObjects/EnemyEncounter.h"
+#include "../GameObjects/ActorBattle.h"
+#include "../GameObjects/CharacterBattle.h"
+#include "../GameObjects/EnemyBattle.h"
 
 #include "../Graphics/Font.h"
 
@@ -60,7 +60,7 @@ public:
 private:
 	std::string mBackgroundImageName;
 
-	std::map<std::string, Sprite> mBattleIconsMap;
+	std::map<std::string, SpriteComponent> mBattleIconsMap;
 
 	std::map<std::string, Enemy> mEnemyMap;
 	std::vector<Enemy> mEnemies;

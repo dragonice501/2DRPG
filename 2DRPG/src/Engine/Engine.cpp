@@ -26,6 +26,8 @@ bool Engine::Init()
     isRunning = GraphicsManager::OpenWindow();
     isRunning = AudioManager::Init();
 
+    AudioManager::SetVolume(10);
+
     return isRunning;
 }
 

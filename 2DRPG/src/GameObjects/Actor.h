@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Components.h"
+#include "../Components/Components.h"
 
 #include "../Dialogue/Dialogue.h"
 #include "../Utils/Vec2.h"
