@@ -23,9 +23,7 @@ private:
 		PS_SELECTING_WEAPON,
 		PS_SELECTING_SHIELD,
 		PS_SELECTING_ARMOUR_HEAD,
-		PS_SELECTING_ARMOUR_CHEST,
-		PS_SELECTING_ARMOUR_ARMS,
-		PS_SELECTING_ARMOUR_LEGS
+		PS_SELECTING_ARMOUR_BODY
 	};
 
 	enum EEquipState
@@ -60,9 +58,7 @@ public:
 	void FillInventoryShieldsButtons();
 	void FillInventoryArmourButtons();
 	void FillInventoryArmourHeadButtons();
-	void FillInventoryArmourChestButtons();
-	void FillInventoryArmourArmsButtons();
-	void FillInventoryArmourLegsButtons();
+	void FillInventoryArmourBodyButtons();
 
 	void FillJournalKeywordsButton(int index);
 
@@ -203,16 +199,12 @@ public:
 	UIButton mEquipmentWeaponButton;
 	UIButton mEquipmentShieldButton;
 	UIButton mEquipmentHeadButton;
-	UIButton mEquipmentChestButton;
-	UIButton mEquipmentArmsButton;
-	UIButton mEquipmentLegsButton;
+	UIButton mEquipmentBodyButton;
 	
 	UIText mEquipmentWeaponText;
 	UIText mEquipmentShieldText;
 	UIText mEquipmentHeadText;
-	UIText mEquipmentChestText;
-	UIText mEquipmentArmsText;
-	UIText mEquipmentLegsText;
+	UIText mEquipmentBodyText;
 
 	UIPanel mEquipmentSelectionPanel;
 	UIButton mEquipmentSelectionButtonOne;

@@ -10,7 +10,7 @@ public:
 	enum EArmourType
 	{
 		HEAD,
-		CHEST,
+		BODY,
 		ARMS,
 		LEGS
 	};

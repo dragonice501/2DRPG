@@ -673,19 +673,9 @@ bool MenuShop::PurchaseArmour()
 				PlayerManager::AddArmourHeadToInventory(mArmour[mSelectedArmourIndex]);
 				break;
 			}
-			case Armour::CHEST:
+			case Armour::BODY:
 			{
-				PlayerManager::AddArmourChestToInventory(mArmour[mSelectedArmourIndex]);
-				break;
-			}
-			case Armour::ARMS:
-			{
-				PlayerManager::AddArmourArmsToInventory(mArmour[mSelectedArmourIndex]);
-				break;
-			}
-			case Armour::LEGS:
-			{
-				PlayerManager::AddArmourLegsToInventory(mArmour[mSelectedArmourIndex]);
+				PlayerManager::AddArmourBodyToInventory(mArmour[mSelectedArmourIndex]);
 				break;
 			}
 		}

@@ -124,31 +124,13 @@ void GameManager::LoadGameSave()
 				PlayerManager::SetCharacterArmourHead(i, index);
 			}
 		}
-		else if (type == "CharacterArmourChest")
+		else if (type == "CharacterArmourBody")
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				int index;
 				gameSaveInFile >> index;
-				PlayerManager::SetCharacterArmourChest(i, index);
-			}
-		}
-		else if (type == "CharacterArmourArms")
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				int index;
-				gameSaveInFile >> index;
-				PlayerManager::SetCharacterArmourArms(i, index);
-			}
-		}
-		else if (type == "CharacterArmourLegs")
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				int index;
-				gameSaveInFile >> index;
-				PlayerManager::SetCharacterArmourLegs(i, index);
+				PlayerManager::SetCharacterArmourBody(i, index);
 			}
 		}
 		else if (type == "PeopleKeywords")
@@ -214,33 +196,15 @@ void GameManager::LoadGameSave()
 				PlayerManager::AddArmourHeadToInventory(Armour(type));
 			}
 		}
-		else if (type == "InventoryArmourChest")
+		else if (type == "InventoryArmourBody")
 		{
 			while (gameSaveInFile >> type)
 			{
 				if (type == "Break") break;
 
-				PlayerManager::AddArmourChestToInventory(Armour(type));
+				PlayerManager::AddArmourBodyToInventory(Armour(type));
 			}
 			}
-		else if (type == "InventoryArmourArms")
-		{
-			while (gameSaveInFile >> type)
-			{
-				if (type == "Break") break;
-
-				PlayerManager::AddArmourArmsToInventory(Armour(type));
-			}
-		}
-		else if (type == "InventoryArmourLegs")
-		{
-			while (gameSaveInFile >> type)
-			{
-				if (type == "Break") break;
-
-				PlayerManager::AddArmourLegsToInventory(Armour(type));
-			}
-		}
 	}
 }
 
@@ -328,26 +292,12 @@ void GameManager::SaveGame()
 		}
 		gameSaveOutFile <<std::endl;
 
-		gameSaveOutFile << "CharacterArmourChest" << std::endl;
+		gameSaveOutFile << "CharacterArmourBody" << std::endl;
 		for (int i = 0; i < 4; i++)
 		{
-			gameSaveOutFile << PlayerManager::GetCharacterArmourChest(i) << ' ';
+			gameSaveOutFile << PlayerManager::GetCharacterArmourBody(i) << ' ';
 		}
 		gameSaveOutFile << std::endl;
-
-		gameSaveOutFile << "CharacterArmourArms" << std::endl;
-		for (int i = 0; i < 4; i++)
-		{
-			gameSaveOutFile << PlayerManager::GetCharacterArmourArms(i) << ' ';
-		}
-		gameSaveOutFile << std::endl;
-
-		gameSaveOutFile << "CharacterArmourLegs" << std::endl;
-		for (int i = 0; i < 4; i++)
-		{
-			gameSaveOutFile << PlayerManager::GetCharacterArmourLegs(i) << ' ';
-		}
-		gameSaveOutFile << std::endl << std::endl;
 
 		gameSaveOutFile << "PeopleKeywords ";
 		for (int i = 0; i < PlayerManager::GetPeopleKeywords().size(); i++)
@@ -398,26 +348,12 @@ void GameManager::SaveGame()
 		}
 		gameSaveOutFile << "Break" << std::endl;
 
-		gameSaveOutFile << "InventoryArmourChest ";
-		for (int i = 0; i < PlayerManager::GetInventoryArmourChest().size(); i++)
+		gameSaveOutFile << "InventoryArmourBody ";
+		for (int i = 0; i < PlayerManager::GetInventoryArmourBody().size(); i++)
 		{
-			gameSaveOutFile << PlayerManager::GetInventoryArmourChest()[i].mName << ' ';
+			gameSaveOutFile << PlayerManager::GetInventoryArmourBody()[i].mName << ' ';
 		}
 		gameSaveOutFile << "Break" << std::endl;
-
-		gameSaveOutFile << "InventoryArmourArms ";
-		for (int i = 0; i < PlayerManager::GetInventoryArmourArms().size(); i++)
-		{
-			gameSaveOutFile << PlayerManager::GetInventoryArmourArms()[i].mName << ' ';
-		}
-		gameSaveOutFile << "Break" << std::endl;
-
-		gameSaveOutFile << "InventoryArmourLegs ";
-		for (int i = 0; i < PlayerManager::GetInventoryArmourLegs().size(); i++)
-		{
-			gameSaveOutFile << PlayerManager::GetInventoryArmourLegs()[i].mName << ' ';
-		}
-		gameSaveOutFile << "Break" << std::endl << std::endl;
 	}
 	gameSaveInFile.close();
 }

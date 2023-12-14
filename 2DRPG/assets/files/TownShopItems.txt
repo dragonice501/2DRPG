@@ -7,6 +7,4 @@ End
 Armour
 Helmet
 Vest
-Gloves
-Greeves
 End

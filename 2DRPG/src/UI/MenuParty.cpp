@@ -94,9 +94,7 @@ void MenuParty::Render()
             mEquipmentWeaponText.Render();
             mEquipmentShieldText.Render();
             mEquipmentHeadText.Render();
-            mEquipmentChestText.Render();
-            mEquipmentArmsText.Render();
-            mEquipmentLegsText.Render();
+            mEquipmentBodyText.Render();
 
             break;
         }
@@ -126,17 +124,7 @@ void MenuParty::Render()
             mInventoryPanel.Render();
             break;
         }
-        case MenuParty::PS_SELECTING_ARMOUR_CHEST:
-        {
-            mInventoryPanel.Render();
-            break;
-        }
-        case MenuParty::PS_SELECTING_ARMOUR_ARMS:
-        {
-            mInventoryPanel.Render();
-            break;
-        }
-        case MenuParty::PS_SELECTING_ARMOUR_LEGS:
+        case MenuParty::PS_SELECTING_ARMOUR_BODY:
         {
             mInventoryPanel.Render();
             break;
@@ -746,25 +734,11 @@ void MenuParty::SetupInventoryPanel()
             PlayerManager::SetCharacterArmourHead(mSelectedCharacterIndex, 0);
             FillEquipmentText(mSelectedCharacterIndex);
         }
-        else if (mPanelState == PS_SELECTING_ARMOUR_CHEST && PlayerManager::CanEquipArmourChest(0))
+        else if (mPanelState == PS_SELECTING_ARMOUR_BODY && PlayerManager::CanEquipArmourBody(0))
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourChest(mSelectedCharacterIndex, 0);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_ARMS && PlayerManager::CanEquipArmourArms(0))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourArms(mSelectedCharacterIndex, 0);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_LEGS && PlayerManager::CanEquipArmourLegs(0))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourLegs(mSelectedCharacterIndex, 0);
+            PlayerManager::SetCharacterArmourBody(mSelectedCharacterIndex, 0);
             FillEquipmentText(mSelectedCharacterIndex);
         }
     };
@@ -773,9 +747,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON ||
             mPanelState == PS_SELECTING_SHIELD ||
             mPanelState == PS_SELECTING_ARMOUR_HEAD || 
-            mPanelState == PS_SELECTING_ARMOUR_CHEST || 
-            mPanelState == PS_SELECTING_ARMOUR_ARMS || 
-            mPanelState == PS_SELECTING_ARMOUR_LEGS)
+            mPanelState == PS_SELECTING_ARMOUR_BODY)
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
@@ -813,25 +785,11 @@ void MenuParty::SetupInventoryPanel()
             PlayerManager::SetCharacterArmourHead(mSelectedCharacterIndex, 1);
             FillEquipmentText(mSelectedCharacterIndex);
         }
-        else if (mPanelState == PS_SELECTING_ARMOUR_CHEST && PlayerManager::CanEquipArmourChest(1))
+        else if (mPanelState == PS_SELECTING_ARMOUR_BODY && PlayerManager::CanEquipArmourBody(1))
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourChest(mSelectedCharacterIndex, 1);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_ARMS && PlayerManager::CanEquipArmourArms(1))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourArms(mSelectedCharacterIndex, 1);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_LEGS && PlayerManager::CanEquipArmourLegs(1))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourLegs(mSelectedCharacterIndex, 1);
+            PlayerManager::SetCharacterArmourBody(mSelectedCharacterIndex, 1);
             FillEquipmentText(mSelectedCharacterIndex);
         }
     };
@@ -840,9 +798,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON ||
             mPanelState == PS_SELECTING_SHIELD ||
             mPanelState == PS_SELECTING_ARMOUR_HEAD ||
-            mPanelState == PS_SELECTING_ARMOUR_CHEST ||
-            mPanelState == PS_SELECTING_ARMOUR_ARMS ||
-            mPanelState == PS_SELECTING_ARMOUR_LEGS)
+            mPanelState == PS_SELECTING_ARMOUR_BODY)
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
@@ -880,25 +836,11 @@ void MenuParty::SetupInventoryPanel()
             PlayerManager::SetCharacterArmourHead(mSelectedCharacterIndex, 2);
             FillEquipmentText(mSelectedCharacterIndex);
         }
-        else if (mPanelState == PS_SELECTING_ARMOUR_CHEST && PlayerManager::CanEquipArmourChest(2))
+        else if (mPanelState == PS_SELECTING_ARMOUR_BODY && PlayerManager::CanEquipArmourBody(2))
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourChest(mSelectedCharacterIndex, 2);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_ARMS && PlayerManager::CanEquipArmourArms(2))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourArms(mSelectedCharacterIndex, 2);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_LEGS && PlayerManager::CanEquipArmourLegs(2))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourLegs(mSelectedCharacterIndex, 2);
+            PlayerManager::SetCharacterArmourBody(mSelectedCharacterIndex, 2);
             FillEquipmentText(mSelectedCharacterIndex);
         }
     };
@@ -907,9 +849,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON ||
             mPanelState == PS_SELECTING_SHIELD ||
             mPanelState == PS_SELECTING_ARMOUR_HEAD ||
-            mPanelState == PS_SELECTING_ARMOUR_CHEST ||
-            mPanelState == PS_SELECTING_ARMOUR_ARMS ||
-            mPanelState == PS_SELECTING_ARMOUR_LEGS)
+            mPanelState == PS_SELECTING_ARMOUR_BODY)
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
@@ -943,25 +883,11 @@ void MenuParty::SetupInventoryPanel()
             PlayerManager::SetCharacterArmourHead(mSelectedCharacterIndex, 3);
             FillEquipmentText(mSelectedCharacterIndex);
         }
-        else if (mPanelState == PS_SELECTING_ARMOUR_CHEST && PlayerManager::CanEquipArmourChest(3))
+        else if (mPanelState == PS_SELECTING_ARMOUR_BODY && PlayerManager::CanEquipArmourBody(3))
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourChest(mSelectedCharacterIndex, 3);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_ARMS && PlayerManager::CanEquipArmourArms(3))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourArms(mSelectedCharacterIndex, 3);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-        else if (mPanelState == PS_SELECTING_ARMOUR_LEGS && PlayerManager::CanEquipArmourLegs(3))
-        {
-            mPanelState = PS_EQUIP;
-            SelectPreviousButtonThird();
-            PlayerManager::SetCharacterArmourLegs(mSelectedCharacterIndex, 3);
+            PlayerManager::SetCharacterArmourBody(mSelectedCharacterIndex, 3);
             FillEquipmentText(mSelectedCharacterIndex);
         }
     };
@@ -970,9 +896,7 @@ void MenuParty::SetupInventoryPanel()
         if (mPanelState == PS_SELECTING_WEAPON ||
             mPanelState == PS_SELECTING_SHIELD ||
             mPanelState == PS_SELECTING_ARMOUR_HEAD ||
-            mPanelState == PS_SELECTING_ARMOUR_CHEST ||
-            mPanelState == PS_SELECTING_ARMOUR_ARMS ||
-            mPanelState == PS_SELECTING_ARMOUR_LEGS)
+            mPanelState == PS_SELECTING_ARMOUR_BODY)
         {
             mPanelState = PS_EQUIP;
             SelectPreviousButtonThird();
@@ -1304,26 +1228,12 @@ void MenuParty::SetupEquipPanel()
     mEquipmentHeadText.mPosition = mEquipmentHeadButton.mPosition + Vec2(fontLength, 0.0f);
     mEquipmentHeadText.mText = "";
 
-    mEquipmentChestButton.mPosition = mEquipmentHeadButton.mPosition + Vec2(0.0f, vertSpacing);
-    mEquipmentChestButton.mText = "Chest  ";
+    mEquipmentBodyButton.mPosition = mEquipmentHeadButton.mPosition + Vec2(0.0f, vertSpacing);
+    mEquipmentBodyButton.mText = "Body  ";
 
-    fontLength = Font::GetStringFontLength(mEquipmentChestButton.mText.c_str()) * TEXT_SIZE;
-    mEquipmentChestText.mPosition = mEquipmentChestButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentChestText.mText = "";
-
-    mEquipmentArmsButton.mPosition = mEquipmentChestButton.mPosition + Vec2(0.0f, vertSpacing);
-    mEquipmentArmsButton.mText = "Arms  ";
-
-    fontLength = Font::GetStringFontLength(mEquipmentArmsButton.mText.c_str()) * TEXT_SIZE;
-    mEquipmentArmsText.mPosition = mEquipmentArmsButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentArmsText.mText = "";
-
-    mEquipmentLegsButton.mPosition = mEquipmentArmsButton.mPosition + Vec2(0.0f, vertSpacing);
-    mEquipmentLegsButton.mText = "Legs  ";
-
-    fontLength = Font::GetStringFontLength(mEquipmentLegsButton.mText.c_str()) * TEXT_SIZE;
-    mEquipmentLegsText.mPosition = mEquipmentLegsButton.mPosition + Vec2(fontLength, 0.0f);
-    mEquipmentLegsText.mText = "";
+    fontLength = Font::GetStringFontLength(mEquipmentBodyButton.mText.c_str()) * TEXT_SIZE;
+    mEquipmentBodyText.mPosition = mEquipmentBodyButton.mPosition + Vec2(fontLength, 0.0f);
+    mEquipmentBodyText.mText = "";
 
     mEquipmentWeaponButton.OnDownAction = [this]()
     {
@@ -1383,7 +1293,7 @@ void MenuParty::SetupEquipPanel()
     };
     mEquipmentHeadButton.OnDownAction = [this]()
     {
-        mCurrentButton = &mEquipmentChestButton;
+        mCurrentButton = &mEquipmentBodyButton;
     };
     mEquipmentHeadButton.OnAcceptAction = [this]()
     {
@@ -1405,82 +1315,30 @@ void MenuParty::SetupEquipPanel()
         SelectPreviousButtonSecond();
     };
 
-    mEquipmentChestButton.OnUpAction = [this]()
+    mEquipmentBodyButton.OnUpAction = [this]()
     {
         mCurrentButton = &mEquipmentHeadButton;
     };
-    mEquipmentChestButton.OnDownAction = [this]()
+    mEquipmentBodyButton.OnDownAction = [this]()
     {
-        mCurrentButton = &mEquipmentArmsButton;
+        
     };
-    mEquipmentChestButton.OnAcceptAction = [this]()
-    {
-        if (mEquipState == ES_EQUIPPING)
-        {
-            FillInventoryArmourChestButtons();
-            mPanelState = PS_SELECTING_ARMOUR_CHEST;
-            mCurrentButton = &mInventoryPanelButtonOne;
-            mPreviousButtonThird = &mEquipmentChestButton;
-        }
-        else if (mEquipState = ES_REMOVING)
-        {
-            PlayerManager::SetCharacterArmourChest(mSelectedCharacterIndex, -1);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-    };
-    mEquipmentChestButton.OnCancelAction = [this]()
-    {
-        SelectPreviousButtonSecond();
-    };
-
-    mEquipmentArmsButton.OnUpAction = [this]()
-    {
-        mCurrentButton = &mEquipmentChestButton;
-    };
-    mEquipmentArmsButton.OnDownAction = [this]()
-    {
-        mCurrentButton = &mEquipmentLegsButton;
-    };
-    mEquipmentArmsButton.OnAcceptAction = [this]()
+    mEquipmentBodyButton.OnAcceptAction = [this]()
     {
         if (mEquipState == ES_EQUIPPING)
         {
-            FillInventoryArmourArmsButtons();
-            mPanelState = PS_SELECTING_ARMOUR_ARMS;
+            FillInventoryArmourBodyButtons();
+            mPanelState = PS_SELECTING_ARMOUR_BODY;
             mCurrentButton = &mInventoryPanelButtonOne;
-            mPreviousButtonThird = &mEquipmentArmsButton;
+            mPreviousButtonThird = &mEquipmentBodyButton;
         }
         else if (mEquipState = ES_REMOVING)
         {
-            PlayerManager::SetCharacterArmourArms(mSelectedCharacterIndex, -1);
+            PlayerManager::SetCharacterArmourBody(mSelectedCharacterIndex, -1);
             FillEquipmentText(mSelectedCharacterIndex);
         }
     };
-    mEquipmentArmsButton.OnCancelAction = [this]()
-    {
-        SelectPreviousButtonSecond();
-    };
-
-    mEquipmentLegsButton.OnUpAction = [this]()
-    {
-        mCurrentButton = &mEquipmentArmsButton;
-    };
-    mEquipmentLegsButton.OnAcceptAction = [this]()
-    {
-        if (mEquipState == ES_EQUIPPING)
-        {
-            FillInventoryArmourLegsButtons();
-            mPanelState = PS_SELECTING_ARMOUR_LEGS;
-            mCurrentButton = &mInventoryPanelButtonOne;
-            mPreviousButtonThird = &mEquipmentLegsButton;
-        }
-        else if (mEquipState = ES_REMOVING)
-        {
-            PlayerManager::SetCharacterArmourLegs(mSelectedCharacterIndex, -1);
-            FillEquipmentText(mSelectedCharacterIndex);
-        }
-    };
-    mEquipmentLegsButton.OnCancelAction = [this]()
+    mEquipmentBodyButton.OnCancelAction = [this]()
     {
         SelectPreviousButtonSecond();
     };
@@ -1488,9 +1346,7 @@ void MenuParty::SetupEquipPanel()
     mEquipmentPanel.mButtons.push_back(&mEquipmentWeaponButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentShieldButton);
     mEquipmentPanel.mButtons.push_back(&mEquipmentHeadButton);
-    mEquipmentPanel.mButtons.push_back(&mEquipmentChestButton);
-    mEquipmentPanel.mButtons.push_back(&mEquipmentArmsButton);
-    mEquipmentPanel.mButtons.push_back(&mEquipmentLegsButton);
+    mEquipmentPanel.mButtons.push_back(&mEquipmentBodyButton);
 
     mEquipmentSelectionPanel.mPosition = CalcWindowPositionFromUV(mEquipmentPanel.mPosition) + Vec2(mEquipmentPanel.mSize.x + UI_BOX_BORDER_SIZE * 3.0f, 0.0f);
     mEquipmentSelectionPanel.mPosition = CalcWindowUVFromPosition(mEquipmentSelectionPanel.mPosition);
@@ -1819,20 +1675,10 @@ void MenuParty::FillInventoryArmourButtons()
         mInventoryPanel.mButtons[index]->mIsActive = true;
         mInventoryPanel.mButtons[index]->mText = PlayerManager::GetInventoryArmourHead()[i].mName;
     }
-    for (int i = 0; i < PlayerManager::GetInventoryArmourChest().size(); i++, index++)
+    for (int i = 0; i < PlayerManager::GetInventoryArmourBody().size(); i++, index++)
     {
         mInventoryPanel.mButtons[index]->mIsActive = true;
-        mInventoryPanel.mButtons[index]->mText = PlayerManager::GetInventoryArmourChest()[i].mName;
-    }
-    for (int i = 0; i < PlayerManager::GetInventoryArmourArms().size(); i++, index++)
-    {
-        mInventoryPanel.mButtons[index]->mIsActive = true;
-        mInventoryPanel.mButtons[index]->mText = PlayerManager::GetInventoryArmourArms()[i].mName;
-    }
-    for (int i = 0; i < PlayerManager::GetInventoryArmourLegs().size(); i++, index++)
-    {
-        mInventoryPanel.mButtons[index]->mIsActive = true;
-        mInventoryPanel.mButtons[index]->mText = PlayerManager::GetInventoryArmourLegs()[i].mName;
+        mInventoryPanel.mButtons[index]->mText = PlayerManager::GetInventoryArmourBody()[i].mName;
     }
 }
 
@@ -1850,45 +1696,17 @@ void MenuParty::FillInventoryArmourHeadButtons()
     }
 }
 
-void MenuParty::FillInventoryArmourChestButtons()
+void MenuParty::FillInventoryArmourBodyButtons()
 {
     mInventoryPanelButtonOne.mIsActive = false;
     mInventoryPanelButtonTwo.mIsActive = false;
     mInventoryPanelButtonThree.mIsActive = false;
     mInventoryPanelButtonFour.mIsActive = false;
 
-    for (int i = 0; i < PlayerManager::GetInventoryArmourChest().size(); i++)
+    for (int i = 0; i < PlayerManager::GetInventoryArmourBody().size(); i++)
     {
         mInventoryPanel.mButtons[i]->mIsActive = true;
-        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryArmourChest()[i].mName;
-    }
-}
-
-void MenuParty::FillInventoryArmourArmsButtons()
-{
-    mInventoryPanelButtonOne.mIsActive = false;
-    mInventoryPanelButtonTwo.mIsActive = false;
-    mInventoryPanelButtonThree.mIsActive = false;
-    mInventoryPanelButtonFour.mIsActive = false;
-
-    for (int i = 0; i < PlayerManager::GetInventoryArmourArms().size(); i++)
-    {
-        mInventoryPanel.mButtons[i]->mIsActive = true;
-        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryArmourArms()[i].mName;
-    }
-}
-
-void MenuParty::FillInventoryArmourLegsButtons()
-{
-    mInventoryPanelButtonOne.mIsActive = false;
-    mInventoryPanelButtonTwo.mIsActive = false;
-    mInventoryPanelButtonThree.mIsActive = false;
-    mInventoryPanelButtonFour.mIsActive = false;
-
-    for (int i = 0; i < PlayerManager::GetInventoryArmourLegs().size(); i++)
-    {
-        mInventoryPanel.mButtons[i]->mIsActive = true;
-        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryArmourLegs()[i].mName;
+        mInventoryPanel.mButtons[i]->mText = PlayerManager::GetInventoryArmourBody()[i].mName;
     }
 }
 
@@ -1973,30 +1791,12 @@ void MenuParty::FillEquipmentText(int partyIndex)
         mEquipmentHeadText.mText = "";
     }
 
-    if (PlayerManager::GetCharacterArmourChest(partyIndex) != -1)
+    if (PlayerManager::GetCharacterArmourBody(partyIndex) != -1)
     {
-        mEquipmentChestText.mText = PlayerManager::GetInventoryArmourChest()[PlayerManager::GetCharacterArmourChest(partyIndex)].mName;
+        mEquipmentBodyText.mText = PlayerManager::GetInventoryArmourBody()[PlayerManager::GetCharacterArmourBody(partyIndex)].mName;
     }
     else
     {
-        mEquipmentChestText.mText = "";
-    }
-
-    if (PlayerManager::GetCharacterArmourArms(partyIndex) != -1)
-    {
-        mEquipmentArmsText.mText = PlayerManager::GetInventoryArmourArms()[PlayerManager::GetCharacterArmourArms(partyIndex)].mName;
-    }
-    else
-    {
-        mEquipmentArmsText.mText = "";
-    }
-
-    if (PlayerManager::GetCharacterArmourLegs(partyIndex) != -1)
-    {
-        mEquipmentLegsText.mText = PlayerManager::GetInventoryArmourLegs()[PlayerManager::GetCharacterArmourLegs(partyIndex)].mName;
-    }
-    else
-    {
-        mEquipmentLegsText.mText = "";
+        mEquipmentBodyText.mText = "";
     }
 }

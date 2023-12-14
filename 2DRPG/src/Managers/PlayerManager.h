@@ -29,17 +29,13 @@ public:
 	static const int GetCharacterWeapon(const int index) { return mCharacterWeaponIndeces[index]; }
 	static const int GetCharacterShield(const int index) { return mCharacterShieldIndeces[index]; }
 	static const int GetCharacterArmourHead(const int index) { return mCharacterArmourHeadIndeces[index]; }
-	static const int GetCharacterArmourChest(const int index) { return mCharacterArmourChestIndeces[index]; }
-	static const int GetCharacterArmourArms(const int index) { return mCharacterArmourArmsIndeces[index]; }
-	static const int GetCharacterArmourLegs(const int index) { return mCharacterArmourLegsIndeces[index]; }
+	static const int GetCharacterArmourBody(const int index) { return mCharacterArmourBodyIndeces[index]; }
 
 	static void SetCharacterAttribites(const int partyIndex, const CharacterAttributes& attributes) { mCharacterAttributes[partyIndex] = attributes; }
 	static void SetCharacterWeapon(const int characterIndex, const int weaponIndex) { mCharacterWeaponIndeces[characterIndex] = weaponIndex; }
 	static void SetCharacterShield(const int characterIndex, const int shieldIndex) { mCharacterShieldIndeces[characterIndex] = shieldIndex; }
 	static void SetCharacterArmourHead(const int characterIndex, const int headIndex) { mCharacterArmourHeadIndeces[characterIndex] = headIndex; }
-	static void SetCharacterArmourChest(const int characterIndex, const int chestIndex) { mCharacterArmourChestIndeces[characterIndex] = chestIndex; }
-	static void SetCharacterArmourArms(const int characterIndex, const int armsIndex) { mCharacterArmourArmsIndeces[characterIndex] = armsIndex; }
-	static void SetCharacterArmourLegs(const int characterIndex, const int legsIndex) { mCharacterArmourLegsIndeces[characterIndex] = legsIndex; }
+	static void SetCharacterArmourBody(const int characterIndex, const int BodyIndex) { mCharacterArmourBodyIndeces[characterIndex] = BodyIndex; }
 
 	static const int& GetPartyGold() { return mPartyGold; }
 	static const std::vector<std::string>& GetPeopleKeywords() { return mPeopleKeywords; }
@@ -50,9 +46,7 @@ public:
 	static const std::vector<Weapon>& GetInventoryWeapons() { return mInventoryWeapons; }
 	static const std::vector<Shield>& GetInventoryShields() { return mInventoryShields; }
 	static const std::vector<Armour>& GetInventoryArmourHead() { return mInventoryArmourHead; }
-	static const std::vector<Armour>& GetInventoryArmourChest() { return mInventoryArmourChest; }
-	static const std::vector<Armour>& GetInventoryArmourArms() { return mInventoryArmourArms; }
-	static const std::vector<Armour>& GetInventoryArmourLegs() { return mInventoryArmourLegs; }
+	static const std::vector<Armour>& GetInventoryArmourBody() { return mInventoryArmourBody; }
 
 	static void LearnNewPeopleKeyword(const std::string& keyword) { mPeopleKeywords.push_back(keyword); }
 	static void LearnNewPlaceKeyword(const std::string& keyword) { mPlacesKeywords.push_back(keyword); }
@@ -62,9 +56,7 @@ public:
 	static void AddWeaponToInventory(const Weapon& newWeapon) { mInventoryWeapons.push_back(newWeapon); }
 	static void AddShieldToInventory(const Shield& newShield) { mInventoryShields.push_back(newShield); }
 	static void AddArmourHeadToInventory(const Armour& newArmour) { mInventoryArmourHead.push_back(newArmour); }
-	static void AddArmourChestToInventory(const Armour& newArmour) { mInventoryArmourChest.push_back(newArmour); }
-	static void AddArmourArmsToInventory(const Armour& newArmour) { mInventoryArmourArms.push_back(newArmour); }
-	static void AddArmourLegsToInventory(const Armour& newArmour) { mInventoryArmourLegs.push_back(newArmour); }
+	static void AddArmourBodyToInventory(const Armour& newArmour) { mInventoryArmourBody.push_back(newArmour); }
 
 	static void SetupCharacters();
 
@@ -82,9 +74,7 @@ public:
 	static bool CanEquipWeapon(int weaponIndex);
 	static bool CanEquipShield(int shieldIndex);
 	static bool CanEquipArmourHead(int armourIndex);
-	static bool CanEquipArmourChest(int armourIndex);
-	static bool CanEquipArmourArms(int armourIndex);
-	static bool CanEquipArmourLegs(int armourIndex);
+	static bool CanEquipArmourBody(int armourIndex);
 
 	static int mPartyGold;
 private:
@@ -92,9 +82,7 @@ private:
 	static int mCharacterWeaponIndeces[4];
 	static int mCharacterShieldIndeces[4];
 	static int mCharacterArmourHeadIndeces[4];
-	static int mCharacterArmourChestIndeces[4];
-	static int mCharacterArmourArmsIndeces[4];
-	static int mCharacterArmourLegsIndeces[4];
+	static int mCharacterArmourBodyIndeces[4];
 
 	static std::vector<std::string> mPeopleKeywords;
 	static std::vector<std::string> mPlacesKeywords;
@@ -104,9 +92,7 @@ private:
 	static std::vector<Weapon> mInventoryWeapons;
 	static std::vector<Shield> mInventoryShields;
 	static std::vector<Armour> mInventoryArmourHead;
-	static std::vector<Armour> mInventoryArmourChest;
-	static std::vector<Armour> mInventoryArmourArms;
-	static std::vector<Armour> mInventoryArmourLegs;
+	static std::vector<Armour> mInventoryArmourBody;
 
 	static int mLevelExpAmounts[];
 

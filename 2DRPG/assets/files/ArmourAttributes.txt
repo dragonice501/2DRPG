@@ -11,17 +11,3 @@ Defense 8
 MagicDefense 4
 Buy 300
 Sell 75
-
-Armour Gloves
-Type 2
-Defense 4
-MagicDefense 2
-Buy 100
-Sell 25
-
-Armour Greeves
-Type 3
-Defense 6
-MagicDefense 3
-Buy 250
-Sell 50
