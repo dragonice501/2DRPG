@@ -4,7 +4,6 @@ TileMap WorldTileMap
 
 NewGamePositions
 
-
 EncounterRate 10 20
 
 SceneEntrance 0

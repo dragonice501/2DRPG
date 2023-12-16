@@ -64,7 +64,7 @@ public:
 	static void SubtractGold(const int gold) { mPartyGold -= gold; }
 	static int CalcLevelUpExp(int level);
 	static bool CheckLevelUp(int& outIndex);
-	static CharacterAttributes LevelUp(int characterIndex);
+	static CharacterAttributes LevelUp(int characterIndex, bool* outStats);
 	static void RemoveAllEquipment(const int characterIndex);
 	static int GetPlayerWeaponDamage(const int index);
 
@@ -96,5 +96,8 @@ private:
 
 	static int mLevelExpAmounts[];
 
-	static uint8_t mLevelGauranteeStats[];
+	static uint8_t mLevelGauranteeStatsDancer[];
+	static uint8_t mLevelGauranteeStatsKnight[];
+	static uint8_t mLevelGauranteeStatsMage[];
+	static uint8_t mLevelGauranteeStatsPaladin[];
 };

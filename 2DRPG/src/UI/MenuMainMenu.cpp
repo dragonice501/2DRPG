@@ -332,16 +332,16 @@ void MenuMainMenu::SetupNewCharacterPanels()
 	mNewCharacterButtonFour.mText = mClasses[mNewCharacterClasses[3]];
 
 	mNewCharacterNameButtonOne.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelOne.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonOne.mText = "Name";
+	mNewCharacterNameButtonOne.mText = "AAAA";
 
 	mNewCharacterNameButtonTwo.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelTwo.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonTwo.mText = "Name";
+	mNewCharacterNameButtonTwo.mText = "BBBB";
 
 	mNewCharacterNameButtonThree.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelThree.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonThree.mText = "Name";
+	mNewCharacterNameButtonThree.mText = "CCCC";
 
 	mNewCharacterNameButtonFour.mPosition = CalcWindowPositionFromUV(mNewCharacterNamePanelFour.mPosition) + Vec2(TEXT_PADDING);
-	mNewCharacterNameButtonFour.mText = "Name";
+	mNewCharacterNameButtonFour.mText = "DDDD";
 
 	mNewCharacterButtonOne.OnLeftAction = [this]()
 	{

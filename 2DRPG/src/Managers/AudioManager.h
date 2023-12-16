@@ -40,8 +40,6 @@ public:
 		return mSFX[path];
 	}
 
-	static int SetVolume(int volume = 128) { return Mix_Volume(-1, volume); }
-
 	static void PlayMusic(std::string fileName, int loops = -1)
 	{
 		Mix_PlayMusic(GetMusic(fileName), loops);
@@ -66,7 +64,10 @@ public:
 	static inline void FadeInMusic(std::string fileName, int fadeInTimeMilliseconds, int loop = -1) { Mix_FadeInMusic(GetMusic(fileName), loop, fadeInTimeMilliseconds); }
 	static inline void FadeOutMusic(int fadeoutTimeMilliseconds) { if(Mix_PlayingMusic()) Mix_FadeOutMusic(fadeoutTimeMilliseconds); }
 
-	static inline void PlaySFX(std::string fileName, int loops = 0, int channel = 0) { Mix_PlayChannel(channel, GetSFX(fileName), loops); }
+	static inline void PlaySFX(std::string fileName, int loops = 0, int channel = -1) { Mix_PlayChannel(channel, GetSFX(fileName), loops); }
+	static inline void SetMasterVolume(int maxVolume = 100) { int volume = (128 * maxVolume) / 100; Mix_MasterVolume(volume); Mix_VolumeMusic(volume); }
+	static inline void SetSFXVolume(int channel = -1, int maxVolume = 100) { int volume = (128 * maxVolume) / 100; Mix_Volume(channel, volume); }
+	static inline void SetMusicVolume(int maxVolume = 100) { int volume = (128 * maxVolume) / 100; Mix_VolumeMusic(volume); }
 
 	static SDL_AudioSpec wavSpec;
 	static Uint32 wavLength;

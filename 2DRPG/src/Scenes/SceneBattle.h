@@ -86,8 +86,8 @@ private:
 
 	float mTurnTime = 1.5f;
 	float mTurnTimeRemaining = mTurnTime;
-	float mBattleEndTime = 2.0f;
-	float mBattleEndTimeRemaing = mBattleEndTime;
+	float mBattleEventTime = 2.0f;
+	float mBattleEventTimeRemaining = mBattleEventTime;
 
 	int mDamageDealt = 0;
 	int mEnemyTargetIndex = 0;
@@ -96,7 +96,8 @@ private:
 	int mBattleGoldPool = 0;
 	int mBattleExpPool = 0;
 	int mLevelUpIndex = 0;
-	CharacterAttributes mLevelUpStats;
+
+	bool mStatArray[8];
 	int mStatIndex = 0;
 
 	std::vector<Vec2> mPlayerCharacterPositions =

@@ -419,10 +419,10 @@ void SceneBattle::Update(const float dt)
 	{
 		case BS_MONSTERS_APPEARED:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
-				mBattleEndTimeRemaing = mBattleEndTime;
+				mBattleEventTimeRemaining = mBattleEventTime;
 				if (!mBattleTurns[mTurnIndex]->isEnemy)
 				{
 					mBattleState = BS_SELECTING_ACTION;
@@ -549,10 +549,10 @@ void SceneBattle::Update(const float dt)
 		}
 		case BS_MONSTERS_DEFEATED:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
-				mBattleEndTimeRemaing = mBattleEndTime;
+				mBattleEventTimeRemaining = mBattleEventTime;
 				
 				mBattleState = BS_GOLD_GAINED;
 			}
@@ -564,10 +564,10 @@ void SceneBattle::Update(const float dt)
 		}
 		case BS_GOLD_GAINED:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
-				mBattleEndTimeRemaing = mBattleEndTime;
+				mBattleEventTimeRemaining = mBattleEventTime;
 
 				PlayerManager::AddGold(mBattleGoldPool);
 				mBattleState = BS_EXP_GAINED;
@@ -576,11 +576,12 @@ void SceneBattle::Update(const float dt)
 		}
 		case BS_EXP_GAINED:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
-				mBattleEndTimeRemaing = mBattleEndTime;
+				mBattleEventTimeRemaining = mBattleEventTime;
 
+				// Set Party attributes with battle attributes
 				for (int i = 0; i < mBattleCharacters.size(); i++)
 				{
 					CharacterAttributes& characterAttributes = PlayerManager::GetCharacterAttributes()[i];
@@ -601,28 +602,51 @@ void SceneBattle::Update(const float dt)
 		}
 		case BS_LEVEL_UP:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
-				mBattleEndTimeRemaing = mBattleEndTime;
+				mBattleEventTimeRemaining = mBattleEventTime;
 
-				mLevelUpStats = PlayerManager::LevelUp(mLevelUpIndex);
+				PlayerManager::LevelUp(mLevelUpIndex, mStatArray);
 
-				mLevelUpIndex++;
-				if (!PlayerManager::CheckLevelUp(mLevelUpIndex))
+				// Find First Stat Increase
+				mStatIndex = 0;
+				while (!mStatArray[mStatIndex])
 				{
-					mBattleState = BS_BATTLE_END;
+					mStatIndex++;
 				}
+
+				mBattleState = BS_STAT_INCREASE;
 			}
 			break;
 		}
 		case BS_STAT_INCREASE:
 		{
-			mBattleEndTimeRemaing -= dt;
-			if (mBattleEndTimeRemaing <= 0)
+			mBattleEventTimeRemaining -= dt;
+			if (mBattleEventTimeRemaining <= 0)
 			{
+				mBattleEventTimeRemaining = mBattleEventTime;
 
-				
+				mStatIndex++;
+				while (!mStatArray[mStatIndex])
+				{
+					mStatIndex++;
+				}
+				if (mStatIndex >= 8)
+				{
+					for (int i = 0; i < 8; i++) mStatArray[i] = false;
+					mStatIndex = 0;
+
+					mLevelUpIndex++;
+					if (!PlayerManager::CheckLevelUp(mLevelUpIndex))
+					{
+						mBattleState = BS_BATTLE_END;
+					}
+					else
+					{
+						mBattleState = BS_LEVEL_UP;
+					}
+				}
 			}
 			break;
 		}
@@ -966,6 +990,55 @@ void SceneBattle::Render(SDL_Rect& camera)
 		case BS_LEVEL_UP:
 		{
 			battleString = PlayerManager::GetCharacterAttributes()[mLevelUpIndex].characterName + " Level Up";
+
+			DrawBattleEvent(rect, battleString);
+			break;
+		}
+		case BS_STAT_INCREASE:
+		{
+			switch (mStatIndex)
+			{
+				case 0:
+				{
+					battleString = "Health Up";
+					break;
+				}
+				case 1:
+				{
+					battleString = "Magic Up";
+					break;
+				}
+				case 2:
+				{
+					battleString = "Strength Up";
+					break;
+				}
+				case 3:
+				{
+					battleString = "Defense Up";
+					break;
+				}
+				case 4:
+				{
+					battleString = "Intelligence Up";
+					break;
+				}
+				case 5:
+				{
+					battleString = "Speed Up";
+					break;
+				}
+				case 6:
+				{
+					battleString = "Skill Up";
+					break;
+				}
+				case 7:
+				{
+					battleString = "Luck Up";
+					break;
+				}
+			}
 
 			DrawBattleEvent(rect, battleString);
 			break;

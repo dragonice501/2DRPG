@@ -20,9 +20,21 @@ std::vector<Shield> PlayerManager::mInventoryShields;
 std::vector<Armour> PlayerManager::mInventoryArmourHead;
 std::vector<Armour> PlayerManager::mInventoryArmourBody;
 
-uint8_t PlayerManager::mLevelGauranteeStats[2] =
+uint8_t PlayerManager::mLevelGauranteeStatsDancer[10] =
 {
-    170, 85
+    128,128,128,128,128,128,128,128,128,128
+};
+uint8_t PlayerManager::mLevelGauranteeStatsKnight[10] =
+{
+    128,128,128,128,128,128,128,128,128,128
+};
+uint8_t PlayerManager::mLevelGauranteeStatsMage[10] =
+{
+    128,128,128,128,128,128,128,128,128,128
+};
+uint8_t PlayerManager::mLevelGauranteeStatsPaladin[10] =
+{
+    128,128,128,128,128,128,128,128,128,128
 };
 
 void PlayerManager::LoadCharacters()
@@ -221,56 +233,100 @@ bool PlayerManager::CheckLevelUp(int& outIndex)
     return false;
 }
 
-CharacterAttributes PlayerManager::LevelUp(int characterIndex)
+CharacterAttributes PlayerManager::LevelUp(int characterIndex, bool* outStats)
 {
     CharacterAttributes levelUpAttributes;
     CharacterAttributes& attributes = mCharacterAttributes[characterIndex];
     attributes.level++;
     attributes.expNextLevel = CalcLevelUpExp(attributes.level);
 
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 7))
+    uint8_t* mLevelUpStats = nullptr;
+    switch (attributes.characterClass)
     {
-        attributes.healthMax++;
-        attributes.health = attributes.healthMax;
-        levelUpAttributes.health++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 6))
-    {
-        attributes.magicMax++;
-        attributes.magic = attributes.magicMax;
-        levelUpAttributes.magic++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 5))
-    {
-        attributes.strength++;
-        levelUpAttributes.strength++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 4))
-    {
-        attributes.defense++;
-        levelUpAttributes.defense++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 3))
-    {
-        attributes.intelligence++;
-        levelUpAttributes.intelligence++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 2))
-    {
-        attributes.speed++;
-        levelUpAttributes.speed++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 1))
-    {
-        attributes.skill++;
-        levelUpAttributes.skill++;
-    }
-    if (mLevelGauranteeStats[attributes.level - 2] & (1 << 0))
-    {
-        attributes.luck++;
-        levelUpAttributes.luck++;
+        case DANCER:
+        {
+            mLevelUpStats = mLevelGauranteeStatsDancer;
+            break;
+        }
+        case KNIGHT:
+        {
+            mLevelUpStats = mLevelGauranteeStatsKnight;
+            break;
+        }
+        case MAGE:
+        {
+            mLevelUpStats = mLevelGauranteeStatsMage;
+            break;
+        }
+        case PALADIN:
+        {
+            mLevelUpStats = mLevelGauranteeStatsPaladin;
+            break;
+        }
     }
 
+    if (mLevelUpStats)
+    {
+        if (mLevelUpStats[attributes.level - 2] & (1 << 7))
+        {
+            attributes.healthMax++;
+            attributes.health = attributes.healthMax;
+            levelUpAttributes.health++;
+
+            outStats[0] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 6))
+        {
+            attributes.magicMax++;
+            attributes.magic = attributes.magicMax;
+            levelUpAttributes.magic++;
+
+            outStats[1] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 5))
+        {
+            attributes.strength++;
+            levelUpAttributes.strength++;
+
+            outStats[2] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 4))
+        {
+            attributes.defense++;
+            levelUpAttributes.defense++;
+
+            outStats[3] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 3))
+        {
+            attributes.intelligence++;
+            levelUpAttributes.intelligence++;
+
+            outStats[4] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 2))
+        {
+            attributes.speed++;
+            levelUpAttributes.speed++;
+
+            outStats[5] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 1))
+        {
+            attributes.skill++;
+            levelUpAttributes.skill++;
+
+            outStats[6] = true;
+        }
+        if (mLevelUpStats[attributes.level - 2] & (1 << 0))
+        {
+            attributes.luck++;
+            levelUpAttributes.luck++;
+
+            outStats[7] = true;
+        }
+    }
+    
     return levelUpAttributes;
 }
 

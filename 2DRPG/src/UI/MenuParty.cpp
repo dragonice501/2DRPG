@@ -1507,7 +1507,8 @@ void MenuParty::FillPartyAttributes()
     string =
         GetClassName(attributes.characterClass) + "  " +
         std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
-        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1)) +
+        " xp";
     mPartyClassTextOne.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1527,7 +1528,8 @@ void MenuParty::FillPartyAttributes()
     string =
         GetClassName(attributes.characterClass) + "  " +
         std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
-        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1)) +
+        " xp";
     mPartyClassTextTwo.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1547,7 +1549,8 @@ void MenuParty::FillPartyAttributes()
     string =
         GetClassName(attributes.characterClass) + "  " +
         std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
-        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1)) +
+        " xp";
     mPartyClassTextThree.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
@@ -1567,7 +1570,8 @@ void MenuParty::FillPartyAttributes()
     string =
         GetClassName(attributes.characterClass) + "  " +
         std::to_string(attributes.exp - PlayerManager::CalcLevelUpExp(attributes.level - 1)) + '/' +
-        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1));
+        std::to_string(attributes.expNextLevel - PlayerManager::CalcLevelUpExp(attributes.level - 1)) +
+        " xp";
     mPartyClassTextFour.mText = string;
 
     string = std::to_string(attributes.health) + '/' + std::to_string(attributes.healthMax) + " HP";
