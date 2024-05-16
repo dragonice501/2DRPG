@@ -13,561 +13,627 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\SDL">
+      <UniqueIdentifier>{c6b5daac-1d0a-4552-9d67-86f20464357a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IMGUI">
+      <UniqueIdentifier>{dac18987-42bd-4a12-a01a-03ef5b26ec59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{6a037265-6412-40e6-b699-16e920abfc61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{b79c6c50-8e0e-4a6a-a7aa-1a62282ef27a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{f5ad9286-ba3c-48b4-b830-f20d37d9c6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{a7a05601-c8a6-4cb1-9105-24f792bdb66d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{451edad3-6c25-4d13-a9ca-b985c35a4092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDL">
+      <UniqueIdentifier>{84051622-d588-481b-b111-1ed449e617b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{449c1254-55da-440d-8d76-cbd2565208f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{394c0054-3df6-4c72-a0fe-0623dc294edd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{e5b8f751-8f52-4107-93c7-8e6e699f2b79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{dff0c2a4-0ff4-472d-b0f9-75438afdb099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{18b4b8e7-1914-4b9b-b9bb-16528e9cc094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{6e080ff9-4b8d-4b34-95d6-f89048756de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{a53c1102-1128-41cd-8f0e-23f2fcac9f72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{e3dc883b-1fb9-4596-b78f-45219646d64a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{21c890cb-9ba4-4147-9721-c1d5c8ccb79b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Items">
+      <UniqueIdentifier>{2775d10c-42e6-40f3-bbf1-91aa58ec1e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dialogue">
+      <UniqueIdentifier>{4a3caff0-ddfb-4d63-a10a-5f01938fa264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IMGUI">
+      <UniqueIdentifier>{d99e5ae2-6d8d-41b4-abcc-5e51a54a1a63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Engine\Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CharacterBattle.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CharacterExploration.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EnemyBattle.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_sdl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_sdl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\Vec2.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\InputManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Font.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Interactable.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\Utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Menu.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\SceneManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\MenuBattle.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\CharacterExploration.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\MenuInteract.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\SceneExploration.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\MenuMainMenu.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\SceneOverworld.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\MenuParty.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\SceneTown.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\MenuShop.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\InputManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Npc.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\GameManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\PlayerManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\GraphicsManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneBattle.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\SceneBattle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneExploration.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\PlayerManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneMainMenu.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\CharacterBattle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneOverworld.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Npc.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneTown.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Enemy.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneTownShop.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\UIButton.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Tile.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\MenuParty.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UIButton.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\Menu.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UIPanel.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\MenuInteract.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UISprite.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\UIPanel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\MenuBattle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Vec2.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\SceneTownShop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\MenuShop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Managers\AssetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\SceneMainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\MenuMainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\UISprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Managers\AudioManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObjects\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObjects\Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObjects\EnemyBattle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Engine\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imgui_impl_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imgui_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\SDL2\include\begin_code.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\SDL2\include\close_code.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_assert.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_atomic.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_audio.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_bits.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_blendmode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_clipboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_android.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_iphoneos.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_macosx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_minimal.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_pandora.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_psp.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_windows.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_winrt.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_config_wiz.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_copying.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_cpuinfo.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_egl.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_endian.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_error.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_events.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_filesystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_gamecontroller.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_gesture.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_guid.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_haptic.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_hidapi.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_hints.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_image.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_joystick.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_keyboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_keycode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_loadso.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_locale.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_log.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_main.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_messagebox.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_metal.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_misc.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_mixer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_mouse.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_mutex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_name.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengl.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengl_glext.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles2.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles2_gl2.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles2_gl2ext.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles2_gl2platform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_opengles2_khrplatform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_pixels.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_platform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_power.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_quit.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_rect.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_render.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_revision.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_rwops.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_scancode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_sensor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_shape.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_stdinc.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_surface.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_system.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_syswm.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_assert.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_common.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_compare.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_crc32.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_font.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_fuzzer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_harness.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_images.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_log.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_md5.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_memory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_test_random.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_thread.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_timer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_touch.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_ttf.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_types.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_version.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_video.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
     <ClInclude Include="libs\SDL2\include\SDL_vulkan.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\Vec2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imconfig.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Font.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imgui.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\GraphicsConstants.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imgui_impl_sdl.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\Constants.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imgui_internal.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\Utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imgui_sdl.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\SceneManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imstb_rectpack.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imstb_textedit.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\CharacterExploration.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\imgui\imstb_truetype.h">
+      <Filter>Header Files\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\Components.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\SDL2\include\close_code.h">
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneExploration.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="libs\SDL2\include\begin_code.h">
+      <Filter>Header Files\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneOverworld.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\ActorBattle.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneTown.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Armour.h">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\InputManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\AssetManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\GameManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\AudioManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\GraphicsManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\CharacterBattle.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dialogue\Dialogue.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\CharacterExploration.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneBattle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Components.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\EnemyEncounter.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Constants.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\PlayerManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Dialogue.h">
+      <Filter>Header Files\Dialogue</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\CharacterBattle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Enemy.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\EnemyBattle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\EnemyBattle.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\ActorBattle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\EnemyEncounter.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Npc.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Engine.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Enemy.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Font.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\UIButton.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\GameManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MenuParty.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\Menu.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\GraphicsConstants.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MenuInteract.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\GraphicsManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\UIPanel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\InputManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MenuBattle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Interactable.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\UIText.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Item.h">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
-    <ClInclude Include="src\Items\Item.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Menu.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Items\Weapon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MenuBattle.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneTownShop.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MenuInteract.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MenuShop.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MenuMainMenu.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\AssetManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MenuParty.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Items\Armour.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MenuShop.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Items\Shield.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Npc.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\SceneMainMenu.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\PlayerManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MenuMainMenu.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\UISprite.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\SceneBattle.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\AudioManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\SceneExploration.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\SceneMainMenu.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Tile.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\SceneOverworld.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneTown.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneTownShop.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shield.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tile.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UIButton.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UIPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UISprite.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UIText.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec2.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Weapon.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
