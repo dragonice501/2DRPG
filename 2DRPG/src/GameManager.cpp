@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "FileStringConstants.h"
 
 bool GameManager::mNewGame = false;
 int GameManager::mNewGameClasses[4];
@@ -39,13 +40,12 @@ void GameManager::LoadGameSave()
 
 	std::string type;
 	std::string basePath = SDL_GetBasePath();
-	std::string gameSavePath = "assets\\saves\\GameSave.txt";
-	std::ifstream gameSaveInFile(basePath + gameSavePath);
+	std::ifstream gameSaveInFile(basePath + STRING_SAVE_PATH);
 	while (gameSaveInFile >> type)
 	{
-		if (type == "LevelName") gameSaveInFile >> mSceneToLoad;
-		else if (type == "Gold") gameSaveInFile >> PlayerManager::mPartyGold;
-		else if (type == "CharacterPositions")
+		if (type == STRING_LEVEL_NAME) gameSaveInFile >> mSceneToLoad;
+		else if (type == STRING_GOLD) gameSaveInFile >> PlayerManager::mPartyGold;
+		else if (type == STRING_CHARACTER_POSITIONS)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -55,7 +55,7 @@ void GameManager::LoadGameSave()
 				mPreviousCharacterPositions.push_back(position);
 			}
 		}
-		else if (type == "CharacterDirections")
+		else if (type == STRING_CHARACTER_DIRECTIONS)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -65,7 +65,7 @@ void GameManager::LoadGameSave()
 				mPreviousCharacterDirections.push_back(direction);
 			}
 		}
-		else if (type == "Characters")
+		else if (type == STRING_CHARACTERS)
 		{
 			for(int i = 0; i < 4; i++)
 			{
@@ -81,23 +81,15 @@ void GameManager::LoadGameSave()
 
 				attributes.expNextLevel = PlayerManager::CalcLevelUpExp(attributes.level);
 
-				gameSaveInFile >> attributes.health;
-				gameSaveInFile >> attributes.healthMax;
-				gameSaveInFile >> attributes.magic;
-				gameSaveInFile >> attributes.magicMax;
-				gameSaveInFile >> attributes.strength;
-				gameSaveInFile >> attributes.defense;
-				gameSaveInFile >> attributes.intelligence;
-				gameSaveInFile >> attributes.speed;
-				gameSaveInFile >> attributes.skill;
-				gameSaveInFile >> attributes.luck;
-				gameSaveInFile >> attributes.exp;
+				gameSaveInFile >>
+					attributes.health >> attributes.healthMax >> attributes.magic >> attributes.magicMax >> attributes.strength >> 
+					attributes.defense  >> attributes.intelligence >> attributes.speed >> attributes.skill >> attributes.luck >> attributes.exp;
 
 				PlayerManager::SetCharacterAttribites(partyIndex, attributes);
 				partyIndex++;
 			}
 		}
-		else if (type == "CharacterWeapons")
+		else if (type == STRING_CHARACTER_WEAPONS)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -106,7 +98,7 @@ void GameManager::LoadGameSave()
 				PlayerManager::SetCharacterWeapon(i, index);
 			}
 		}
-		else if (type == "CharacterShields")
+		else if (type == STRING_CHARACTER_SHIELDS)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -115,7 +107,7 @@ void GameManager::LoadGameSave()
 				PlayerManager::SetCharacterShield(i, index);
 			}
 		}
-		else if (type == "CharacterArmourHead")
+		else if (type == STRING_CHARACTER_ARMOUR_HEAD)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -124,7 +116,7 @@ void GameManager::LoadGameSave()
 				PlayerManager::SetCharacterArmourHead(i, index);
 			}
 		}
-		else if (type == "CharacterArmourBody")
+		else if (type == STRING_CHARACTER_ARMOUR_BODY)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -133,78 +125,78 @@ void GameManager::LoadGameSave()
 				PlayerManager::SetCharacterArmourBody(i, index);
 			}
 		}
-		else if (type == "PeopleKeywords")
+		else if (type == STRING_PEOPLE_KEYWORDS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::LearnNewPeopleKeyword(type);
 			}
 		}
-		else if (type == "PlacesKeywords")
+		else if (type == STRING_PLACES_KEYWORDS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::LearnNewPlaceKeyword(type);
 			}
 		}
-		else if (type == "MysteryKeywords")
+		else if (type == STRING_MYSTERY_KEYWORDS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::LearnNewMysteryKeyword(type);
 			}
 		}
-		else if (type == "BestiaryKeywords")
+		else if (type == STRING_BESTIARY_KEYWORDS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::LearnNewBestiaryKeyword(type);
 			}
 		}
-		else if (type == "InventoryWeapons")
+		else if (type == STRING_INVENTORY_WEAPONS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::AddWeaponToInventory(Weapon(type));
 			}
 		}
-		else if (type == "InventoryShields")
+		else if (type == STRING_INVENTORY_SHIELDS)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::AddShieldToInventory(Shield(type));
 			}
 		}
-		else if (type == "InventoryArmourHead")
+		else if (type == STRING_INVENTORY_ARMOUR_HEAD)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::AddArmourHeadToInventory(Armour(type));
 			}
 		}
-		else if (type == "InventoryArmourBody")
+		else if (type == STRING_INVENTORY_ARMOUR_BODY)
 		{
 			while (gameSaveInFile >> type)
 			{
-				if (type == "Break") break;
+				if (type == STRING_BREAK) break;
 
 				PlayerManager::AddArmourBodyToInventory(Armour(type));
 			}
-			}
+		}
 	}
 }
 
@@ -221,38 +213,40 @@ void GameManager::SetSceneToLoad(const std::string& sceneToLoad, const int entra
 void GameManager::SaveGame()
 {
 	std::string basePath = SDL_GetBasePath();
-	std::string gameSavePath = "assets\\saves\\GameSave.txt";
+	std::cout << basePath + STRING_SAVE_PATH << "\n";
 	std::ifstream gameSaveInFile;
-	gameSaveInFile.open(basePath + gameSavePath);
+	gameSaveInFile.open(basePath + STRING_SAVE_PATH);
 	if (gameSaveInFile.is_open())
 	{
 		gameSaveInFile.close();
-		std::remove(gameSavePath.c_str());
+		std::remove((basePath + STRING_SAVE_PATH).c_str());
+		std::cout << "Removed" << "\n";
 	}
 
 	std::ofstream gameSaveOutFile;
-	gameSaveOutFile.open(gameSavePath);
+	gameSaveOutFile.open(basePath + STRING_SAVE_PATH);
 	if (gameSaveOutFile.is_open())
 	{
-		gameSaveOutFile << "LevelName " << mSceneName << std::endl << std::endl;
+		gameSaveOutFile << STRING_LEVEL_NAME << "\n" << mSceneName << "\n" << "\n";
 
-		gameSaveOutFile << "Gold " << PlayerManager::GetPartyGold() << std::endl << std::endl;;
+		gameSaveOutFile << STRING_GOLD << "\n" << PlayerManager::GetPartyGold() << "\n" << "\n";
 
-		gameSaveOutFile << "CharacterPositions" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_POSITIONS << "\n";
 		for (int i = 0; i < 4; i++)
 		{
-			gameSaveOutFile << mCurrentCharacterPositions[i].x << ' ' << mCurrentCharacterPositions[i].y << std::endl;
+			gameSaveOutFile << mCurrentCharacterPositions[i].x << ' ' << mCurrentCharacterPositions[i].y << "\n";
 		}
-		gameSaveOutFile << std::endl;
+		gameSaveOutFile << "\n";
 
-		gameSaveOutFile << "CharacterDirections" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_DIRECTIONS << "\n";
 		for (int i = 0; i < mPreviousCharacterDirections.size(); i++)
 		{
-			gameSaveOutFile << mPreviousCharacterDirections[i].x << ' ' << mPreviousCharacterDirections[i].y << std::endl;
+			gameSaveOutFile << mPreviousCharacterDirections[i].x << ' ' << mPreviousCharacterDirections[i].y << "\n";
+			std::cout << mPreviousCharacterDirections[i].x << ' ' << mPreviousCharacterDirections[i].y << "\n";
 		}
-		gameSaveOutFile << std::endl;
+		gameSaveOutFile << "\n";
 
-		gameSaveOutFile << "Characters" << std::endl;
+		gameSaveOutFile << STRING_CHARACTERS << "\n";
 		for (int i = 0; i < PlayerManager::GetCharacterAttributes().size(); i++)
 		{
 			CharacterAttributes& attributes = PlayerManager::GetCharacterAttributes()[i];
@@ -268,92 +262,92 @@ void GameManager::SaveGame()
 			<< attributes.speed << ' '
 			<< attributes.skill << ' '
 			<< attributes.luck << ' '
-			<< attributes.exp << std::endl << std::endl;
+			<< attributes.exp << "\n" << "\n";
 		}
 
-		gameSaveOutFile << "CharacterWeapons" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_WEAPONS << "\n";
 		for (int i = 0; i < 4; i++)
 		{
 			gameSaveOutFile << PlayerManager::GetCharacterWeapon(i) << ' ';
 		}
-		gameSaveOutFile << std::endl << std::endl;
+		gameSaveOutFile << "\n" << "\n";
 
-		gameSaveOutFile << "CharacterShield" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_SHIELDS << "\n";
 		for (int i = 0; i < 4; i++)
 		{
 			gameSaveOutFile << PlayerManager::GetCharacterShield(i) << ' ';
 		}
-		gameSaveOutFile <<std::endl;
+		gameSaveOutFile <<"\n";
 
-		gameSaveOutFile << "CharacterArmourHead" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_ARMOUR_HEAD << "\n";
 		for (int i = 0; i < 4; i++)
 		{
 			gameSaveOutFile << PlayerManager::GetCharacterArmourHead(i) << ' ';
 		}
-		gameSaveOutFile <<std::endl;
+		gameSaveOutFile <<"\n";
 
-		gameSaveOutFile << "CharacterArmourBody" << std::endl;
+		gameSaveOutFile << STRING_CHARACTER_ARMOUR_BODY << "\n";
 		for (int i = 0; i < 4; i++)
 		{
 			gameSaveOutFile << PlayerManager::GetCharacterArmourBody(i) << ' ';
 		}
-		gameSaveOutFile << std::endl;
+		gameSaveOutFile << "\n";
 
-		gameSaveOutFile << "PeopleKeywords ";
+		gameSaveOutFile << STRING_PEOPLE_KEYWORDS << ' ';
 		for (int i = 0; i < PlayerManager::GetPeopleKeywords().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetPeopleKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "PlacesKeywords ";
+		gameSaveOutFile << STRING_PLACES_KEYWORDS << ' ';
 		for (int i = 0; i < PlayerManager::GetPlacesKeywords().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetPlacesKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "MysteryKeywords ";
+		gameSaveOutFile << STRING_MYSTERY_KEYWORDS << ' ';
 		for (int i = 0; i < PlayerManager::GetMysteryKeywords().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetMysteryKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "BestiaryKeywords ";
+		gameSaveOutFile << STRING_BESTIARY_KEYWORDS << ' ';
 		for (int i = 0; i < PlayerManager::GetBestiaryKeywords().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetBestiaryKeywords()[i] << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n" << "\n";
 
-		gameSaveOutFile << "InventoryWeapons ";
+		gameSaveOutFile << STRING_INVENTORY_WEAPONS << ' ';
 		for (int i = 0; i < PlayerManager::GetInventoryWeapons().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetInventoryWeapons()[i].mName << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "InventoryShields ";
+		gameSaveOutFile << STRING_INVENTORY_SHIELDS << ' ';
 		for (int i = 0; i < PlayerManager::GetInventoryShields().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetInventoryShields()[i].mName << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "InventoryArmourHead ";
+		gameSaveOutFile << STRING_INVENTORY_ARMOUR_HEAD << ' ';
 		for (int i = 0; i < PlayerManager::GetInventoryArmourHead().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetInventoryArmourHead()[i].mName << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 
-		gameSaveOutFile << "InventoryArmourBody ";
+		gameSaveOutFile << STRING_INVENTORY_ARMOUR_BODY << ' ';
 		for (int i = 0; i < PlayerManager::GetInventoryArmourBody().size(); i++)
 		{
 			gameSaveOutFile << PlayerManager::GetInventoryArmourBody()[i].mName << ' ';
 		}
-		gameSaveOutFile << "Break" << std::endl;
+		gameSaveOutFile << STRING_BREAK << "\n";
 	}
 	gameSaveInFile.close();
 }
